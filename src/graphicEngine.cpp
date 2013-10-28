@@ -1,26 +1,18 @@
-#include <irrlicht.h>
-#include <iostream>
+// Facade pattern to separate graphic engine from the rest of the game
+#include "graphicEngine.h"
 
-using namespace std;
-using namespace irr;
-using namespace core;
-using namespace scene;
-using namespace video;
-using namespace io;
-
-int main(int argc, char** argv)
-{
-    //Create an Irrlicht Device.
-    IrrlichtDevice * device = createDevice(EDT_OPENGL,dimension2d<u32>(800,600));
+graphicEngine::graphicEngine(){
+	//Create an Irrlicht Device.
+    device = createDevice(EDT_OPENGL,dimension2d<u32>(800,600));
 
     //Get the Scene Manager from the device.
-    ISceneManager * smgr = device->getSceneManager();
+    smgr = device->getSceneManager();
 
     //Get the Video Driver from the device.
-    IVideoDriver * driver = device->getVideoDriver();
+    driver = device->getVideoDriver();
 
     //Add a Cube to the Scene.
-    ISceneNode * node = smgr->addCubeSceneNode();
+    node = smgr->addCubeSceneNode();
 
     //Needed to make the object's texture visible without a light source.
     node->setMaterialFlag(EMF_LIGHTING, false);
@@ -33,11 +25,15 @@ int main(int argc, char** argv)
 
     //Add FPS Camera to allow movement using Keyboard and Mouse.
     smgr->addCameraSceneNodeFPS();
+}
 
-    //Run simulation
-    while(device->run())
-    {
-        //Begin Scene with a gray backdrop #rgb(125,125,125)
+/*
+	Actualiza una vez la pantalla. 
+	Devuelve si el device esta listo
+*/
+bool graphicEngine::updateOnce(){
+	if(device->run()){
+		//Begin Scene with a gray backdrop #rgb(125,125,125)
         driver->beginScene(true,true,SColor(0,125,125,125));
 
         //Render the scene at this instant.
@@ -47,6 +43,8 @@ int main(int argc, char** argv)
         driver->endScene();
 
         //Logic to update the scene will go here.
+        return true;
+    }else{
+    	return false;
     }
-    return 0;
 }
