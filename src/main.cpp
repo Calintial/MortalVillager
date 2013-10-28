@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 {
     bool pausa = false;
     graphicEngine graphics;
-    //intelEngine intel;
+    intelEngine intel;
     //Run simulation
     while(graphics.updateOnce()){
         while(pausa){
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 
         // dependiendo de cómo vaya de rápido, igual tendremos que poner esto en hilos, o algo así
         gestionar_entrada_usuario();
-        //intel.doSomething();
+        intel.doSomething();
         // hasta aquí la posibilidad de hilos
 
         actualizar_movimientos();
