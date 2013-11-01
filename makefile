@@ -7,10 +7,12 @@ main: bin/main
 
 bin/main: src/main.cpp graphicEngine.o intelEngine.o
 	mkdir -p bin
-	g++ -o bin/main src/main.cpp graphicEngine.o intelEngine.o $(INCLUDES) $(LINKS) 
 
-graphicEngine.o: src/graphicEngine.cpp include/graphicEngine.h
-	g++ -c src/graphicEngine.cpp $(INCLUDES)
+	g++ -o bin/main src/main.cpp graphicEngine.o intelEngine.o edificio.o personaje.o $(INCLUDES) $(LINKS) 
+
+
+graphicEngine.o: src/graphicEngine.cpp include/graphicEngine.h src/edificio.cpp include/edificio.h src/personaje.cpp include/personaje.h
+	g++ -c src/graphicEngine.cpp src/personaje.cpp src/edificio.cpp $(INCLUDES)
 
 intelEngine.o: src/intelEngine.cpp include/intelEngine.h
 	g++ -c src/intelEngine.cpp $(INCLUDES)
