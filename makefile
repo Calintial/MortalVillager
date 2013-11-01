@@ -5,17 +5,22 @@ LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm
 
 main: bin/main
 
-bin/main: src/main.cpp graphicEngine.o intelEngine.o
+bin/main: src/main.cpp graphicEngine.o intelEngine.o personaje.o edificio.o
 	mkdir -p bin
+	g++ -o bin/main $^ $(INCLUDES) $(LINKS) #$^ es la lista de todas las dependencias
 
-	g++ -o bin/main src/main.cpp graphicEngine.o intelEngine.o edificio.o personaje.o $(INCLUDES) $(LINKS) 
 
-
-graphicEngine.o: src/graphicEngine.cpp include/graphicEngine.h src/edificio.cpp include/edificio.h src/personaje.cpp include/personaje.h
-	g++ -c src/graphicEngine.cpp src/personaje.cpp src/edificio.cpp $(INCLUDES)
+graphicEngine.o: src/graphicEngine.cpp include/graphicEngine.h
+	g++ -c src/graphicEngine.cpp $(INCLUDES)
 
 intelEngine.o: src/intelEngine.cpp include/intelEngine.h
 	g++ -c src/intelEngine.cpp $(INCLUDES)
+
+personaje.o: src/personaje.cpp include/personaje.h
+	g++ -c src/personaje.cpp $(INCLUDES)
+
+edificio.o: src/edificio.cpp include/edificio.h
+	g++ -c src/edificio.cpp $(INCLUDES)
 
 # bin/hello: src/HelloWorld.cpp
 # 	mkdir -p bin;g++ -o bin/hello src/HelloWorld.cpp $(INCLUDES) $(LINKS)
