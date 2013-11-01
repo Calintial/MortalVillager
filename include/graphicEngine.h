@@ -9,6 +9,8 @@ using namespace io;
 using namespace irr;
 using namespace gui;
 
+
+
 class graphicEngine {
 public:
 	graphicEngine();
@@ -33,10 +35,10 @@ private:
 	IGUIFont* font;
 };
 enum{
-	GUI_BOTON_JUGAR = 101,
-	GUI_BOTON_OPCIONES,
-	GUI_BOTON_CREDITOS,
-	GUI_BOTON_SALIR
+	GUI_BOTON_JUGAR = 0,
+	GUI_BOTON_OPCIONES=1,
+	GUI_BOTON_CREDITOS=2,
+	GUI_BOTON_SALIR=3
 };
 struct SAppContext
 {
@@ -51,36 +53,38 @@ public:
 
 	virtual bool OnEvent(const SEvent& event)
 	{
-		printf("Hola");
-	/*
-		if (event.EventType == EET_GUI_EVENT)
+		
+	
+		if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
 		{
+
 			s32 id = event.GUIEvent.Caller->getID();
 			IGUIEnvironment* env = Context.device->getGUIEnvironment();
-
-			switch(event.GUIEvent.EventType)
+			
+			switch(id)
 			{
 
-			case GUI_BOTON_JUGAR:
+			case 0:
 				
 				break;
 
-			case GUI_BOTON_OPCIONES:					
+			case 1:					
 			
 				break;
 
-			case GUI_BOTON_CREDITOS:
+			case 2:
 				
 				break;
-			case GUI_BOTON_SALIR:
-				//Context.device->closeDevice();
+			case 3:
+				
+				Context.device->closeDevice();
 				break;
 
 			default:
 				break;
 			}
 		}
-*/
+
 		return false;
 	}
 

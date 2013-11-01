@@ -1,4 +1,4 @@
-INCLUDES=-I/usr/include/irrlicht/ -Iinclude
+INCLUDES=-I/usr/include/irrlicht/ -Iinclude -g
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm
 
 .PHONY: all clean

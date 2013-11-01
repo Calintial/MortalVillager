@@ -21,9 +21,11 @@ void gestionar_entrada_usuario(){
 }
 
 int main(int argc, char** argv)
-{
+{ 
+
     bool pausa = false;
     graphicEngine graphics;
+    graphics.pintarMenu();
     intelEngine intel;
     //Run simulation
     while(graphics.updateOnce()){
