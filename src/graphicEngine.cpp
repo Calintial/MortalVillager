@@ -9,7 +9,7 @@ graphicEngine::graphicEngine(){
     device = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY));
 
     env = device->getGUIEnvironment();
-    device->setWindowCaption(L"Demo de Mortal Village");
+    device->setWindowCaption(L"Demo de Mortal Villager");
     device->setResizable(true);
 
     //Get the Scene Manager from the device.
@@ -19,8 +19,7 @@ graphicEngine::graphicEngine(){
     driver = device->getVideoDriver();
 
     video::IVideoDriver* driver = device->getVideoDriver();
-    env = device->getGUIEnvironment();
-    
+    env = device->getGUIEnvironment();   
 }
 void graphicEngine::pintarCubo(){
 
@@ -45,7 +44,14 @@ void graphicEngine::pintarCubo(){
     //Add FPS Camera to allow movement using Keyboard and Mouse.
     smgr->addCameraSceneNodeFPS();
 }
+
 void graphicEngine::pintarMenu(){
+
+    //Cargar fondo del menu principal
+    video::ITexture* images = driver->getTexture("../media/Imagenes/Fondo.png");
+
+
+
     skin = env->getSkin();
     font = env->getFont("../media/fonthaettenschweiler.bmp");
     if (font)
@@ -59,7 +65,7 @@ void graphicEngine::pintarMenu(){
         L"Opciones", L"Opciones de juego");       
     env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+80,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 112), 0, GUI_BOTON_CREDITOS,
         L"Creditos", L"Información del juego"); 
-     env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+120,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 152), 0, GUI_BOTON_SALIR,
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+120,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 152), 0, GUI_BOTON_SALIR,
         L"Salir", L"Salir del juego");
     SAppContext context;
     context.device = device;
@@ -71,8 +77,15 @@ void graphicEngine::pintarMenu(){
    while(device->run() && driver)
     if (device->isWindowActive())
     {
+        //Esta instrucción borra la pantalla y la repinta ;) (Cada vez que cambiemos de menu deberiamos usarla)
         driver->beginScene(true, true, SColor(0,200,200,200));
 
+        //Pinta el fondo del menu principal
+        driver->draw2DImage(images, core::position2d<s32>(0,0),
+            core::rect<s32>(0,0,800 ,600), 0,
+            video::SColor(255,255,255,255), true);
+
+        //Pinta los botones antes definidos
         env->drawAll();
     
         driver->endScene();

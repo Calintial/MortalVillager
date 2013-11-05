@@ -63,25 +63,24 @@ public:
 			
 			switch(id)
 			{
+				case 0:
+					
+					break;
 
-			case 0:
+				case 1:					
 				
-				break;
+					break;
 
-			case 1:					
-			
-				break;
+				case 2:
+					
+					break;
+				case 3:	
+					Context.device->closeDevice();
+					exit(0);
+					break;
 
-			case 2:
-				
-				break;
-			case 3:
-				
-				Context.device->closeDevice();
-				break;
-
-			default:
-				break;
+				default:
+					break;
 			}
 		}
 
