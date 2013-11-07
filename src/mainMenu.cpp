@@ -5,7 +5,7 @@ mainMenu::mainMenu(){
     dimensionPantallaY=600;
 
 	//Create an Irrlicht Device.
-    MenuDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY));
+    MenuDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
 
     env = MenuDevice->getGUIEnvironment();
     MenuDevice->setWindowCaption(L"Demo de Mortal Villager");
@@ -19,6 +19,26 @@ mainMenu::mainMenu(){
 
     video::IVideoDriver* driver = MenuDevice->getVideoDriver();
     env = MenuDevice->getGUIEnvironment();
+
+    //Cargar fondo del menu principal
+    images = driver->getTexture("../media/Imagenes/Fondo.png");
+    skin = env->getSkin();
+    font = env->getFont("../media/fonthaettenschweiler.bmp");
+    if (font)
+        skin->setFont(font);
+
+    skin->setFont(env->getBuiltInFont(), EGDF_TOOLTIP);
+        
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 32), 0, GUI_BOTON_JUGAR,
+        L"Jugar", L"Empezar partida");
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+40,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72), 0,GUI_BOTON_OPCIONES,
+        L"Opciones", L"Opciones de juego");       
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+80,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 112), 0, GUI_BOTON_CREDITOS,
+        L"Creditos", L"Información del juego"); 
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+120,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 152), 0, GUI_BOTON_SALIR,
+        L"Salir", L"Salir del juego");
+
+    MenuDevice->setEventReceiver(this); 
 
     start = false;
 }
@@ -70,25 +90,7 @@ bool mainMenu::OnEvent(const SEvent& event)
 }
 
 bool mainMenu::run(){
-    //Cargar fondo del menu principal
-    video::ITexture* images = driver->getTexture("../media/Imagenes/Fondo.png");
-    skin = env->getSkin();
-    font = env->getFont("../media/fonthaettenschweiler.bmp");
-    if (font)
-        skin->setFont(font);
-
-    skin->setFont(env->getBuiltInFont(), EGDF_TOOLTIP);
-        
-    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 32), 0, GUI_BOTON_JUGAR,
-        L"Jugar", L"Empezar partida");
-    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+40,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72), 0,GUI_BOTON_OPCIONES,
-        L"Opciones", L"Opciones de juego");       
-    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+80,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 112), 0, GUI_BOTON_CREDITOS,
-        L"Creditos", L"Información del juego"); 
-    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+120,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 152), 0, GUI_BOTON_SALIR,
-        L"Salir", L"Salir del juego");
-
-    MenuDevice->setEventReceiver(this); 
+    
     while(MenuDevice->run() && driver)
     {
         if (MenuDevice->isWindowActive())

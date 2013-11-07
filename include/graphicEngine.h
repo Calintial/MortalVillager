@@ -1,11 +1,12 @@
 // Facade pattern to separate graphic engine from the rest of the game
 #include "mainMenu.h"
+#include "gameScreen.h"
 #include <iostream>
 
 class graphicEngine {
 public:
 	graphicEngine();
-	~graphicEngine() {};
+	~graphicEngine();
 	/*graphicEngine(const graphicEngine&) {};
 	graphicEngine& operator=(const graphicEngine&) {};*/
 	bool updateOnce();
@@ -14,4 +15,5 @@ public:
 
 private:
 	mainMenu menu;
+	gameScreen* game;
 };
