@@ -44,19 +44,19 @@ bool mainMenu::OnEvent(const SEvent& event)
 		
 		switch(id)
 		{
-			case 0:
+			case GUI_BOTON_JUGAR:
 				start = true;
 				MenuDevice->closeDevice();
 				break;
 
-			case 1:					
+			case GUI_BOTON_OPCIONES:					
 			
 				break;
 
-			case 2:
+			case GUI_BOTON_CREDITOS:
 				
 				break;
-			case 3:	
+			case GUI_BOTON_SALIR:	
 				MenuDevice->closeDevice();
 				exit(0);
 				break;
