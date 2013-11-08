@@ -36,4 +36,6 @@ private:
 	int dimensionPantallaY; 
 
 	bool start;
+
+	void initMainMenu();
 };
