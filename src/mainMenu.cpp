@@ -25,19 +25,19 @@ bool mainMenu::OnEvent(const SEvent& event)
 		
 		switch(id)
 		{
-			case GUI_BOTON_JUGAR:
+			case GUI_MENU_BOTON_JUGAR:
 				start = true;
 				MenuDevice->closeDevice();
 				break;
 
-			case GUI_BOTON_OPCIONES:					
-			
+			case GUI_MENU_BOTON_OPCIONES:					
+			    initOptionsMenu();
 				break;
 
-			case GUI_BOTON_CREDITOS:
+			case GUI_MENU_BOTON_CREDITOS:
 				
 				break;
-			case GUI_BOTON_SALIR:	
+			case GUI_MENU_BOTON_SALIR:	
 				MenuDevice->closeDevice();
 				exit(0);
 				break;
@@ -84,6 +84,8 @@ void  mainMenu::initMainMenu()
     MenuDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
 
     env = MenuDevice->getGUIEnvironment();
+    env->clear();
+
     MenuDevice->setWindowCaption(L"Demo de Mortal Villager");
     MenuDevice->setResizable(true);
 
@@ -94,7 +96,7 @@ void  mainMenu::initMainMenu()
     driver = MenuDevice->getVideoDriver();
 
     video::IVideoDriver* driver = MenuDevice->getVideoDriver();
-    env = MenuDevice->getGUIEnvironment();
+    
 
     //Cargar fondo del menu principal
     images = driver->getTexture("../media/Imagenes/Fondo.png");
@@ -105,16 +107,23 @@ void  mainMenu::initMainMenu()
 
     skin->setFont(env->getBuiltInFont(), EGDF_TOOLTIP);
         
-    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 32), 0, GUI_BOTON_JUGAR,
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 32), 0, GUI_MENU_BOTON_JUGAR,
         L"Jugar", L"Empezar partida");
-    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+40,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72), 0,GUI_BOTON_OPCIONES,
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+40,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72), 0,GUI_MENU_BOTON_OPCIONES,
         L"Opciones", L"Opciones de juego");       
-    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+80,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 112), 0, GUI_BOTON_CREDITOS,
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+80,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 112), 0, GUI_MENU_BOTON_CREDITOS,
         L"Creditos", L"Información del juego"); 
-    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+120,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 152), 0, GUI_BOTON_SALIR,
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+120,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 152), 0, GUI_MENU_BOTON_SALIR,
         L"Salir", L"Salir del juego");
 
     MenuDevice->setEventReceiver(this); 
 
     start = false;   
+}
+
+void mainMenu::initOptionsMenu()
+{
+    env->clear();
+    env = MenuDevice->getGUIEnvironment();
+    env->addComboBox (rect<s32>(),0,GUI_OPCIONES_COMBO_WIREFRAME);
 }

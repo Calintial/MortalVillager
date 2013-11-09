@@ -9,10 +9,15 @@ using namespace gui;
 
 
 enum{
-	GUI_BOTON_JUGAR = 0,
-	GUI_BOTON_OPCIONES=1,
-	GUI_BOTON_CREDITOS=2,
-	GUI_BOTON_SALIR=3
+	/*Elementos menu principal*/
+	GUI_MENU_BOTON_JUGAR = 0,
+	GUI_MENU_BOTON_OPCIONES=1,
+	GUI_MENU_BOTON_CREDITOS=2,
+	GUI_MENU_BOTON_SALIR=3,
+
+	/*Elementos menu opciones*/
+	GUI_OPCIONES_SONIDO=4,
+	GUI_OPCIONES_COMBO_WIREFRAME=5
 };
 
 class mainMenu : public IEventReceiver
@@ -38,4 +43,5 @@ private:
 	bool start;
 
 	void initMainMenu();
+	void initOptionsMenu();
 };
