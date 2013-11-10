@@ -1,4 +1,8 @@
+#ifndef MAINMENU_H
+#define MAINMENU_H
+
 #include <irrlicht.h>
+#include "gameEngine.h"
 
 using namespace irr;
 using namespace core;
@@ -6,6 +10,7 @@ using namespace scene;
 using namespace video;
 using namespace io;
 using namespace gui;
+using namespace std;
 
 
 enum{
@@ -20,14 +25,16 @@ enum{
 	GUI_OPCIONES_COMBO_WIREFRAME=5
 };
 
+
 class mainMenu : public IEventReceiver
 {
 public:
 	mainMenu();
 	~mainMenu();
 
-	bool run();
+	int run();
 	virtual bool OnEvent(const SEvent& event);
+
 private:
 	IrrlichtDevice * MenuDevice;
 	video::IVideoDriver* driver;
@@ -40,8 +47,10 @@ private:
 	int dimensionPantallaX; 
 	int dimensionPantallaY; 
 
-	bool start;
+	int gameState;
 
 	void initMainMenu();
 	void initOptionsMenu();
 };
+
+#endif

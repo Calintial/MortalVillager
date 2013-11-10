@@ -1,10 +1,12 @@
 #include "mainMenu.h"
 
-mainMenu::mainMenu(){
+mainMenu::mainMenu()
+{
     initMainMenu();
 }
 
-mainMenu::~mainMenu(){
+mainMenu::~mainMenu()
+{
 	delete MenuDevice;
 	delete driver;
 	delete smgr;
@@ -19,42 +21,38 @@ bool mainMenu::OnEvent(const SEvent& event)
 
 	if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
 	{
-
 		s32 id = event.GUIEvent.Caller->getID();
 		IGUIEnvironment* env = MenuDevice->getGUIEnvironment();
 		
 		switch(id)
 		{
 			case GUI_MENU_BOTON_JUGAR:
-				start = true;
-				MenuDevice->closeDevice();
-				break;
+                 gameState = INGAME;
+				 break;
 
 			case GUI_MENU_BOTON_OPCIONES:					
-			    initOptionsMenu();
-				break;
+			     initOptionsMenu();
+				 break;
 
 			case GUI_MENU_BOTON_CREDITOS:
-				
-				break;
+				 break;
+
 			case GUI_MENU_BOTON_SALIR:	
-				MenuDevice->closeDevice();
-				exit(0);
+                 gameState = FINISH;
 				break;
 
 			default:
 				break;
 		}
 	}
-
 	return false;
 }
 
-bool mainMenu::run(){
-    
-    while(MenuDevice->run() && driver)
-    {
-        if (MenuDevice->isWindowActive())
+int mainMenu::run()
+{
+    if (MenuDevice->run())
+    {        
+        if(MenuDevice->isWindowActive() && driver)
         {
             //Esta instrucción borra la pantalla y la repinta ;) (Cada vez que cambiemos de menu deberiamos usarla)
             driver->beginScene(true, true, SColor(0,200,200,200));
@@ -69,10 +67,18 @@ bool mainMenu::run(){
 
             driver->endScene();
         }
+
+    }
+    else
+    {
+        gameState = FINISH;
     }
 
-    MenuDevice->drop();
-    return start;
+    if(gameState != MAIN)
+    {
+        MenuDevice->drop();
+    }
+    return gameState;
 }
 
 void  mainMenu::initMainMenu()
@@ -118,7 +124,7 @@ void  mainMenu::initMainMenu()
 
     MenuDevice->setEventReceiver(this); 
 
-    start = false;   
+    gameState = MAIN;   
 }
 
 void mainMenu::initOptionsMenu()

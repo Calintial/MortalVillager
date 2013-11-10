@@ -1,19 +1,21 @@
-// Facade pattern to separate graphic engine from the rest of the game
+#ifndef GRAPHICENGINE_H
+#define GRAPHICENGINE_H
+
 #include "mainMenu.h"
-#include "gameScreen.h"
+#include "gameEngine.h"
 #include <iostream>
+using namespace std;
+
+class mainMenu;
 
 class graphicEngine {
 public:
 	graphicEngine();
 	~graphicEngine();
-	/*graphicEngine(const graphicEngine&) {};
-	graphicEngine& operator=(const graphicEngine&) {};*/
-	bool updateOnce();
-	bool pintarMenu();
-	//void pintarCubo();
+	int DrawMainMenu();
 
 private:
-	mainMenu menu;
-	gameScreen* game;
+	mainMenu* menu;
 };
+
+#endif
