@@ -14,14 +14,20 @@ using namespace std;
 class graphicEngine;
 
 class gameEngine {
+
 public:
 	gameEngine();
 	~gameEngine();
 	void run();
+	static void setVolume(float);
+	static float getVolume();
 
 private:
 	graphicEngine* graphics;
 	int gameState;
+	static float volumen;
 };
+
+
 
 #endif

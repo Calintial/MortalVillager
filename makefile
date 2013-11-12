@@ -1,6 +1,6 @@
 OPTS=-g
-INCLUDES=-I/usr/include/irrlicht/ -Iinclude
-LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm
+INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
+LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex
 
 .PHONY: all clean
 

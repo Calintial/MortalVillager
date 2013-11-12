@@ -1,5 +1,7 @@
 #include "gameEngine.h"
 
+float gameEngine::volumen = 0.5;
+
 gameEngine::gameEngine()
 {
 	gameState = MAIN;
@@ -27,4 +29,14 @@ void gameEngine::run()
 			default: break;
 		}
 	}
+}
+
+void gameEngine::setVolume(float vol)
+{
+	volumen = vol;
+}
+
+float gameEngine::getVolume()
+{
+	return volumen;
 }

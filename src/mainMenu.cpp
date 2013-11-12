@@ -2,6 +2,50 @@
 
 mainMenu::mainMenu()
 {
+    credits = false;
+
+    dimensionPantallaX=800;
+    dimensionPantallaY=600;
+
+    //Create an Irrlicht Device.
+    MenuDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
+
+    env = MenuDevice->getGUIEnvironment();
+    env->clear();
+
+    MenuDevice->setWindowCaption(L"Demo de Mortal Villager");
+    MenuDevice->setResizable(true);
+
+    //Get the Scene Manager from the MenuDevice.
+    smgr = MenuDevice->getSceneManager();
+
+    //Get the Video Driver from the MenuDevice.
+    driver = MenuDevice->getVideoDriver();
+
+    video::IVideoDriver* driver = MenuDevice->getVideoDriver();
+    
+
+    //Cargar fondo del menu principal
+    images = driver->getTexture("../media/Imagenes/Fondo.png");
+    skin = env->getSkin();
+    font = env->getFont("../media/fonthaettenschweiler.bmp");
+    if (font)
+        skin->setFont(font);
+
+    skin->setFont(env->getBuiltInFont(), EGDF_TOOLTIP);
+
+    MenuDevice->setEventReceiver(this); 
+
+    //Init sound engine
+    FMOD::System_Create(&system);
+    system->init(32, FMOD_INIT_NORMAL, 0);
+
+    system->createSound("../media/Sonido/blop.mp3", FMOD_HARDWARE, 0, &sound1);
+    sound1->setMode(FMOD_LOOP_OFF);
+
+    gameState = MAIN;  
+
+
     initMainMenu();
 }
 
@@ -35,16 +79,40 @@ bool mainMenu::OnEvent(const SEvent& event)
 				 break;
 
 			case GUI_MENU_BOTON_CREDITOS:
+                 initCreditsMenu();
 				 break;
 
 			case GUI_MENU_BOTON_SALIR:	
                  gameState = FINISH;
-				break;
+				 break;
 
-			default:
-				break;
+            case GUI_OPCIONES_BOTON_ATRAS:
+                 initMainMenu();
+                 break;
 		}
 	}
+    else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
+    {
+        s32 id = event.GUIEvent.Caller->getID();
+        IGUIEnvironment* env = MenuDevice->getGUIEnvironment();
+
+        switch(id)
+        {
+            case GUI_OPCIONES_SCROLL_SONIDO: 
+                 s32 pos = ((IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
+                 gameEngine::setVolume(pos/100.0);
+
+                 //Emitir un sonido
+                 FMOD::Channel* channel;
+                 system->getChannel(0,&channel);
+                 system->playSound(FMOD_CHANNEL_FREE, sound1, false, &channel);
+                 channel->setVolume(pos/100.0);
+                 channel->setPaused(false);
+                 system->update();
+                 break;
+
+        }        
+    }
 	return false;
 }
 
@@ -62,6 +130,31 @@ int mainMenu::run()
                 core::rect<s32>(0,0,800 ,600), 0,
                 video::SColor(255,255,255,255), true);
 
+            //Si estamos en la pantalla de creditos, pintamos el texto
+            if(credits)
+            {
+                font->draw(L"Juego creado por el grupo Calintial",
+                    core::rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72),
+                    video::SColor(255,255,255,255));
+
+                font->draw(L"Silvia De Gregorio Medrano",
+                    core::rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+20,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72),
+                    video::SColor(255,255,255,255));
+
+                font->draw(L"Victor Guzmán Pedrajas",
+                    core::rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+40,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72),
+                    video::SColor(255,255,255,255));
+
+                font->draw(L"Adrián Medina Gonzalez",
+                    core::rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+60,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72),
+                    video::SColor(255,255,255,255));
+
+                font->draw(L"Adrián Escolano Díaz",
+                    core::rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+80,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72),
+                    video::SColor(255,255,255,255));            
+            }
+
+
             //Pinta los botones antes definidos
             env->drawAll();
 
@@ -76,6 +169,9 @@ int mainMenu::run()
 
     if(gameState != MAIN)
     {
+        sound1->release();
+        system->close();
+        system->release();
         MenuDevice->drop();
     }
     return gameState;
@@ -83,36 +179,9 @@ int mainMenu::run()
 
 void  mainMenu::initMainMenu()
 {
-    dimensionPantallaX=800;
-    dimensionPantallaY=600;
-
-    //Create an Irrlicht Device.
-    MenuDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
-
-    env = MenuDevice->getGUIEnvironment();
+    credits = false;
     env->clear();
 
-    MenuDevice->setWindowCaption(L"Demo de Mortal Villager");
-    MenuDevice->setResizable(true);
-
-    //Get the Scene Manager from the MenuDevice.
-    smgr = MenuDevice->getSceneManager();
-
-    //Get the Video Driver from the MenuDevice.
-    driver = MenuDevice->getVideoDriver();
-
-    video::IVideoDriver* driver = MenuDevice->getVideoDriver();
-    
-
-    //Cargar fondo del menu principal
-    images = driver->getTexture("../media/Imagenes/Fondo.png");
-    skin = env->getSkin();
-    font = env->getFont("../media/fonthaettenschweiler.bmp");
-    if (font)
-        skin->setFont(font);
-
-    skin->setFont(env->getBuiltInFont(), EGDF_TOOLTIP);
-        
     env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 32), 0, GUI_MENU_BOTON_JUGAR,
         L"Jugar", L"Empezar partida");
     env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+40,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72), 0,GUI_MENU_BOTON_OPCIONES,
@@ -121,15 +190,28 @@ void  mainMenu::initMainMenu()
         L"Creditos", L"Información del juego"); 
     env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+120,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 152), 0, GUI_MENU_BOTON_SALIR,
         L"Salir", L"Salir del juego");
-
-    MenuDevice->setEventReceiver(this); 
-
-    gameState = MAIN;   
 }
 
 void mainMenu::initOptionsMenu()
 {
     env->clear();
     env = MenuDevice->getGUIEnvironment();
-    env->addComboBox (rect<s32>(),0,GUI_OPCIONES_COMBO_WIREFRAME);
+
+    IGUIScrollBar* volume_bar = env->addScrollBar(true,rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 32), 0, GUI_OPCIONES_SCROLL_SONIDO);
+
+    volume_bar->setPos(gameEngine::getVolume() * 100);
+
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+40,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 72), 0, GUI_OPCIONES_BOTON_ATRAS,
+        L"Volver", L"Volver al menu principal");
+}
+
+void mainMenu::initCreditsMenu()
+{
+    credits = true;
+
+    env->clear();
+
+    env->addButton(rect<s32>((dimensionPantallaX/2-100),dimensionPantallaY/2+120,(dimensionPantallaX/2+100),dimensionPantallaY/2 + 152), 0, GUI_OPCIONES_BOTON_ATRAS,
+        L"Volver", L"Volver al menu principal");
+
 }
