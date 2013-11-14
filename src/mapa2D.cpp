@@ -11,8 +11,32 @@ using namespace core;
 
 mapa2D::mapa2D()
 {
-	IFileSystem *irrFile;
-	WorkingDirectory = irrFile->getWorkingDirectory() + "/";
+	int dimensionPantallaX=800;
+    int dimensionPantallaY=600;
+    
+	MapaDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),32,false,false,false,0);
+
+    env = MapaDevice->getGUIEnvironment();
+    env->clear();
+
+    MapaDevice->setWindowCaption(L"Demo de Mapa Mortal Villager");
+    MapaDevice->setResizable(true);
+
+    //Get the Scene Manager from the MapaDevice.
+    smgr = MapaDevice->getSceneManager();
+
+    //Get the Video Driver from the MapaDevice.
+    driver = MapaDevice->getVideoDriver();
+    
+    //Get the Timer from MapaDevice
+    timer = MapaDevice->getTimer();
+
+    video::IVideoDriver* driver = MapaDevice->getVideoDriver();
+    
+	file = MapaDevice->getFileSystem();;
+	WorkingDirectory = file->getWorkingDirectory() + "/";
+	
+	skin = env->getSkin();
 
 	Init();   
     
@@ -21,6 +45,8 @@ mapa2D::mapa2D()
     LoadTextures();
     
     //LoadEvents();
+    
+    gameState = INGAME;  
 }
 
 mapa2D::~mapa2D()
@@ -67,9 +93,9 @@ void mapa2D::AllocateMap()
         }
 
         // Delete textures
-        for(u32 i = 0; i < Texturas.size(); i++)
+        /*for(u32 i = 0; i < Texturas.size(); i++)
                 irrDriver->removeTexture(Texturas[i]);
-        Texturas.clear();
+        Texturas.clear();*/
 }
 
 void mapa2D::LoadTextures()

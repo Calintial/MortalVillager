@@ -5,6 +5,8 @@
 #define MAPA_H
 
 #include <irrlicht.h>
+#include "gameEngine.h"
+
 #include <string>
 #include <vector>
 #include <fstream>
@@ -78,6 +80,17 @@ public:
 	//Manejo de objetos
 	//void Update(u32 TDeltaTime);
 private:
+	IrrlichtDevice * MapaDevice;
+	video::IVideoDriver* driver;
+	scene::ISceneManager* smgr;
+	ITimer *timer;
+	IFileSystem *file;
+	gui::IGUIEnvironment* env;
+	IGUISkin* skin;
+	IGUIFont* font;
+	video::ITexture* images;
+	int gameState;
+
 	void Init();
 	void AllocateMap();
 	void LoadTextures();
