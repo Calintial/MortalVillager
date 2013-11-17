@@ -7,21 +7,22 @@
 
 using namespace std;
 
-#define HEIGHT 21
+#define HEIGHT 20
 #define WIDTH 20
 
 class pathfinding
 {
 public:
 	pathfinding();
-	~pathfinding();
+	~pathfinding(); 
 	void run();
 	Region* getCorrespondingRegion(int x, int y);
 	void createRegions();
 	void analyzeRegions();
+	void leftEdge(Region*);
 
 private:
-	int width,height;
+	int width,height; 
 	int tamRegion;
 	int mapa[HEIGHT][WIDTH];
 	std::vector<Region*> regiones;

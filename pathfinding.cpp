@@ -5,11 +5,11 @@ pathfinding::pathfinding(){
 	height = HEIGHT;
 	tamRegion = 10;
 	cout<<"MAPA:"<<endl;
-	for (int i = 0; i < width; ++i)
+	for (int i = 0; i < height; ++i)
 	{
-		for (int j = 0; j < height; ++j)
+		for (int j = 0; j < width; ++j)
 		{
-			if((i+1) % (j+1) == 0){
+			if((j+1)%(i+1) == 0){
 				mapa[i][j] = -1;
 				cout<<"▣";
 			}else{
@@ -31,28 +31,71 @@ pathfinding::~pathfinding(){
 
 void pathfinding::createRegions(){
 	int finalX,finalY;
-	for (int i = 0; i < height; i+=tamRegion)
+	for (int i = 0; i < width; i+=tamRegion)
 	{
-		for (int j = 0; j < width; j+=tamRegion)
+		for (int j = 0; j < height; j+=tamRegion)
 		{
 			finalX = i+tamRegion-1;
 			finalY = j+tamRegion-1;
-			if (finalX > height)
+			if (finalY > height)
 			{
-				finalX = height - 1;
+				finalY = height - 1;
 			}
 
-			if (finalY > width)
+			if (finalX > width)
 			{
-				finalY = width -1;
+				finalX = width -1;
 			}
 			regiones.push_back(new Region(i,j,finalX,finalY));
 		}
 	}
 }
 
-void pathfinding::analyzeRegions(){
+void pathfinding::leftEdge(Region* actual){
+	if (actual->inicioX > 0)
+	{
+		Region* regionIzquierda = getCorrespondingRegion(actual->inicioX-1,actual->inicioY);
+		int iterador = actual->inicioY;
 
+		int tamHueco = 0;
+		int posHueco = -1;
+		while(iterador < actual->finalY && iterador < height)
+		{
+			if (mapa[iterador][actual->inicioX] == 0 && mapa[iterador][regionIzquierda->finalX] == 0)
+			{
+				if (posHueco == -1)
+				{
+					posHueco = iterador;
+				}
+				tamHueco++;
+			}else{
+				if (tamHueco > 0)
+				{
+					// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
+					new Enlace(actual,regionIzquierda,0); //TODO: cambiar el peso
+					cout<<"Nuevo enlace"<<endl;
+					tamHueco = 0;
+					posHueco = -1;
+				}
+				
+			}
+			iterador++;
+		}
+		if (tamHueco > 0)
+		{
+			new Enlace(actual,regionIzquierda,0); //TODO: cambiar el peso
+			cout<<"Nuevo enlace"<<endl;
+		}
+	}
+}
+
+void pathfinding::analyzeRegions(){
+	for (int regIndex = 0; regIndex < regiones.size(); ++regIndex)
+	{
+		Region* actual = regiones[regIndex];
+		// borde izquierdo de cada region
+		leftEdge(actual);
+	}
 }
 
 void pathfinding::run(){
@@ -61,7 +104,17 @@ void pathfinding::run(){
 	cout<<"He creado "<<regiones.size()<<" regiones"<<endl;
 	for (int i = 0; i < regiones.size(); ++i)
 	{
-		cout<<"Reg"<<i<<" {"<<regiones[i]->inicioX<<","<<regiones[i]->inicioY<<" - "<<regiones[i]->finalX<<","<<regiones[i]->finalY<<"}"<<endl;
+		cout<<"Reg"<<i<<"("<<regiones[i]<<") {"<<regiones[i]->inicioX<<","<<regiones[i]->inicioY<<" - "<<regiones[i]->finalX<<","<<regiones[i]->finalY<<"}"<<endl;
+	}
+	analyzeRegions();
+	for (int i = 0; i < regiones.size(); ++i)
+	{
+		cout<<"### Reg"<<i<<"("<<regiones[i]<<") conectada con:"<<endl;
+		std::vector<Region*> lista = regiones[i]->getConnectedRegions();
+		for (int j = 0; j < lista.size(); ++j)
+		{
+			cout<<"Reg "<<lista[j]<<endl;
+		}
 	}
 	/*Enlace *link;
 	link = new Enlace(r0,r1,10);

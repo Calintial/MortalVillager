@@ -12,7 +12,7 @@ $(EXEC): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(EXEC)
 
 # To obtain object files
-%.o: %.cpp
+%.o: %.cpp %.h
 	$(CC) -c $(CC_FLAGS) $< -o $@
 
 # To remove generated files
