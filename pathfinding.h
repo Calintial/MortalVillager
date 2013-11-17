@@ -7,8 +7,8 @@
 
 using namespace std;
 
-#define HEIGHT 102
-#define WIDTH 106
+#define HEIGHT 21
+#define WIDTH 20
 
 class pathfinding
 {
@@ -18,6 +18,7 @@ public:
 	void run();
 	Region* getCorrespondingRegion(int x, int y);
 	void createRegions();
+	void analyzeRegions();
 
 private:
 	int width,height;

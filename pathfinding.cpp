@@ -4,6 +4,21 @@ pathfinding::pathfinding(){
 	width = WIDTH;
 	height = HEIGHT;
 	tamRegion = 10;
+	cout<<"MAPA:"<<endl;
+	for (int i = 0; i < width; ++i)
+	{
+		for (int j = 0; j < height; ++j)
+		{
+			if((i+1) % (j+1) == 0){
+				mapa[i][j] = -1;
+				cout<<"▣";
+			}else{
+				mapa[i][j] = 0;
+				cout<<"□";
+			}
+		}
+		cout<<endl;
+	}
 }
 
 pathfinding::~pathfinding(){
@@ -34,6 +49,10 @@ void pathfinding::createRegions(){
 			regiones.push_back(new Region(i,j,finalX,finalY));
 		}
 	}
+}
+
+void pathfinding::analyzeRegions(){
+
 }
 
 void pathfinding::run(){
