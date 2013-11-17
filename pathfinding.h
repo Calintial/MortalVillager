@@ -5,19 +5,23 @@
 #include <iostream>
 #include <vector>
 
-#define HEIGHT 10
-#define WIDTH 10
+using namespace std;
+
+#define HEIGHT 102
+#define WIDTH 106
 
 class pathfinding
 {
 public:
 	pathfinding();
-	~pathfinding(){}
+	~pathfinding();
 	void run();
 	Region* getCorrespondingRegion(int x, int y);
+	void createRegions();
 
-//private:
-	//int width,height;
-	//int** mapa;
+private:
+	int width,height;
+	int tamRegion;
+	int mapa[HEIGHT][WIDTH];
 	std::vector<Region*> regiones;
 };

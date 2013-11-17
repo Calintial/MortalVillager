@@ -1,22 +1,50 @@
 #include "pathfinding.h"
 
 pathfinding::pathfinding(){
-	/*width = WIDTH;
+	width = WIDTH;
 	height = HEIGHT;
-	mapa = new int[HEIGHT][WIDTH];*/
+	tamRegion = 10;
+}
+
+pathfinding::~pathfinding(){
+	for (int i = 0; i < regiones.size(); ++i)
+	{
+		delete regiones[i];
+	}
+	regiones.clear();
+}
+
+void pathfinding::createRegions(){
+	int finalX,finalY;
+	for (int i = 0; i < height; i+=tamRegion)
+	{
+		for (int j = 0; j < width; j+=tamRegion)
+		{
+			finalX = i+tamRegion-1;
+			finalY = j+tamRegion-1;
+			if (finalX > height)
+			{
+				finalX = height - 1;
+			}
+
+			if (finalY > width)
+			{
+				finalY = width -1;
+			}
+			regiones.push_back(new Region(i,j,finalX,finalY));
+		}
+	}
 }
 
 void pathfinding::run(){
-	Region *r0 = new Region(0,0,2,2);
-	Region *r1 = new Region(0,3,2,5);
-	Region *r2 = new Region(3,0,5,2);
-	Region *r3 = new Region(3,3,5,5);
-	regiones.push_back(r0);
-	regiones.push_back(r1);
-	regiones.push_back(r2);
-	regiones.push_back(r3);
+	createRegions();
 
-	Enlace *link;
+	cout<<"He creado "<<regiones.size()<<" regiones"<<endl;
+	for (int i = 0; i < regiones.size(); ++i)
+	{
+		cout<<"Reg"<<i<<" {"<<regiones[i]->inicioX<<","<<regiones[i]->inicioY<<" - "<<regiones[i]->finalX<<","<<regiones[i]->finalY<<"}"<<endl;
+	}
+	/*Enlace *link;
 	link = new Enlace(r0,r1,10);
 	link = new Enlace(r0,r2,10);
 	link = new Enlace(r2,r3,10);
@@ -38,7 +66,7 @@ void pathfinding::run(){
 	delete r0;
 	delete r1;
 	delete r2;
-	delete r3;
+	delete r3;*/
 }
 
 Region* pathfinding::getCorrespondingRegion(int x, int y){
