@@ -6,6 +6,11 @@ gameEngine::gameEngine()
 {
 	gameState = MAIN;
 	graphics = new graphicEngine();
+
+	vector<battleIA*> units;
+	battleIA* unit = new battleIA();
+	units.push_back(unit);
+	ia = new intelEngine(units);
 }
 
 gameEngine::~gameEngine()
@@ -17,6 +22,7 @@ void gameEngine::run()
 {
 	//Bucle principal del juego. Mientras el estado no cambia a FINISH el programa no termina.
 	//En cada estado se llamará a los motores necesarios(IA,Graficos,etc...)
+	char aux = 0;
 	while(gameState != FINISH)
 	{
 		switch(gameState)
@@ -24,7 +30,7 @@ void gameEngine::run()
 			
 			case MAIN: gameState = graphics->DrawMainMenu();
 					   break;
-			case INGAME: cout<<"Jugando"<<endl; break;
+			case INGAME: ia->updateBattleIA();break;
 			case PAUSE: break;
 			default: break;
 		}

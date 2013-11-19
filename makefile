@@ -1,12 +1,14 @@
-OPTS=-g
+OPTS=-g -std=c++11
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex
+
+OBJECTS=graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o Unidades.o battleIA.o 
 
 .PHONY: all clean
 
 main: bin/main
 
-bin/main: src/main.cpp graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o
+bin/main: src/main.cpp $(OBJECTS)
 	mkdir -p bin
 	g++ -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
@@ -32,6 +34,13 @@ edificio.o: src/edificio.cpp include/edificio.h
 
 gameScreen.o: src/gameScreen.cpp include/gameScreen.h
 	g++ -c src/gameScreen.cpp $(OPTS) $(INCLUDES)
+
+battleIA.o: src/battleIA.cpp include/battleIA.h
+	g++ -c src/battleIA.cpp $(OPTS) $(INCLUDES)
+
+Unidades.o: src/Unidades.cpp include/Unidades.h
+	g++ -c src/Unidades.cpp $(OPTS) $(INCLUDES)
+
 
 # bin/hello: src/HelloWorld.cpp
 # 	mkdir -p bin;g++ -o bin/hello src/HelloWorld.cpp $(OPTS) $(INCLUDES) $(LINKS)

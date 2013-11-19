@@ -2,6 +2,8 @@
 #define GAMEENGINE_H
 
 #include "graphicEngine.h"
+#include "intelEngine.h"
+#include "battleIA.h"
 #include <iostream>
 using namespace std;
 
@@ -24,6 +26,7 @@ public:
 
 private:
 	graphicEngine* graphics;
+	intelEngine* ia;
 	int gameState;
 	static float volumen;
 };
