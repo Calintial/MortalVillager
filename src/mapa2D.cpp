@@ -171,17 +171,18 @@ void mapa2D::Render()
 		for(int j = 0; j < ViewSize.Height; j++)
 		{
 			// Obtenermos coordenadas actuales cuadricula
-            GridPosition.X = i + CameraScroll.X - ViewSize.Width / 2;
-            GridPosition.Y = j + CameraScroll.Y - ViewSize.Height / 2;
-            DrawPosition = position2di((i - ViewSize.Width / 2) * TILE_WIDTH + 400, (j - ViewSize.Height / 2) * TILE_HEIGHT + 300);
-
+            //GridPosition.X = i + CameraScroll.X - ViewSize.Width / 2;
+            //GridPosition.Y = j + CameraScroll.Y - ViewSize.Height / 2;
+            //DrawPosition = position2di((i - ViewSize.Width / 2) * TILE_WIDTH + 400, (j - ViewSize.Height / 2) * TILE_HEIGHT + 300);
+			DrawPosition = position2di(i*TILE_WIDTH,j*TILE_HEIGHT);
 			// Validar coordenada
-			if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
-				STile *Tile = &vTiles[GridPosition.X][GridPosition.Y];
+			//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
+				//STile *Tile = &vTiles[GridPosition.X][GridPosition.Y];
+				STile *Tile = &vTiles[i][j];
 				//Pinta
 				if(Tile->textura)
 					Pintar(Tile->textura, DrawPosition.X, DrawPosition.Y);
-			}
+			//}
 		}
 	}
 	
