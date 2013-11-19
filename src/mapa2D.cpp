@@ -1,4 +1,5 @@
 #include "mapa2D.h"
+#include "graphicEngine.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -9,31 +10,30 @@ using namespace std;
 using namespace core;
 
 
-mapa2D::mapa2D()
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice)
 {
-	int dimensionPantallaX=800;
-    int dimensionPantallaY=600;
+	//int dimensionPantallaX=800;
+    //int dimensionPantallaY=600;
     
-	MapaDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),32,false,false,false,0);
+	//MapaDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),32,false,false,false,0);
 
-    env = MapaDevice->getGUIEnvironment();
+	MapaDevice = IrrDevice;
+
+    env = IrrDevice->getGUIEnvironment();
     env->clear();
 
-    MapaDevice->setWindowCaption(L"Demo de Mapa Mortal Villager");
-    MapaDevice->setResizable(true);
-
     //Get the Scene Manager from the MapaDevice.
-    smgr = MapaDevice->getSceneManager();
+    smgr = IrrDevice->getSceneManager();
 
     //Get the Video Driver from the MapaDevice.
-    driver = MapaDevice->getVideoDriver();
+    driver = IrrDevice->getVideoDriver();
     
     //Get the Timer from MapaDevice
-    timer = MapaDevice->getTimer();
+    timer = IrrDevice->getTimer();
 
-    video::IVideoDriver* driver = MapaDevice->getVideoDriver();
+    video::IVideoDriver* driver = IrrDevice->getVideoDriver();
     
-	file = MapaDevice->getFileSystem();;
+	file = IrrDevice->getFileSystem();;
 	WorkingDirectory = file->getWorkingDirectory() + "/";
 	
 	skin = env->getSkin();
@@ -46,7 +46,7 @@ mapa2D::mapa2D()
     
     //LoadEvents();
     
-    gameState = INGAME;  
+    gameState = INGAME;
 }
 
 mapa2D::~mapa2D()
@@ -93,31 +93,39 @@ void mapa2D::AllocateMap()
         }
 
         // Delete textures
-        /*for(u32 i = 0; i < Texturas.size(); i++)
-                irrDriver->removeTexture(Texturas[i]);
-        Texturas.clear();*/
+        for(u32 i = 0; i < Texturas.size(); i++)
+                driver->removeTexture(Texturas[i]);
+        Texturas.clear();
 }
 
 void mapa2D::LoadTextures()
 {
 	//Carga Texturas
-	int TexCount = 0;
-	File.read(reinterpret_cast<char *>(&TexCount), sizeof(TexCount));
-    Texturas.clear();
-        
+	int TexCount = 1;
+		
+
+	//File.read(reinterpret_cast<char *>(&TexCount), sizeof(TexCount));
+
+    //Texturas.clear();
+        		cout << TexCount <<endl;
+
 	stringc TextureFile;
-	char tex[256];
+	//char tex[256];
 	
 	for(int i = 0; i < TexCount; i++)
 	{
-		File.get(tex, 2147483647, 0);
-		File.get();
-        TextureFile = tex;
+		//File.get(tex, 2147483647, 0);
+		//File.get();
+        //TextureFile = tex;
                 
+        //cout << tex;
         if(TextureFile == "none")
 			Texturas.push_back(NULL);
 		else
-			Texturas.push_back(irrDriver->getTexture(WorkingDirectory + "Texturas/map/" + TextureFile));
+		{
+			ITexture* textura = driver->getTexture("../media/Texturas/map/grass0.png");
+			Texturas.push_back(textura);
+		}
 	}
         
         STile *Tile;
@@ -129,6 +137,8 @@ void mapa2D::LoadTextures()
 					Tile->textura = Texturas[0];
 				}
 		}
+		
+		Render();
 }
 
 void mapa2D::LoadEvents(STile *Tile,int i, int j)
@@ -153,6 +163,9 @@ void mapa2D::SetCameraScroll(const position2di &TPosition) {
 void mapa2D::Render()
 {
 	position2di GridPosition, DrawPosition;
+	
+	driver->beginScene(true, true, SColor(0,200,200,200));
+	
     for(int i = 0; i < ViewSize.Width; i++)
     {
 		for(int j = 0; j < ViewSize.Height; j++)
@@ -171,12 +184,16 @@ void mapa2D::Render()
 			}
 		}
 	}
+	
+	env->drawAll();
+	driver->endScene();
 }
 
 //Pinta alrededor de una posicion
 void mapa2D::Pintar(const ITexture *TTexture, int TPositionX, int TPositionY)
 {
-                irrDriver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width >> 1), TPositionY - (TTexture->getSize().Height >> 1)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+	cout <<"Pos:" << TPositionX << "," << TPositionY << endl;
+	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width >> 1), TPositionY - (TTexture->getSize().Height >> 1)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 
 // Posicion de la cuadricula del mapa a una coordenada de la pantalla

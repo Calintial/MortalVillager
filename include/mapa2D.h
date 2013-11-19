@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 
 using namespace irr;
 using namespace video;
@@ -53,10 +54,10 @@ public:
 	};
 
 
-	mapa2D();
+	mapa2D(IrrlichtDevice * IrrDevice);
 	~mapa2D();
-	mapa2D(const mapa2D&) {};
-	mapa2D& operator=(const mapa2D&) {};
+	//mapa2D(const mapa2D&) {};
+	//mapa2D& operator=(const mapa2D&) {};
 
 	bool free();
 
@@ -108,7 +109,6 @@ private:
 	array<ITexture *> Texturas;
 	std::fstream File;
 	stringc WorkingDirectory;
-	IVideoDriver *irrDriver;
 	
 	//Eventos
 	array<IndexedEventStruct> IndexedEvents;
