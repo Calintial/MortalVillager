@@ -5,7 +5,7 @@ graphicEngine::graphicEngine()
     //Create an Irrlicht Device.
     IrrDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
 	IrrDevice->setWindowCaption(L"Demo de Mapa Mortal Villager");
-    IrrDevice->setResizable(true);
+    //IrrDevice->setResizable(true);
 	
 	menu = NULL;
 	mapa = NULL;

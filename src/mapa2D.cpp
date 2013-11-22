@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <cstdlib>
+#include <string>
 
 using namespace irr;
 using namespace video;
@@ -29,20 +31,22 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice)
     driver = IrrDevice->getVideoDriver();
     
     //Get the Timer from MapaDevice
-    timer = IrrDevice->getTimer();
-
     video::IVideoDriver* driver = IrrDevice->getVideoDriver();
     
 	file = IrrDevice->getFileSystem();;
 	WorkingDirectory = file->getWorkingDirectory() + "/";
 	
 	skin = env->getSkin();
+	
+	IrrDevice->setEventReceiver(this); 
 
 	Init();   
     
+    //GenerarMapa();
+    
     AllocateMap();
     
-    LoadTextures();
+    Pintar();
     
     //LoadEvents();
     
@@ -56,11 +60,9 @@ mapa2D::~mapa2D()
 
 void mapa2D::Init()
 {
-	vTiles = NULL;
-	Width = 250;
-	Height = 250;
-	ViewSize.Width = 25;
-    ViewSize.Height = 19;
+	//vTiles = NULL;
+	ViewSize.Width = 26;
+    ViewSize.Height = 20;
     CameraScroll.X = 2;
     CameraScroll.Y = 2;
 }
@@ -71,96 +73,151 @@ bool mapa2D::free()
     //vTiles.clear();
 	if(vTiles) 
     {
-		for(int i = 0; i < Width; i++)
+		for(int i = 0; i < WIDTH; i++)
 			delete[] vTiles[i];
 		delete[] vTiles;
 
-        vTiles = NULL;
+        //vTiles = NULL;
 	}
-    IndexedEvents.clear();
+    //IndexedEvents.clear();
     
     return true;
 }
 
+bool mapa2D::OnEvent(const SEvent& event)
+{
+}
+
 void mapa2D::AllocateMap()
 {
-        if(vTiles)
-                return;
-
-        vTiles = new STile*[Width];
-        for(int i = 0; i < Width; i++) {
-                vTiles[i] = new STile[Height];
-        }
-
-        // Delete textures
-        for(u32 i = 0; i < Texturas.size(); i++)
-                driver->removeTexture(Texturas[i]);
-        Texturas.clear();
-}
-
-void mapa2D::LoadTextures()
-{
-	//Carga Texturas
-	int TexCount = 1;
-		
-
-	//File.read(reinterpret_cast<char *>(&TexCount), sizeof(TexCount));
-
-    //Texturas.clear();
-        		cout << TexCount <<endl;
-
-	stringc TextureFile;
-	//char tex[256];
-	
-	for(int i = 0; i < TexCount; i++)
+	int k=0;
+	bool gen=true;
+    int c=10;
+    srand(time(0));
+    std::string mapatext = "";
+    
+    ifstream myfile ("../media/mapa.txt");
+	if (myfile.is_open())
 	{
-		//File.get(tex, 2147483647, 0);
-		//File.get();
-        //TextureFile = tex;
-                
-        //cout << tex;
-        if(TextureFile == "none")
-			Texturas.push_back(NULL);
-		else
+		getline (myfile,mapatext);
+		myfile.close();
+	}
+    //cout << "HOLA" << endl;
+    
+	for(int i = 0; i < WIDTH; i++) 
+    {
+		for(int j=0; j < HEIGHT; j++) 
 		{
-			ITexture* textura = driver->getTexture("../media/Texturas/map/grass0.png");
-			Texturas.push_back(textura);
+			//vTiles[i][j] =new Suelo(0);
+			if(mapatext[k]=='0')
+			{
+				vTiles[i][j] =new Suelo(0);
+			}
+			else if(mapatext[k]=='1')
+			{
+				vTiles[i][j] = new Suelo(1);
+			}
+			
+			vTiles[i][j]->Pintar(driver);
+			k++;
 		}
 	}
-        
-        STile *Tile;
-        for(int i = 0; i < Width; i++)
-        {
-                for(int j = 0; j < Height; j++)
-                {
-					Tile = &vTiles[i][j];
-					Tile->textura = Texturas[0];
-				}
-		}
-		
-		Render();
 }
 
-void mapa2D::LoadEvents(STile *Tile,int i, int j)
+//Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
+void mapa2D::GenerarMapa()
+{
+	bool gen=true;
+    int c=10;
+    srand(time(0));
+    std::string mapatext = "";
+    //cout << "HOLA" << endl;
+
+	for(int i = 0; i < WIDTH; i++) 
+    {
+		for(int j=0; j < HEIGHT; j++) 
+		{
+			int r=rand()%c;
+			if(r==1){
+				if(gen)
+					gen=false;
+				else 
+					gen=true;
+			}
+			if(gen)
+			{
+				c=10;
+				if(vTiles[i][j]==NULL)
+				{
+					vTiles[i][j] =new Suelo(0);
+					mapatext+="0";
+					if(rand()%c!=1)
+						vTiles[i+1][j] = new Suelo(0);
+				}
+				else if(vTiles[i][j]->getTipo()==1)
+				{
+					gen=false;
+					c=3;
+					mapatext+="1";
+				}
+				else
+				{
+					mapatext+="0";
+				}
+			}
+			else if(gen==false)
+			{
+				c=3;
+				if(vTiles[i][j]==NULL)
+				{
+					vTiles[i][j] =new Suelo(1);
+					mapatext+="1";
+					if(rand()%c!=1)
+						vTiles[i+1][j] = new Suelo(1);
+				}
+				else if(vTiles[i][j]->getTipo()==0)
+				{
+					mapatext+="0";
+					gen=true;
+					c=10;
+				}
+				else
+				{
+					mapatext+="1";
+				}
+			}
+		}
+	}
+					
+			//cout << mapatext << endl;
+			cout << mapatext.size() << endl;
+			std::ofstream file("../media/mapa.txt", std::ios_base::binary);
+			std::string fileString;
+
+			file << mapatext;
+}
+
+/*void mapa2D::LoadEvents(STile *Tile,int i, int j)
 {
 	IndexedEvents.push_back(IndexedEventStruct(Tile, position2di(i, j)));
-}
+}*/
 
 
-void mapa2D::SetCameraScroll(const position2di &TPosition) {
+void mapa2D::SetCameraScroll(const position2di &TPosition) 
+{
 
         CameraScroll = TPosition;
         if(CameraScroll.X < 2)
                 CameraScroll.X = 2;
         if(CameraScroll.Y < 2)
                 CameraScroll.Y = 2;
-        if(CameraScroll.X >= Width - 2)
-                CameraScroll.X = Width - 2;
-        if(CameraScroll.Y >= Height - 2)
-                CameraScroll.Y = Height - 2;
+        if(CameraScroll.X >= WIDTH - 2)
+                CameraScroll.X = WIDTH - 2;
+        if(CameraScroll.Y >= HEIGHT - 2)
+                CameraScroll.Y = HEIGHT - 2;
 }
 
-void mapa2D::Render()
+void mapa2D::Pintar()
 {
 	position2di GridPosition, DrawPosition;
 	
@@ -178,10 +235,10 @@ void mapa2D::Render()
 			// Validar coordenada
 			//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
 				//STile *Tile = &vTiles[GridPosition.X][GridPosition.Y];
-				STile *Tile = &vTiles[i][j];
+				IDibujable *Tile = vTiles[i][j];
 				//Pinta
-				if(Tile->textura)
-					Pintar(Tile->textura, DrawPosition.X, DrawPosition.Y);
+				if(Tile->getTextura())
+					PintarTile(Tile->getTextura(), DrawPosition.X, DrawPosition.Y);
 			//}
 		}
 	}
@@ -191,9 +248,9 @@ void mapa2D::Render()
 }
 
 //Pinta alrededor de una posicion
-void mapa2D::Pintar(const ITexture *TTexture, int TPositionX, int TPositionY)
+void mapa2D::PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY)
 {
-	cout <<"Pos:" << TPositionX << "," << TPositionY << endl;
+	//cout <<"Pos:" << TPositionX << "," << TPositionY << endl;
 	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width >> 1), TPositionY - (TTexture->getSize().Height >> 1)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 
@@ -213,23 +270,27 @@ bool mapa2D::GridToScreen(const position2di &TGridPosition, position2di &TScreen
 }
 
 // Convierte una coordenada de la pantalla en una posicion de la cuadricula del mapa
-void mapa2D::ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const {
+void mapa2D::ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const 
+{
         TGridPosition.X = GetCameraScroll().X + TScreenPosition.X / TILE_WIDTH - GetViewSize().Width / 2;
         TGridPosition.Y = GetCameraScroll().Y + TScreenPosition.Y / TILE_HEIGHT - GetViewSize().Height / 2;
 }
 
 
-IndexedEventStruct *mapa2D::GetIndexedEvent(int TEventType, int TEventData) {
+/*IndexedEventStruct *mapa2D::GetIndexedEvent(int TEventType, int TEventData) 
+{
 
-        for(u32 i = 0; i < IndexedEvents.size(); i++) {
+        for(u32 i = 0; i < IndexedEvents.size(); i++) 
+        {
                 IndexedEventStruct *IndexedEvent = &IndexedEvents[i];
-                if(IndexedEvent->Tile->EventType == TEventType && IndexedEvent->Tile->EventData == TEventData) {
+                if(IndexedEvent->Tile->EventType == TEventType && IndexedEvent->Tile->EventData == TEventData) 
+                {
                         return IndexedEvent;
                 }
         }
 
         return NULL;
-}
+}*/
 
 
 
