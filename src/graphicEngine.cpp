@@ -24,7 +24,7 @@ int graphicEngine::DrawMainMenu()
 {
 	if(menu == NULL)
 		menu = new mainMenu(IrrDevice);
-		
+		//hudmap= new hud(IrrDevice);
     int status = menu->run();
     
     /*if(status == INGAME)
@@ -34,8 +34,9 @@ int graphicEngine::DrawMainMenu()
 
 int graphicEngine::DrawMap()
 {
-	if(mapa == NULL)
+	if(mapa == NULL){
 		mapa = new mapa2D(IrrDevice);
-		
+		hudmap= new hud(IrrDevice);
+	}
 	int status = INGAME;
 }

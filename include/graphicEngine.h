@@ -1,9 +1,9 @@
 #ifndef GRAPHICENGINE_H
 #define GRAPHICENGINE_H
-
 #include "mainMenu.h"
 #include "mapa2D.h"
 #include "gameEngine.h"
+#include "hud.h"
 #include <iostream>
 using namespace std;
 
@@ -24,6 +24,7 @@ private:
 	IrrlichtDevice * IrrDevice;
 	mainMenu* menu;
 	mapa2D* mapa;
+	hud * hudmap;
 };
 
 #endif
