@@ -4,17 +4,18 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include "Enlace.h"
+//#include "Enlace.h"
 
 class Region
 {
 public:
+	Region();
 	Region(int,int,int,int);
 	~Region();
-	void add(Enlace*);
-	void remove(Enlace*);
+/*	void add(Enlace*);
+	void remove(Enlace*);*/
 	bool isInside(int x, int y);
-	std::vector<Region*> getConnectedRegions();
+//	std::vector<Region*> getConnectedRegions();
 
 
 //private:
@@ -24,7 +25,7 @@ public:
 	int finalX;
 	int finalY;
 
-	std::vector<Enlace*> enlaces;
+	//std::vector<Enlace*> enlaces;
 };
 
 #endif

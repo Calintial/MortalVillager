@@ -11,6 +11,9 @@ OBJECTS = $(SOURCES:.cpp=.o)
 $(EXEC): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(EXEC)
 
+main_path: pathfinding_deverdad.o Region.o
+	$(CC) $^ -lboost_graph  -o main_path
+
 # To obtain object files
 %.o: %.cpp %.h
 	$(CC) -c $(CC_FLAGS) $< -o $@
