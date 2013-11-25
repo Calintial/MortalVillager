@@ -30,7 +30,9 @@ void gameEngine::run()
 			
 			case MAIN: gameState = graphics->DrawMainMenu();
 					   break;
-			case INGAME: ia->updateBattleIA();break;
+
+			case INGAME: cout<<"Jugando"<<endl; gameState = graphics->DrawMap(); ia->updateBattleIA();break;
+
 			case PAUSE: break;
 			default: break;
 		}

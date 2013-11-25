@@ -1,28 +1,27 @@
 #include "mainMenu.h"
 
-mainMenu::mainMenu()
+mainMenu::mainMenu(IrrlichtDevice * IrrDevice)
 {
     credits = false;
 
-    dimensionPantallaX=800;
-    dimensionPantallaY=600;
+    //dimensionPantallaX=800;
+    //dimensionPantallaY=600;
 
     //Create an Irrlicht Device.
-    MenuDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
+    //MenuDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
 
-    env = MenuDevice->getGUIEnvironment();
+	MenuDevice = IrrDevice;
+
+    env = IrrDevice->getGUIEnvironment();
     env->clear();
 
-    MenuDevice->setWindowCaption(L"Demo de Mortal Villager");
-    MenuDevice->setResizable(true);
-
     //Get the Scene Manager from the MenuDevice.
-    smgr = MenuDevice->getSceneManager();
+    smgr = IrrDevice->getSceneManager();
 
     //Get the Video Driver from the MenuDevice.
-    driver = MenuDevice->getVideoDriver();
+    driver = IrrDevice->getVideoDriver();
 
-    video::IVideoDriver* driver = MenuDevice->getVideoDriver();
+    video::IVideoDriver* driver = IrrDevice->getVideoDriver();
     
 
     //Cargar fondo del menu principal
@@ -34,7 +33,7 @@ mainMenu::mainMenu()
 
     skin->setFont(env->getBuiltInFont(), EGDF_TOOLTIP);
 
-    MenuDevice->setEventReceiver(this); 
+    IrrDevice->setEventReceiver(this); 
 
     //Init sound engine
     FMOD::System_Create(&system);
@@ -45,13 +44,12 @@ mainMenu::mainMenu()
 
     gameState = MAIN;  
 
-
     initMainMenu();
 }
 
 mainMenu::~mainMenu()
 {
-	delete MenuDevice;
+	//delete MenuDevice;
 	delete driver;
 	delete smgr;
 	delete env;
@@ -172,7 +170,7 @@ int mainMenu::run()
         sound1->release();
         system->close();
         system->release();
-        MenuDevice->drop();
+        //MenuDevice->drop();
     }
     return gameState;
 }
