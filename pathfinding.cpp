@@ -84,7 +84,8 @@ void pathfinding::analyzeRegions(){
 					if (tamHueco > 0)
 					{
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-						boost::add_edge(actual->descriptor,regionIzquierda->descriptor,grafoRegiones);
+						Enlace enlace(actual->inicioX,posHueco,regionIzquierda->finalX,posHueco);
+						boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
 						cout<<"Nuevo enlace izquierda"<<endl;
 						tamHueco = 0;
 						posHueco = -1;
@@ -95,7 +96,8 @@ void pathfinding::analyzeRegions(){
 			}
 			if (tamHueco > 0)
 			{
-				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,grafoRegiones);
+				Enlace enlace(actual->inicioX,posHueco,regionIzquierda->finalX,posHueco);
+				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
 				cout<<"Nuevo enlace izquierda"<<endl;
 			}
 		}
@@ -121,7 +123,8 @@ void pathfinding::analyzeRegions(){
 					if (tamHueco > 0)
 					{
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-						boost::add_edge(actual->descriptor,regionArriba->descriptor,grafoRegiones);
+						Enlace enlace(posHueco,actual->inicioY,posHueco,regionArriba->finalY);
+						boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
 						cout<<"Nuevo enlace arriba"<<endl;
 						tamHueco = 0;
 						posHueco = -1;
@@ -132,12 +135,19 @@ void pathfinding::analyzeRegions(){
 			}
 			if (tamHueco > 0)
 			{
-				boost::add_edge(actual->descriptor,regionArriba->descriptor,grafoRegiones);
+				Enlace enlace(posHueco,actual->inicioY,posHueco,regionArriba->finalY);
+				boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
 				cout<<"Nuevo enlace arriba"<<endl;
 			}
 		}
 
 	}
+}
+
+void pathfinding::findInnerPaths(){
+	// recorrer cada vértice calculando los caminos entre cada par de enlaces
+	// guardar los caminos de alguna forma???????
+	// guardar los pesos en un vector de tamaño nº de enlaces del nodo (camino al propio enlace = 0)
 }
 
 Region* pathfinding::getCorrespondingRegion(int x, int y){
@@ -162,6 +172,8 @@ void pathfinding::run(){
 	std::cout << std::endl;
 
 	analyzeRegions();
+
+	findInnerPaths();
 
 }
 

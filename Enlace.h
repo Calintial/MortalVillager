@@ -2,21 +2,25 @@
 #define ENLACE_H
 
 #include <stdexcept> 
-//#include "Region.h"
 #include <iostream>
 
-class Region;
 class Enlace
 {
 public:
-	Enlace(Region *r1, Region* r2, int peso);
+	Enlace(int,int,int,int);
+	Enlace(const Enlace&);
 	~Enlace();
-	Region* getConnected(Region *whocalls);
 
-//private:
-	Region* reg1;
-	Region* reg2;
-	int intrapeso;
+	int getOrigenX() const {return origenX;}
+	int getOrigenY() const {return origenY;}
+	int getDestinoX() const {return destinoX;}
+	int getDestinoY() const {return destinoY;}
+
+private:
+	int origenX,origenY;
+	int destinoX,destinoY;
+
+	std::vector<int> pesos;
 
 };
 #endif

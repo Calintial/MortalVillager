@@ -3,13 +3,14 @@
 #include <iostream>
 
 #include "Region.h"
+#include "Enlace.h"
 
 using namespace std;
 
 #define HEIGHT 20
 #define WIDTH 20
 
-typedef boost::adjacency_list<boost::listS, boost::vecS, boost::undirectedS, Region > Graph;
+typedef boost::adjacency_list<boost::listS, boost::vecS, boost::undirectedS, Region,Enlace > Graph;
 
 //Some typedefs for simplicity
 typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;
@@ -26,6 +27,7 @@ public:
 	void run();
 	void createRegions();
 	void analyzeRegions();
+	void findInnerPaths();
 	Region* getCorrespondingRegion(int x, int y);
 
 private:

@@ -11,7 +11,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 $(EXEC): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(EXEC)
 
-main_path: pathfinding.o Region.o
+main_path: pathfinding.o Region.o Enlace.o
 	$(CC) $^ -lboost_graph  -o main_path
 
 # To obtain object files

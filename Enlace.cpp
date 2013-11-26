@@ -1,29 +1,16 @@
 #include "Region.h"
 
-Enlace::Enlace(Region *r1, Region* r2, int peso){
-	reg1 = r1;
-	r1->add(this);
-	reg2 = r2;
-	r2->add(this);
-	intrapeso = peso;
+Enlace::Enlace(int _origenX,int _origenY,int _destinoX,int _destinoY)
+	:origenX(_origenX),origenY(_origenY),destinoX(_destinoX),destinoY(_destinoY)
+{
+	// hacer algo con los pesos, si hace falta y tal...
 }
 
-Enlace::~Enlace(){
-	reg1->remove(this);
-	reg2->remove(this);
+Enlace::Enlace(const Enlace& copia){
+	origenX = copia.getOrigenX();
+	destinoX = copia.getDestinoX();
+	origenY = copia.getOrigenY();
+	destinoY = copia.getDestinoY();
 }
 
-Region* Enlace::getConnected(Region *whocalls){
-	if (reg1 == whocalls)
-	{
-		return reg2;
-	}else if (reg2 == whocalls) 
-	{
-		return reg1;
-	}else{
-		std::string mensaje = "";
-		mensaje += (long)whocalls;
-		mensaje += "is not connected to this link";
-		throw std::runtime_error(mensaje);
-	}
-}
+Enlace::~Enlace(){}
