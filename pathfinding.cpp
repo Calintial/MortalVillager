@@ -10,7 +10,12 @@ pathfinding::pathfinding(){
 	{
 		for (int j = 0; j < width; ++j)
 		{
-			if((j+1)%(i+1) == 0){
+			if (i == 9 && j == 3)
+			{
+				mapa[i][j] = -1;
+				cout<<"▣";
+			}
+			else if((j+1)%(i+1) == 0){
 				mapa[i][j] = -1;
 				cout<<"▣";
 			}else{
@@ -20,6 +25,7 @@ pathfinding::pathfinding(){
 		}
 		cout<<endl;
 	}
+
 }
 
 pathfinding::~pathfinding(){}
@@ -53,13 +59,6 @@ void pathfinding::createRegions(){
 }
 
 void pathfinding::analyzeRegions(){
-	/*for (int regIndex = 0; regIndex < regiones.size(); ++regIndex)
-	{
-		Region* actual = regiones[regIndex];
-		// borde izquierdo de cada region
-		leftEdge(actual);
-	}*/
-
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first){
 		Region* actual = &grafoRegiones[*vp.first];
@@ -86,7 +85,7 @@ void pathfinding::analyzeRegions(){
 					{
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
 						boost::add_edge(actual->descriptor,regionIzquierda->descriptor,grafoRegiones);
-						cout<<"Nuevo enlace"<<endl;
+						cout<<"Nuevo enlace izquierda"<<endl;
 						tamHueco = 0;
 						posHueco = -1;
 					}
@@ -97,9 +96,47 @@ void pathfinding::analyzeRegions(){
 			if (tamHueco > 0)
 			{
 				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,grafoRegiones);
-				cout<<"Nuevo enlace"<<endl;
+				cout<<"Nuevo enlace izquierda"<<endl;
 			}
 		}
+
+		// upper edge
+		if (actual->inicioY > 0)
+		{
+			Region* regionArriba = getCorrespondingRegion(actual->inicioX,actual->inicioY-1);
+			int iterador = actual->inicioX;
+
+			int tamHueco = 0;
+			int posHueco = -1;
+			while(iterador < actual->finalX && iterador < width)
+			{
+				if (mapa[actual->inicioY][iterador] == 0 && mapa[regionArriba->finalY][iterador] == 0)
+				{
+					if (posHueco == -1)
+					{
+						posHueco = iterador;
+					}
+					tamHueco++;
+				}else{
+					if (tamHueco > 0)
+					{
+						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
+						boost::add_edge(actual->descriptor,regionArriba->descriptor,grafoRegiones);
+						cout<<"Nuevo enlace arriba"<<endl;
+						tamHueco = 0;
+						posHueco = -1;
+					}
+					
+				}
+				iterador++;
+			}
+			if (tamHueco > 0)
+			{
+				boost::add_edge(actual->descriptor,regionArriba->descriptor,grafoRegiones);
+				cout<<"Nuevo enlace arriba"<<endl;
+			}
+		}
+
 	}
 }
 
