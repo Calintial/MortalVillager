@@ -1,4 +1,4 @@
-#include "pathfinding_deverdad.h"
+#include "pathfinding.h"
 #include <boost/graph/graphviz.hpp>
 
 pathfinding::pathfinding(){
