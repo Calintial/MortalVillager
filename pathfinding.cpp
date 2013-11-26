@@ -47,18 +47,85 @@ void pathfinding::createRegions(){
 			grafoRegiones[vertice].inicioY = j;
 			grafoRegiones[vertice].finalX = finalX;
 			grafoRegiones[vertice].finalY = finalY;
+			grafoRegiones[vertice].descriptor = vertice;
 		}
 	}
+}
+
+void pathfinding::analyzeRegions(){
+	/*for (int regIndex = 0; regIndex < regiones.size(); ++regIndex)
+	{
+		Region* actual = regiones[regIndex];
+		// borde izquierdo de cada region
+		leftEdge(actual);
+	}*/
+
+	std::pair<vertex_iter, vertex_iter> vp;
+	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first){
+		Region* actual = &grafoRegiones[*vp.first];
+		// para cada región solo hay que mirar izquierda y arriba
+		// left edge
+		if (actual->inicioX > 0)
+		{
+			Region* regionIzquierda = getCorrespondingRegion(actual->inicioX-1,actual->inicioY);
+			int iterador = actual->inicioY;
+
+			int tamHueco = 0;
+			int posHueco = -1;
+			while(iterador < actual->finalY && iterador < height)
+			{
+				if (mapa[iterador][actual->inicioX] == 0 && mapa[iterador][regionIzquierda->finalX] == 0)
+				{
+					if (posHueco == -1)
+					{
+						posHueco = iterador;
+					}
+					tamHueco++;
+				}else{
+					if (tamHueco > 0)
+					{
+						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
+						boost::add_edge(actual->descriptor,regionIzquierda->descriptor,grafoRegiones);
+						cout<<"Nuevo enlace"<<endl;
+						tamHueco = 0;
+						posHueco = -1;
+					}
+					
+				}
+				iterador++;
+			}
+			if (tamHueco > 0)
+			{
+				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,grafoRegiones);
+				cout<<"Nuevo enlace"<<endl;
+			}
+		}
+	}
+}
+
+Region* pathfinding::getCorrespondingRegion(int x, int y){
+	std::pair<vertex_iter, vertex_iter> vp;
+	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)
+	{
+		if(grafoRegiones[*vp.first].isInside(x,y)){
+			return &grafoRegiones[*vp.first];
+		}
+	}
+	return NULL;
 }
 
 void pathfinding::run(){
 	createRegions();
 	
+	cout<<"He creado "<<num_vertices(grafoRegiones)<<" regiones"<<endl;
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first){
-		std::cout << grafoRegiones[*vp.first].inicioX << ", " << grafoRegiones[*vp.first].inicioY << std::endl;
+		std::cout << "Reg"<<*vp.first<<"{"<<grafoRegiones[*vp.first].inicioX << ", " << grafoRegiones[*vp.first].inicioY <<"}"<< std::endl;
 	}
 	std::cout << std::endl;
+
+	analyzeRegions();
+
 }
 
 int main(){

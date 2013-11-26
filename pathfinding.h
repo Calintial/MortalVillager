@@ -25,6 +25,8 @@ public:
 	~pathfinding();
 	void run();
 	void createRegions();
+	void analyzeRegions();
+	Region* getCorrespondingRegion(int x, int y);
 
 private:
 	int width,height; 
