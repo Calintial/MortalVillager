@@ -16,7 +16,7 @@ mainMenu::mainMenu(IrrlichtDevice * IrrDevice)
     env->clear();
 
     //Get the Scene Manager from the MenuDevice.
-    smgr = IrrDevice->getSceneManager();
+    //smgr = IrrDevice->getSceneManager();
 
     //Get the Video Driver from the MenuDevice.
     driver = IrrDevice->getVideoDriver();
@@ -51,7 +51,7 @@ mainMenu::~mainMenu()
 {
 	//delete MenuDevice;
 	delete driver;
-	delete smgr;
+	//delete smgr;
 	delete env;
 	delete skin;
 	delete font;
@@ -111,6 +111,7 @@ bool mainMenu::OnEvent(const SEvent& event)
 
         }        
     }
+
 	return false;
 }
 
@@ -167,9 +168,13 @@ int mainMenu::run()
 
     if(gameState != MAIN)
     {
-        sound1->release();
-        system->close();
-        system->release();
+        if(sound1 != NULL)
+        {
+            sound1->release();
+            system->close();
+            system->release();
+            sound1 = NULL;
+        }
         //MenuDevice->drop();
     }
     return gameState;

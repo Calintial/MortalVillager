@@ -1,12 +1,15 @@
-OPTS=-g
+OPTS=-g -std=c++11
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex
+
+OBJECTS=graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o Unidades.o battleIA.o suelo.o mapa2D.o hud.o
 
 .PHONY: all clean
 
 main: bin/main
 
-bin/main: src/main.cpp graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mapa2D.o mainMenu.o gameScreen.o hud.o
+bin/main: src/main.cpp $(OBJECTS)
+
 	mkdir -p bin
 	g++ -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
@@ -32,11 +35,21 @@ personaje.o: src/personaje.cpp include/personaje.h
 edificio.o: src/edificio.cpp include/edificio.h
 	g++ -c src/edificio.cpp $(OPTS) $(INCLUDES)
 
+suelo.o: src/suelo.cpp include/suelo.h
+	g++ -c src/suelo.cpp $(OPTS) $(INCLUDES)
+
 gameScreen.o: src/gameScreen.cpp include/gameScreen.h
 	g++ -c src/gameScreen.cpp $(OPTS) $(INCLUDES)
 
+battleIA.o: src/battleIA.cpp include/battleIA.h
+	g++ -c src/battleIA.cpp $(OPTS) $(INCLUDES)
+
+Unidades.o: src/Unidades.cpp include/Unidades.h
+	g++ -c src/Unidades.cpp $(OPTS) $(INCLUDES)
+
 mapa2D.o: src/mapa2D.cpp include/mapa2D.h
 	g++ -c src/mapa2D.cpp $(OPTS) $(INCLUDES)
+
 
 # bin/hello: src/HelloWorld.cpp
 # 	mkdir -p bin;g++ -o bin/hello src/HelloWorld.cpp $(OPTS) $(INCLUDES) $(LINKS)

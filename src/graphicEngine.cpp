@@ -5,7 +5,7 @@ graphicEngine::graphicEngine()
     //Create an Irrlicht Device.
     IrrDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
 	IrrDevice->setWindowCaption(L"Demo de Mapa Mortal Villager");
-    IrrDevice->setResizable(true);
+    //IrrDevice->setResizable(true);
 	
 	menu = NULL;
 	mapa = NULL;
@@ -29,14 +29,18 @@ int graphicEngine::DrawMainMenu()
     
     /*if(status == INGAME)
 		DrawMap();*/
+    return status;
     
 }
 
-int graphicEngine::DrawMap()
+int graphicEngine::DrawMap(IDibujable** ia_units,IDibujable** user_units)
 {
+
 	if(mapa == NULL){
-		mapa = new mapa2D(IrrDevice);
+		mapa = new mapa2D(IrrDevice,ia_units,user_units);
 		hudmap= new hud(IrrDevice);
 	}
+	mapa->Pintar();
 	int status = INGAME;
+	return status;
 }

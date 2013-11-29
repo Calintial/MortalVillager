@@ -6,7 +6,7 @@ LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex
 
 main: bin/main
 
-bin/main: src/main.cpp graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mapa.o mainMenu.o gameScreen.o
+bin/main: src/main.cpp graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o suelo.o mapa2D.o mainMenu.o gameScreen.o
 	mkdir -p bin
 	g++ -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
@@ -33,8 +33,8 @@ edificio.o: src/edificio.cpp include/edificio.h
 gameScreen.o: src/gameScreen.cpp include/gameScreen.h
 	g++ -c src/gameScreen.cpp $(OPTS) $(INCLUDES)
 
-mapa.o: src/mapa.cpp include/mapa.h
-	g++ -c src/mapa.cpp $(OPTS) $(INCLUDES)
+mapa2D.o: src/mapa2D.cpp include/mapa2D.h
+	g++ -c src/mapa2D.cpp $(OPTS) $(INCLUDES)
 
 # bin/hello: src/HelloWorld.cpp
 # 	mkdir -p bin;g++ -o bin/hello src/HelloWorld.cpp $(OPTS) $(INCLUDES) $(LINKS)
