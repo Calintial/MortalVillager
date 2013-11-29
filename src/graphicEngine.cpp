@@ -7,16 +7,14 @@ graphicEngine::graphicEngine()
 	IrrDevice->setWindowCaption(L"Demo de Mapa Mortal Villager");
     //IrrDevice->setResizable(true);
 	
-	menu = NULL;
-	mapa = NULL;
+pantalla=NULL;
     //menu = new mainMenu(IrrDevice);
     //mapa = new mapa2D(IrrDevice);
 }
 
 graphicEngine::~graphicEngine()
 {
-    delete menu;
-    delete mapa;
+	delete pantalla;
 }
 
 //Funcion encargada de pintar el menu principal
@@ -35,12 +33,23 @@ int graphicEngine::DrawMainMenu()
 
 int graphicEngine::DrawMap(IDibujable** ia_units,IDibujable** user_units)
 {
-
+	if(pantalla == NULL){
+		pantalla= new Pantalla(IrrDevice);
+	}
+	pantalla->pintarPantalla(ia_units,user_units);
+	/*
 	if(mapa == NULL){
 		mapa = new mapa2D(IrrDevice,ia_units,user_units);
 		hudmap= new hud(IrrDevice);
 	}
+
+	IrrDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
+
 	mapa->Pintar();
+	hudmap->paint();
+
+	IrrDevice->getVideoDriver()->endScene();   
+*/
 	int status = INGAME;
 	return status;
 }

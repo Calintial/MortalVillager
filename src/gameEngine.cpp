@@ -9,7 +9,7 @@ gameEngine::gameEngine()
 	battleIA* IAunit = new battleIA();
 	IAUnits.push_back(IAunit);
 
-	Unidades* unit = new Unidades(24,18);
+	Unidades* unit = new Unidades(24,12);
 	UserUnits.push_back(unit);
 
 	

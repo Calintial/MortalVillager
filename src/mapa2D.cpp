@@ -1,5 +1,4 @@
 #include "mapa2D.h"
-#include "graphicEngine.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -56,7 +55,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Us
     //LoadEvents();
     
     gameState = INGAME;
-	IrrDevice->setEventReceiver(this); 
+	//IrrDevice->setEventReceiver(this); 
 }
 
 mapa2D::~mapa2D()
@@ -90,21 +89,16 @@ bool mapa2D::free()
     return true;
 }
 
-bool mapa2D::OnEvent(const SEvent& event)
+bool mapa2D::OnEventMapa(const SEvent& event)
 {
-	if (event.GUIEvent.EventType == EET_MOUSE_INPUT_EVENT)
-	{
-		switch(event.MouseInput.Event)
-		{
-			case EMIE_LMOUSE_PRESSED_DOWN:
+
 							position2di pos_grid;
         					pos_grid.X = event.MouseInput.X / (TILE_WIDTH - ViewSize.Width)/2;
         					pos_grid.Y = event.MouseInput.Y / (TILE_HEIGHT - ViewSize.Height)/2;
 							cout<<"Boton izquierdo presionado:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
-							break;
-		}
-	}
+
+
 	return false;
 }
 
@@ -239,7 +233,6 @@ void mapa2D::Pintar()
         {
 			position2di GridPosition, DrawPosition;
 			
-			driver->beginScene(true, true, SColor(0,200,200,200));
 			
 		    for(int i = 0; i < ViewSize.Width; i++)
 		    {
@@ -280,7 +273,7 @@ void mapa2D::Pintar()
 
 			
 			env->drawAll();
-			driver->endScene();        	
+     	
         }
     }
 

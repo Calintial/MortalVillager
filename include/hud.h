@@ -23,7 +23,8 @@ class hud : public IEventReceiver
 public:
 	hud(IrrlichtDevice * IrrDevice);
 	~hud();
-	void repaint(IrrlichtDevice * IrrDevice);
+	void paint();
+	void paintInformation();
 	virtual bool OnEvent(const SEvent& event);
 private:
 	IrrlichtDevice * MenuDevice;
