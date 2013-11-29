@@ -29,13 +29,18 @@ int graphicEngine::DrawMainMenu()
     
     /*if(status == INGAME)
 		DrawMap();*/
+    return status;
     
 }
 
-int graphicEngine::DrawMap()
+int graphicEngine::DrawMap(IDibujable** ia_units,IDibujable** user_units)
 {
+
 	if(mapa == NULL)
-		mapa = new mapa2D(IrrDevice);
+		mapa = new mapa2D(IrrDevice,ia_units,user_units);
+
+	mapa->Pintar();
 		
 	int status = INGAME;
+	return status;
 }

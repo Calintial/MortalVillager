@@ -7,20 +7,24 @@
 #include <iostream>
 #include <vector>
 #include "battleIA.h"
+#include "gameEngine.h"
+
 using namespace std;
+
+class battleIA;
 
 class intelEngine {
 public:
 	intelEngine();
-	intelEngine(vector<battleIA*> units);
+	intelEngine(battleIA**,Unidades**);
 	~intelEngine();
 	void updateBattleIA();
 	/*intelEngine(const intelEngine&) {};
 	intelEngine& operator=(const intelEngine&) {};*/
 
 private:
-	vector<battleIA*> ia_units;
-	
+	battleIA** ia_units;
+	Unidades** user_units;
 };
 
 #endif

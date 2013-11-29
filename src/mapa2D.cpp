@@ -12,12 +12,14 @@ using namespace std;
 using namespace core;
 
 
-mapa2D::mapa2D(IrrlichtDevice * IrrDevice)
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Userunits)
 {
 	//int dimensionPantallaX=800;
     //int dimensionPantallaY=600;
     
 	//MapaDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),32,false,false,false,0);
+	ia_units = IAunits;
+	user_units = Userunits;
 
 	MapaDevice = IrrDevice;
 
@@ -38,19 +40,23 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice)
 	
 	skin = env->getSkin();
 	
-	IrrDevice->setEventReceiver(this); 
+
 
 	Init();   
     
     //GenerarMapa();
     
+	user_units[0]->Pintar(driver);
+	ia_units[0]->Pintar(driver);
+
     AllocateMap();
     
-    Pintar();
+    //Pintar();
     
     //LoadEvents();
     
     gameState = INGAME;
+	IrrDevice->setEventReceiver(this); 
 }
 
 mapa2D::~mapa2D()
@@ -86,6 +92,20 @@ bool mapa2D::free()
 
 bool mapa2D::OnEvent(const SEvent& event)
 {
+	if (event.GUIEvent.EventType == EET_MOUSE_INPUT_EVENT)
+	{
+		switch(event.MouseInput.Event)
+		{
+			case EMIE_LMOUSE_PRESSED_DOWN:
+							position2di pos_grid;
+        					pos_grid.X = event.MouseInput.X / (TILE_WIDTH - ViewSize.Width)/2;
+        					pos_grid.Y = event.MouseInput.Y / (TILE_HEIGHT - ViewSize.Height)/2;
+							cout<<"Boton izquierdo presionado:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
+							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
+							break;
+		}
+	}
+	return false;
 }
 
 void mapa2D::AllocateMap()
@@ -108,20 +128,14 @@ void mapa2D::AllocateMap()
     {
 		for(int j=0; j < HEIGHT; j++) 
 		{
-			//vTiles[i][j] =new Suelo(0);
-			if(mapatext[k]=='0')
-			{
-				vTiles[i][j] =new Suelo(0);
-			}
-			else if(mapatext[k]=='1')
-			{
-				vTiles[i][j] = new Suelo(1);
-			}
-			
+			vTiles[i][j] =new Suelo(0);
+
 			vTiles[i][j]->Pintar(driver);
 			k++;
 		}
 	}
+
+
 }
 
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
@@ -219,32 +233,57 @@ void mapa2D::SetCameraScroll(const position2di &TPosition)
 
 void mapa2D::Pintar()
 {
-	position2di GridPosition, DrawPosition;
-	
-	driver->beginScene(true, true, SColor(0,200,200,200));
-	
-    for(int i = 0; i < ViewSize.Width; i++)
-    {
-		for(int j = 0; j < ViewSize.Height; j++)
-		{
-			// Obtenermos coordenadas actuales cuadricula
-            //GridPosition.X = i + CameraScroll.X - ViewSize.Width / 2;
-            //GridPosition.Y = j + CameraScroll.Y - ViewSize.Height / 2;
-            //DrawPosition = position2di((i - ViewSize.Width / 2) * TILE_WIDTH + 400, (j - ViewSize.Height / 2) * TILE_HEIGHT + 300);
-			DrawPosition = position2di(i*TILE_WIDTH,j*TILE_HEIGHT);
-			// Validar coordenada
-			//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
-				//STile *Tile = &vTiles[GridPosition.X][GridPosition.Y];
-				IDibujable *Tile = vTiles[i][j];
-				//Pinta
-				if(Tile->getTextura())
-					PintarTile(Tile->getTextura(), DrawPosition.X, DrawPosition.Y);
-			//}
-		}
-	}
-	
-	env->drawAll();
-	driver->endScene();
+	if (MapaDevice->run())
+    {        
+        if(MapaDevice->isWindowActive() && driver)
+        {
+			position2di GridPosition, DrawPosition;
+			
+			driver->beginScene(true, true, SColor(0,200,200,200));
+			
+		    for(int i = 0; i < ViewSize.Width; i++)
+		    {
+				for(int j = 0; j < ViewSize.Height; j++)
+				{
+					// Obtenermos coordenadas actuales cuadricula
+		            //GridPosition.X = i + CameraScroll.X - ViewSize.Width / 2;
+		            //GridPosition.Y = j + CameraScroll.Y - ViewSize.Height / 2;
+		            //DrawPosition = position2di((i - ViewSize.Width / 2) * TILE_WIDTH + 400, (j - ViewSize.Height / 2) * TILE_HEIGHT + 300);
+					DrawPosition = position2di(i*TILE_WIDTH,j*TILE_HEIGHT);
+					// Validar coordenada
+					//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
+						//STile *Tile = &vTiles[GridPosition.X][GridPosition.Y];
+						IDibujable *Tile = vTiles[i][j];
+						//Pinta
+						if(Tile->getTextura())
+							PintarTile(Tile->getTextura(), DrawPosition.X, DrawPosition.Y);
+					//}
+				}
+			}
+
+			int n_ia = gameEngine::getNumberIAUnits();
+			int n_user = gameEngine::getNumberUserUnits();
+
+			for(int i=0; i<n_ia; i++)
+			{
+				int* pos = ia_units[i]->getPosition();
+				DrawPosition = position2di(pos[0]*TILE_WIDTH,pos[1]*TILE_HEIGHT);
+				PintarTile(ia_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);		
+			}
+
+			for(int i=0; i<n_user; i++)
+			{
+				int* pos = user_units[i]->getPosition();
+				DrawPosition = position2di(pos[0]*TILE_WIDTH,pos[1]*TILE_HEIGHT);
+				PintarTile(user_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);		
+			}
+
+			
+			env->drawAll();
+			driver->endScene();        	
+        }
+    }
+
 }
 
 //Pinta alrededor de una posicion

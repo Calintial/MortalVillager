@@ -4,6 +4,7 @@
 #include "mainMenu.h"
 #include "mapa2D.h"
 #include "gameEngine.h"
+#include "IDibujable.h"
 #include <iostream>
 using namespace std;
 
@@ -18,7 +19,7 @@ public:
 	graphicEngine();
 	~graphicEngine();
 	int DrawMainMenu();
-	int DrawMap();
+	int DrawMap(IDibujable**,IDibujable**);
 
 private:
 	IrrlichtDevice * IrrDevice;

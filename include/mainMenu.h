@@ -42,7 +42,7 @@ public:
 private:
 	IrrlichtDevice * MenuDevice;
 	video::IVideoDriver* driver;
-	scene::ISceneManager* smgr;
+	//scene::ISceneManager* smgr;
 	gui::IGUIEnvironment* env;
 	IGUISkin* skin;
 	IGUIFont* font;

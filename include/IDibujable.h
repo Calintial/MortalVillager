@@ -14,6 +14,7 @@ class IDibujable{
 			return textura;
 		}
 		virtual void Pintar(IVideoDriver* ) = 0;
+		virtual int* getPosition(){};
 		void setTextura(ITexture* tex){textura=tex;}
 		int getTipo(){return tipo;}
 		void setTipo(int t){tipo=t;}

@@ -39,17 +39,15 @@ suelo.o: src/suelo.cpp include/suelo.h
 gameScreen.o: src/gameScreen.cpp include/gameScreen.h
 	g++ -c src/gameScreen.cpp $(OPTS) $(INCLUDES)
 
-<<<<<<< HEAD
 battleIA.o: src/battleIA.cpp include/battleIA.h
 	g++ -c src/battleIA.cpp $(OPTS) $(INCLUDES)
 
 Unidades.o: src/Unidades.cpp include/Unidades.h
 	g++ -c src/Unidades.cpp $(OPTS) $(INCLUDES)
 
-=======
 mapa2D.o: src/mapa2D.cpp include/mapa2D.h
 	g++ -c src/mapa2D.cpp $(OPTS) $(INCLUDES)
->>>>>>> 8285c84aaf5e2756e036ad39b4722ed38f3e154f
+
 
 # bin/hello: src/HelloWorld.cpp
 # 	mkdir -p bin;g++ -o bin/hello src/HelloWorld.cpp $(OPTS) $(INCLUDES) $(LINKS)

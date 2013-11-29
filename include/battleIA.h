@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Unidades.h"
+#include "gameEngine.h"
 
 
 using namespace std;
@@ -16,23 +17,28 @@ enum{
 	RECOVERY = 4,
 };
 
+
+
 class battleIA : public Unidades
 {
 
 public:
 	battleIA();
+	battleIA(int,int);
 	~battleIA();
-	int updateIA();
+	int updateIA(Unidades**);
+	void Pintar(IVideoDriver*);
 
 private:
 	int state;
 	int* enemy_pos;
 
-	int searching();
-	int approach();
-	int attack();
-	int flee();
+	int searching(Unidades**);
+	int approach(Unidades**);
+	int attack(Unidades**);
+	int flee(Unidades**);
 	int recovery();
+	int* searchEnemy(Unidades**);
 
 };
 

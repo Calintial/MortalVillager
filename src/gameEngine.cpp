@@ -1,16 +1,25 @@
 #include "gameEngine.h"
 
 float gameEngine::volumen = 0.5;
+vector<battleIA*> gameEngine::IAUnits;
+vector<Unidades*> gameEngine::UserUnits;
 
 gameEngine::gameEngine()
 {
+	battleIA* IAunit = new battleIA();
+	IAUnits.push_back(IAunit);
+
+	Unidades* unit = new Unidades(24,18);
+	UserUnits.push_back(unit);
+
+	
 	gameState = MAIN;
+
 	graphics = new graphicEngine();
 
-	vector<battleIA*> units;
-	battleIA* unit = new battleIA();
-	units.push_back(unit);
-	ia = new intelEngine(units);
+
+
+	ia = new intelEngine(&IAUnits[0],&UserUnits[0]);
 }
 
 gameEngine::~gameEngine()
@@ -31,7 +40,10 @@ void gameEngine::run()
 			case MAIN: gameState = graphics->DrawMainMenu();
 					   break;
 
-			case INGAME: cout<<"Jugando"<<endl; gameState = graphics->DrawMap(); ia->updateBattleIA();break;
+			case INGAME: updatePlayer();
+						 ia->updateBattleIA();
+						 gameState = graphics->DrawMap((IDibujable**)&IAUnits[0],(IDibujable**)&UserUnits[0]);
+						 break;
 
 			case PAUSE: break;
 			default: break;
@@ -47,4 +59,22 @@ void gameEngine::setVolume(float vol)
 float gameEngine::getVolume()
 {
 	return volumen;
+}
+
+int gameEngine::getNumberIAUnits()
+{
+	return IAUnits.size();
+}
+
+int gameEngine::getNumberUserUnits()
+{
+	return UserUnits.size();
+}
+
+void gameEngine::updatePlayer()
+{
+	for(Unidades* u : UserUnits)
+	{
+		u->updateUnit();
+	}
 }

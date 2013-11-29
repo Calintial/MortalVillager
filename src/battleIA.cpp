@@ -6,25 +6,32 @@ battleIA::battleIA()
 	enemy_pos = NULL;
 }
 
+battleIA::battleIA(int x, int y)
+{
+	setPosition(x,y);
+	state = 0;
+	enemy_pos = NULL;
+}
+
 battleIA::~battleIA()
 {
 	delete enemy_pos;
 }
 
-int battleIA::updateIA()
+int battleIA::updateIA(Unidades** user)
 {
 	switch(state)
 	{
-		case SEARCHING: state = this->searching();
+		case SEARCHING: state = this->searching(user);
 						break;
 
-		case APPROACH:  state = this->approach();
+		case APPROACH:  state = this->approach(user);
 						break;
 
-		case ATTACK: 	state = this->attack();
+		case ATTACK: 	state = this->attack(user);
 						break;
 
-		case FLEE: 		state = this->flee();
+		case FLEE: 		state = this->flee(user);
 						break;
 
 		case RECOVERY:  state = this->recovery();
@@ -32,10 +39,10 @@ int battleIA::updateIA()
 	}
 }
 
-int battleIA::searching()
+int battleIA::searching(Unidades** user)
 {
-	cout<<"Searching"<<endl;
-	enemy_pos = this->searchEnemy();
+	//cout<<"Searching"<<endl;
+	enemy_pos = this->searchEnemy(user);
 	if(enemy_pos == NULL)
 	{
 		return SEARCHING;
@@ -46,10 +53,10 @@ int battleIA::searching()
 	}
 }
 
-int battleIA::approach()
+int battleIA::approach(Unidades** user)
 {
 	cout<<"Approach"<<endl;
-	enemy_pos = this->searchEnemy();
+	enemy_pos = this->searchEnemy(user);
 	if(enemy_pos == NULL)
 	{
 		return SEARCHING;
@@ -70,10 +77,10 @@ int battleIA::approach()
 	}
 }
 
-int battleIA::attack()
+int battleIA::attack(Unidades** user)
 {
 	cout<<"Attack"<<endl;
-	enemy_pos = this->searchEnemy();
+	enemy_pos = this->searchEnemy(user);
 	if(enemy_pos == NULL)
 	{
 		return SEARCHING;
@@ -96,10 +103,10 @@ int battleIA::attack()
 	}
 }
 
-int battleIA::flee()
+int battleIA::flee(Unidades** user)
 {
 	cout<<"Flee"<<endl;
-	enemy_pos = this->searchEnemy();
+	enemy_pos = this->searchEnemy(user);
 	if(enemy_pos == NULL)
 	{
 		return RECOVERY;
@@ -114,5 +121,37 @@ int battleIA::flee()
 int battleIA::recovery()
 {
 	cout<<"Recovery"<<endl;
-	return SEARCHING;
+	if(this->getLife() != 100)
+	{
+		this->Recovery();
+		return RECOVERY;
+	}
+	else
+	{
+		return SEARCHING;
+	}
+
+}
+
+int* battleIA::searchEnemy(Unidades** vUnits)
+{
+	/*Busca a un enemigo en su rango establecido y devuelve un puntero con un array de sus coordenadas*/
+	int nUnits = gameEngine::getNumberUserUnits();
+	int* mypos = getPosition();
+	for(int i=0; i<nUnits; i++)
+	{
+		int* pos = vUnits[i]->getPosition();
+
+		if((mypos[0] + 1 == pos[0] || mypos[0] + 2 == pos[0]) || (mypos[0] - 1 == pos[0] || mypos[0] -2 == pos[0]) ||
+		   (mypos[1] + 1 == pos[1] || mypos[1] + 2 == pos[1]) || (mypos[1] - 1 == pos[1] || mypos[1] -2 == pos[1]))
+		{
+			return pos;
+		}
+	}
+	return NULL;
+}
+
+void battleIA::Pintar(IVideoDriver* driver)
+{
+	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
 }
