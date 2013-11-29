@@ -1,7 +1,9 @@
 #include "edificio.h"
 
-edificio::edificio(int t){
-
+edificio::edificio(int t, IDibujable* p)
+{
+	setTipo(t);
+	partes = p;
 }
 
 edificio::~edificio()

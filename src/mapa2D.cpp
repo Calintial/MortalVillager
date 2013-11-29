@@ -98,9 +98,12 @@ bool mapa2D::OnEvent(const SEvent& event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
 							position2di pos_grid;
-        					pos_grid.X = event.MouseInput.X / (TILE_WIDTH - ViewSize.Width)/2;
-        					pos_grid.Y = event.MouseInput.Y / (TILE_HEIGHT - ViewSize.Height)/2;
-							cout<<"Boton izquierdo presionado:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
+							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
+							cout<<"ViewWidth:"<< ViewSize.Width << endl;
+							cout<<"ViewHeight:"<< ViewSize.Height << endl;
+        					pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
+        					pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
+							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
 							break;
 		}
@@ -128,7 +131,7 @@ void mapa2D::AllocateMap()
     {
 		for(int j=0; j < HEIGHT; j++) 
 		{
-			vTiles[i][j] =new Suelo(0);
+			vTiles[i][j] =new Suelo(0,i,j);
 
 			vTiles[i][j]->Pintar(driver);
 			k++;
@@ -163,10 +166,10 @@ void mapa2D::GenerarMapa()
 				c=10;
 				if(vTiles[i][j]==NULL)
 				{
-					vTiles[i][j] =new Suelo(0);
+					vTiles[i][j] =new Suelo(0,i,j);
 					mapatext+="0";
 					if(rand()%c!=1)
-						vTiles[i+1][j] = new Suelo(0);
+						vTiles[i+1][j] = new Suelo(0,i,j);
 				}
 				else if(vTiles[i][j]->getTipo()==1)
 				{
@@ -184,10 +187,10 @@ void mapa2D::GenerarMapa()
 				c=3;
 				if(vTiles[i][j]==NULL)
 				{
-					vTiles[i][j] =new Suelo(1);
+					vTiles[i][j] =new Suelo(1,i,j);
 					mapatext+="1";
 					if(rand()%c!=1)
-						vTiles[i+1][j] = new Suelo(1);
+						vTiles[i+1][j] = new Suelo(1,i,j);
 				}
 				else if(vTiles[i][j]->getTipo()==0)
 				{
@@ -266,15 +269,15 @@ void mapa2D::Pintar()
 
 			for(int i=0; i<n_ia; i++)
 			{
-				int* pos = ia_units[i]->getPosition();
-				DrawPosition = position2di(pos[0]*TILE_WIDTH,pos[1]*TILE_HEIGHT);
+				position2di pos = ia_units[i]->getPosition();
+				DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
 				PintarTile(ia_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);		
 			}
 
 			for(int i=0; i<n_user; i++)
 			{
-				int* pos = user_units[i]->getPosition();
-				DrawPosition = position2di(pos[0]*TILE_WIDTH,pos[1]*TILE_HEIGHT);
+				position2di pos = user_units[i]->getPosition();
+				DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
 				PintarTile(user_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);		
 			}
 

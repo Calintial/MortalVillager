@@ -3,19 +3,21 @@
 battleIA::battleIA()
 {
 	state = 0;
-	enemy_pos = NULL;
+	enemy_pos.X = -1;
+	enemy_pos.Y = -1;
 }
 
 battleIA::battleIA(int x, int y)
 {
 	setPosition(x,y);
 	state = 0;
-	enemy_pos = NULL;
+	enemy_pos.X = -1;
+	enemy_pos.Y = -1;
 }
 
 battleIA::~battleIA()
 {
-	delete enemy_pos;
+	//delete enemy_pos;
 }
 
 int battleIA::updateIA(Unidades** user)
@@ -43,7 +45,7 @@ int battleIA::searching(Unidades** user)
 {
 	//cout<<"Searching"<<endl;
 	enemy_pos = this->searchEnemy(user);
-	if(enemy_pos == NULL)
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
 		return SEARCHING;
 	}
@@ -55,22 +57,22 @@ int battleIA::searching(Unidades** user)
 
 int battleIA::approach(Unidades** user)
 {
-	cout<<"Approach"<<endl;
+	//cout<<"Approach"<<endl;
 	enemy_pos = this->searchEnemy(user);
-	if(enemy_pos == NULL)
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
 		return SEARCHING;
 	}
 	else
 	{
 		/*Comprobar si el enemigo está dentro de rango*/
-		if(this->enemy_in_attack_range(enemy_pos[0],enemy_pos[1]))
+		if(this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y))
 		{
 			return ATTACK;
 		}
 		else
 		{
-			this->Move(enemy_pos[0],enemy_pos[1]);
+			this->Move(enemy_pos.X,enemy_pos.Y);
 			return APPROACH;
 		}
 
@@ -79,20 +81,20 @@ int battleIA::approach(Unidades** user)
 
 int battleIA::attack(Unidades** user)
 {
-	cout<<"Attack"<<endl;
+	//cout<<"Attack"<<endl;
 	enemy_pos = this->searchEnemy(user);
-	if(enemy_pos == NULL)
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
 		return SEARCHING;
 	}
 	else
 	{
-		if(this->enemy_in_attack_range(enemy_pos[0],enemy_pos[1]) && this->getLife() > 25)
+		if(this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y) && this->getLife() > 25)
 		{
-			this->Attack(enemy_pos[0],enemy_pos[1]);
+			this->Attack(enemy_pos.X,enemy_pos.Y);
 			return ATTACK;
 		}
-		else if(!this->enemy_in_attack_range(enemy_pos[0],enemy_pos[1]))
+		else if(!this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y))
 		{
 			return APPROACH;
 		}		
@@ -105,9 +107,9 @@ int battleIA::attack(Unidades** user)
 
 int battleIA::flee(Unidades** user)
 {
-	cout<<"Flee"<<endl;
+	//cout<<"Flee"<<endl;
 	enemy_pos = this->searchEnemy(user);
-	if(enemy_pos == NULL)
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
 		return RECOVERY;
 	}
@@ -120,7 +122,7 @@ int battleIA::flee(Unidades** user)
 
 int battleIA::recovery()
 {
-	cout<<"Recovery"<<endl;
+	//cout<<"Recovery"<<endl;
 	if(this->getLife() != 100)
 	{
 		this->Recovery();
@@ -133,22 +135,25 @@ int battleIA::recovery()
 
 }
 
-int* battleIA::searchEnemy(Unidades** vUnits)
+position2di battleIA::searchEnemy(Unidades** vUnits)
 {
 	/*Busca a un enemigo en su rango establecido y devuelve un puntero con un array de sus coordenadas*/
 	int nUnits = gameEngine::getNumberUserUnits();
-	int* mypos = getPosition();
+	position2di mypos = getPosition();
+	position2di pos;
 	for(int i=0; i<nUnits; i++)
 	{
-		int* pos = vUnits[i]->getPosition();
+		pos = vUnits[i]->getPosition();
 
-		if((mypos[0] + 1 == pos[0] || mypos[0] + 2 == pos[0]) || (mypos[0] - 1 == pos[0] || mypos[0] -2 == pos[0]) ||
-		   (mypos[1] + 1 == pos[1] || mypos[1] + 2 == pos[1]) || (mypos[1] - 1 == pos[1] || mypos[1] -2 == pos[1]))
+		if((mypos.X + 1 == pos.X || mypos.X + 2 == pos.X) || (mypos.X - 1 == pos.X || mypos.X -2 == pos.X) ||
+		   (mypos.Y + 1 == pos.Y || mypos.Y + 2 == pos.Y) || (mypos.Y - 1 == pos.Y || mypos.Y -2 == pos.Y))
 		{
 			return pos;
 		}
 	}
-	return NULL;
+	pos.X = -1;
+	pos.Y = -1;
+	return pos;
 }
 
 void battleIA::Pintar(IVideoDriver* driver)
