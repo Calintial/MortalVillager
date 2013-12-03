@@ -59,8 +59,6 @@ mainMenu::~mainMenu()
 
 bool mainMenu::OnEvent(const SEvent& event)
 {
-	
-
 	if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();

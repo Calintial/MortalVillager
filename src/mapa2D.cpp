@@ -92,7 +92,7 @@ bool mapa2D::free()
 
 bool mapa2D::OnEvent(const SEvent& event)
 {
-	if (event.GUIEvent.EventType == EET_MOUSE_INPUT_EVENT)
+	if (event.GUIEvent.EventType == irr::EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
 		{
@@ -101,15 +101,24 @@ bool mapa2D::OnEvent(const SEvent& event)
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
 							cout<<"ViewHeight:"<< ViewSize.Height << endl;
-        					pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
-        					pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
+							pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
+							pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
 							break;
 		}
 	}
+	if(event.EventType == irr::EET_KEY_INPUT_EVENT)
+	{
+		if(event.KeyInput.Key == irr::KEY_ESCAPE && event.KeyInput.PressedDown)
+		{
+			cout << "PAUSA" << endl;
+			gameState = PAUSE;
+		}
+	}
 	return false;
 }
+
 
 void mapa2D::AllocateMap()
 {
@@ -234,12 +243,16 @@ void mapa2D::SetCameraScroll(const position2di &TPosition)
                 CameraScroll.Y = HEIGHT - 2;
 }
 
-void mapa2D::Pintar()
+int mapa2D::Pintar()
 {
 	if (MapaDevice->run())
     {        
         if(MapaDevice->isWindowActive() && driver)
         {
+			if(gameState == PAUSE)
+			{
+				return gameState;
+			}
 			position2di GridPosition, DrawPosition;
 			
 			driver->beginScene(true, true, SColor(0,200,200,200));
@@ -286,7 +299,7 @@ void mapa2D::Pintar()
 			driver->endScene();        	
         }
     }
-
+	return gameState;
 }
 
 //Pinta alrededor de una posicion

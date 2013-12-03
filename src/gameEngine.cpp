@@ -45,7 +45,8 @@ void gameEngine::run()
 						 gameState = graphics->DrawMap((IDibujable**)&IAUnits[0],(IDibujable**)&UserUnits[0]);
 						 break;
 
-			case PAUSE: break;
+			case PAUSE: gameState = graphics->DrawPausa();
+						break;
 			default: break;
 		}
 	}

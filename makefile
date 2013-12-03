@@ -2,7 +2,7 @@ OPTS=-g -std=c++11
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex
 
-OBJECTS=graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o Unidades.o battleIA.o suelo.o mapa2D.o
+OBJECTS=graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o Unidades.o battleIA.o suelo.o pausa.o mapa2D.o
 
 .PHONY: all clean
 
@@ -47,6 +47,9 @@ Unidades.o: src/Unidades.cpp include/Unidades.h
 
 mapa2D.o: src/mapa2D.cpp include/mapa2D.h
 	g++ -c src/mapa2D.cpp $(OPTS) $(INCLUDES)
+
+pausa.o: src/pausa.cpp include/pausa.h
+	g++ -c src/pausa.cpp $(OPTS) $(INCLUDES)
 
 
 # bin/hello: src/HelloWorld.cpp

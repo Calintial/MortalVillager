@@ -27,20 +27,25 @@ int graphicEngine::DrawMainMenu()
 		
     int status = menu->run();
     
-    /*if(status == INGAME)
-		DrawMap();*/
     return status;
-    
 }
 
+int graphicEngine::DrawPausa()
+{
+	if(pause == NULL)
+		pause = new pausa(IrrDevice);
+		
+    int status = pause->run();
+    
+    return status;
+}
 int graphicEngine::DrawMap(IDibujable** ia_units,IDibujable** user_units)
 {
 
 	if(mapa == NULL)
 		mapa = new mapa2D(IrrDevice,ia_units,user_units);
-
-	mapa->Pintar();
+	int status = 0;
+	status = mapa->Pintar();
 		
-	int status = INGAME;
 	return status;
 }

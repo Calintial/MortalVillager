@@ -3,6 +3,7 @@
 
 #include "mainMenu.h"
 #include "mapa2D.h"
+#include "pausa.h"
 #include "gameEngine.h"
 #include "IDibujable.h"
 #include <iostream>
@@ -10,6 +11,7 @@ using namespace std;
 
 class mainMenu;
 class mapa2D;
+class pausa;
 
 const int dimensionPantallaX = 800;
 const int dimensionPantallaY = 600;
@@ -19,12 +21,14 @@ public:
 	graphicEngine();
 	~graphicEngine();
 	int DrawMainMenu();
+	int DrawPausa();
 	int DrawMap(IDibujable**,IDibujable**);
 
 private:
 	IrrlichtDevice * IrrDevice;
 	mainMenu* menu;
 	mapa2D* mapa;
+	pausa* pause;
 };
 
 #endif
