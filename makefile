@@ -1,6 +1,6 @@
  # Declaration of variables
 CC = g++
-CC_FLAGS = -g -Wall
+CC_FLAGS = -g -Wall --std=c++0x
 
 # File names
 EXEC = run
@@ -11,7 +11,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 $(EXEC): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(EXEC)
 
-main_path: pathfinding.o Region.o Enlace.o
+main_path: pathfinding.o Region.o Enlace.o Camino.o
 	$(CC) $^ -lboost_graph  -o main_path
 
 # To obtain object files

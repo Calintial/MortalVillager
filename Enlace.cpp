@@ -1,16 +1,22 @@
 #include "Region.h"
 
-Enlace::Enlace(int _origenX,int _origenY,int _destinoX,int _destinoY)
-	:origenX(_origenX),origenY(_origenY),destinoX(_destinoX),destinoY(_destinoY)
-{
-	// hacer algo con los pesos, si hace falta y tal...
-}
+Enlace::Enlace(position2di _origen,position2di _destino)
+	:origen(_origen),destino(_destino)
+{}
 
 Enlace::Enlace(const Enlace& copia){
-	origenX = copia.getOrigenX();
-	destinoX = copia.getDestinoX();
-	origenY = copia.getOrigenY();
-	destinoY = copia.getDestinoY();
+	origen = copia.origen;
+	destino = copia.destino;
+	#pragma GCC warning "Esta copia huele mal"
+	intracaminos = copia.intracaminos;
 }
 
 Enlace::~Enlace(){}
+
+std::vector<Camino> Enlace::getIntraCaminos(){
+	return intracaminos;
+}
+
+void Enlace::setIntraCaminos(const std::vector<Camino>& caminos){
+	intracaminos = caminos;
+}

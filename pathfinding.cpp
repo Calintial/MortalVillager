@@ -84,7 +84,7 @@ void pathfinding::analyzeRegions(){
 					if (tamHueco > 0)
 					{
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-						Enlace enlace(actual->inicioX,posHueco,regionIzquierda->finalX,posHueco);
+						Enlace enlace(position2di(actual->inicioX,posHueco),position2di(regionIzquierda->finalX,posHueco));
 						boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
 						cout<<"Nuevo enlace izquierda"<<endl;
 						tamHueco = 0;
@@ -96,7 +96,7 @@ void pathfinding::analyzeRegions(){
 			}
 			if (tamHueco > 0)
 			{
-				Enlace enlace(actual->inicioX,posHueco,regionIzquierda->finalX,posHueco);
+				Enlace enlace(position2di(actual->inicioX,posHueco),position2di(regionIzquierda->finalX,posHueco));
 				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
 				cout<<"Nuevo enlace izquierda"<<endl;
 			}
@@ -123,7 +123,7 @@ void pathfinding::analyzeRegions(){
 					if (tamHueco > 0)
 					{
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-						Enlace enlace(posHueco,actual->inicioY,posHueco,regionArriba->finalY);
+						Enlace enlace(position2di(posHueco,actual->inicioY),position2di(posHueco,regionArriba->finalY));
 						boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
 						cout<<"Nuevo enlace arriba"<<endl;
 						tamHueco = 0;
@@ -135,7 +135,7 @@ void pathfinding::analyzeRegions(){
 			}
 			if (tamHueco > 0)
 			{
-				Enlace enlace(posHueco,actual->inicioY,posHueco,regionArriba->finalY);
+				Enlace enlace(position2di(posHueco,actual->inicioY),position2di(posHueco,regionArriba->finalY));
 				boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
 				cout<<"Nuevo enlace arriba"<<endl;
 			}
@@ -145,9 +145,44 @@ void pathfinding::analyzeRegions(){
 }
 
 void pathfinding::findInnerPaths(){
-	// recorrer cada vértice calculando los caminos entre cada par de enlaces
-	// guardar los caminos de alguna forma???????
-	// guardar los pesos en un vector de tamaño nº de enlaces del nodo (camino al propio enlace = 0)
+	std::pair<vertex_iter, vertex_iter> vp;
+	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)
+	{
+		Region* regionActual = &grafoRegiones[*vp.first];
+
+		auto edges = boost::in_edges(*vp.first,grafoRegiones);
+		for(auto i = edges.first; i != edges.second; ++i){
+			Enlace enlaceI = grafoRegiones[*i];
+			position2di puntoI;
+			if(regionActual->isInside(enlaceI.getOrigen().X,enlaceI.getOrigen().Y)){
+				puntoI = enlaceI.getOrigen();
+			}else{
+				puntoI = enlaceI.getDestino();
+			}
+			std::vector<Camino> caminos;
+			for(auto j = edges.first; j != edges.second; ++j){
+				Enlace enlaceJ = grafoRegiones[*j];
+				position2di puntoJ;
+				if(regionActual->isInside(enlaceJ.getOrigen().X,enlaceJ.getOrigen().Y)){
+					puntoJ = enlaceJ.getOrigen();
+				}else{
+					puntoJ = enlaceJ.getDestino();
+				}
+				Camino nuevo(puntoI);
+				// el camino con el propio nodo es vacío (nuevo camino y ya está)
+				if (j != i)
+				{
+					// calculo el camino entre puntoI y puntoJ
+					cout<<"Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
+				}
+				caminos.push_back(nuevo);
+				// para cada enlace, hacemos push_back a enlaceI.intracaminos con el camino entre enlaceI y enlaceJ
+			}
+			enlaceI.setIntraCaminos(caminos);
+			cout<<"Soy el enlaceI entre {"<<enlaceI.getOrigen().X<<","<<enlaceI.getOrigen().Y<<"} y {"<<enlaceI.getDestino().X<<","<<enlaceI.getDestino().Y<<"}"<<endl;
+		}
+		cout<<"Siguiente vértice"<<endl;
+	}
 }
 
 Region* pathfinding::getCorrespondingRegion(int x, int y){
@@ -159,6 +194,10 @@ Region* pathfinding::getCorrespondingRegion(int x, int y){
 		}
 	}
 	return NULL;
+}
+
+Camino* pathfinding::calcularCamino(position2di origen, position2di destino){
+	
 }
 
 void pathfinding::run(){

@@ -3,24 +3,29 @@
 
 #include <stdexcept> 
 #include <iostream>
+#include <irrlicht.h>
+#include "Camino.h"
+
+using namespace irr::core;
 
 class Enlace
 {
 public:
-	Enlace(int,int,int,int);
+	Enlace(position2di,position2di);
 	Enlace(const Enlace&);
 	~Enlace();
 
-	int getOrigenX() const {return origenX;}
-	int getOrigenY() const {return origenY;}
-	int getDestinoX() const {return destinoX;}
-	int getDestinoY() const {return destinoY;}
+	position2di getOrigen() const {return origen;}
+	position2di getDestino() const {return destino;}
+
+	std::vector<Camino> getIntraCaminos();
+	void setIntraCaminos(const std::vector<Camino>& caminos);
 
 private:
-	int origenX,origenY;
-	int destinoX,destinoY;
+	position2di origen;
+	position2di destino;
 
-	std::vector<int> pesos;
+	std::vector<Camino> intracaminos;
 
 };
 #endif

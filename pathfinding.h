@@ -29,6 +29,7 @@ public:
 	void analyzeRegions();
 	void findInnerPaths();
 	Region* getCorrespondingRegion(int x, int y);
+	Camino* calcularCamino(position2di,position2di);
 
 private:
 	int width,height; 
