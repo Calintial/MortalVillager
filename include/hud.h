@@ -6,8 +6,8 @@
 #include <iostream>
 #include <irrlicht.h>
 #include <fmod.hpp>
-
-
+#include "IDibujable.h"
+#include "Unidades.h"
 using namespace irr;
 using namespace core;
 using namespace scene;
@@ -23,9 +23,8 @@ public:
 	hud(IrrlichtDevice * IrrDevice);
 	~hud();
 	void paint();
-	void paintInformation();
+	void paintInformation(Unidades *,bool);
 	virtual bool OnEvent(const SEvent& event);
-	void infoPersonaje(int infoX, int infoY);
 	int P1X,P1Y,P2X,P2Y;
 private:
 	IrrlichtDevice * MenuDevice;
@@ -35,7 +34,8 @@ private:
 	IGUISkin* skin;
 	IGUIFont* font;
 	video::ITexture* images;
-	
+	Unidades * personaje;
+	bool ensenyarInformacion;
 };
 
 #endif

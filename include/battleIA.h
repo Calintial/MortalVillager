@@ -31,14 +31,14 @@ public:
 
 private:
 	int state;
-	int* enemy_pos;
+	position2di enemy_pos;
 
 	int searching(Unidades**);
 	int approach(Unidades**);
 	int attack(Unidades**);
 	int flee(Unidades**);
 	int recovery();
-	int* searchEnemy(Unidades**);
+	position2di searchEnemy(Unidades**);
 
 };
 

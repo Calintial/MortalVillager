@@ -13,7 +13,7 @@
 class Suelo : public IDibujable
 {
 public:
-	Suelo(int t);
+	Suelo(int t, int i, int j);
 	~Suelo();
 	/*ITexture* getTextura() const {
 		return textura;

@@ -3,72 +3,66 @@
 Unidades::Unidades()
 {
 	life = 100;
-	position[0] = 1;
-	position[1] = 1;
+	setPosition(1,1);
 	state = 0;
-	last_clicked[0] = 1;
-	last_clicked[1] = 1;
+	last_clicked.X = 1;
+	last_clicked.Y = 1;
 }
 
 Unidades::Unidades(int x, int y)
 {
 	life = 100;
-	position[0] = x;
-	position[1] = y;
+	setPosition(x,y);
 	state = 0;
-	last_clicked[0] = x;
-	last_clicked[1] = y;
+	last_clicked.X = x;
+	last_clicked.Y = y;
 }
 
 Unidades::~Unidades()
 {
 	life = 0;
-	position[0] = 0;
-	position[1] = 0;
-	last_clicked[0] = 0;
-	last_clicked[1] = 0;
+	setPosition(0,0);
+	last_clicked.X = 0;
+	last_clicked.Y = 0;
 	state = 0;
 }
 
 
 void Unidades::Move(int x, int y)
 {
+	position2di position = getPosition();
 	state = MOVE;
 	/*Moverse a una posicion establecida*/
-	if(x > position[0])
-		position[0]++;
-	else if(x < position[0])
-		position[0]--;
+	if(x > position.X)
+		position.X++;
+	else if(x < position.X)
+		position.X--;
 
-	if(y > position[1])
-		position[1]++;
-	else if(y < position[1])
-		position[1]--;
-
-	cout<<"New position:"<<position[0]<<","<<position[1]<<endl;
-	last_clicked[0] = x;
-	last_clicked[1] = y;
+	if(y > position.Y)
+		position.Y++;
+	else if(y < position.Y)
+		position.Y--;
+		
+	setPosition(position);
+	cout<<"New position:"<<position.X<<","<<position.Y<<endl;
+	last_clicked.X = x;
+	last_clicked.Y = y;
 }
 
 void Unidades::Attack(int x, int y)
 {
 	//if(enemy_in_range(x,y))
 		/*Hay un enemigo, atacar*/
-	cout<<"Attacking!!"<<endl;
+	//cout<<"Attacking!!"<<endl;
 	life--;
-	cout<<"life: "<<life<<endl;
-}
-
-
-int* Unidades::getPosition()
-{
-	return position;
+	//cout<<"life: "<<life<<endl;
 }
 
 bool Unidades::enemy_in_attack_range(int x,int y)
 {
+	position2di position = getPosition();
 	/*Comprobar si es posicion adyacente a la unidad*/
-	if(x == position[0] + 1 || x == position[0] - 1 || y == position[1] + 1 || y == position[1] - 1)
+	if(x == position.X + 1 || x == position.X - 1 || y == position.Y + 1 || y == position.Y - 1)
 	{
 		/*si lo es, comprobar si hay un enemigo*/
 		return true;
@@ -86,12 +80,6 @@ void Unidades::Recovery()
 	life++;
 }
 
-void Unidades::setPosition(int x,int y)
-{
-	position[0] = x;
-	position[1] = y;	
-}
-
 void Unidades::Pintar(IVideoDriver* driver)
 {
 	setTextura(driver->getTexture("../media/Texturas/units/user_unit_test.png"));
@@ -99,10 +87,11 @@ void Unidades::Pintar(IVideoDriver* driver)
 
 void Unidades::updateUnit()
 {
+	position2di position = getPosition();
 	if(state == MOVE)
 	{
-		Move(last_clicked[0],last_clicked[1]);
-		if(position[0] == last_clicked[0] && position[1] == last_clicked[1])
+		Move(last_clicked.X,last_clicked.Y);
+		if(position.X == last_clicked.X && position.Y == last_clicked.Y)
 		{
 			state = NOTHING;
 		}
