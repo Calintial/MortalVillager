@@ -1,23 +1,24 @@
- # Declaration of variables
-CC = g++
-CC_FLAGS = -g -Wall --std=c++0x
+OPTS=-g -Wall --std=c++0x
+INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
+LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
+OBJECTS = $(wildcard *.o)
 
-# File names
-EXEC = run
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(SOURCES:.cpp=.o)
+.PHONY: all clean
 
-# Main target
-$(EXEC): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXEC)
+main: bin/main
 
-main_path: pathfinding.o Region.o Enlace.o Camino.o
-	$(CC) $^ -lboost_graph  -o main_path
+bin/main: src/main.cpp $(OBJECTS)
+	mkdir -p bin
+	g++ -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
+
 
 # To obtain object files
-%.o: %.cpp %.h
-	$(CC) -c $(CC_FLAGS) $< -o $@
+%.o: src/%.cpp include/%.h
+	g++ -c $< $(OPTS) $(INCLUDES) -o $@
 
-# To remove generated files
+# bin/hello: src/HelloWorld.cpp
+# 	mkdir -p bin;g++ -o bin/hello src/HelloWorld.cpp $(OPTS) $(INCLUDES) $(LINKS)
+
 clean:
-	rm -f $(EXEC) $(OBJECTS)
+	rm *.o
+	rm -rf bin
