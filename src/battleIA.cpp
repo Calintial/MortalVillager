@@ -1,0 +1,162 @@
+#include "battleIA.h"
+
+battleIA::battleIA()
+{
+	state = 0;
+	enemy_pos.X = -1;
+	enemy_pos.Y = -1;
+}
+
+battleIA::battleIA(int x, int y)
+{
+	setPosition(x,y);
+	state = 0;
+	enemy_pos.X = -1;
+	enemy_pos.Y = -1;
+}
+
+battleIA::~battleIA()
+{
+	//delete enemy_pos;
+}
+
+int battleIA::updateIA(Unidades** user)
+{
+	switch(state)
+	{
+		case SEARCHING: state = this->searching(user);
+						break;
+
+		case APPROACH:  state = this->approach(user);
+						break;
+
+		case ATTACK: 	state = this->attack(user);
+						break;
+
+		case FLEE: 		state = this->flee(user);
+						break;
+
+		case RECOVERY:  state = this->recovery();
+						break;
+	}
+}
+
+int battleIA::searching(Unidades** user)
+{
+	//cout<<"Searching"<<endl;
+	enemy_pos = this->searchEnemy(user);
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
+	{
+		return SEARCHING;
+	}
+	else
+	{
+		return APPROACH;
+	}
+}
+
+int battleIA::approach(Unidades** user)
+{
+	//cout<<"Approach"<<endl;
+	enemy_pos = this->searchEnemy(user);
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
+	{
+		return SEARCHING;
+	}
+	else
+	{
+		/*Comprobar si el enemigo está dentro de rango*/
+		if(this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y))
+		{
+			return ATTACK;
+		}
+		else
+		{
+			this->Move(enemy_pos.X,enemy_pos.Y);
+			return APPROACH;
+		}
+
+	}
+}
+
+int battleIA::attack(Unidades** user)
+{
+	//cout<<"Attack"<<endl;
+	enemy_pos = this->searchEnemy(user);
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
+	{
+		return SEARCHING;
+	}
+	else
+	{
+		if(this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y) && this->getLife() > 25)
+		{
+			this->Attack(enemy_pos.X,enemy_pos.Y);
+			return ATTACK;
+		}
+		else if(!this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y))
+		{
+			return APPROACH;
+		}		
+		else if(this->getLife() <= 25)
+		{
+			return FLEE;
+		}
+	}
+}
+
+int battleIA::flee(Unidades** user)
+{
+	//cout<<"Flee"<<endl;
+	enemy_pos = this->searchEnemy(user);
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
+	{
+		return RECOVERY;
+	}
+	else
+	{
+		this->Move(0,0);
+		return FLEE;
+	}
+}
+
+int battleIA::recovery()
+{
+	//cout<<"Recovery"<<endl;
+	if(this->getLife() != 100)
+	{
+		this->Recovery();
+		return RECOVERY;
+	}
+	else
+	{
+		return SEARCHING;
+	}
+
+}
+
+position2di battleIA::searchEnemy(Unidades** vUnits)
+{
+	/*Busca a un enemigo en su rango establecido y devuelve un puntero con un array de sus coordenadas*/
+	int nUnits = gameEngine::getNumberUserUnits();
+	position2di mypos = getPosition();
+	position2di pos;
+	for(int i=0; i<nUnits; i++)
+	{
+		pos = vUnits[i]->getPosition();
+
+		if((mypos.X + 1 == pos.X || mypos.X + 2 == pos.X) || (mypos.X - 1 == pos.X || mypos.X -2 == pos.X) ||
+		   (mypos.Y + 1 == pos.Y || mypos.Y + 2 == pos.Y) || (mypos.Y - 1 == pos.Y || mypos.Y -2 == pos.Y))
+		{
+			return pos;
+		}
+	}
+	pos.X = -1;
+	pos.Y = -1;
+	return pos;
+}
+
+void battleIA::Pintar(IVideoDriver* driver)
+{
+	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
+}

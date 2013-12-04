@@ -1,16 +1,25 @@
+#ifndef EDIFICIO_H
+#define EDIFICIO_H
+
 /*
 	Clase para gestionar los distintos edificios
 */
+#include "IDibujable.h"
 #include <iostream>
 
-class edificio {
+class edificio  : public IDibujable{
 public:
-	edificio();
-	~edificio() {};
+	edificio(int t, IDibujable* partes);
+	~edificio();
 	edificio(const edificio&) {};
 	edificio& operator=(const edificio&) {};
 
-	void doSomething();
-
+	void Pintar(IVideoDriver* driver);
+	
+	//void doSomething();
+	
 private:
+	IDibujable* partes;
 };
+
+#endif
