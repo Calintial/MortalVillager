@@ -215,10 +215,10 @@ void pathfinding::run(){
 	findInnerPaths();
 
 }
-
+/*
 int main(){
 	pathfinding p;
 	p.run();
 	return 0;
 }
-
+*/
