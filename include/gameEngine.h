@@ -7,6 +7,7 @@
 #include "IDibujable.h"
 #include "Unidades.h"
 #include <iostream>
+#include <time.h>
 using namespace std;
 
 
@@ -32,12 +33,15 @@ public:
 	static int getNumberUserUnits();
 
 private:
+	void sleep(unsigned int);
+
 	graphicEngine* graphics;
 	intelEngine* ia;
 	int gameState;
 	static float volumen;
 	static vector<battleIA*> IAUnits;
 	static vector<Unidades*> UserUnits;
+
 };
 
 

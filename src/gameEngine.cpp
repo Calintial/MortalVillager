@@ -43,11 +43,13 @@ void gameEngine::run()
 			case INGAME: updatePlayer();
 						 ia->updateBattleIA();
 						 gameState = graphics->DrawMap((IDibujable**)&IAUnits[0],(IDibujable**)&UserUnits[0]);
+						 //this->sleep(20);
 						 break;
 
 			case PAUSE: break;
 			default: break;
 		}
+		
 	}
 }
 
@@ -77,4 +79,10 @@ void gameEngine::updatePlayer()
 	{
 		u->updateUnit();
 	}
+}
+
+void gameEngine::sleep(unsigned int mseconds)
+{
+    clock_t goal = (mseconds*(CLOCKS_PER_SEC/1000)) + clock();
+    while (goal > clock());
 }
