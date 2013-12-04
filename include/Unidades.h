@@ -27,11 +27,15 @@ public:
 	virtual void Pintar(IVideoDriver* driver);
 	void Recovery();
 	void updateUnit();
+	int getVisionRange();
+	int getAttackRange();
 
 private:
 	int life;
 	position2di last_clicked;
 	int state;
+	int vision_range;
+	int attack_range;
 
 };
 

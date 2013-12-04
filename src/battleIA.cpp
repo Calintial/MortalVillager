@@ -141,14 +141,20 @@ position2di battleIA::searchEnemy(Unidades** vUnits)
 	int nUnits = gameEngine::getNumberUserUnits();
 	position2di mypos = getPosition();
 	position2di pos;
+	int v_range = getVisionRange();
 	for(int i=0; i<nUnits; i++)
 	{
 		pos = vUnits[i]->getPosition();
 
-		if((mypos.X + 1 == pos.X || mypos.X + 2 == pos.X) || (mypos.X - 1 == pos.X || mypos.X -2 == pos.X) ||
-		   (mypos.Y + 1 == pos.Y || mypos.Y + 2 == pos.Y) || (mypos.Y - 1 == pos.Y || mypos.Y -2 == pos.Y))
+		for(int x = mypos.X - v_range; x <= mypos.X + v_range; x++)
 		{
-			return pos;
+			for(int y = mypos.Y - v_range; y <= mypos.Y + v_range; y++)
+			{
+				if(pos.X == x && pos.Y == y)
+				{
+					return pos;
+				}
+			}
 		}
 	}
 	pos.X = -1;

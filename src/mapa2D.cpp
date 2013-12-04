@@ -57,6 +57,9 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Us
     
     gameState = INGAME;
 	IrrDevice->setEventReceiver(this); 
+
+	drawVision = false;
+	drawAttackVision = false;
 }
 
 mapa2D::~mapa2D()
@@ -107,6 +110,18 @@ bool mapa2D::OnEvent(const SEvent& event)
 							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
 							break;
 		}
+	}
+	else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+		switch(id)
+		{
+			case CB_VISION_RANGE: drawVision = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
+								  break;
+			case CB_ATTACK_RANGE: drawAttackVision = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
+								  break;
+		}
+		
 	}
 	return false;
 }
@@ -234,7 +249,7 @@ void mapa2D::SetCameraScroll(const position2di &TPosition)
                 CameraScroll.Y = HEIGHT - 2;
 }
 
-void mapa2D::Pintar()
+int mapa2D::Pintar()
 {
 	if (MapaDevice->run())
     {        
@@ -264,15 +279,9 @@ void mapa2D::Pintar()
 				}
 			}
 
-			int n_ia = gameEngine::getNumberIAUnits();
+			DrawIAUnits();
 			int n_user = gameEngine::getNumberUserUnits();
 
-			for(int i=0; i<n_ia; i++)
-			{
-				position2di pos = ia_units[i]->getPosition();
-				DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
-				PintarTile(ia_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);		
-			}
 
 			for(int i=0; i<n_user; i++)
 			{
@@ -286,6 +295,11 @@ void mapa2D::Pintar()
 			driver->endScene();        	
         }
     }
+    else
+    {
+    	gameState = FINISH;
+    }
+    return gameState;
 
 }
 
@@ -334,5 +348,46 @@ void mapa2D::ScreenToGrid(const position2di &TScreenPosition, position2di &TGrid
         return NULL;
 }*/
 
+void mapa2D::DrawIAUnits()
+{
+	position2di DrawPosition;
+	int n_ia = gameEngine::getNumberIAUnits();	
 
+	for(int i=0; i<n_ia; i++)
+	{
+		position2di pos = ia_units[i]->getPosition();
+		DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
+		PintarTile(ia_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);
+		
+		int v_range = ((Unidades*)ia_units[i])->getVisionRange();
+		int a_range = ((Unidades*)ia_units[i])->getAttackRange();
+		/*Pintar vision de la unidad*/
+		if(drawVision)
+		{
+			for(int x = pos.X - v_range; x <= pos.X + v_range; x++)
+			{
+				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
+				{
+					ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
+					DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+					PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);
+				}
+			}
+		}
+
+		/*Pintar rango de ataque de la unidad*/
+		if(drawAttackVision)
+		{
+			for(int x = pos.X - a_range; x <= pos.X + a_range; x++)
+			{
+				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
+				{
+					ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
+					DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+					PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);
+				}
+			}
+		}
+	}
+}
 

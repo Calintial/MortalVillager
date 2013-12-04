@@ -7,6 +7,8 @@ Unidades::Unidades()
 	state = 0;
 	last_clicked.X = 1;
 	last_clicked.Y = 1;
+	vision_range = 3;
+	attack_range = 1;
 }
 
 Unidades::Unidades(int x, int y)
@@ -16,6 +18,8 @@ Unidades::Unidades(int x, int y)
 	state = 0;
 	last_clicked.X = x;
 	last_clicked.Y = y;
+	vision_range = 3;
+	attack_range = 1;
 }
 
 Unidades::~Unidades()
@@ -25,6 +29,8 @@ Unidades::~Unidades()
 	last_clicked.X = 0;
 	last_clicked.Y = 0;
 	state = 0;
+	vision_range = 0;
+	attack_range = 0;
 }
 
 
@@ -33,20 +39,23 @@ void Unidades::Move(int x, int y)
 	position2di position = getPosition();
 	state = MOVE;
 	/*Moverse a una posicion establecida*/
-	if(x > position.X)
-		position.X++;
-	else if(x < position.X)
-		position.X--;
+	if(x<26 && y<20)
+	{
+		if(x > position.X)
+			position.X++;
+		else if(x < position.X)
+			position.X--;
 
-	if(y > position.Y)
-		position.Y++;
-	else if(y < position.Y)
-		position.Y--;
-		
-	setPosition(position);
-	cout<<"New position:"<<position.X<<","<<position.Y<<endl;
-	last_clicked.X = x;
-	last_clicked.Y = y;
+		if(y > position.Y)
+			position.Y++;
+		else if(y < position.Y)
+			position.Y--;
+			
+		setPosition(position);
+		cout<<"New position:"<<position.X<<","<<position.Y<<endl;
+		last_clicked.X = x;
+		last_clicked.Y = y;		
+	}
 }
 
 void Unidades::Attack(int x, int y)
@@ -96,4 +105,14 @@ void Unidades::updateUnit()
 			state = NOTHING;
 		}
 	}
+}
+
+int Unidades::getVisionRange()
+{
+	return vision_range;
+}
+
+int Unidades::getAttackRange()
+{
+	return attack_range;
 }
