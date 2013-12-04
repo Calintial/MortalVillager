@@ -11,7 +11,7 @@ using namespace std;
 using namespace core;
 
 
-mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Userunits)
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Userunits,hud * _nuevohud)
 {
 	//int dimensionPantallaX=800;
     //int dimensionPantallaY=600;
@@ -39,7 +39,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Us
 	
 	skin = env->getSkin();
 	
-
+	hudpantalla=_nuevohud;
 
 	Init();   
     
@@ -91,13 +91,27 @@ bool mapa2D::free()
 
 bool mapa2D::OnEventMapa(const SEvent& event)
 {
-
+						
+						
+						
+						
 							position2di pos_grid;
         					pos_grid.X = event.MouseInput.X / (TILE_WIDTH - ViewSize.Width)/2;
         					pos_grid.Y = event.MouseInput.Y / (TILE_HEIGHT - ViewSize.Height)/2;
-							cout<<"Boton izquierdo presionado:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
-							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
+        					cout<<"Normal X: "<<event.MouseInput.X<<" Y : "<<event.MouseInput.Y<<endl;
+        					cout<<"Personaje X: "<<((Unidades*)user_units[0])->getPosition()[0]<<" Y: "<<((Unidades*)user_units[0])->getPosition()[1]<<endl;
+							cout<<"X: "<<pos_grid.X<<" Y: "<<pos_grid.Y<<endl;
+							//cout<<"Boton izquierdo presionado:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
+							//Se ha clickado al HUD
+							//if(pos_grid.X==((Unidades*)user_units[0])->getPosition()[0] && pos_grid.Y==((Unidades*)user_units[1])->getPosition()[1]){
+								//cout<<"si"<<endl;
+							hudpantalla->infoPersonaje(event.MouseInput.X,event.MouseInput.Y);
 
+							//}
+							//Se ha clickado en la pantalla
+							//else{
+							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
+							//}
 
 	return false;
 }

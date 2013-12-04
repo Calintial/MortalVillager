@@ -10,7 +10,7 @@
 #include "suelo.h"
 #include "edificio.h"
 #include "Unidades.h"
-
+#include "hud.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -62,7 +62,7 @@ public:
 	};
 
 
-	mapa2D(IrrlichtDevice * IrrDevice,IDibujable**,IDibujable**);
+	mapa2D(IrrlichtDevice * IrrDevice,IDibujable**,IDibujable**,hud*);
 	~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
@@ -116,7 +116,7 @@ private:
 	
 	//Texturas
 	stringc WorkingDirectory;
-	
+	hud * hudpantalla;
 	//Eventos
 	//array<IndexedEventStruct> IndexedEvents;
 	

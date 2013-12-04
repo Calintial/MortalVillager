@@ -21,8 +21,9 @@ Pantalla::~Pantalla(){
 int Pantalla::pintarPantalla(IDibujable** ia_units,IDibujable** user_units){
 
 	if(mapa == NULL){
-		mapa = new mapa2D(pantallaDevice,ia_units,user_units);
 		hudmapa= new hud(pantallaDevice);
+		mapa = new mapa2D(pantallaDevice,ia_units,user_units,hudmapa);
+		
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	mapa->Pintar();
@@ -32,7 +33,7 @@ int Pantalla::pintarPantalla(IDibujable** ia_units,IDibujable** user_units){
 }
 bool Pantalla::OnEvent(const SEvent& event){
 
-	if (event.GUIEvent.EventType == EET_MOUSE_INPUT_EVENT)
+	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
 		{

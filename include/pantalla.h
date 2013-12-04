@@ -18,5 +18,6 @@ private:
 	hud * hudmapa;
 	mapa2D * mapa;
 
+
 };
 #endif 

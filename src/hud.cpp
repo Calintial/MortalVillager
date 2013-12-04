@@ -15,8 +15,20 @@ hud::hud(IrrlichtDevice * IrrDevice){
 	skin = env->getSkin();
 	if (font)
 		skin->setFont(font);
+	P1X=0;
+	P1Y=403;
+	P2X=800;
+	P2Y=600;
 
-
+}
+void hud::infoPersonaje(int infoX, int infoY){
+font->draw(L"safhuioasghigusdhgunhasdgujasdyguasdghasujghsdjgsdgasdg",
+				core::rect<s32>(300,450,300,450),
+				video::SColor(255,0,0,0));
+font->draw(L"789",
+				core::rect<s32>(500,450,500,450),
+				video::SColor(255,0,0,0));
+driver->endScene();
 }
 bool hud::OnEvent(const SEvent& event)
 {

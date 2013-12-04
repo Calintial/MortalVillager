@@ -3,7 +3,6 @@
 */
 #ifndef HUD_H
 #define HUD_H
-
 #include <iostream>
 #include <irrlicht.h>
 #include <fmod.hpp>
@@ -26,6 +25,8 @@ public:
 	void paint();
 	void paintInformation();
 	virtual bool OnEvent(const SEvent& event);
+	void infoPersonaje(int infoX, int infoY);
+	int P1X,P1Y,P2X,P2Y;
 private:
 	IrrlichtDevice * MenuDevice;
 	video::IVideoDriver* driver;
@@ -34,6 +35,7 @@ private:
 	IGUISkin* skin;
 	IGUIFont* font;
 	video::ITexture* images;
+	
 };
 
 #endif
