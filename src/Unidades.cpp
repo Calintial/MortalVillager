@@ -58,23 +58,29 @@ void Unidades::Move(int x, int y)
 	}
 }
 
-void Unidades::Attack(int x, int y)
+void Unidades::Attack(position2di pos)
 {
-	//if(enemy_in_range(x,y))
+	if(enemy_in_attack_range(pos))
+		life--;
 		/*Hay un enemigo, atacar*/
 	//cout<<"Attacking!!"<<endl;
-	life--;
+	
 	//cout<<"life: "<<life<<endl;
 }
 
-bool Unidades::enemy_in_attack_range(int x,int y)
+bool Unidades::enemy_in_attack_range(position2di pos)
 {
-	position2di position = getPosition();
-	/*Comprobar si es posicion adyacente a la unidad*/
-	if(x == position.X + 1 || x == position.X - 1 || y == position.Y + 1 || y == position.Y - 1)
+	position2di mypos = getPosition();
+	/*Comprobar si esta en rango de ataque el enemigo*/
+	for(int x = mypos.X - attack_range; x <= mypos.X + attack_range; x++)
 	{
-		/*si lo es, comprobar si hay un enemigo*/
-		return true;
+		for(int y = mypos.Y - attack_range; y <= mypos.Y + attack_range; y++)
+		{
+			if(pos.X == x && pos.Y == y)
+			{
+				return true;
+			}
+		}
 	}
 	return false;	
 }

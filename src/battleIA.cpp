@@ -66,7 +66,7 @@ int battleIA::approach(Unidades** user)
 	else
 	{
 		/*Comprobar si el enemigo está dentro de rango*/
-		if(this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y))
+		if(this->enemy_in_attack_range(enemy_pos))
 		{
 			return ATTACK;
 		}
@@ -89,12 +89,12 @@ int battleIA::attack(Unidades** user)
 	}
 	else
 	{
-		if(this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y) && this->getLife() > 25)
+		if(this->enemy_in_attack_range(enemy_pos) && this->getLife() > 25)
 		{
-			this->Attack(enemy_pos.X,enemy_pos.Y);
+			this->Attack(enemy_pos);
 			return ATTACK;
 		}
-		else if(!this->enemy_in_attack_range(enemy_pos.X,enemy_pos.Y))
+		else if(!this->enemy_in_attack_range(enemy_pos))
 		{
 			return APPROACH;
 		}		

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <irrlicht.h>
 #include <fmod.hpp>
+#include <string>
 #include "graphicEngine.h"
 
 using namespace irr;
@@ -19,6 +20,7 @@ enum{
 	/*Estados de la IA*/
 	CB_VISION_RANGE = 0,
 	CB_ATTACK_RANGE = 1,
+	SCROLL_SPEED = 2
 };
 
 class DebugMenu
@@ -44,6 +46,8 @@ public:
 	~DebugMenu();
 	void initDebugMenu();
 	void Draw();
+	void DrawMEF();
+	void DrawParameters();
 };
 
 #endif

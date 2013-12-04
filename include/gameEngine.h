@@ -29,6 +29,8 @@ public:
 	void updatePlayer();
 	static void setVolume(float);
 	static float getVolume();
+	static void setSpeed(int);
+	static int getSpeed();
 	static int getNumberIAUnits();
 	static int getNumberUserUnits();
 
@@ -39,6 +41,7 @@ private:
 	intelEngine* ia;
 	int gameState;
 	static float volumen;
+	static int game_speed;
 	static vector<battleIA*> IAUnits;
 	static vector<Unidades*> UserUnits;
 

@@ -123,6 +123,17 @@ bool mapa2D::OnEvent(const SEvent& event)
 		}
 		
 	}
+	else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+
+		switch(id)
+		{
+			case SCROLL_SPEED: s32 pos = ((IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
+                 			   gameEngine::setSpeed(pos);
+							   break;
+		}
+	}
 	return false;
 }
 

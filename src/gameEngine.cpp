@@ -1,6 +1,7 @@
 #include "gameEngine.h"
 
 float gameEngine::volumen = 0.5;
+int gameEngine::game_speed = 100;
 vector<battleIA*> gameEngine::IAUnits;
 vector<Unidades*> gameEngine::UserUnits;
 
@@ -43,7 +44,7 @@ void gameEngine::run()
 			case INGAME: updatePlayer();
 						 ia->updateBattleIA();
 						 gameState = graphics->DrawMap((IDibujable**)&IAUnits[0],(IDibujable**)&UserUnits[0]);
-						 //this->sleep(20);
+						 this->sleep(100-game_speed);
 						 break;
 
 			case PAUSE: break;
@@ -85,4 +86,14 @@ void gameEngine::sleep(unsigned int mseconds)
 {
     clock_t goal = (mseconds*(CLOCKS_PER_SEC/1000)) + clock();
     while (goal > clock());
+}
+
+void gameEngine::setSpeed(int speed)
+{
+	game_speed = speed;
+}
+
+int gameEngine::getSpeed()
+{
+	return game_speed;
 }
