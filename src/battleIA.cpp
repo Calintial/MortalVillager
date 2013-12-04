@@ -166,3 +166,8 @@ void battleIA::Pintar(IVideoDriver* driver)
 {
 	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
 }
+
+int battleIA::getState()
+{
+	return state;
+}

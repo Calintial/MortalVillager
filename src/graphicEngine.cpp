@@ -43,10 +43,12 @@ int graphicEngine::DrawMap(IDibujable** ia_units,IDibujable** user_units)
 		mapa = new mapa2D(IrrDevice,ia_units,user_units);
 
 	if(debug == NULL)
-		debug = new DebugMenu(IrrDevice);
+		debug = new DebugMenu(IrrDevice,ia_units);
 
+	IrrDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	int status = mapa->Pintar();
 	debug->Draw();
+	IrrDevice->getVideoDriver()->endScene();  
 
 	return status;
 }

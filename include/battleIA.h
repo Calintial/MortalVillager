@@ -28,6 +28,7 @@ public:
 	~battleIA();
 	int updateIA(Unidades**);
 	void Pintar(IVideoDriver*);
+	int getState();
 
 private:
 	int state;

@@ -257,8 +257,7 @@ int mapa2D::Pintar()
         {
 			position2di GridPosition, DrawPosition;
 			
-			driver->beginScene(true, true, SColor(0,200,200,200));
-			
+						
 		    for(int i = 0; i < ViewSize.Width; i++)
 		    {
 				for(int j = 0; j < ViewSize.Height; j++)
@@ -292,7 +291,7 @@ int mapa2D::Pintar()
 
 			
 			env->drawAll();
-			driver->endScene();        	
+			      	
         }
     }
     else
