@@ -123,9 +123,15 @@ private:
 	
 	bool drawVision;
 	bool drawAttackVision;
+	int ia_selected;
+	int user_selected;
 
 	//Objetos
 	void DrawIAUnits();
+	void DrawUserUnits();
+	void InicializarGraficosUnidades();
+	int IASelected(position2di);
+	int UserSelected(position2di);
 	
 };
 

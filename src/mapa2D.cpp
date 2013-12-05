@@ -46,8 +46,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Us
     
     //GenerarMapa();
     
-	user_units[0]->Pintar(driver);
-	ia_units[0]->Pintar(driver);
+    InicializarGraficosUnidades();
 
     AllocateMap();
     
@@ -60,6 +59,9 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Us
 
 	drawVision = false;
 	drawAttackVision = false;
+
+	ia_selected = 0;
+	user_selected = 0;
 }
 
 mapa2D::~mapa2D()
@@ -107,7 +109,26 @@ bool mapa2D::OnEvent(const SEvent& event)
         					pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
         					pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
-							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
+
+							int pos_vector = IASelected(pos_grid);
+							if(pos_vector != -1)
+							{
+								ia_selected = pos_vector;
+								DebugMenu::setUnitSelected(ia_selected);
+							}
+							else
+							{
+								pos_vector = UserSelected(pos_grid);
+								if(pos_vector != -1)
+								{
+									user_selected = pos_vector;
+									cout<<"usuario seleccionado: "<<user_selected<<endl;
+								}
+								else
+								{
+									((Unidades*)user_units[user_selected])->Move(pos_grid.X,pos_grid.Y);
+								}
+							}
 							break;
 		}
 	}
@@ -290,16 +311,7 @@ int mapa2D::Pintar()
 			}
 
 			DrawIAUnits();
-			int n_user = gameEngine::getNumberUserUnits();
-
-
-			for(int i=0; i<n_user; i++)
-			{
-				position2di pos = user_units[i]->getPosition();
-				DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
-				PintarTile(user_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);		
-			}
-
+			DrawUserUnits();
 			
 			env->drawAll();
 			      	
@@ -378,9 +390,13 @@ void mapa2D::DrawIAUnits()
 			{
 				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
 				{
-					ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
-					DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
-					PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);
+					if(x < ViewSize.Width && y < ViewSize.Height)
+					{
+						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
+						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+						PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);					
+					}
+
 				}
 			}
 		}
@@ -392,12 +408,69 @@ void mapa2D::DrawIAUnits()
 			{
 				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
 				{
-					ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
-					DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
-					PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);
+					if(x < ViewSize.Width && y < ViewSize.Height)
+					{
+						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
+						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+						PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);						
+					}
+
 				}
 			}
 		}
 	}
 }
 
+void mapa2D::DrawUserUnits()
+{
+	int n_user = gameEngine::getNumberUserUnits();
+
+	position2di DrawPosition;
+	for(int i=0; i<n_user; i++)
+	{
+		position2di pos = user_units[i]->getPosition();
+		DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
+		PintarTile(user_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);		
+	}
+
+}
+
+void mapa2D::InicializarGraficosUnidades()
+{
+	int n_ia = gameEngine::getNumberIAUnits();
+	int n_units = gameEngine::getNumberUserUnits();
+
+	for(int i=0; i<n_ia; i++)
+		ia_units[i]->Pintar(driver);
+
+	for(int i=0; i<n_units; i++)
+		user_units[i]->Pintar(driver);
+}
+
+int mapa2D::IASelected(position2di coord)
+{
+	int n_ia = gameEngine::getNumberIAUnits();
+
+	for(int i=0; i<n_ia; i++)
+	{
+		if(ia_units[i]->getPosition().X == coord.X && ia_units[i]->getPosition().Y == coord.Y)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+int mapa2D::UserSelected(position2di coord)
+{
+	int n_units = gameEngine::getNumberUserUnits();
+
+	for(int i=0; i<n_units; i++)
+	{
+		if(user_units[i]->getPosition().X == coord.X && user_units[i]->getPosition().Y == coord.Y)
+		{
+			return i;
+		}
+	}
+	return -1;
+}

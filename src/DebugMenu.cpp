@@ -1,5 +1,7 @@
 #include "DebugMenu.h"
 
+int DebugMenu::unitSelected = 0;
+
 DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, IDibujable** ia_units)
 {
 	DebugDevice = IrrDevice;
@@ -55,7 +57,7 @@ void DebugMenu::Draw()
 
 void DebugMenu::DrawMEF()
 {
-	int ia_state = ((battleIA*)vUnits[0])->getState();
+	int ia_state = ((battleIA*)vUnits[unitSelected])->getState();
 
 	if(ia_state == SEARCHING)
 	{
@@ -136,13 +138,26 @@ void DebugMenu::DrawMEF()
 
 void DebugMenu::DrawParameters()
 {
-	int ia_life = ((Unidades*)vUnits[0])->getLife();
+	int ia_life = ((Unidades*)vUnits[unitSelected])->getLife();
 	std::string string_life = "Vida:" + to_string(ia_life);
-	
+	std::string string_unit_selected = "Unidad seleccionada: " + to_string(unitSelected);
 
 	font->draw(L"Parametros",
     core::rect<s32>(dimensionPantallaX + 59,509,dimensionPantallaX + 209,534),video::SColor(255,0,0,0));
 
-	font->draw(stringw(string_life.c_str()),
+	font->draw(stringw(string_unit_selected.c_str()),
     core::rect<s32>(dimensionPantallaX + 59,540,dimensionPantallaX + 209,565),video::SColor(255,0,0,0));
+
+    font->draw(stringw(string_life.c_str()),
+    core::rect<s32>(dimensionPantallaX + 59,571,dimensionPantallaX + 209,596),video::SColor(255,0,0,0));
+}
+
+void DebugMenu::setUnitSelected(int unit)
+{
+	unitSelected = unit;
+}
+
+int DebugMenu::getUnitSelected()
+{
+	return unitSelected;
 }

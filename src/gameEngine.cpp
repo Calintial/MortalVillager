@@ -8,7 +8,9 @@ vector<Unidades*> gameEngine::UserUnits;
 gameEngine::gameEngine()
 {
 	battleIA* IAunit = new battleIA();
+	battleIA* IAunit2 = new battleIA(10,10);
 	IAUnits.push_back(IAunit);
+	IAUnits.push_back(IAunit2);
 
 	Unidades* unit = new Unidades(24,18);
 	UserUnits.push_back(unit);

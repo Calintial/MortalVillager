@@ -39,6 +39,8 @@ private:
 	video::ITexture* state_flee;
 	video::ITexture* state_recovery;
 
+	static int unitSelected;
+
 
 
 public:
@@ -48,6 +50,8 @@ public:
 	void Draw();
 	void DrawMEF();
 	void DrawParameters();
+	static void setUnitSelected(int);
+	static int getUnitSelected();
 };
 
 #endif
