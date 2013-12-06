@@ -8,6 +8,7 @@
 #include <vector>
 #include "battleIA.h"
 #include "gameEngine.h"
+#include "IDibujable.h"
 
 using namespace std;
 
@@ -16,15 +17,15 @@ class battleIA;
 class intelEngine {
 public:
 	intelEngine();
-	intelEngine(battleIA**,Unidades**);
+	intelEngine(vector<IDibujable*>*,vector<IDibujable*>*);
 	~intelEngine();
 	void updateBattleIA();
 	/*intelEngine(const intelEngine&) {};
 	intelEngine& operator=(const intelEngine&) {};*/
 
 private:
-	battleIA** ia_units;
-	Unidades** user_units;
+	vector<IDibujable*>* ia_units;
+	vector<IDibujable*>* user_units;
 };
 
 #endif
