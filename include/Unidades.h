@@ -21,17 +21,21 @@ public:
 	~Unidades();
 	void updateIA();
 	void Move(int,int);
-	void Attack(int,int);
-	bool enemy_in_attack_range(int,int);
+	void Attack(position2di);
+	bool enemy_in_attack_range(position2di);
 	int getLife();
 	virtual void Pintar(IVideoDriver* driver);
 	void Recovery();
 	void updateUnit();
+	int getVisionRange();
+	int getAttackRange();
 
 private:
 	int life;
 	position2di last_clicked;
 	int state;
+	int vision_range;
+	int attack_range;
 
 };
 

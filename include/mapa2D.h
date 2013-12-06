@@ -10,6 +10,8 @@
 #include "suelo.h"
 #include "edificio.h"
 #include "Unidades.h"
+#include "DebugMenu.h"
+
 
 #include <string>
 #include <vector>
@@ -62,7 +64,7 @@ public:
 	};
 
 
-	mapa2D(IrrlichtDevice * IrrDevice,IDibujable**,IDibujable**);
+	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*);
 	~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
@@ -79,7 +81,7 @@ public:
     const dimension2di &GetViewSize() const { return ViewSize; }
     
     //Graficos
-    void Pintar();
+    int Pintar();
     void PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY);
     bool GridToScreen(const position2di &TGridPosition, position2di &TScreenPosition) const;
 	void ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const;
@@ -93,6 +95,9 @@ public:
 	
 	//Manejo de objetos
 	//void Update(u32 TDeltaTime);
+
+	int getIASelected();
+	int getUserSelected();
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -108,8 +113,8 @@ private:
 	//void LoadEvents(STile *Tile, int i, int j);
 
 	IDibujable* vTiles[WIDTH][HEIGHT];
-	IDibujable** ia_units;
-	IDibujable** user_units;
+	vector<IDibujable*>* ia_units;
+	vector<IDibujable*>* user_units;
 	
 	//Vista
 	//int ViewWidth,ViewHeight;
@@ -122,8 +127,18 @@ private:
 	//Eventos
 	//array<IndexedEventStruct> IndexedEvents;
 	
+	bool drawVision;
+	bool drawAttackVision;
+	int ia_selected;
+	int user_selected;
+
 	//Objetos
-	
+
+	void DrawIAUnits();
+	void DrawUserUnits();
+	void InicializarGraficosUnidades();
+	int IASelected(position2di);
+	int UserSelected(position2di);
 };
 
 #endif

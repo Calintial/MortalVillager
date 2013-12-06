@@ -2,7 +2,9 @@ OPTS=-g -Wall -std=c++11
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 
-OBJECTS=graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o
+
+OBJECTS=graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o DebugMenu.o
+
 
 .PHONY: all clean
 

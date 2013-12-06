@@ -5,7 +5,7 @@ intelEngine::intelEngine()
 {
 }
 
-intelEngine::intelEngine(battleIA** units,Unidades** Userunits)
+intelEngine::intelEngine(vector<IDibujable*>* units,vector<IDibujable*>* Userunits)
 {
 	ia_units = units;
 	user_units = Userunits;
@@ -13,19 +13,17 @@ intelEngine::intelEngine(battleIA** units,Unidades** Userunits)
 
 intelEngine::~intelEngine()
 {
-	int n_iaUnits = gameEngine::getNumberIAUnits();
+	/*int n_iaUnits = gameEngine::getNumberIAUnits();
 	for(int i=0; i<n_iaUnits; i++)
-	{
-		delete ia_units[i];
-	}
+	{*/
+		delete ia_units;
+	/*}*/
 }
 
 void intelEngine::updateBattleIA()
 {
-	int n_iaUnits = gameEngine::getNumberIAUnits();
-
-	for(int i=0; i<n_iaUnits; i++)
+	for(int i=0; i<ia_units->size(); i++)
 	{
-		ia_units[i]->updateIA(user_units);
+		((battleIA*)ia_units->at(i))->updateIA(user_units);
 	}
 }

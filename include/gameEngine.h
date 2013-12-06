@@ -7,6 +7,7 @@
 #include "IDibujable.h"
 #include "Unidades.h"
 #include <iostream>
+#include <time.h>
 using namespace std;
 
 
@@ -28,16 +29,31 @@ public:
 	void updatePlayer();
 	static void setVolume(float);
 	static float getVolume();
-	static int getNumberIAUnits();
-	static int getNumberUserUnits();
+
+	static void setSpeed(int);
+	static int getSpeed();
+	static void addIAUnit(int,int);
+
 
 private:
+	void sleep(unsigned int);
+
 	graphicEngine* graphics;
 	intelEngine* ia;
 	int gameState;
 	static float volumen;
-	static vector<battleIA*> IAUnits;
-	static vector<Unidades*> UserUnits;
+
+	static int game_speed;
+	vector<IDibujable*> IAUnits;
+	vector<IDibujable*> UserUnits;
+
+	/*Añadir unidades dinamicamente*/
+	static vector<battleIA*> Add_IAUnits;
+	static vector<Unidades*> Add_UserUnits;
+	static void addUserUnit(int,int);
+	void addNewUnits();
+
+
 };
 
 
