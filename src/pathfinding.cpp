@@ -1,31 +1,8 @@
 #include "pathfinding.h"
 #include <boost/graph/graphviz.hpp>
 
-pathfinding::pathfinding(){
-	width = WIDTH;
-	height = HEIGHT;
-	tamRegion = 10;
-	cout<<"MAPA:"<<endl;
-	for (int i = 0; i < height; ++i)
-	{
-		for (int j = 0; j < width; ++j)
-		{
-			if (i == 9 && j == 3)
-			{
-				mapa[i][j] = -1;
-				cout<<"▣";
-			}
-			else if((j+1)%(i+1) == 0){
-				mapa[i][j] = -1;
-				cout<<"▣";
-			}else{
-				mapa[i][j] = 0;
-				cout<<"□";
-			}
-		}
-		cout<<endl;
-	}
-
+pathfinding::pathfinding(mapa2D* _mapa){
+	mapa = _mapa;
 }
 
 pathfinding::~pathfinding(){}
@@ -73,7 +50,7 @@ void pathfinding::analyzeRegions(){
 			int posHueco = -1;
 			while(iterador < actual->finalY && iterador < height)
 			{
-				if (mapa[iterador][actual->inicioX] == 0 && mapa[iterador][regionIzquierda->finalX] == 0)
+				if (mapa->getTile(iterador,actual->inicioX)->isTransitable() && mapa->getTile(iterador,regionIzquierda->finalX)->isTransitable())
 				{
 					if (posHueco == -1)
 					{
@@ -112,7 +89,7 @@ void pathfinding::analyzeRegions(){
 			int posHueco = -1;
 			while(iterador < actual->finalX && iterador < width)
 			{
-				if (mapa[actual->inicioY][iterador] == 0 && mapa[regionArriba->finalY][iterador] == 0)
+				if (mapa->getTile(actual->inicioY,iterador)->isTransitable() && mapa->getTile(regionArriba->finalY,iterador)->isTransitable())
 				{
 					if (posHueco == -1)
 					{
@@ -173,7 +150,7 @@ void pathfinding::findInnerPaths(){
 				if (j != i)
 				{
 					// calculo el camino entre puntoI y puntoJ
-					cout<<"Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
+					cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
 				}
 				caminos.push_back(nuevo);
 				// para cada enlace, hacemos push_back a enlaceI.intracaminos con el camino entre enlaceI y enlaceJ

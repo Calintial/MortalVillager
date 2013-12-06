@@ -4,11 +4,9 @@
 
 #include "Region.h"
 #include "Enlace.h"
+#include "mapa2D.h"
 
 using namespace std;
-
-#define HEIGHT 20
-#define WIDTH 20
 
 typedef boost::adjacency_list<boost::listS, boost::vecS, boost::undirectedS, Region,Enlace > Graph;
 
@@ -22,7 +20,7 @@ typedef boost::graph_traits<Graph>::vertex_iterator vertex_iter;
 class pathfinding
 {
 public:
-	pathfinding();
+	pathfinding(mapa2D*);
 	~pathfinding();
 	void run();
 	void createRegions();
@@ -33,7 +31,7 @@ public:
 
 private:
 	int width,height; 
-	int tamRegion;
-	int mapa[HEIGHT][WIDTH];
+	const int tamRegion = 10;
+	mapa2D* mapa;
 	Graph grafoRegiones;
 };
