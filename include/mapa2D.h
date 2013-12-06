@@ -10,7 +10,6 @@
 #include "suelo.h"
 #include "edificio.h"
 #include "Unidades.h"
-#include "hud.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -26,8 +25,8 @@ using namespace scene;
 
 const int TILE_WIDTH	= 32;
 const int TILE_HEIGHT = 32;
-#define WIDTH 250
-#define HEIGHT 250
+#define WIDTH 200
+#define HEIGHT 200
 
 
 // estructura que guarda la imagen y información de un tile por cada
@@ -62,7 +61,7 @@ public:
 	};
 
 
-	mapa2D(IrrlichtDevice * IrrDevice,IDibujable**,IDibujable**,hud*);
+	mapa2D(IrrlichtDevice * IrrDevice,IDibujable**,IDibujable**);
 	~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
@@ -83,7 +82,7 @@ public:
 	void ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const;
 	
 	//Eventos
-	 bool OnEventMapa(const SEvent& event);
+	 Unidades * OnEventMapa(const SEvent& event);
 	//IndexedEventStruct *GetIndexedEvent(int TEventType, int TEventData);
 	
 	// Collision
@@ -116,7 +115,7 @@ private:
 	
 	//Texturas
 	stringc WorkingDirectory;
-	hud * hudpantalla;
+
 	//Eventos
 	//array<IndexedEventStruct> IndexedEvents;
 	

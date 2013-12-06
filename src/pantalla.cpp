@@ -21,8 +21,9 @@ Pantalla::~Pantalla(){
 int Pantalla::pintarPantalla(IDibujable** ia_units,IDibujable** user_units){
 
 	if(mapa == NULL){
-		hudmapa= new hud(pantallaDevice);
-		mapa = new mapa2D(pantallaDevice,ia_units,user_units,hudmapa);
+		
+		mapa = new mapa2D(pantallaDevice,ia_units,user_units);
+		hudmapa= new hud(pantallaDevice,mapa);
 		
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
@@ -38,7 +39,8 @@ bool Pantalla::OnEvent(const SEvent& event){
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
-							mapa->OnEventMapa(event);
+							
+							hudmapa->paintInformation(mapa->OnEventMapa(event));
 							break;
 		}
 	}

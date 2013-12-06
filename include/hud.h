@@ -8,6 +8,8 @@
 #include <fmod.hpp>
 #include "IDibujable.h"
 #include "Unidades.h"
+#include "mapa2D.h"
+
 using namespace irr;
 using namespace core;
 using namespace scene;
@@ -16,16 +18,19 @@ using namespace io;
 using namespace gui;
 
 using namespace std;
-
+#define WIDTH 200
+#define HEIGHT 200
+class mapa2D;
 class hud : public IEventReceiver
 {
 public:
-	hud(IrrlichtDevice * IrrDevice);
+	hud(IrrlichtDevice * IrrDevice, mapa2D *);
 	~hud();
 	void paint();
-	void paintInformation(Unidades *,bool);
+	void paintInformation(Unidades *);
 	virtual bool OnEvent(const SEvent& event);
 	int P1X,P1Y,P2X,P2Y;
+	void pintarMiniMapa();
 private:
 	IrrlichtDevice * MenuDevice;
 	video::IVideoDriver* driver;
@@ -36,6 +41,8 @@ private:
 	video::ITexture* images;
 	Unidades * personaje;
 	bool ensenyarInformacion;
+	std::string mapa;
+	mapa2D * _mapa2D;
 };
 
 #endif

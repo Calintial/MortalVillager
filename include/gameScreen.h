@@ -1,3 +1,5 @@
+#ifndef GAMEENGINE_H
+#define GAMEENGINE_H
 #include <irrlicht.h>
 #include <iostream>
 
@@ -28,3 +30,4 @@ private:
 	int dimensionPantallaX; 
 	int dimensionPantallaY; 
 };
+#endif

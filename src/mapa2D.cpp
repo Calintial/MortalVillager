@@ -11,7 +11,7 @@ using namespace std;
 using namespace core;
 
 
-mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Userunits,hud * _nuevohud)
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Userunits)
 {
 	//int dimensionPantallaX=800;
     //int dimensionPantallaY=600;
@@ -39,7 +39,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Us
 	
 	skin = env->getSkin();
 	
-	hudpantalla=_nuevohud;
+
 
 	Init();   
     
@@ -53,7 +53,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Us
     //Pintar();
     
     //LoadEvents();
-    
+
     gameState = INGAME;
 	//IrrDevice->setEventReceiver(this); 
 }
@@ -89,12 +89,13 @@ bool mapa2D::free()
     return true;
 }
 
-bool mapa2D::OnEventMapa(const SEvent& event)
+Unidades* mapa2D::OnEventMapa(const SEvent& event)
 {
 						
 						
 						
-						
+						Unidades * uni= new Unidades();
+						uni=NULL;
 							position2di pos_grid;
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
@@ -106,15 +107,14 @@ bool mapa2D::OnEventMapa(const SEvent& event)
 							cout<<"X: "<<pos_grid.X<<" Y: "<<pos_grid.Y<<endl;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 							if(((Unidades*)user_units[0])->getPosition().X==pos_grid.X && ((Unidades*)user_units[0])->getPosition().Y==pos_grid.Y){
-								hudpantalla->paintInformation((Unidades*)user_units[0],true);
+								//hudpantalla->paintInformation((Unidades*)user_units[0],true,mapatexto);
+								((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
+								return (Unidades*)user_units[0];
 							}
-							else{
-								hudpantalla->paintInformation((Unidades*)user_units[0],false);
-							}
+							
 							((Unidades*)user_units[0])->Move(pos_grid.X,pos_grid.Y);
-							//}
-
-	return false;
+							return uni;
+							
 }
 
 void mapa2D::AllocateMap()

@@ -5,7 +5,7 @@
 #include "mapa2D.h"
 
 class mapa2D;
-
+class hud;
 class Pantalla : public IEventReceiver
 {
 public:
