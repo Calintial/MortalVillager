@@ -48,8 +48,11 @@ Unidades.o: src/Unidades.cpp include/Unidades.h
 mapa2D.o: src/mapa2D.cpp include/mapa2D.h
 	g++ -c src/mapa2D.cpp $(OPTS) $(INCLUDES)
 
-pausa.o: src/mapa2D.cpp include/mapa2D.h
-	g++ -c src/mapa2D.cpp $(OPTS) $(INCLUDES)
+pausa.o: src/pausa.cpp include/pausa.h
+	g++ -c src/pausa.cpp $(OPTS) $(INCLUDES)
+
+state.o: src/state.cpp include/state.h
+	g++ -c src/state.cpp $(OPTS) $(INCLUDES)
 
 
 # bin/hello: src/HelloWorld.cpp

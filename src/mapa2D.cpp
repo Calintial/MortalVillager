@@ -251,6 +251,7 @@ int mapa2D::Pintar()
         {
 			if(gameState == PAUSE)
 			{
+										 cout << "PAUSAENMAPA" << endl;
 				return gameState;
 			}
 			position2di GridPosition, DrawPosition;

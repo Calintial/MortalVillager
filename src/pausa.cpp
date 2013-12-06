@@ -53,7 +53,9 @@ bool pausa::OnEvent(const SEvent& event)
 		{
 			case GUI_PAUSA_BOTON_REANUDAR :
 				gameState = INGAME;
+				cout << "INGAME" << endl;
 				env->clear();
+				
 				break;
 
 			case GUI_PAUSA_BOTON_SALIR :	

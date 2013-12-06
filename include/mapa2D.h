@@ -26,8 +26,8 @@ using namespace scene;
 
 const int TILE_WIDTH	= 32;
 const int TILE_HEIGHT = 32;
-#define WIDTH 250
-#define HEIGHT 250
+#define WIDTH 200
+#define HEIGHT 200
 
 
 // estructura que guarda la imagen y información de un tile por cada
