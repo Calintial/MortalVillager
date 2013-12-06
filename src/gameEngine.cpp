@@ -2,8 +2,10 @@
 
 float gameEngine::volumen = 0.5;
 int gameEngine::game_speed = 100;
-vector<battleIA*> gameEngine::IAUnits;
-vector<Unidades*> gameEngine::UserUnits;
+
+vector<battleIA*> gameEngine::Add_IAUnits;
+vector<Unidades*> gameEngine::Add_UserUnits;
+
 
 gameEngine::gameEngine()
 {
@@ -22,7 +24,7 @@ gameEngine::gameEngine()
 
 
 
-	ia = new intelEngine(&IAUnits[0],&UserUnits[0]);
+	ia = new intelEngine(&IAUnits,&UserUnits);
 }
 
 gameEngine::~gameEngine()
@@ -43,10 +45,13 @@ void gameEngine::run()
 			case MAIN: gameState = graphics->DrawMainMenu();
 					   break;
 
-			case INGAME: updatePlayer();
+			case INGAME: addNewUnits();
+					     updatePlayer();
 						 ia->updateBattleIA();
-						 gameState = graphics->DrawMap((IDibujable**)&IAUnits[0],(IDibujable**)&UserUnits[0]);
+
+						 gameState = graphics->DrawMap(&IAUnits,&UserUnits);
 						 this->sleep(100-game_speed);
+
 						 break;
 
 			case PAUSE: break;
@@ -66,22 +71,13 @@ float gameEngine::getVolume()
 	return volumen;
 }
 
-int gameEngine::getNumberIAUnits()
-{
-	return IAUnits.size();
-}
-
-int gameEngine::getNumberUserUnits()
-{
-	return UserUnits.size();
-}
-
 void gameEngine::updatePlayer()
 {
-	for(Unidades* u : UserUnits)
+	for(IDibujable* u : UserUnits)
 	{
-		u->updateUnit();
+		((Unidades*)u)->updateUnit();
 	}
+
 }
 
 void gameEngine::sleep(unsigned int mseconds)
@@ -98,4 +94,27 @@ void gameEngine::setSpeed(int speed)
 int gameEngine::getSpeed()
 {
 	return game_speed;
+}
+
+void gameEngine::addIAUnit(int x,int y)
+{
+	Add_IAUnits.push_back(new battleIA(x,y));
+}
+
+void gameEngine::addUserUnit(int x,int y)
+{
+	Add_UserUnits.push_back(new Unidades(x,y));
+}
+
+void gameEngine::addNewUnits()
+{
+	for(battleIA* ia : Add_IAUnits)
+	{
+		IAUnits.push_back(ia);
+	}
+
+	for(Unidades* unit : Add_UserUnits)
+	{
+		UserUnits.push_back(unit);
+	}
 }

@@ -12,6 +12,7 @@
 #include "Unidades.h"
 #include "DebugMenu.h"
 
+
 #include <string>
 #include <vector>
 #include <fstream>
@@ -63,7 +64,7 @@ public:
 	};
 
 
-	mapa2D(IrrlichtDevice * IrrDevice,IDibujable**,IDibujable**);
+	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*);
 	~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
@@ -92,6 +93,9 @@ public:
 	
 	//Manejo de objetos
 	//void Update(u32 TDeltaTime);
+
+	int getIASelected();
+	int getUserSelected();
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -107,8 +111,8 @@ private:
 	//void LoadEvents(STile *Tile, int i, int j);
 
 	IDibujable* vTiles[WIDTH][HEIGHT];
-	IDibujable** ia_units;
-	IDibujable** user_units;
+	vector<IDibujable*>* ia_units;
+	vector<IDibujable*>* user_units;
 	
 	//Vista
 	//int ViewWidth,ViewHeight;
@@ -127,12 +131,12 @@ private:
 	int user_selected;
 
 	//Objetos
+
 	void DrawIAUnits();
 	void DrawUserUnits();
 	void InicializarGraficosUnidades();
 	int IASelected(position2di);
 	int UserSelected(position2di);
-	
 };
 
 #endif

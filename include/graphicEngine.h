@@ -21,7 +21,8 @@ public:
 	graphicEngine();
 	~graphicEngine();
 	int DrawMainMenu();
-	int DrawMap(IDibujable**,IDibujable**);
+	int DrawMap(vector<IDibujable*>*,vector<IDibujable*>*);
+
 private:
 	IrrlichtDevice * IrrDevice;
 	mainMenu* menu;

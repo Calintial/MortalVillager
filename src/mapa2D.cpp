@@ -12,7 +12,7 @@ using namespace std;
 using namespace core;
 
 
-mapa2D::mapa2D(IrrlichtDevice * IrrDevice, IDibujable** IAunits, IDibujable** Userunits)
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits)
 {
 	//int dimensionPantallaX=800;
     //int dimensionPantallaY=600;
@@ -110,11 +110,14 @@ bool mapa2D::OnEvent(const SEvent& event)
         					pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
+
 							int pos_vector = IASelected(pos_grid);
 							if(pos_vector != -1)
 							{
 								ia_selected = pos_vector;
-								DebugMenu::setUnitSelected(ia_selected);
+
+								//DebugMenu::setUnitSelected(ia_selected);
+
 							}
 							else
 							{
@@ -126,7 +129,9 @@ bool mapa2D::OnEvent(const SEvent& event)
 								}
 								else
 								{
-									((Unidades*)user_units[user_selected])->Move(pos_grid.X,pos_grid.Y);
+
+									((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
+
 								}
 							}
 							break;
@@ -155,6 +160,21 @@ bool mapa2D::OnEvent(const SEvent& event)
 							   break;
 		}
 	}
+
+	else if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+
+		IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
+		IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
+
+		switch(id)
+		{
+			case BUTTON_ADD_IA: gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()); break;
+			case BUTTON_ADD_UNIT: break;
+		}
+	}
+
 	return false;
 }
 
@@ -373,16 +393,17 @@ void mapa2D::ScreenToGrid(const position2di &TScreenPosition, position2di &TGrid
 void mapa2D::DrawIAUnits()
 {
 	position2di DrawPosition;
-	int n_ia = gameEngine::getNumberIAUnits();	
+
+	int n_ia = ia_units->size();	
 
 	for(int i=0; i<n_ia; i++)
 	{
-		position2di pos = ia_units[i]->getPosition();
+		position2di pos = ia_units->at(i)->getPosition();
 		DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
-		PintarTile(ia_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);
+		PintarTile(ia_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);
 		
-		int v_range = ((Unidades*)ia_units[i])->getVisionRange();
-		int a_range = ((Unidades*)ia_units[i])->getAttackRange();
+		int v_range = ((Unidades*)ia_units->at(i))->getVisionRange();
+		int a_range = ((Unidades*)ia_units->at(i))->getAttackRange();
 		/*Pintar vision de la unidad*/
 		if(drawVision)
 		{
@@ -423,37 +444,37 @@ void mapa2D::DrawIAUnits()
 
 void mapa2D::DrawUserUnits()
 {
-	int n_user = gameEngine::getNumberUserUnits();
+	int n_user = user_units->size();
 
 	position2di DrawPosition;
 	for(int i=0; i<n_user; i++)
 	{
-		position2di pos = user_units[i]->getPosition();
+		position2di pos = user_units->at(i)->getPosition();
 		DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
-		PintarTile(user_units[i]->getTextura(), DrawPosition.X, DrawPosition.Y);		
+		PintarTile(user_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);		
 	}
 
 }
 
 void mapa2D::InicializarGraficosUnidades()
 {
-	int n_ia = gameEngine::getNumberIAUnits();
-	int n_units = gameEngine::getNumberUserUnits();
+	int n_ia = ia_units->size();
+	int n_units = user_units->size();
 
 	for(int i=0; i<n_ia; i++)
-		ia_units[i]->Pintar(driver);
+		ia_units->at(i)->Pintar(driver);
 
 	for(int i=0; i<n_units; i++)
-		user_units[i]->Pintar(driver);
+		user_units->at(i)->Pintar(driver);
 }
 
 int mapa2D::IASelected(position2di coord)
 {
-	int n_ia = gameEngine::getNumberIAUnits();
+	int n_ia = ia_units->size();
 
 	for(int i=0; i<n_ia; i++)
 	{
-		if(ia_units[i]->getPosition().X == coord.X && ia_units[i]->getPosition().Y == coord.Y)
+		if(ia_units->at(i)->getPosition().X == coord.X && ia_units->at(i)->getPosition().Y == coord.Y)
 		{
 			return i;
 		}
@@ -463,14 +484,24 @@ int mapa2D::IASelected(position2di coord)
 
 int mapa2D::UserSelected(position2di coord)
 {
-	int n_units = gameEngine::getNumberUserUnits();
+	int n_units = user_units->size();
 
 	for(int i=0; i<n_units; i++)
 	{
-		if(user_units[i]->getPosition().X == coord.X && user_units[i]->getPosition().Y == coord.Y)
+		if(user_units->at(i)->getPosition().X == coord.X && user_units->at(i)->getPosition().Y == coord.Y)
 		{
 			return i;
 		}
 	}
 	return -1;
+}
+
+int mapa2D::getIASelected()
+{
+	return ia_selected;
+}
+
+int mapa2D::getUserSelected()
+{
+	return user_selected;
 }

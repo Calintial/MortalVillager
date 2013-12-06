@@ -29,10 +29,11 @@ public:
 	void updatePlayer();
 	static void setVolume(float);
 	static float getVolume();
+
 	static void setSpeed(int);
 	static int getSpeed();
-	static int getNumberIAUnits();
-	static int getNumberUserUnits();
+	static void addIAUnit(int,int);
+
 
 private:
 	void sleep(unsigned int);
@@ -41,9 +42,17 @@ private:
 	intelEngine* ia;
 	int gameState;
 	static float volumen;
+
 	static int game_speed;
-	static vector<battleIA*> IAUnits;
-	static vector<Unidades*> UserUnits;
+	vector<IDibujable*> IAUnits;
+	vector<IDibujable*> UserUnits;
+
+	/*Añadir unidades dinamicamente*/
+	static vector<battleIA*> Add_IAUnits;
+	static vector<Unidades*> Add_UserUnits;
+	static void addUserUnit(int,int);
+	void addNewUnits();
+
 
 };
 

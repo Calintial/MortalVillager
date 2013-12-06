@@ -36,17 +36,19 @@ int graphicEngine::DrawMainMenu()
     
 }
 
-int graphicEngine::DrawMap(IDibujable** ia_units,IDibujable** user_units)
+int graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
 
 	if(mapa == NULL)
 		mapa = new mapa2D(IrrDevice,ia_units,user_units);
 
+
 	if(debug == NULL)
-		debug = new DebugMenu(IrrDevice,ia_units);
+		debug = new DebugMenu(IrrDevice,ia_units,mapa);
 
 	IrrDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	int status = mapa->Pintar();
+	
 	debug->Draw();
 	IrrDevice->getVideoDriver()->endScene();  
 

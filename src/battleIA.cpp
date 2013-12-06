@@ -20,7 +20,7 @@ battleIA::~battleIA()
 	//delete enemy_pos;
 }
 
-int battleIA::updateIA(Unidades** user)
+int battleIA::updateIA(vector<IDibujable*>* user)
 {
 	switch(state)
 	{
@@ -41,7 +41,7 @@ int battleIA::updateIA(Unidades** user)
 	}
 }
 
-int battleIA::searching(Unidades** user)
+int battleIA::searching(vector<IDibujable*>* user)
 {
 	//cout<<"Searching"<<endl;
 	enemy_pos = this->searchEnemy(user);
@@ -55,7 +55,7 @@ int battleIA::searching(Unidades** user)
 	}
 }
 
-int battleIA::approach(Unidades** user)
+int battleIA::approach(vector<IDibujable*>* user)
 {
 	//cout<<"Approach"<<endl;
 	enemy_pos = this->searchEnemy(user);
@@ -79,7 +79,7 @@ int battleIA::approach(Unidades** user)
 	}
 }
 
-int battleIA::attack(Unidades** user)
+int battleIA::attack(vector<IDibujable*>* user)
 {
 	//cout<<"Attack"<<endl;
 	enemy_pos = this->searchEnemy(user);
@@ -105,7 +105,7 @@ int battleIA::attack(Unidades** user)
 	}
 }
 
-int battleIA::flee(Unidades** user)
+int battleIA::flee(vector<IDibujable*>* user)
 {
 	//cout<<"Flee"<<endl;
 	enemy_pos = this->searchEnemy(user);
@@ -135,16 +135,16 @@ int battleIA::recovery()
 
 }
 
-position2di battleIA::searchEnemy(Unidades** vUnits)
+position2di battleIA::searchEnemy(vector<IDibujable*>* vUnits)
 {
 	/*Busca a un enemigo en su rango establecido y devuelve un puntero con un array de sus coordenadas*/
-	int nUnits = gameEngine::getNumberUserUnits();
+	int nUnits = vUnits->size();
 	position2di mypos = getPosition();
 	position2di pos;
 	int v_range = getVisionRange();
 	for(int i=0; i<nUnits; i++)
 	{
-		pos = vUnits[i]->getPosition();
+		pos = ((Unidades*)vUnits->at(i))->getPosition();
 
 		for(int x = mypos.X - v_range; x <= mypos.X + v_range; x++)
 		{

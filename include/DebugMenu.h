@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "graphicEngine.h"
+#include "mapa2D.h"
 
 using namespace irr;
 using namespace core;
@@ -27,6 +28,8 @@ enum{
 	SPBOX_COORDX = 5,
 	SPBOX_COORDY = 6
 };
+
+class mapa2D;
 
 class DebugMenu
 {
