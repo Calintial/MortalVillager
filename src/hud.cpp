@@ -45,10 +45,36 @@ void hud::paintInformation(Unidades * pers){
 }
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
 void hud::pintarMiniMapa(){
+	int x=600;
+	int y=400;
+	int xhud=0;
+	int yhud=0;
+	IDibujable *dib;
 	for(int i=0;i<WIDTH;i++){
 		for(int j=0;j<HEIGHT;j++){
-			driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(600,400,604 ,404),0);
+			dib= _mapa2D->getTile(i,j);
+			if(dib->getTipo()==0){
+
+				driver->drawPixel(x+i,y+j,video::SColor(255,222,184,135));
+			}
+			else if(dib->getTipo()==1){
+
+				driver->drawPixel(x+i,y+j,video::SColor(255,0,100,0));
+			}
 		}
+	}
+	vector<IDibujable*>* idub= _mapa2D->getIa_units();
+
+	for(int i=0;i<idub->size();i++){
+		xhud=idub->at(i)->getPosition().X;
+		yhud=idub->at(i)->getPosition().Y;
+		driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+	}
+	idub=_mapa2D->getUser_units();
+	for(int i=0;i<idub->size();i++){
+		xhud=idub->at(i)->getPosition().X;
+		yhud=idub->at(i)->getPosition().Y;
+		driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 	}
 }
 void hud::paint(){

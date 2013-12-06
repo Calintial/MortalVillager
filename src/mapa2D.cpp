@@ -202,8 +202,12 @@ void mapa2D::AllocateMap()
     {
 		for(int j=0; j < HEIGHT; j++) 
 		{
-			vTiles[i][j] =new Suelo(0,i,j);
-
+			if(i==100||j ==100){
+				vTiles[i][j] =new Suelo(1,i,j);
+			}
+			else{
+				vTiles[i][j] =new Suelo(0,i,j);
+		}
 			vTiles[i][j]->Pintar(driver);
 			k++;
 		}
@@ -397,6 +401,12 @@ void mapa2D::ScreenToGrid(const position2di &TScreenPosition, position2di &TGrid
 
         return NULL;
 }*/
+vector<IDibujable*>* mapa2D::getIa_units(){
+	return ia_units;
+}
+vector<IDibujable*>* mapa2D::getUser_units(){
+	return user_units;
+}
 
 void mapa2D::DrawIAUnits()
 {
