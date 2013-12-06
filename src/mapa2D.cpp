@@ -97,7 +97,7 @@ bool mapa2D::free()
 
 bool mapa2D::OnEvent(const SEvent& event)
 {
-	if (event.GUIEvent.EventType == EET_MOUSE_INPUT_EVENT)
+	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
 		{
@@ -170,8 +170,10 @@ bool mapa2D::OnEvent(const SEvent& event)
 
 		switch(id)
 		{
-			case BUTTON_ADD_IA: gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()); break;
-			case BUTTON_ADD_UNIT: break;
+			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
+								break;
+			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
+								  break;
 		}
 	}
 
@@ -395,7 +397,6 @@ void mapa2D::DrawIAUnits()
 	position2di DrawPosition;
 
 	int n_ia = ia_units->size();	
-
 	for(int i=0; i<n_ia; i++)
 	{
 		position2di pos = ia_units->at(i)->getPosition();

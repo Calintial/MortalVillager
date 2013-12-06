@@ -32,8 +32,8 @@ public:
 
 	static void setSpeed(int);
 	static int getSpeed();
-	static void addIAUnit(int,int);
-
+	static IDibujable* addIAUnit(int,int);
+	static IDibujable* addUserUnit(int,int);
 
 private:
 	void sleep(unsigned int);
@@ -50,7 +50,7 @@ private:
 	/*Añadir unidades dinamicamente*/
 	static vector<battleIA*> Add_IAUnits;
 	static vector<Unidades*> Add_UserUnits;
-	static void addUserUnit(int,int);
+	
 	void addNewUnits();
 
 
