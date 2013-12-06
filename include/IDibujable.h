@@ -20,6 +20,7 @@ class IDibujable{
 		void setTextura(ITexture* tex){textura=tex;}
 		int getTipo(){return tipo;}
 		void setTipo(int t){tipo=t;}
+		bool isTransitable();
 				
 	private:
 		ITexture* textura;

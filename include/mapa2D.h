@@ -71,6 +71,8 @@ public:
 	
 	void GenerarMapa();
 
+	IDibujable* getTile(int x, int y);
+
 	//VISTAS
 	void SetCameraScroll(const position2di &TPosition);
 	const position2di &GetCameraScroll() const { return CameraScroll; }

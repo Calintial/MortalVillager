@@ -214,6 +214,10 @@ void mapa2D::GenerarMapa()
 			file << mapatext;
 }
 
+IDibujable* mapa2D::getTile(int x, int y){
+	return vTiles[y][x];
+}
+
 /*void mapa2D::LoadEvents(STile *Tile,int i, int j)
 {
 	IndexedEvents.push_back(IndexedEventStruct(Tile, position2di(i, j)));
