@@ -1,8 +1,7 @@
 #include "DebugMenu.h"
 
-int DebugMenu::unitSelected = 0;
 
-DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, IDibujable** ia_units)
+DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<IDibujable*>* ia_units, mapa2D* map)
 {
 	DebugDevice = IrrDevice;
     env = IrrDevice->getGUIEnvironment();
@@ -11,6 +10,7 @@ DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, IDibujable** ia_units)
     initDebugMenu();
 
     vUnits = ia_units;
+    mapa = map;
 }
 
 DebugMenu::~DebugMenu()
@@ -28,6 +28,23 @@ void DebugMenu::initDebugMenu()
 	IGUIScrollBar* speed_bar = env->addScrollBar(true,rect<s32>(300,dimensionPantallaY+50,500,dimensionPantallaY+75), 0, SCROLL_SPEED);
 
     speed_bar->setPos(gameEngine::getSpeed());
+
+    /*Botones para añadir IA o unidades de usuario*/
+	env->addButton(rect<s32>(550,dimensionPantallaY+35,750,dimensionPantallaY+60), 0, BUTTON_ADD_IA,
+        L"Añadir IA", L"Añadir unidad controlada por la IA");
+
+	env->addButton(rect<s32>(550,dimensionPantallaY+70,750,dimensionPantallaY+95), 0, BUTTON_ADD_UNIT,
+        L"Añadir Unidad", L"Añadir unidad controlada por el usuario");
+
+	/*Spin box para obtener las coordenadas para añadir las unidades*/
+	IGUISpinBox* spbox_X = env->addSpinBox(L"0",rect<s32>(760,dimensionPantallaY+55,810,dimensionPantallaY+75),true,0,SPBOX_COORDX);
+	IGUISpinBox* spbox_Y = env->addSpinBox(L"0",rect<s32>(830,dimensionPantallaY+55,880,dimensionPantallaY+75),true,0,SPBOX_COORDY);
+
+	spbox_X->setDecimalPlaces(0);
+	spbox_Y->setDecimalPlaces(0);
+
+	spbox_X->setRange(0,26);
+	spbox_Y->setRange(0,20);
 
 	/*Cargar texturas imagenes*/
 	state_search = driver->getTexture("../media/Imagenes/Debug/MEF/Search.png");
@@ -57,7 +74,7 @@ void DebugMenu::Draw()
 
 void DebugMenu::DrawMEF()
 {
-	int ia_state = ((battleIA*)vUnits[unitSelected])->getState();
+	int ia_state = ((battleIA*)vUnits->at(mapa->getIASelected()))->getState();
 
 	if(ia_state == SEARCHING)
 	{
@@ -138,9 +155,9 @@ void DebugMenu::DrawMEF()
 
 void DebugMenu::DrawParameters()
 {
-	int ia_life = ((Unidades*)vUnits[unitSelected])->getLife();
+	int ia_life = ((Unidades*)vUnits->at(mapa->getIASelected()))->getLife();
 	std::string string_life = "Vida:" + to_string(ia_life);
-	std::string string_unit_selected = "Unidad seleccionada: " + to_string(unitSelected);
+	std::string string_unit_selected = "Unidad seleccionada: " + to_string(mapa->getIASelected());
 
 	font->draw(L"Parametros",
     core::rect<s32>(dimensionPantallaX + 59,509,dimensionPantallaX + 209,534),video::SColor(255,0,0,0));
@@ -152,12 +169,3 @@ void DebugMenu::DrawParameters()
     core::rect<s32>(dimensionPantallaX + 59,571,dimensionPantallaX + 209,596),video::SColor(255,0,0,0));
 }
 
-void DebugMenu::setUnitSelected(int unit)
-{
-	unitSelected = unit;
-}
-
-int DebugMenu::getUnitSelected()
-{
-	return unitSelected;
-}
