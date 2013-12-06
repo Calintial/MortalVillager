@@ -18,7 +18,7 @@ Pantalla::~Pantalla(){
 
     delete mapa;
 }
-int Pantalla::pintarPantalla(IDibujable** ia_units,IDibujable** user_units){
+int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
 	if(mapa == NULL){
 		

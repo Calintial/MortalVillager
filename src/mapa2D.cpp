@@ -55,7 +55,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
     //LoadEvents();
     
     gameState = INGAME;
-	IrrDevice->setEventReceiver(this); 
+
 
 	drawVision = false;
 	drawAttackVision = false;
@@ -97,8 +97,9 @@ bool mapa2D::free()
 
 Unidades * mapa2D::OnEventMapa(const SEvent& event)
 {
+	cout<<"mimimi"<<endl;
 	Unidades* unidad;
-	if (event.GUIEvent.EventType == EET_MOUSE_INPUT_EVENT)
+	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
 		{
@@ -125,6 +126,7 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 								pos_vector = UserSelected(pos_grid);
 								if(pos_vector != -1)
 								{
+
 									user_selected = pos_vector;
 									cout<<"usuario seleccionado: "<<user_selected<<endl;
 									return (Unidades*)user_units->at(user_selected);

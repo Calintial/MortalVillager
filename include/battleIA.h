@@ -26,19 +26,20 @@ public:
 	battleIA();
 	battleIA(int,int);
 	~battleIA();
-	int updateIA(Unidades**);
+	int updateIA(vector<IDibujable*>*);
 	void Pintar(IVideoDriver*);
+	int getState();
 
 private:
 	int state;
 	position2di enemy_pos;
 
-	int searching(Unidades**);
-	int approach(Unidades**);
-	int attack(Unidades**);
-	int flee(Unidades**);
+	int searching(vector<IDibujable*>*);
+	int approach(vector<IDibujable*>*);
+	int attack(vector<IDibujable*>*);
+	int flee(vector<IDibujable*>*);
 	int recovery();
-	position2di searchEnemy(Unidades**);
+	position2di searchEnemy(vector<IDibujable*>*);
 
 };
 
