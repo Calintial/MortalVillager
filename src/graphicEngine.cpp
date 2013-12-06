@@ -3,7 +3,7 @@
 graphicEngine::graphicEngine()
 {
     //Create an Irrlicht Device.
-    IrrDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX+2166,dimensionPantallaY+178),16,false,false,false,0);
+    IrrDevice = createDevice(EDT_OPENGL,dimension2d<u32>(dimensionPantallaX,dimensionPantallaY),16,false,false,false,0);
 	IrrDevice->setWindowCaption(L"Demo de Mapa Mortal Villager");
     IrrDevice->setResizable(true);
 
@@ -43,13 +43,13 @@ int graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* us
 		mapa = new mapa2D(IrrDevice,ia_units,user_units);
 
 
-	if(debug == NULL)
-		debug = new DebugMenu(IrrDevice,ia_units,mapa);
+	/*if(debug == NULL)
+		debug = new DebugMenu(IrrDevice,ia_units,mapa);*/
 
 	IrrDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	int status = mapa->Pintar();
 	
-	debug->Draw();
+	//debug->Draw();
 	IrrDevice->getVideoDriver()->endScene();  
 
 	return status;
