@@ -1,7 +1,6 @@
 OPTS=-g -Wall -std=c++11
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
-<<<<<<< HEAD
 
 OBJECTS=graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o Unidades.o battleIA.o suelo.o mapa2D.o Region.o Enlace.o Camino.o pathfinding.o IDibujable.o DebugMenu.o hud.o pantalla.o
 
