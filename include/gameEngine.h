@@ -6,19 +6,21 @@
 #include "battleIA.h"
 #include "IDibujable.h"
 #include "Unidades.h"
+#include "state.h"
 #include <iostream>
 #include <time.h>
 using namespace std;
 
-
+/*
 #define MAIN 0
 #define INGAME 1
 #define PAUSE 2
-#define FINISH 3
+#define FINISH 3*/
 
 class graphicEngine;
 class intelEngine;
 class battleIA;
+class Current;
 
 class gameEngine {
 
@@ -26,34 +28,33 @@ public:
 	gameEngine();
 	~gameEngine();
 	void run();
-	void updatePlayer();
+	static void updatePlayer();
 	static void setVolume(float);
 	static float getVolume();
 
 	static void setSpeed(int);
 	static int getSpeed();
+	static vector<IDibujable*> getIAUnits(){ return IAUnits; }
+	static vector<IDibujable*> getUserUnits(){ return UserUnits; }
 	static void addIAUnit(int,int);
+	static void sleep(unsigned int);
+	static void addNewUnits();
 
-
+	static Current stado;
 private:
-	void sleep(unsigned int);
-
 	graphicEngine* graphics;
 	intelEngine* ia;
 	int gameState;
 	static float volumen;
 
 	static int game_speed;
-	vector<IDibujable*> IAUnits;
-	vector<IDibujable*> UserUnits;
+	static vector<IDibujable*> IAUnits;
+	static vector<IDibujable*> UserUnits;
 
 	/*Añadir unidades dinamicamente*/
 	static vector<battleIA*> Add_IAUnits;
 	static vector<Unidades*> Add_UserUnits;
 	static void addUserUnit(int,int);
-	void addNewUnits();
-
-
 };
 
 

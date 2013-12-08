@@ -33,27 +33,27 @@ graphicEngine::~graphicEngine()
 }
 
 //Funcion encargada de pintar el menu principal
-int graphicEngine::DrawMainMenu()
+void graphicEngine::DrawMainMenu()
 {
 	if(menu == NULL)
 		menu = new mainMenu(IrrDevice);
-		//hudmap= new hud(IrrDevice);
-    int status = menu->run();
-    
-    /*if(status == INGAME)
-		DrawMap();*/
-    return status;
-    
+    menu->run();
 }
 
-int graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
+
+void graphicEngine::DrawPausa()
+{
+	if(pause == NULL)
+		pause = new pausa(IrrDevice);
+		
+    int status = pause->run();
+}
+
+void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
 	if(pantalla == NULL){
 		pantalla= new Pantalla(IrrDevice);
 	}
 	pantalla->pintarPantalla(ia_units,user_units);
-	int status = INGAME;
-
-
-	return status;
+	//int status = 1;
 }
