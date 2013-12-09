@@ -1,25 +1,35 @@
+CC=g++
 OPTS=-g -Wall -std=c++11
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 
-OBJECTS=graphicEngine.o gameEngine.o intelEngine.o personaje.o edificio.o mainMenu.o gameScreen.o Unidades.o battleIA.o suelo.o mapa2D.o Region.o Enlace.o Camino.o pathfinding.o IDibujable.o DebugMenu.o hud.o pantalla.o
+OBJECTS=graphicEngine.o gameEngine.o intelEngine.o mainMenu.o Unidades.o battleIA.o suelo.o mapa2D.o Region.o Enlace.o Camino.o pathfinding.o IDibujable.o DebugMenu.o hud.o
+OBJECTS_MAIN=pantalla.o $(OBJECTS)
+OBJECTS_PATHFINDING=pantallaPathfinding.o $(OBJECTS)
 
 .PHONY: all clean
 
+all: bin/main bin/pathfinding
+
+
+pathfinding: bin/pathfinding
+	
+
 main: bin/main
 
-bin/main: src/main.cpp $(OBJECTS)
 
+bin/main: src/main.cpp $(OBJECTS_MAIN)
 	mkdir -p bin
-	g++ -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
+	$(CC) -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
+
+bin/pathfinding: src/main.cpp $(OBJECTS_PATHFINDING)
+	mkdir -p bin
+	$(CC) -o bin/pathfinding $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
 # To obtain object files
 %.o: src/%.cpp include/%.h
-	g++ -c $< $(OPTS) $(INCLUDES) -o $@
-
-# bin/hello: src/HelloWorld.cpp
-# 	mkdir -p bin;g++ -o bin/hello src/HelloWorld.cpp $(OPTS) $(INCLUDES) $(LINKS)
+	$(CC) -c $< $(OPTS) $(INCLUDES) -o $@
 
 clean:
-	rm *.o
+	rm -f *.o
 	rm -rf bin
