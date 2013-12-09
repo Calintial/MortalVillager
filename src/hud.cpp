@@ -68,13 +68,36 @@ void hud::pintarMiniMapa(){
 	for(int i=0;i<idub->size();i++){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
-		driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+		if(ensenyarInformacion==true){
+			if(xhud==personaje->getPosition().X && yhud==personaje->getPosition().Y){
+				driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+			}
+			else{
+				driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+			}
+		}
+		else{
+				driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+
+		}
+		
 	}
 	idub=_mapa2D->getUser_units();
 	for(int i=0;i<idub->size();i++){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
-		driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+		if(ensenyarInformacion==true){
+			if(xhud==personaje->getPosition().X && yhud==personaje->getPosition().Y){
+				driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+			}
+			else{
+				driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+			}
+		}
+		else{
+			driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+
+		}
 	}
 }
 void hud::paint(){

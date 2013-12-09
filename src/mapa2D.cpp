@@ -114,10 +114,11 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 
 
 							int pos_vector = IASelected(pos_grid);
+
 							if(pos_vector != -1)
 							{
 								ia_selected = pos_vector;
-
+								return (Unidades*)ia_units->at(ia_selected);
 								//DebugMenu::setUnitSelected(ia_selected);
 
 							}
