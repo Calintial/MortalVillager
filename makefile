@@ -6,7 +6,7 @@ LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 OBJECTS=graphicEngine.o gameEngine.o intelEngine.o mainMenu.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o DebugMenu.o
 OBJECTS_MAIN=pantalla.o $(OBJECTS)
 OBJECTS_PATHFINDING=pantallaPathfinding.o $(OBJECTS)
-OBJECTS_IA_BATALLA=DebugMenu.o $(OBJECTS)
+OBJECTS_IA_BATALLA=pantallaIABatalla.o DebugMenu.o $(OBJECTS)
 
 
 .PHONY: all clean

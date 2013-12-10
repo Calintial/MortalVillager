@@ -11,6 +11,7 @@ graphicEngine::graphicEngine()
 	menu = NULL;
 	mapa = NULL;
 	debug = NULL;
+	pantalla = NULL;
     //menu = new mainMenu(IrrDevice);
     //mapa = new mapa2D(IrrDevice);
 }
@@ -39,18 +40,12 @@ int graphicEngine::DrawMainMenu()
 int graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
 
-	if(mapa == NULL)
-		mapa = new mapa2D(IrrDevice,ia_units,user_units);
+	if(pantalla == NULL){
+	    pantalla= new Pantalla(IrrDevice);
+	}
 
+	int status = pantalla->pintarPantalla(ia_units,user_units);
 
-	if(debug == NULL)
-		debug = new DebugMenu(IrrDevice,ia_units,mapa);
-
-	IrrDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
-	int status = mapa->Pintar();
-	
-	debug->Draw();
-	IrrDevice->getVideoDriver()->endScene();  
 
 	return status;
 }

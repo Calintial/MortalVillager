@@ -6,6 +6,7 @@
 #include "gameEngine.h"
 #include "IDibujable.h"
 #include "DebugMenu.h"
+#include "pantalla.h"
 #include <iostream>
 using namespace std;
 
@@ -28,6 +29,7 @@ private:
 	mainMenu* menu;
 	mapa2D* mapa;
 	DebugMenu* debug;
+	Pantalla* pantalla;
 };
 
 #endif
