@@ -58,8 +58,8 @@ void mapa2D::Init()
 	//vTiles = NULL;
 	ViewSize.Width = 26;
     ViewSize.Height = 20;
-    CameraScroll.X = 50;
-    CameraScroll.Y = 50;
+    CameraScroll.X = 0;
+    CameraScroll.Y = 0;
 }
 
 bool mapa2D::free()
@@ -338,47 +338,53 @@ void mapa2D::DrawIAUnits()
 	position2di DrawPosition;
 
 	int n_ia = ia_units->size();	
-
+	int newposX = 0;
+	int newposY = 0;
 	for(int i=0; i<n_ia; i++)
 	{
 		position2di pos = ia_units->at(i)->getPosition();
-		DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
-		PintarTile(ia_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);
-		
-		int v_range = ((Unidades*)ia_units->at(i))->getVisionRange();
-		int a_range = ((Unidades*)ia_units->at(i))->getAttackRange();
-		/*Pintar vision de la unidad*/
-		if(drawVision)
+		newposX = pos.X - CameraScroll.X;
+		newposY = pos.Y - CameraScroll.Y;
+		if(newposX> 0 && newposY > 0)
 		{
-			for(int x = pos.X - v_range; x <= pos.X + v_range; x++)
+			DrawPosition = position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
+			PintarTile(ia_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);
+			
+			int v_range = ((Unidades*)ia_units->at(i))->getVisionRange();
+			int a_range = ((Unidades*)ia_units->at(i))->getAttackRange();
+			/*Pintar vision de la unidad*/
+			if(drawVision)
 			{
-				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
+				for(int x = newposX - v_range; x <= newposX + v_range; x++)
 				{
-					if(x < ViewSize.Width && y < ViewSize.Height)
+					for(int y = newposY - v_range; y <= newposY + v_range; y++)
 					{
-						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
-						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
-						PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);					
-					}
+						if(x < ViewSize.Width && y < ViewSize.Height)
+						{
+							ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
+							DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+							PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);					
+						}
 
+					}
 				}
 			}
-		}
 
-		/*Pintar rango de ataque de la unidad*/
-		if(drawAttackVision)
-		{
-			for(int x = pos.X - a_range; x <= pos.X + a_range; x++)
+			/*Pintar rango de ataque de la unidad*/
+			if(drawAttackVision)
 			{
-				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
+				for(int x = newposX - a_range; x <= newposX + a_range; x++)
 				{
-					if(x < ViewSize.Width && y < ViewSize.Height)
+					for(int y = newposY - a_range; y <= newposY + a_range; y++)
 					{
-						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
-						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
-						PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);						
-					}
+						if(x < ViewSize.Width && y < ViewSize.Height)
+						{
+							ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
+							DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+							PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);						
+						}
 
+					}
 				}
 			}
 		}
@@ -388,13 +394,19 @@ void mapa2D::DrawIAUnits()
 void mapa2D::DrawUserUnits()
 {
 	int n_user = user_units->size();
-
+	int newposX = 0;
+	int newposY = 0;
 	position2di DrawPosition;
 	for(int i=0; i<n_user; i++)
 	{
 		position2di pos = user_units->at(i)->getPosition();
-		DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
-		PintarTile(user_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);		
+		newposX = pos.X - CameraScroll.X;
+		newposY = pos.Y - CameraScroll.Y;
+		if(newposX> 0 && newposY > 0)
+		{
+			DrawPosition = position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
+			PintarTile(user_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);
+		}
 	}
 
 }
