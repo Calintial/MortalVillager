@@ -5,8 +5,8 @@ Suelo::Suelo(int t, int i, int j)
 {
 	setTipo(t);
 	position2di p;
-	p.X = i;
-	p.Y = j;
+	p.X = j;
+	p.Y = i;
 	setPosition(p);
 }
 
