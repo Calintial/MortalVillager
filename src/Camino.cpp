@@ -4,7 +4,9 @@ Camino::Camino(position2di inicio){
 	camino.push_back(inicio);
 	peso = 0;
 }
+Camino::Camino(){
 
+}
 Camino::~Camino(){
 
 }
@@ -20,4 +22,7 @@ int Camino::getPeso(){
 
 std::vector<position2di> Camino::getCamino(){
 	return camino;
+}
+void  Camino::addNodoCamino(Nodo _nodo){
+	caminoNodo=_nodo;
 }
