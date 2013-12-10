@@ -8,6 +8,7 @@ using namespace std;
 #include "graphicEngine.h"
 #include "intelEngine.h"
 
+class gameEngine;
 class graphicEngine;
 class intelEngine;
 
@@ -26,7 +27,7 @@ class Current
 		void finish();
 		bool inicial();
 		bool sfinal();
-		void doSomething(graphicEngine* graphics, intelEngine* ia);
+		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
 };
 
 class State
@@ -54,7 +55,7 @@ class State
 		virtual bool sfinal()
 		{
 		}
-		virtual void doSomething(graphicEngine* graphics, intelEngine* ia)
+		virtual void doSomething(gameEngine* ge,graphicEngine* graphics, intelEngine* ia)
 		{
 		}
 };
@@ -71,7 +72,7 @@ class MAINS: public State
 		void finish(Current *c);
 		bool inicial(){return true;}
 		bool sfinal(){return false;}
-		void doSomething(graphicEngine* graphics, intelEngine* ia);
+		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
 };
 
 class INGAME: public State
@@ -85,7 +86,7 @@ class INGAME: public State
 		void pause(Current *c);
 		bool inicial(){return false;}
 		bool sfinal(){return false;}
-		void doSomething(graphicEngine* graphics, intelEngine* ia);
+		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
 };
 
 class PAUSE: public State
@@ -100,7 +101,7 @@ class PAUSE: public State
 		void finish(Current *c);
 		bool inicial(){return false;}
 		bool sfinal(){return false;}
-		void doSomething(graphicEngine* graphics, intelEngine* ia);
+		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
 };
 
 class FINISH: public State

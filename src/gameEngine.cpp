@@ -2,8 +2,6 @@
 
 float gameEngine::volumen = 0.5;
 int gameEngine::game_speed = 100;
-vector<IDibujable*> gameEngine::IAUnits;
-vector<IDibujable*> gameEngine::UserUnits;
 Current gameEngine::stado;
 
 vector<battleIA*> gameEngine::Add_IAUnits;
@@ -41,7 +39,7 @@ void gameEngine::run()
 	int i=0;
 	while(!stado.sfinal())
 	{
-		stado.doSomething(graphics,ia);
+		stado.doSomething(this, graphics,ia);
 	}
 	/*while(gameState != FINISH)
 	{

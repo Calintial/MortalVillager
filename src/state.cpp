@@ -35,9 +35,9 @@ bool Current::sfinal()
 	return current->sfinal();
 }
 
-void Current::doSomething(graphicEngine* graphics, intelEngine* ia)
+void Current::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia)
 {
-	current->doSomething(graphics,ia);
+	current->doSomething(ge, graphics,ia);
 }
 
 //---MAINS--/
@@ -46,10 +46,10 @@ MAINS::MAINS()
 	cout << "MAINS-ctor " << endl;
 }
 
-void MAINS::doSomething(graphicEngine* graphics, intelEngine* ia)
+void MAINS::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia)
 {
 	graphics->DrawMainMenu();
-	cout << "MOSTRARE MENU";
+	//cout << "MOSTRAR MENU";
 }
 
 void MAINS::ingame(Current *c)
@@ -72,18 +72,19 @@ INGAME::INGAME()
 	cout << "INGAME-ctor " << endl;
 }
 
-void INGAME::doSomething(graphicEngine* graphics, intelEngine* ia)
+void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia)
 {
-	gameEngine::addNewUnits();
-	gameEngine::updatePlayer();
+	ge->addNewUnits();
+	ge->updatePlayer();
 	ia->updateBattleIA();
 	
-	vector<IDibujable*> StIAUnits = gameEngine::getIAUnits();
-	vector<IDibujable*> StUserUnits = gameEngine::getUserUnits();
-	graphics->DrawMap(&StUserUnits,&StIAUnits);
+	vector<IDibujable*> StIAUnits = ge->getIAUnits();
+	vector<IDibujable*> StUserUnits = ge->getUserUnits();
 	
-	gameEngine::sleep(100-gameEngine::getSpeed());
-	cout << "MOSTRARE PANTALLA DE JUEGO" << endl;
+	graphics->DrawMap(&StIAUnits,&StUserUnits);
+	
+	ge->sleep(100-gameEngine::getSpeed());
+	//cout << "MOSTRAR PANTALLA DE JUEGO" << endl;
 }
 
 
@@ -100,10 +101,10 @@ PAUSE::PAUSE()
 	cout << "PAUSE-ctor " << endl;
 }
 
-void PAUSE::doSomething(graphicEngine* graphics, intelEngine* ia)
+void PAUSE::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia)
 {
 	graphics->DrawPausa();
-	cout << "MOSTRARE PANTALLA DE PAUSA" << endl;
+	//cout << "MOSTRAR PANTALLA DE PAUSA" << endl;
 }
 
 void PAUSE::ingame(Current *c)

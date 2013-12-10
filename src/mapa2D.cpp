@@ -115,6 +115,7 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 
 
 							int pos_vector = IASelected(pos_grid);
+							cout << "pos_vector" << pos_vector << endl;
 							if(pos_vector != -1)
 							{
 								ia_selected = pos_vector;
@@ -125,6 +126,7 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 							else
 							{
 								pos_vector = UserSelected(pos_grid);
+								cout << "pos_vector" << pos_vector << endl;
 								if(pos_vector != -1)
 								{
 
