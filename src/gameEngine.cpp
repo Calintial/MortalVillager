@@ -2,6 +2,7 @@
 
 float gameEngine::volumen = 0.5;
 int gameEngine::game_speed = 100;
+Current gameEngine::stado;
 
 vector<battleIA*> gameEngine::Add_IAUnits;
 vector<Unidades*> gameEngine::Add_UserUnits;
@@ -17,12 +18,9 @@ gameEngine::gameEngine()
 	Unidades* unit = new Unidades(24,12);
 	UserUnits.push_back(unit);
 
-	
-	gameState = MAIN;
+	gameState = 0;
 
 	graphics = new graphicEngine();
-
-
 
 	ia = new intelEngine(&IAUnits,&UserUnits);
 }
@@ -37,7 +35,13 @@ void gameEngine::run()
 	//Bucle principal del juego. Mientras el estado no cambia a FINISH el programa no termina.
 	//En cada estado se llamará a los motores necesarios(IA,Graficos,etc...)
 	char aux = 0;
-	while(gameState != FINISH)
+	
+	int i=0;
+	while(!stado.sfinal())
+	{
+		stado.doSomething(this, graphics,ia);
+	}
+	/*while(gameState != FINISH)
 	{
 		switch(gameState)
 		{
@@ -51,14 +55,13 @@ void gameEngine::run()
 
 						 gameState = graphics->DrawMap(&IAUnits,&UserUnits);
 						 this->sleep(100-game_speed);
-
 						 break;
 
-			case PAUSE: break;
+			case PAUSE: gameState = graphics->DrawPausa();
+						break;
 			default: break;
-		}
-		
-	}
+		}		
+	}*/
 }
 
 void gameEngine::setVolume(float vol)

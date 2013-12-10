@@ -44,5 +44,13 @@ bool Pantalla::OnEvent(const SEvent& event){
 							break;
 		}
 	}
+	if(event.EventType == EET_KEY_INPUT_EVENT)
+	{
+		if(event.KeyInput.Key == irr::KEY_ESCAPE && event.KeyInput.PressedDown)
+		{
+			cout << "PAUSA" << endl;
+			gameEngine::stado.pause();
+		}
+	}
 	return false;
 }

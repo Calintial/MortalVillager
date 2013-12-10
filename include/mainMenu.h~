@@ -36,7 +36,7 @@ public:
 	mainMenu(IrrlichtDevice * IrrDevice);
 	~mainMenu();
 
-	void run();
+	int run();
 	virtual bool OnEvent(const SEvent& event);
 
 private:
