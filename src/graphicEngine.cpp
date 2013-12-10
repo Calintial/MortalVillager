@@ -8,7 +8,7 @@ graphicEngine::graphicEngine()
 
     //IrrDevice->setResizable(true);
 	
-pantalla=NULL;
+	pantalla=NULL;
 
     IrrDevice->setResizable(true);
 
@@ -16,6 +16,8 @@ pantalla=NULL;
 	menu = NULL;
 
 	debug = NULL;
+	
+	pause = NULL;
 
     //menu = new mainMenu(IrrDevice);
     //mapa = new mapa2D(IrrDevice);
@@ -29,6 +31,8 @@ graphicEngine::~graphicEngine()
     delete menu;
 
     delete debug;
+    
+	delete pause;
 
 }
 
@@ -46,7 +50,7 @@ void graphicEngine::DrawPausa()
 	if(pause == NULL)
 		pause = new pausa(IrrDevice);
 		
-    int status = pause->run();
+    pause->run();
 }
 
 void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
@@ -55,5 +59,4 @@ void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* u
 		pantalla= new Pantalla(IrrDevice);
 	}
 	pantalla->pintarPantalla(ia_units,user_units);
-	//int status = 1;
 }

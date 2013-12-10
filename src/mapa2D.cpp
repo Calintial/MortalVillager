@@ -99,6 +99,7 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 {
 	cout<<"mimimi"<<endl;
 	Unidades* unidad;
+	
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
