@@ -52,7 +52,7 @@ const int TILE_HEIGHT = 32;
 	position2di Position;
 };*/
 
-class mapa2D : public IEventReceiver
+class mapa2D
 {
 public:
 	enum EventType {
@@ -83,7 +83,7 @@ public:
 	void ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const;
 	
 	//Eventos
-	virtual bool OnEvent(const SEvent& event);
+	Unidades* OnEventMapa(const SEvent& event);
 	//IndexedEventStruct *GetIndexedEvent(int TEventType, int TEventData);
 	
 	// Collision
@@ -94,6 +94,9 @@ public:
 
 	int getIASelected();
 	int getUserSelected();
+
+	dimension2di ViewSize;
+
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -114,7 +117,7 @@ private:
 	
 	//Vista
 	//int ViewWidth,ViewHeight;
-	dimension2di ViewSize;
+	
 	position2di CameraScroll;
 	
 	//Texturas

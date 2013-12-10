@@ -1,4 +1,4 @@
-make
+make ia
 cd bin/
-./main
+./ia_batalla
 cd ..

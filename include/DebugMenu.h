@@ -31,7 +31,7 @@ enum{
 
 class mapa2D;
 
-class DebugMenu
+class DebugMenu : public IEventReceiver
 {
 private:
 	vector<IDibujable*>* vUnits;
@@ -49,6 +49,10 @@ private:
 
 	mapa2D* mapa;
 
+	bool drawVision;
+	bool drawAttackVision;
+
+
 
 
 public:
@@ -58,6 +62,8 @@ public:
 	void Draw();
 	void DrawMEF();
 	void DrawParameters();
+	void DrawVisions();
+	virtual bool OnEvent(const SEvent& event);
 };
 
 #endif

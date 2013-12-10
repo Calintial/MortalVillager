@@ -55,7 +55,6 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
     //LoadEvents();
     
     gameState = INGAME;
-	IrrDevice->setEventReceiver(this); 
 
 	drawVision = false;
 	drawAttackVision = false;
@@ -95,7 +94,7 @@ bool mapa2D::free()
     return true;
 }
 
-bool mapa2D::OnEvent(const SEvent& event)
+Unidades* mapa2D::OnEventMapa(const SEvent& event)
 {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
@@ -116,8 +115,6 @@ bool mapa2D::OnEvent(const SEvent& event)
 							{
 								ia_selected = pos_vector;
 
-								//DebugMenu::setUnitSelected(ia_selected);
-
 							}
 							else
 							{
@@ -126,58 +123,16 @@ bool mapa2D::OnEvent(const SEvent& event)
 								{
 									user_selected = pos_vector;
 									cout<<"usuario seleccionado: "<<user_selected<<endl;
+									return (Unidades*)user_units->at(user_selected);
 								}
 								else
 								{
-
 									((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
-
 								}
 							}
 							break;
 		}
 	}
-	else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-		switch(id)
-		{
-			case CB_VISION_RANGE: drawVision = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
-								  break;
-			case CB_ATTACK_RANGE: drawAttackVision = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
-								  break;
-		}
-		
-	}
-	else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-
-		switch(id)
-		{
-			case SCROLL_SPEED: s32 pos = ((IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
-                 			   gameEngine::setSpeed(pos);
-							   break;
-		}
-	}
-
-	else if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-
-		IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
-		IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
-
-		switch(id)
-		{
-			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
-								break;
-			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
-								  break;
-		}
-	}
-
-	return false;
 }
 
 void mapa2D::AllocateMap()
@@ -402,44 +357,6 @@ void mapa2D::DrawIAUnits()
 		position2di pos = ia_units->at(i)->getPosition();
 		DrawPosition = position2di(pos.X*TILE_WIDTH,pos.Y*TILE_HEIGHT);
 		PintarTile(ia_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);
-		
-		int v_range = ((Unidades*)ia_units->at(i))->getVisionRange();
-		int a_range = ((Unidades*)ia_units->at(i))->getAttackRange();
-		/*Pintar vision de la unidad*/
-		if(drawVision)
-		{
-			for(int x = pos.X - v_range; x <= pos.X + v_range; x++)
-			{
-				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
-				{
-					if(x < ViewSize.Width && y < ViewSize.Height)
-					{
-						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
-						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
-						PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);					
-					}
-
-				}
-			}
-		}
-
-		/*Pintar rango de ataque de la unidad*/
-		if(drawAttackVision)
-		{
-			for(int x = pos.X - a_range; x <= pos.X + a_range; x++)
-			{
-				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
-				{
-					if(x < ViewSize.Width && y < ViewSize.Height)
-					{
-						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
-						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
-						PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);						
-					}
-
-				}
-			}
-		}
 	}
 }
 

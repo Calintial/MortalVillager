@@ -11,6 +11,10 @@ DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<IDibujable*>* ia_units, 
 
     vUnits = ia_units;
     mapa = map;
+
+	DebugDevice->setEventReceiver(this); 
+	drawVision = false;
+	drawAttackVision = false;
 }
 
 DebugMenu::~DebugMenu()
@@ -64,8 +68,8 @@ void DebugMenu::Draw()
             core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
 			DrawParameters();
-
 			DrawMEF();
+			DrawVisions();
 
 			env->drawAll();
 		}
@@ -169,3 +173,101 @@ void DebugMenu::DrawParameters()
     core::rect<s32>(dimensionPantallaX + 59,571,dimensionPantallaX + 209,596),video::SColor(255,0,0,0));
 }
 
+void DebugMenu::DrawVisions()
+{
+	position2di DrawPosition;
+
+	int n_ia = vUnits->size();	
+	for(int i=0; i<n_ia; i++)
+	{
+		position2di pos = vUnits->at(i)->getPosition();
+		int v_range = ((Unidades*)vUnits->at(i))->getVisionRange();
+		int a_range = ((Unidades*)vUnits->at(i))->getAttackRange();
+		/*Pintar vision de la unidad*/
+		if(drawVision)
+		{
+			for(int x = pos.X - v_range; x <= pos.X + v_range; x++)
+			{
+				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
+				{
+					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
+					{
+						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
+						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+						mapa->PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);					
+					}
+
+				}
+			}
+		}
+
+		/*Pintar rango de ataque de la unidad*/
+		if(drawAttackVision)
+		{
+			for(int x = pos.X - a_range; x <= pos.X + a_range; x++)
+			{
+				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
+				{
+					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
+					{
+						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
+						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+						mapa->PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);						
+					}
+
+				}
+			}
+		}
+	}
+}
+
+bool DebugMenu::OnEvent(const SEvent& event)
+{
+	if (event.EventType == EET_MOUSE_INPUT_EVENT)
+	{
+		switch(event.MouseInput.Event)
+		{
+			case EMIE_LMOUSE_PRESSED_DOWN: mapa->OnEventMapa(event); break;
+		}
+	}
+	else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+		switch(id)
+		{
+			case CB_VISION_RANGE: drawVision = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
+								  break;
+			case CB_ATTACK_RANGE: drawAttackVision = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
+								  break;
+		}
+		
+	}
+	else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+
+		switch(id)
+		{
+			case SCROLL_SPEED: s32 pos = ((IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
+                 			   gameEngine::setSpeed(pos);
+							   break;
+		}
+	}
+
+	else if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+
+		IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
+		IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
+
+		switch(id)
+		{
+			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
+								break;
+			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
+								  break;
+		}
+	}
+	return false;
+}
