@@ -2,6 +2,7 @@
 #define PANTALLA_H
 
 #include "mapa2D.h"
+#include <irrlicht.h>
 
 class mapa2D;
 class Pantalla : public IEventReceiver
@@ -14,6 +15,7 @@ public:
 private:
 	IrrlichtDevice * pantallaDevice;
 	mapa2D * mapa;
+	ITexture* vision_texture;
 
 
 };

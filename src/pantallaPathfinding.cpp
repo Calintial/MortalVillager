@@ -1,4 +1,4 @@
-#include "pantalla.h"
+#include "pantallaPathfinding.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -13,6 +13,7 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	pantallaDevice->setEventReceiver(this); 
+	vision_texture = pantallaDevice->getVideoDriver()->getTexture("../media/Texturas/units/vision_distance.png");
 }
 Pantalla::~Pantalla(){
 
@@ -37,8 +38,13 @@ bool Pantalla::OnEvent(const SEvent& event){
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
-							
-				cout<<"Me has clicado!"<<endl;
+				// Esto está copiapegado de mapa2D, cuidado por si cambia
+				position2di pos_grid;
+				pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
+				pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
+				cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+				
+				mapa->PintarTile(vision_texture,pos_grid.X,pos_grid.Y);
 				break;
 		}
 	}
