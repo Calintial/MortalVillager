@@ -95,11 +95,10 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 
 
 							int pos_vector = IASelected(pos_grid);
-							cout << "pos_vector" << pos_vector << endl;
 							if(pos_vector != -1)
 							{
 								ia_selected = pos_vector;
-
+								return (Unidades*)ia_units->at(ia_selected);
 								//DebugMenu::setUnitSelected(ia_selected);
 
 							}
@@ -183,6 +182,7 @@ void mapa2D::AllocateMap()
     {
 		for(int j=0; j < HEIGHT; j++) 
 		{
+<<<<<<< HEAD
 			if(mapatext[k]=='0')
 			{
 				vTiles[i][j] = new Suelo(0,i,j);
@@ -192,6 +192,14 @@ void mapa2D::AllocateMap()
 				vTiles[i][j] = new Muro(0,i,j);
 			}
 
+=======
+			if(i==100||j ==100){
+				vTiles[i][j] =new Suelo(1,i,j);
+			}
+			else{
+				vTiles[i][j] =new Suelo(0,i,j);
+		}
+>>>>>>> hud
 			vTiles[i][j]->Pintar(driver);
 			k++;
 		}
@@ -332,6 +340,52 @@ void mapa2D::PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY
 	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width >> 1), TPositionY - (TTexture->getSize().Height >> 1)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 
+<<<<<<< HEAD
+=======
+// Posicion de la cuadricula del mapa a una coordenada de la pantalla
+bool mapa2D::GridToScreen(const position2di &TGridPosition, position2di &TScreenPosition) const 
+{
+        position2di CenterDelta(TGridPosition.X - CameraScroll.X, TGridPosition.Y - CameraScroll.Y);
+
+        TScreenPosition.X = CenterDelta.X * TILE_WIDTH + 400;
+        TScreenPosition.Y = CenterDelta.Y * TILE_HEIGHT + 300;
+
+        // Para saber si esta en la pantalla
+        if(abs(CenterDelta.X) > ViewSize.Width/2 || abs(CenterDelta.Y) > ViewSize.Height/2)
+                return false;
+
+        return true;
+}
+
+// Convierte una coordenada de la pantalla en una posicion de la cuadricula del mapa
+void mapa2D::ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const 
+{
+        TGridPosition.X = GetCameraScroll().X + TScreenPosition.X / TILE_WIDTH - GetViewSize().Width / 2;
+        TGridPosition.Y = GetCameraScroll().Y + TScreenPosition.Y / TILE_HEIGHT - GetViewSize().Height / 2;
+}
+
+
+/*IndexedEventStruct *mapa2D::GetIndexedEvent(int TEventType, int TEventData) 
+{
+
+        for(u32 i = 0; i < IndexedEvents.size(); i++) 
+        {
+                IndexedEventStruct *IndexedEvent = &IndexedEvents[i];
+                if(IndexedEvent->Tile->EventType == TEventType && IndexedEvent->Tile->EventData == TEventData) 
+                {
+                        return IndexedEvent;
+                }
+        }
+
+        return NULL;
+}*/
+vector<IDibujable*>* mapa2D::getIa_units(){
+	return ia_units;
+}
+vector<IDibujable*>* mapa2D::getUser_units(){
+	return user_units;
+}
+>>>>>>> hud
 
 void mapa2D::DrawIAUnits()
 {

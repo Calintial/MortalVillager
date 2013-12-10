@@ -71,7 +71,8 @@ public:
 	
 	//Manejo de objetos
 	//void Update(u32 TDeltaTime);
-
+	vector<IDibujable*>* getIa_units();
+	vector<IDibujable*>* getUser_units();
 	int getIASelected();
 	int getUserSelected();
 private:
