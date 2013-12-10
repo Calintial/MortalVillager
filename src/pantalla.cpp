@@ -27,6 +27,7 @@ int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* 
 		
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
+	pantallaDevice->setEventReceiver(this); 
 	mapa->Pintar();
 	hudmapa->paint();
 	pantallaDevice->getVideoDriver()->endScene(); 
