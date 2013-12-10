@@ -26,34 +26,13 @@ using namespace scene;
 
 const int TILE_WIDTH	= 32;
 const int TILE_HEIGHT = 32;
-#define WIDTH 250
-#define HEIGHT 250
+
+#define WIDTH 200
+#define HEIGHT 200
 
 
-// estructura que guarda la imagen y información de un tile por cada
-// textura que cargemos
-/*struct STile
-{
-	//STile(): textura(NULL), EventType(0), EventData(0){}
-	STile(): objeto(NULL), EventType(0), EventData(0){}
-	//ITexture * textura;
-	int EventType;
-	int EventData;
-	IDibujable * objeto; 
-	//unsigned short ancho;
-	//unsigned short alto;
-	//unsigned short columnas;
-};*/
+class mapa2D {
 
-
-/*struct IndexedEventStruct {
-	IndexedEventStruct(const STile *TTile, const position2di &TPosition) : Tile(TTile), Position(TPosition) { }
-	const STile *Tile;
-	position2di Position;
-};*/
-
-class mapa2D
-{
 public:
 	enum EventType {
 			EVENT_NONE,
@@ -71,13 +50,15 @@ public:
 	
 	void GenerarMapa();
 
+	IDibujable* getTile(int x, int y);
+
 	//VISTAS
 	void SetCameraScroll(const position2di &TPosition);
 	const position2di &GetCameraScroll() const { return CameraScroll; }
     const dimension2di &GetViewSize() const { return ViewSize; }
     
     //Graficos
-    int Pintar();
+    void Pintar();
     void PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY);
     bool GridToScreen(const position2di &TGridPosition, position2di &TScreenPosition) const;
 	void ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const;
@@ -114,7 +95,7 @@ private:
 	IDibujable* vTiles[WIDTH][HEIGHT];
 	vector<IDibujable*>* ia_units;
 	vector<IDibujable*>* user_units;
-	
+
 	//Vista
 	//int ViewWidth,ViewHeight;
 	

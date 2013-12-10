@@ -11,7 +11,7 @@ Pantalla::~Pantalla(){
     delete mapa;
     delete debug;
 }
-int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
+void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
 	if(mapa == NULL)
 		mapa = new mapa2D(pantallaDevice,ia_units,user_units);
@@ -21,11 +21,9 @@ int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* 
 		debug = new DebugMenu(pantallaDevice,ia_units,mapa);
 
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
-	int status = mapa->Pintar();
+	mapa->Pintar();
 	
 	debug->Draw();
 	pantallaDevice->getVideoDriver()->endScene();  
-
-	return status;
 
 }

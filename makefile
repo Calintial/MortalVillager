@@ -1,17 +1,16 @@
 CC=g++
-OPTS=-g -std=c++11
+OPTS=-g -Wall -std=c++11
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 
-OBJECTS=graphicEngine.o gameEngine.o intelEngine.o mainMenu.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o DebugMenu.o
+OBJECTS=graphicEngine.o gameEngine.o intelEngine.o mainMenu.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o DebugMenu.o hud.o edificio.o state.o pausa.o
 OBJECTS_MAIN=pantalla.o $(OBJECTS)
 OBJECTS_PATHFINDING=pantallaPathfinding.o $(OBJECTS)
 OBJECTS_IA_BATALLA=pantallaIABatalla.o DebugMenu.o $(OBJECTS)
 
-
 .PHONY: all clean
 
-all: bin/main bin/pathfinding
+all: bin/main bin/main
 
 
 pathfinding: bin/pathfinding

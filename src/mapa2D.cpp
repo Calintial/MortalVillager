@@ -54,7 +54,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
     
     //LoadEvents();
     
-    gameState = INGAME;
+    //gameState = INGAME;
 
 	drawVision = false;
 	drawAttackVision = false;
@@ -105,12 +105,13 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
 							cout<<"ViewHeight:"<< ViewSize.Height << endl;
-        					pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
-        					pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
+							pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
+							pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
 							int pos_vector = IASelected(pos_grid);
+							cout << "pos_vector" << pos_vector << endl;
 							if(pos_vector != -1)
 							{
 								ia_selected = pos_vector;
@@ -119,8 +120,10 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							else
 							{
 								pos_vector = UserSelected(pos_grid);
+								cout << "pos_vector" << pos_vector << endl;
 								if(pos_vector != -1)
 								{
+
 									user_selected = pos_vector;
 									cout<<"usuario seleccionado: "<<user_selected<<endl;
 									return (Unidades*)user_units->at(user_selected);
@@ -134,6 +137,7 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 		}
 	}
 }
+
 
 void mapa2D::AllocateMap()
 {
@@ -238,6 +242,10 @@ void mapa2D::GenerarMapa()
 			file << mapatext;
 }
 
+IDibujable* mapa2D::getTile(int x, int y){
+	return vTiles[y][x];
+}
+
 /*void mapa2D::LoadEvents(STile *Tile,int i, int j)
 {
 	IndexedEvents.push_back(IndexedEventStruct(Tile, position2di(i, j)));
@@ -258,12 +266,17 @@ void mapa2D::SetCameraScroll(const position2di &TPosition)
                 CameraScroll.Y = HEIGHT - 2;
 }
 
-int mapa2D::Pintar()
+void mapa2D::Pintar()
 {
 	if (MapaDevice->run())
     {        
         if(MapaDevice->isWindowActive() && driver)
         {
+			/*if(gameState == PAUSE)
+			{
+										 cout << "PAUSAENMAPA" << endl;
+				return gameState;
+			}*/
 			position2di GridPosition, DrawPosition;
 			
 						
@@ -294,12 +307,6 @@ int mapa2D::Pintar()
 			      	
         }
     }
-    else
-    {
-    	gameState = FINISH;
-    }
-    return gameState;
-
 }
 
 //Pinta alrededor de una posicion
@@ -331,21 +338,6 @@ void mapa2D::ScreenToGrid(const position2di &TScreenPosition, position2di &TGrid
         TGridPosition.Y = GetCameraScroll().Y + TScreenPosition.Y / TILE_HEIGHT - GetViewSize().Height / 2;
 }
 
-
-/*IndexedEventStruct *mapa2D::GetIndexedEvent(int TEventType, int TEventData) 
-{
-
-        for(u32 i = 0; i < IndexedEvents.size(); i++) 
-        {
-                IndexedEventStruct *IndexedEvent = &IndexedEvents[i];
-                if(IndexedEvent->Tile->EventType == TEventType && IndexedEvent->Tile->EventData == TEventData) 
-                {
-                        return IndexedEvent;
-                }
-        }
-
-        return NULL;
-}*/
 
 void mapa2D::DrawIAUnits()
 {
