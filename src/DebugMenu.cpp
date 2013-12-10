@@ -157,7 +157,7 @@ void DebugMenu::DrawParameters()
 {
 	int ia_life = ((Unidades*)vUnits->at(mapa->getIASelected()))->getLife();
 	std::string string_life = "Vida:" + to_string(ia_life);
-	std::string string_unit_selected = "Unidad seleccionada: " + to_string(mapa->getIASelected());
+	std::string string_unit_selected = "Unidad IA seleccionada: " + to_string(mapa->getIASelected());
 
 	font->draw(L"Parametros",
     core::rect<s32>(dimensionPantallaX + 59,509,dimensionPantallaX + 209,534),video::SColor(255,0,0,0));
