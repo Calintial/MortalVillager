@@ -57,6 +57,7 @@ void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* u
 {
 	if(pantalla == NULL){
 		pantalla= new Pantalla(IrrDevice);
+		cout << "NUEVA PANTALLA" << endl;
 	}
 	pantalla->pintarPantalla(ia_units,user_units);
 }
