@@ -52,7 +52,7 @@ void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* u
 	    pantalla= new Pantalla(IrrDevice);
 	}
 
-	int status = pantalla->pintarPantalla(ia_units,user_units);
+	pantalla->pintarPantalla(ia_units,user_units);
 }
 
 void graphicEngine::DrawPausa()

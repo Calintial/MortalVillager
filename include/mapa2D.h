@@ -8,6 +8,7 @@
 #include "gameEngine.h"
 #include "IDibujable.h"
 #include "suelo.h"
+#include "muro.h"
 #include "edificio.h"
 #include "Unidades.h"
 
@@ -60,19 +61,17 @@ public:
     //Graficos
     void Pintar();
     void PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY);
-    bool GridToScreen(const position2di &TGridPosition, position2di &TScreenPosition) const;
-	void ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const;
 	
 	//Eventos
 	Unidades* OnEventMapa(const SEvent& event);
-	//IndexedEventStruct *GetIndexedEvent(int TEventType, int TEventData);
 	
 	// Collision
 	//bool PuedoMover(const position2di &TPosition);
 	
 	//Manejo de objetos
 	//void Update(u32 TDeltaTime);
-
+	vector<IDibujable*>* getIa_units();
+	vector<IDibujable*>* getUser_units();
 	int getIASelected();
 	int getUserSelected();
 

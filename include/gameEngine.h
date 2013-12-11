@@ -37,8 +37,10 @@ public:
 
 	static void setSpeed(int);
 	static int getSpeed();
+
 	static IDibujable* addIAUnit(int,int);
 	static IDibujable* addUserUnit(int,int);
+
 	void sleep(unsigned int);
 	static Current stado;
 	void addNewUnits();

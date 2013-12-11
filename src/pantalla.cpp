@@ -14,9 +14,10 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 	mapa = NULL;
 	pantallaDevice->setEventReceiver(this); 
 }
-Pantalla::~Pantalla(){
-
+Pantalla::~Pantalla()
+{
     delete mapa;
+    delete hudmapa;
 }
 int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
@@ -27,6 +28,7 @@ int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* 
 		
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
+	pantallaDevice->setEventReceiver(this); 
 	mapa->Pintar();
 	hudmapa->paint();
 	pantallaDevice->getVideoDriver()->endScene(); 
@@ -34,6 +36,7 @@ int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* 
 }
 bool Pantalla::OnEvent(const SEvent& event){
 
+cout << "MIRO EVENTO" << endl;
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
@@ -48,7 +51,7 @@ bool Pantalla::OnEvent(const SEvent& event){
 	{
 		if(event.KeyInput.Key == irr::KEY_ESCAPE && event.KeyInput.PressedDown)
 		{
-			cout << "PAUSA" << endl;
+			cout << "PAUSA LA PANTALLA" << endl;
 			gameEngine::stado.pause();
 		}
 	}

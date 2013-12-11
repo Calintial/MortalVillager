@@ -54,14 +54,14 @@ void MAINS::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia
 
 void MAINS::ingame(Current *c)
 {
-	cout << "cambio de MAINS a INGAME";
+	cout << "cambio de MAINS a INGAME" << endl;
 	c->setCurrent(new INGAME());
 	delete this;
 }
 
 void MAINS::finish(Current *c)
 {
-	cout << "cambio de MAINS a FINISH";
+	cout << "cambio de MAINS a FINISH" << endl;
 	c->setCurrent(new FINISH());
 	delete this;
 }
@@ -90,7 +90,7 @@ void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* i
 
 void INGAME::pause(Current *c)
 {
-	cout << "cambio de INGAME a PAUSE";
+	cout << "cambio de INGAME a PAUSE" << endl;
 	c->setCurrent(new PAUSE());
 	delete this;
 }
@@ -109,14 +109,14 @@ void PAUSE::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia
 
 void PAUSE::ingame(Current *c)
 {
-	cout << "cambio de PAUSE a INGAME";
+	cout << "cambio de PAUSE a INGAME" << endl;
 	c->setCurrent(new INGAME());
 	delete this;
 }
 
 void PAUSE::finish(Current *c)
 {
-	cout << "cambio de PAUSE a FINISH";
+	cout << "cambio de PAUSE a FINISH" << endl;
 	c->setCurrent(new FINISH());
 	delete this;
 }
