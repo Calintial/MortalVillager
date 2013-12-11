@@ -14,12 +14,13 @@ class Suelo : public IDibujable
 {
 public:
 	Suelo(int t, int i, int j);
-	~Suelo();
+	~Suelo() override;
 	/*ITexture* getTextura() const {
 		return textura;
 	}*/
-	void Pintar(IVideoDriver* driver);
+	void Pintar(IVideoDriver* driver) override;
 	//void setTextura(ITexture* tex){textura=tex;}
+	bool isTransitable() override;
 };
 
 #endif

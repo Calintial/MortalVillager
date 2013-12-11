@@ -53,6 +53,7 @@ public:
 	void GenerarMapa();
 
 	IDibujable* getTile(int x, int y);
+	void setTile(int x, int y, IDibujable* contenido);
 
 	//VISTAS
 	void SetCameraScroll(const position2di &TPosition);

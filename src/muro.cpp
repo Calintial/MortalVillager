@@ -1,5 +1,5 @@
 #include "muro.h"
-Muro::Muro(int tipo, int posicionY, int posicionX){
+Muro::Muro(int tipo, int posicionX, int posicionY){
 	setTipo(tipo);
 	position2di p(posicionX,posicionY);
 	setPosition(p);

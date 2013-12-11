@@ -273,6 +273,9 @@ IDibujable* mapa2D::getTile(int x, int y){
 	return vTiles[y][x];
 }
 
+void mapa2D::setTile(int x, int y, IDibujable* contenido){
+	vTiles[x][y] = contenido;
+}
 
 void mapa2D::SetCameraScroll(const position2di &TPosition) 
 {
