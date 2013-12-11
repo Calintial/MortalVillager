@@ -84,6 +84,7 @@ class INGAME: public State
 		void pause(Current *c);
 		bool inicial(){return false;}
 		bool sfinal(){return false;}
+		void finish(Current *c);
 		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
 };
 

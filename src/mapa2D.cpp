@@ -280,6 +280,10 @@ void mapa2D::Pintar()
 			      	
         }
     }
+    else
+    {
+    	gameEngine::stado.finish();
+    }
 }
 
 //Pinta alrededor de una posicion
