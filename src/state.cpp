@@ -95,6 +95,14 @@ void INGAME::pause(Current *c)
 	delete this;
 }
 
+void INGAME::finish(Current *c)
+{
+	cout << "cambio de INGAME a FINISH" << endl;
+	c->setCurrent(new FINISH());
+	delete this;
+}
+
+
 //--PAUSE--//
 PAUSE::PAUSE()
 {
