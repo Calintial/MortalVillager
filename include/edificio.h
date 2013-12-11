@@ -11,8 +11,6 @@ class edificio  : public IDibujable{
 public:
 	edificio(int t, IDibujable* partes);
 	~edificio();
-	edificio(const edificio&) {};
-	edificio& operator=(const edificio&) {};
 
 	void Pintar(IVideoDriver* driver);
 	

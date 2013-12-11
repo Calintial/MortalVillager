@@ -49,12 +49,8 @@ class State
 		{
 			cout << "finish"<<endl;
 		}
-		virtual bool inicial()
-		{
-		}
-		virtual bool sfinal()
-		{
-		}
+		virtual bool inicial() = 0;
+		virtual bool sfinal() = 0;
 		virtual void doSomething(gameEngine* ge,graphicEngine* graphics, intelEngine* ia)
 		{
 		}
