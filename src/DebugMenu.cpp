@@ -62,7 +62,7 @@ void DebugMenu::Draw()
 {
 	if (DebugDevice->run())
 	{        
-		if(DebugDevice->isWindowActive() && driver)
+		if(driver)
 		{
 			font->draw(L"Velocidad del juego",
             core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));

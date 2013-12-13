@@ -45,20 +45,20 @@ void graphicEngine::DrawMainMenu()
 }
 
 
-void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
-{
-
-	if(pantalla == NULL){
-	    pantalla= new Pantalla(IrrDevice);
-	}
-
-	pantalla->pintarPantalla(ia_units,user_units);
-}
-
 void graphicEngine::DrawPausa()
 {
 	if(pause == NULL)
 		pause = new pausa(IrrDevice);
 		
     pause->run();
+}
+
+void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
+{
+	if(pantalla == NULL){
+		pantalla= new Pantalla(IrrDevice);
+	}
+	pantalla->pintarPantalla(ia_units,user_units);
+	pause = NULL;
+	menu = NULL;
 }
