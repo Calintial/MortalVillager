@@ -19,8 +19,8 @@ Pantalla::~Pantalla()
     delete mapa;
     delete hudmapa;
 }
-int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
-
+int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
+{
 	if(mapa == NULL){
 		
 		mapa = new mapa2D(pantallaDevice,ia_units,user_units);
@@ -36,14 +36,19 @@ int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* 
 }
 bool Pantalla::OnEvent(const SEvent& event){
 
-cout << "MIRO EVENTO" << endl;
+cout << "PANTALLA MIRA EVENTO" << endl;
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
+							if(event.MouseInput.X>=hudmapa->dimensionHUD1.X && event.MouseInput.X<=hudmapa->dimensionHUD2.X && event.MouseInput.Y >=hudmapa->dimensionHUD1.Y && event.MouseInput.Y<=hudmapa->dimensionHUD2.Y){
+								cout<<"Has clicado en el minimapa en la posición X:"<<event.MouseInput.X<<", Y"<<event.MouseInput.Y<<endl;
+							}
+							else{
+								hudmapa->paintInformation(mapa->OnEventMapa(event));
+							}
 							
-							hudmapa->paintInformation(mapa->OnEventMapa(event));
 							break;
 		}
 	}
