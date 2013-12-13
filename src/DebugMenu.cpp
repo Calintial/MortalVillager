@@ -95,6 +95,16 @@ void DebugMenu::DrawMEF()
         video::SColor(255,255,255,255), true);
 	}
 
+	//Enemigo en rango
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/der.png"), core::position2d<s32>(dimensionPantallaX + 139,20),
+    core::rect<s32>(0,0,100 ,22), 0,
+    video::SColor(255,255,255,255), true);
+
+	//Fuera de rango
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/izq.png"), core::position2d<s32>(dimensionPantallaX + 139,50),
+    core::rect<s32>(0,0,100 ,22), 0,
+    video::SColor(255,255,255,255), true);
+
 	if(ia_state == APPROACH)
 	{
 		state_approach = driver->getTexture("../media/Imagenes/Debug/MEF/Approach_selected.png");
@@ -109,6 +119,22 @@ void DebugMenu::DrawMEF()
         core::rect<s32>(0,0,75 ,75), 0,
         video::SColor(255,255,255,255), true);
 	}
+
+	//En rango de ataque
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/inf.png"), core::position2d<s32>(dimensionPantallaX + 290,90),
+    core::rect<s32>(0,0,22 ,100), 0,
+    video::SColor(255,255,255,255), true);
+
+	//Fuera de rango de ataque
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/sup.png"), core::position2d<s32>(dimensionPantallaX + 260,90),
+    core::rect<s32>(0,0,22 ,100), 0,
+    video::SColor(255,255,255,255), true);
+
+    //Fuera de rango
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/izqSup2.png"), core::position2d<s32>(dimensionPantallaX + 150,90),
+    core::rect<s32>(0,0,76 ,100), 0,
+    video::SColor(255,255,255,255), true);
+
 
 	if(ia_state == ATTACK)
 	{
@@ -125,6 +151,17 @@ void DebugMenu::DrawMEF()
         video::SColor(255,255,255,255), true);				
 	}
 
+	//Vida insuficiente
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/inf.png"), core::position2d<s32>(dimensionPantallaX + 272.5,282),
+    core::rect<s32>(0,0,22 ,100), 0,
+    video::SColor(255,255,255,255), true);
+
+    //Fuera de rango
+	/*driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/izqSup3.png"), core::position2d<s32>(dimensionPantallaX + 150,230),
+    core::rect<s32>(0,0,76 ,250), 0,
+    video::SColor(255,255,255,255), true);*/
+
+
 	if(ia_state == FLEE)
 	{
 		state_flee = driver->getTexture("../media/Imagenes/Debug/MEF/Flee_selected.png");
@@ -139,6 +176,10 @@ void DebugMenu::DrawMEF()
         core::rect<s32>(0,0,75 ,75), 0,
         video::SColor(255,255,255,255), true);
 	}
+
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/izq.png"), core::position2d<s32>(dimensionPantallaX + 139,410.5),
+    core::rect<s32>(0,0,100 ,22), 0,
+    video::SColor(255,255,255,255), true);
 
 	if(ia_state == RECOVERY)
 	{

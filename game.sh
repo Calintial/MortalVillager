@@ -1,6 +1,6 @@
 if [[ $1 -eq "1" ]]; then
 	make pathfinding
-elif [[ $1 -eq "1" ]]; then
+elif [[ $1 -eq "2" ]]; then
 	make ia
 else
 	make
