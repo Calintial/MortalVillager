@@ -18,8 +18,8 @@ Pantalla::~Pantalla()
 {
     delete mapa;
 }
-int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
-
+int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
+{
 	if(mapa == NULL){
 		
 		mapa = new mapa2D(pantallaDevice,ia_units,user_units);
@@ -35,7 +35,7 @@ int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* 
 }
 bool Pantalla::OnEvent(const SEvent& event){
 
-cout << "MIRO EVENTO" << endl;
+cout << "PANTALLA MIRA EVENTO" << endl;
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
