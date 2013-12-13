@@ -46,10 +46,12 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
 	ia_selected = 0;
 	user_selected = 0;
+	pathFinding=new pathfinding(this);
 }
 
 mapa2D::~mapa2D()
 {
+	delete pathFinding;
    free();
 }
 
@@ -466,4 +468,7 @@ int mapa2D::getIASelected()
 int mapa2D::getUserSelected()
 {
 	return user_selected;
+}
+pathfinding* mapa2D::getPathfinding(){
+	return pathFinding;
 }

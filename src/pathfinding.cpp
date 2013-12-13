@@ -1,6 +1,8 @@
+
 #include "pathfinding.h"
 #include <boost/graph/graphviz.hpp>
 #include <queue>
+#include "mapa2D.h"
 pathfinding::pathfinding(mapa2D* _mapa){
 	mapa = _mapa;
 }

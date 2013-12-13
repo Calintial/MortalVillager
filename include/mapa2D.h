@@ -11,8 +11,8 @@
 #include "muro.h"
 #include "edificio.h"
 #include "Unidades.h"
-#include "DebugMenu.h"
 
+#include "pathfinding.h"
 
 #include <string>
 #include <vector>
@@ -76,6 +76,7 @@ public:
 	vector<IDibujable*>* getUser_units();
 	int getIASelected();
 	int getUserSelected();
+	pathfinding* getPathfinding();
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -85,7 +86,7 @@ private:
 	IGUISkin* skin;
 	int gameState;
 	stringc MapaText;
-
+	pathfinding *pathFinding;
 	void Init();
 	void AllocateMap();
 	//void LoadEvents(STile *Tile, int i, int j);

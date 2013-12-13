@@ -71,7 +71,17 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 								  break;
 		}
 		
-	}/*
+	}
+	else if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+		switch(id)
+		{
+			case BUTTON_NEXT: mapa->getPathfinding()->createRegions();
+								break;
+		}					
+	}
+	/*
 	else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();

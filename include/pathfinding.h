@@ -1,13 +1,14 @@
+#pragma once 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <iostream>
 #include "Nodo.h"
 #include "Region.h"
 #include "Enlace.h"
-#include "mapa2D.h"
+//#include "mapa2D.h"
 
 using namespace std;
-
+class mapa2D;
 typedef boost::adjacency_list<boost::listS, boost::vecS, boost::undirectedS, Region,Enlace > Graph;
 
 //Some typedefs for simplicity
