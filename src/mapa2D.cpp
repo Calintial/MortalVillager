@@ -87,8 +87,8 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
 							cout<<"ViewHeight:"<< ViewSize.Height << endl;
-							pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
-							pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
+							pos_grid.X = event.MouseInput.X/TILE_WIDTH + 1;
+							pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT + 1;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
@@ -249,7 +249,7 @@ void mapa2D::Pintar()
 {
 	if (MapaDevice->run())
     {        
-        if(MapaDevice->isWindowActive() && driver)
+        if(driver)
         {
 			position2di GridPosition, DrawPosition;
 			
@@ -289,7 +289,7 @@ void mapa2D::Pintar()
 //Pinta alrededor de una posicion
 void mapa2D::PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY)
 {
-	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width >> 1), TPositionY - (TTexture->getSize().Height >> 1)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width), TPositionY - (TTexture->getSize().Height)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 
 vector<IDibujable*>* mapa2D::getIa_units(){
