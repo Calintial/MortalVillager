@@ -50,8 +50,8 @@ bool Pantalla::OnEvent(const SEvent& event){
 				{
 					// Esto está copiapegado de mapa2D, cuidado por si cambia
 					position2di pos_grid;
-					pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
-					pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
+					pos_grid.X = (event.MouseInput.X) / TILE_WIDTH +1;
+					pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT +1;
 					cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
 					Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
 					muro->Pintar(pantallaDevice->getVideoDriver());
@@ -62,8 +62,8 @@ bool Pantalla::OnEvent(const SEvent& event){
 				{
 					// Esto está copiapegado de mapa2D, cuidado por si cambia
 					position2di pos_grid;
-					pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
-					pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
+					pos_grid.X = (event.MouseInput.X) / TILE_WIDTH+1;
+					pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT+1;
 					cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
 					Suelo* suelo = new Suelo(0,pos_grid.X,pos_grid.Y);
 					suelo->Pintar(pantallaDevice->getVideoDriver());
