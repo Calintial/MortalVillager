@@ -42,8 +42,6 @@ mainMenu::mainMenu(IrrlichtDevice * IrrDevice)
     system->createSound("../media/Sonido/blop.mp3", FMOD_HARDWARE, 0, &sound1);
     sound1->setMode(FMOD_LOOP_OFF);
 
-    gameState = MAIN;  
-
     initMainMenu();
 }
 
@@ -59,8 +57,6 @@ mainMenu::~mainMenu()
 
 bool mainMenu::OnEvent(const SEvent& event)
 {
-	
-
 	if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
@@ -69,7 +65,7 @@ bool mainMenu::OnEvent(const SEvent& event)
 		switch(id)
 		{
 			case GUI_MENU_BOTON_JUGAR:
-                 gameState = INGAME;
+                 gameEngine::stado.ingame();
 				 break;
 
 			case GUI_MENU_BOTON_OPCIONES:					
@@ -81,7 +77,7 @@ bool mainMenu::OnEvent(const SEvent& event)
 				 break;
 
 			case GUI_MENU_BOTON_SALIR:	
-                 gameState = FINISH;
+                 gameEngine::stado.finish();
 				 break;
 
             case GUI_OPCIONES_BOTON_ATRAS:
@@ -115,7 +111,7 @@ bool mainMenu::OnEvent(const SEvent& event)
 	return false;
 }
 
-int mainMenu::run()
+void mainMenu::run()
 {
     if (MenuDevice->run())
     {        
@@ -163,10 +159,10 @@ int mainMenu::run()
     }
     else
     {
-        gameState = FINISH;
+        gameEngine::stado.finish();
     }
 
-    if(gameState != MAIN)
+    if(!gameEngine::stado.inicial())
     {
         if(sound1 != NULL)
         {
@@ -177,7 +173,6 @@ int mainMenu::run()
         }
         //MenuDevice->drop();
     }
-    return gameState;
 }
 
 void  mainMenu::initMainMenu()

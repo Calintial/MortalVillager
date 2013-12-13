@@ -36,13 +36,12 @@ public:
 	mainMenu(IrrlichtDevice * IrrDevice);
 	~mainMenu();
 
-	int run();
+	void run();
 	virtual bool OnEvent(const SEvent& event);
 
 private:
 	IrrlichtDevice * MenuDevice;
 	video::IVideoDriver* driver;
-	//scene::ISceneManager* smgr;
 	gui::IGUIEnvironment* env;
 	IGUISkin* skin;
 	IGUIFont* font;
@@ -50,11 +49,6 @@ private:
 
 	FMOD::System* system; 
     FMOD::Sound* sound1, *sound2;
-
-	//int dimensionPantallaX; 
-	//int dimensionPantallaY; 
-
-	int gameState;
 
 	bool credits;
 

@@ -8,6 +8,7 @@
 #include "gameEngine.h"
 #include "IDibujable.h"
 #include "suelo.h"
+#include "muro.h"
 #include "edificio.h"
 #include "Unidades.h"
 #include "DebugMenu.h"
@@ -28,31 +29,10 @@ using namespace scene;
 
 const int TILE_WIDTH	= 32;
 const int TILE_HEIGHT = 32;
-#define WIDTH 250
-#define HEIGHT 250
+#define WIDTH 200
+#define HEIGHT 200
 
 
-// estructura que guarda la imagen y información de un tile por cada
-// textura que cargemos
-/*struct STile
-{
-	//STile(): textura(NULL), EventType(0), EventData(0){}
-	STile(): objeto(NULL), EventType(0), EventData(0){}
-	//ITexture * textura;
-	int EventType;
-	int EventData;
-	IDibujable * objeto; 
-	//unsigned short ancho;
-	//unsigned short alto;
-	//unsigned short columnas;
-};*/
-
-
-/*struct IndexedEventStruct {
-	IndexedEventStruct(const STile *TTile, const position2di &TPosition) : Tile(TTile), Position(TPosition) { }
-	const STile *Tile;
-	position2di Position;
-};*/
 
 class mapa2D {
 public:
@@ -80,14 +60,11 @@ public:
     const dimension2di &GetViewSize() const { return ViewSize; }
     
     //Graficos
-    int Pintar();
+    void Pintar();
     void PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY);
-    bool GridToScreen(const position2di &TGridPosition, position2di &TScreenPosition) const;
-	void ScreenToGrid(const position2di &TScreenPosition, position2di &TGridPosition) const;
 	
 	//Eventos
 	Unidades* OnEventMapa(const SEvent& event);
-	//IndexedEventStruct *GetIndexedEvent(int TEventType, int TEventData);
 	
 	// Collision
 	//bool PuedoMover(const position2di &TPosition);
@@ -115,7 +92,7 @@ private:
 	IDibujable* vTiles[WIDTH][HEIGHT];
 	vector<IDibujable*>* ia_units;
 	vector<IDibujable*>* user_units;
-	
+
 	//Vista
 	//int ViewWidth,ViewHeight;
 	dimension2di ViewSize;

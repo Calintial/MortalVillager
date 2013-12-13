@@ -8,7 +8,7 @@ graphicEngine::graphicEngine()
 
     //IrrDevice->setResizable(true);
 	
-pantalla=NULL;
+	pantalla=NULL;
 
     IrrDevice->setResizable(true);
 
@@ -16,6 +16,8 @@ pantalla=NULL;
 	menu = NULL;
 
 	debug = NULL;
+	
+	pause = NULL;
 
     //menu = new mainMenu(IrrDevice);
     //mapa = new mapa2D(IrrDevice);
@@ -29,31 +31,33 @@ graphicEngine::~graphicEngine()
     delete menu;
 
     delete debug;
+    
+	delete pause;
 
 }
 
 //Funcion encargada de pintar el menu principal
-int graphicEngine::DrawMainMenu()
+void graphicEngine::DrawMainMenu()
 {
 	if(menu == NULL)
 		menu = new mainMenu(IrrDevice);
-		//hudmap= new hud(IrrDevice);
-    int status = menu->run();
-    
-    /*if(status == INGAME)
-		DrawMap();*/
-    return status;
-    
+    menu->run();
 }
 
-int graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
+
+void graphicEngine::DrawPausa()
+{
+	if(pause == NULL)
+		pause = new pausa(IrrDevice);
+		
+    pause->run();
+}
+
+void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
 	if(pantalla == NULL){
 		pantalla= new Pantalla(IrrDevice);
+		cout << "NUEVA PANTALLA" << endl;
 	}
 	pantalla->pintarPantalla(ia_units,user_units);
-	int status = INGAME;
-
-
-	return status;
 }
