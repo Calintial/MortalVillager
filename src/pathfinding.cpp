@@ -3,9 +3,7 @@
 #include <boost/graph/graphviz.hpp>
 #include <queue>
 #include "mapa2D.h"
-pathfinding::pathfinding(mapa2D* _mapa){
-	mapa = _mapa;
-}
+pathfinding::pathfinding(mapa2D* _mapa):width(WIDTH),height(HEIGHT),mapa(_mapa){}
 
 pathfinding::~pathfinding(){}
 
