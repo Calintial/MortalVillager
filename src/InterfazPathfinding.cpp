@@ -53,8 +53,22 @@ void InterfazPathfinding::Draw()
 bool InterfazPathfinding::OnEvent(const SEvent& event)
 {
 	
-	
-	if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
+	if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+		switch(id)
+		{
+
+			case BUTTON_NEXT:{ 
+				cout<<"Soy un boton!"<<endl;
+				mapa->getPathfinding()->createRegions();
+				mapa->getPathfinding()->analyzeRegions();
+				mapa->getPathfinding()->findInnerPaths();
+				}
+				break;
+		}					
+	}
+	else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
 		switch(id)
@@ -70,19 +84,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 		}
 		
 	}
-	else if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-		switch(id)
-		{
-			case BUTTON_NEXT:{ 
-				mapa->getPathfinding()->createRegions();
-				mapa->getPathfinding()->analyzeRegions();
-				mapa->getPathfinding()->findInnerPaths();
-				}
-				break;
-		}					
-	}
+
 	/*
 	else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
 	{

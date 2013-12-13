@@ -44,8 +44,10 @@ bool Pantalla::OnEvent(const SEvent& event){
 	{
 		if (event.MouseInput.X >= dimensionPantallaX || event.MouseInput.Y >= dimensionPantallaY)
 		{
+
 			return interfazPathfinding->OnEvent(event);
 		}else{
+
 			switch(event.MouseInput.Event)
 			{
 				case EMIE_LMOUSE_PRESSED_DOWN:
@@ -74,6 +76,10 @@ bool Pantalla::OnEvent(const SEvent& event){
 					break;
 			}
 		}
+	}
+	else{
+		
+			return interfazPathfinding->OnEvent(event);
 	}
 	return false;
 }
