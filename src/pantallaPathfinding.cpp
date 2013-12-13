@@ -42,27 +42,37 @@ bool Pantalla::OnEvent(const SEvent& event){
 
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
-		switch(event.MouseInput.Event)
+		if (event.MouseInput.X >= dimensionPantallaX || event.MouseInput.Y >= dimensionPantallaY)
 		{
-			case EMIE_LMOUSE_PRESSED_DOWN: mapa->OnEventMapa(event); break;
-		}
-	}
-	else if (event.EventType == EET_MOUSE_INPUT_EVENT)
-	{
-		switch(event.MouseInput.Event)
-		{
-			case EMIE_LMOUSE_PRESSED_DOWN:
-				// Esto está copiapegado de mapa2D, cuidado por si cambia
-				position2di pos_grid;
-				pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
-				pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
-				cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
-				Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
-				muro->Pintar(pantallaDevice->getVideoDriver());
-				mapa->setTile(pos_grid.X,pos_grid.Y,muro);
-				
-				//mapa->PintarTile(vision_texture,pos_grid.X,pos_grid.Y);
-				break;
+			return interfazPathfinding->OnEvent(event);
+		}else{
+			switch(event.MouseInput.Event)
+			{
+				case EMIE_LMOUSE_PRESSED_DOWN:
+					{
+						// Esto está copiapegado de mapa2D, cuidado por si cambia
+						position2di pos_grid;
+						pos_grid.X = (event.MouseInput.X) / TILE_WIDTH +1;
+						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT +1;
+						cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+						Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
+						muro->Pintar(pantallaDevice->getVideoDriver());
+						mapa->setTile(pos_grid.X,pos_grid.Y,muro);
+					}
+					break;
+				case EMIE_RMOUSE_PRESSED_DOWN:
+					{
+						// Esto está copiapegado de mapa2D, cuidado por si cambia
+						position2di pos_grid;
+						pos_grid.X = (event.MouseInput.X) / TILE_WIDTH+1;
+						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT+1;
+						cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+						Suelo* suelo = new Suelo(0,pos_grid.X,pos_grid.Y);
+						suelo->Pintar(pantallaDevice->getVideoDriver());
+						mapa->setTile(pos_grid.X,pos_grid.Y,suelo);
+					}
+					break;
+			}
 		}
 	}
 	return false;

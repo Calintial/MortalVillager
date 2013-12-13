@@ -15,6 +15,10 @@ hud::hud(IrrlichtDevice * IrrDevice,mapa2D * _m){
 	skin = env->getSkin();
 	if (font)
 		skin->setFont(font);
+	dimensionHUD1.X=600;
+	dimensionHUD1.Y=400;
+	dimensionHUD2.X=800;
+	dimensionHUD2.Y=600;
 	P1X=0;
 	P1Y=403;
 	P2X=800;
@@ -49,6 +53,7 @@ void hud::pintarMiniMapa(){
 	int y=400;
 	int xhud=0;
 	int yhud=0;
+	position2di dimPantalla=_mapa2D->GetCameraScroll();
 	IDibujable *dib;
 	for(int i=0;i<WIDTH;i++){
 		for(int j=0;j<HEIGHT;j++){
@@ -99,6 +104,8 @@ void hud::pintarMiniMapa(){
 
 		}
 	}
+
+	driver->draw2DRectangleOutline(core::rect<s32>(x+dimPantalla.X,y+dimPantalla.Y,x+dimPantalla.X+26,y+dimPantalla.Y+20),video::SColor(255,0,0,0));
 }
 void hud::paint(){
 

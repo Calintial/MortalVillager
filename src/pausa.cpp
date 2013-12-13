@@ -53,7 +53,6 @@ bool pausa::OnEvent(const SEvent& event)
 		{
 			case GUI_PAUSA_BOTON_REANUDAR :
 				gameEngine::stado.ingame();
-				cout << "INGAME" << endl;
 				env->clear();
 				
 				break;

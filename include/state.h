@@ -50,7 +50,9 @@ class State
 			cout << "finish"<<endl;
 		}
 		virtual bool inicial() = 0;
+
 		virtual bool sfinal() = 0;
+
 		virtual void doSomething(gameEngine* ge,graphicEngine* graphics, intelEngine* ia)
 		{
 		}
@@ -82,6 +84,7 @@ class INGAME: public State
 		void pause(Current *c);
 		bool inicial(){return false;}
 		bool sfinal(){return false;}
+		void finish(Current *c);
 		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
 };
 

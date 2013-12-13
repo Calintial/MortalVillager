@@ -8,8 +8,6 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D* map)
     init();
 
     mapa = map;
-
-	device->setEventReceiver(this); 
 	
 	drawRegiones = false;
 	drawEnlaces = false;
@@ -20,15 +18,15 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D* map)
 InterfazPathfinding::~InterfazPathfinding(){}
 
 void InterfazPathfinding::init(){
-	env->addCheckBox(false,rect<s32>(50,dimensionPantallaY+25,200,dimensionPantallaY+50), 0, CB_REGIONES, 
+	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,0,dimensionPantallaX+160,25), 0, CB_REGIONES, 
 							   L"Ver regiones");
-	env->addCheckBox(false,rect<s32>(50,dimensionPantallaY+50,200,dimensionPantallaY+75), 0, CB_ENLACES, 
+	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,25,dimensionPantallaX+160,50), 0, CB_ENLACES, 
 							   L"Ver enlaces");
-	env->addCheckBox(false,rect<s32>(50,dimensionPantallaY+75,200,dimensionPantallaY+100), 0, CB_CAMINOS_INTERNOS, 
+	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,50,dimensionPantallaX+160,75), 0, CB_CAMINOS_INTERNOS, 
 							   L"Ver caminos internos");
-	env->addCheckBox(false,rect<s32>(50,dimensionPantallaY+100,200,dimensionPantallaY+125), 0, CB_CAMINO_FINAL, 
+	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,75,dimensionPantallaX+160,100), 0, CB_CAMINO_FINAL, 
 							   L"Ver camino final");
-	env->addButton(rect<s32>(550,dimensionPantallaY+35,750,dimensionPantallaY+60), 0, BUTTON_NEXT,
+	env->addButton(rect<s32>(dimensionPantallaX + 10,dimensionPantallaY+35,dimensionPantallaX + 210,dimensionPantallaY+60), 0, BUTTON_NEXT,
         L"Procesar", L"Iniciar análisis del mapa, generación de regiones y cálculo de caminos internos");
 
 }
@@ -37,7 +35,7 @@ void InterfazPathfinding::Draw()
 {
 	if (device->run())
 	{        
-		if(device->isWindowActive() && driver)
+		if(driver)
 		{
 			//font->draw(L"Velocidad del juego",
             //core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));

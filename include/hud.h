@@ -18,8 +18,6 @@ using namespace io;
 using namespace gui;
 
 using namespace std;
-#define WIDTH 200
-#define HEIGHT 200
 class mapa2D;
 class hud : public IEventReceiver
 {
@@ -30,6 +28,8 @@ public:
 	void paintInformation(Unidades *);
 	virtual bool OnEvent(const SEvent& event);
 	int P1X,P1Y,P2X,P2Y;
+	position2di dimensionHUD1;
+	position2di dimensionHUD2;
 	void pintarMiniMapa();
 private:
 	IrrlichtDevice * MenuDevice;

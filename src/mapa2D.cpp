@@ -41,6 +41,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
     AllocateMap();
 
+
 	drawVision = false;
 	drawAttackVision = false;
 
@@ -77,11 +78,8 @@ bool mapa2D::free()
     return true;
 }
 
-Unidades * mapa2D::OnEventMapa(const SEvent& event)
+Unidades* mapa2D::OnEventMapa(const SEvent& event)
 {
-	cout<<"mimimi"<<endl;
-	Unidades* unidad;
-	
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		switch(event.MouseInput.Event)
@@ -91,8 +89,8 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
 							cout<<"ViewHeight:"<< ViewSize.Height << endl;
-							pos_grid.X = (event.MouseInput.X+(TILE_WIDTH/2)) / TILE_WIDTH;
-							pos_grid.Y = (event.MouseInput.Y+(TILE_HEIGHT/2)) / TILE_HEIGHT;
+							pos_grid.X = event.MouseInput.X/TILE_WIDTH + 1;
+							pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT + 1;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
@@ -100,8 +98,9 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 							if(pos_vector != -1)
 							{
 								ia_selected = pos_vector;
+
 								return (Unidades*)ia_units->at(ia_selected);
-								//DebugMenu::setUnitSelected(ia_selected);
+
 
 							}
 							else
@@ -117,52 +116,12 @@ Unidades * mapa2D::OnEventMapa(const SEvent& event)
 								}
 								else
 								{
-
 									((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
-
 								}
 							}
 							break;
 		}
 	}
-	else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-		switch(id)
-		{
-			case CB_VISION_RANGE: drawVision = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
-								  break;
-			case CB_ATTACK_RANGE: drawAttackVision = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
-								  break;
-		}
-		
-	}
-	else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-
-		switch(id)
-		{
-			case SCROLL_SPEED: s32 pos = ((IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
-                 			   gameEngine::setSpeed(pos);
-							   break;
-		}
-	}
-
-	else if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-
-		IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
-		IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
-
-		switch(id)
-		{
-			case BUTTON_ADD_IA: gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()); break;
-			case BUTTON_ADD_UNIT: break;
-		}
-	}
-
 	return NULL;
 }
 
@@ -296,7 +255,7 @@ void mapa2D::Pintar()
 {
 	if (MapaDevice->run())
     {        
-        if(MapaDevice->isWindowActive() && driver)
+        if(driver)
         {
 			position2di GridPosition, DrawPosition;
 			
@@ -327,12 +286,16 @@ void mapa2D::Pintar()
 			      	
         }
     }
+    else
+    {
+    	gameEngine::stado.finish();
+    }
 }
 
 //Pinta alrededor de una posicion
 void mapa2D::PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY)
 {
-	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width >> 1), TPositionY - (TTexture->getSize().Height >> 1)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width), TPositionY - (TTexture->getSize().Height)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 
 vector<IDibujable*>* mapa2D::getIa_units(){
@@ -358,44 +321,6 @@ void mapa2D::DrawIAUnits()
 		{
 			DrawPosition = position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
 			PintarTile(ia_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);
-			
-			int v_range = ((Unidades*)ia_units->at(i))->getVisionRange();
-			int a_range = ((Unidades*)ia_units->at(i))->getAttackRange();
-			/*Pintar vision de la unidad*/
-			if(drawVision)
-			{
-				for(int x = newposX - v_range; x <= newposX + v_range; x++)
-				{
-					for(int y = newposY - v_range; y <= newposY + v_range; y++)
-					{
-						if(x < ViewSize.Width && y < ViewSize.Height)
-						{
-							ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
-							DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
-							PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);					
-						}
-
-					}
-				}
-			}
-
-			/*Pintar rango de ataque de la unidad*/
-			if(drawAttackVision)
-			{
-				for(int x = newposX - a_range; x <= newposX + a_range; x++)
-				{
-					for(int y = newposY - a_range; y <= newposY + a_range; y++)
-					{
-						if(x < ViewSize.Width && y < ViewSize.Height)
-						{
-							ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
-							DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
-							PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);						
-						}
-
-					}
-				}
-			}
 		}
 	}
 }
