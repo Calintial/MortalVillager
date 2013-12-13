@@ -120,6 +120,7 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							break;
 		}
 	}
+	return NULL;
 }
 
 
