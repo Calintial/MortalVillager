@@ -75,8 +75,12 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 		s32 id = event.GUIEvent.Caller->getID();
 		switch(id)
 		{
-			case BUTTON_NEXT: mapa->getPathfinding()->createRegions();
-								break;
+			case BUTTON_NEXT:{ 
+				mapa->getPathfinding()->createRegions();
+				mapa->getPathfinding()->analyzeRegions();
+				mapa->getPathfinding()->findInnerPaths();
+				}
+				break;
 		}					
 	}
 	/*
