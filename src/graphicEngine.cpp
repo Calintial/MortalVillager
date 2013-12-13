@@ -51,7 +51,6 @@ void graphicEngine::DrawPausa()
 		pause = new pausa(IrrDevice);
 		
     pause->run();
-    pantalla = NULL;
 }
 
 void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
