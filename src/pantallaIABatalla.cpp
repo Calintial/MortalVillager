@@ -5,6 +5,8 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	debug = NULL;
+	
+	
 }
 Pantalla::~Pantalla(){
 
