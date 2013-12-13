@@ -8,8 +8,6 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D* map)
     init();
 
     mapa = map;
-
-	device->setEventReceiver(this); 
 	
 	drawRegiones = false;
 	drawEnlaces = false;

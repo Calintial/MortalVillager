@@ -19,7 +19,6 @@ using namespace gui;
 using namespace std;
 
 enum{
-	/*Estados de la IA*/
 	CB_REGIONES = 0,
 	CB_ENLACES = 1,
 	CB_CAMINOS_INTERNOS = 2,
@@ -27,7 +26,7 @@ enum{
 	BUTTON_NEXT = 4
 };
 
-class InterfazPathfinding  : public IEventReceiver
+class InterfazPathfinding
 {
 private:
 	IrrlichtDevice * device;
@@ -44,7 +43,7 @@ public:
 
 	void Draw();
 	void init();
-	virtual bool OnEvent(const SEvent& event);
+	bool OnEvent(const SEvent& event);
 };
 
 #endif
