@@ -40,8 +40,13 @@ bool Pantalla::OnEvent(const SEvent& event){
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
+							if(event.MouseInput.X>=hudmapa->dimensionHUD1.X && event.MouseInput.X<=hudmapa->dimensionHUD2.X && event.MouseInput.Y >=hudmapa->dimensionHUD1.Y && event.MouseInput.Y<=hudmapa->dimensionHUD2.Y){
+								cout<<"Has clicado en el minimapa en la posición X:"<<event.MouseInput.X<<", Y"<<event.MouseInput.Y<<endl;
+							}
+							else{
+								hudmapa->paintInformation(mapa->OnEventMapa(event));
+							}
 							
-							hudmapa->paintInformation(mapa->OnEventMapa(event));
 							break;
 		}
 	}
