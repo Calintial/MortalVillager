@@ -17,6 +17,7 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 Pantalla::~Pantalla()
 {
     delete mapa;
+    delete hudmapa;
 }
 int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
