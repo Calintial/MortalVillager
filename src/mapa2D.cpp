@@ -45,8 +45,8 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	drawVision = false;
 	drawAttackVision = false;
 
-	ia_selected = 0;
-	user_selected = 0;
+	ia_selected = -1;
+	user_selected = -1;
 
 }
 
@@ -81,10 +81,12 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
+		position2di pos_grid;
+		int pos_vector = -1;
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
-							position2di pos_grid;
+							
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
 							cout<<"ViewHeight:"<< ViewSize.Height << endl;
@@ -93,11 +95,20 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
-							int pos_vector = IASelected(pos_grid);
+							pos_vector = IASelected(pos_grid);
 							if(pos_vector != -1)
 							{
-								((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
-								((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+
+								if(user_selected != -1)
+								{
+									((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
+									user_selected = -1;
+								}
+								if(ia_selected != -1)
+								{
+									((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+									ia_selected = -1;
+								}
 								ia_selected = pos_vector;
 								((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,true);
 
@@ -111,8 +122,16 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 								cout << "pos_vector" << pos_vector << endl;
 								if(pos_vector != -1)
 								{
-									((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
-									((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+									if(user_selected != -1)
+									{
+										((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
+										user_selected = -1;
+									}
+									if(ia_selected != -1)
+									{
+										((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+										ia_selected = -1;
+									}
 									user_selected = pos_vector;
 									cout<<"usuario seleccionado: "<<user_selected<<endl;
 									((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,true);
@@ -120,12 +139,35 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 								}
 								else
 								{
-									((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
-									((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
-									((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
+									if(user_selected != -1)
+									{
+										((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
+										user_selected = -1;
+									}
+									if(ia_selected != -1)
+									{
+										((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+										ia_selected = -1;
+									}
+									
+									
+									
 								}
 							}
 							break;
+
+			case EMIE_RMOUSE_PRESSED_DOWN: if(user_selected != -1)
+										   {
+				   								//position2di pos_grid;
+												cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
+												cout<<"ViewWidth:"<< ViewSize.Width << endl;
+												cout<<"ViewHeight:"<< ViewSize.Height << endl;
+												pos_grid.X = event.MouseInput.X/TILE_WIDTH + 1;
+												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT + 1;
+												cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
+		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
+										   }
+										   break;
 		}
 	}
 	return NULL;

@@ -50,6 +50,7 @@ cout << "PANTALLA MIRA EVENTO" << endl;
 							}
 							
 							break;
+			case EMIE_RMOUSE_PRESSED_DOWN: mapa->OnEventMapa(event);
 		}
 	}
 	if(event.EventType == EET_KEY_INPUT_EVENT)
