@@ -59,8 +59,9 @@ mapa2D::~mapa2D()
 void mapa2D::Init()
 {
 	//vTiles = NULL;
-	ViewSize.Width = 26;
-    ViewSize.Height = 20;
+	auto size = driver->getScreenSize();
+	ViewSize.Width = size.Width/TILE_WIDTH;
+    ViewSize.Height = size.Height/TILE_HEIGHT;
     CameraScroll.X = 0;
     CameraScroll.Y = 0;
 }

@@ -36,7 +36,7 @@ public:
 	int estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o);
 private:
 	int width,height; 
-	const int tamRegion = 10;
+	const int tamRegion = 3;
 	mapa2D* mapa;
 	Graph grafoRegiones;
 };
