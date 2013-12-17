@@ -345,6 +345,13 @@ void mapa2D::DrawUserUnits()
 
 }
 
+position2di mapa2D::getDrawPosition(position2di pos){
+	int newposX = pos.X - CameraScroll.X;
+	int newposY = pos.Y - CameraScroll.Y;
+	return position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
+
+}
+
 void mapa2D::InicializarGraficosUnidades()
 {
 	int n_ia = ia_units->size();
