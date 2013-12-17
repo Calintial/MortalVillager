@@ -43,6 +43,10 @@ void pathfinding::analyzeRegions(){
 		// left edge
 		if (actual->inicio.X > 0)
 		{
+			if (actual->inicio.Y == 0)
+			{
+				cout<<"Estoy en {"<<actual->inicio.X<<",0}"<<endl;
+			}
 			Region* regionIzquierda = getCorrespondingRegion(actual->inicio.X-1,actual->inicio.Y);
 			int iterador = actual->inicio.Y;
 
@@ -76,6 +80,10 @@ void pathfinding::analyzeRegions(){
 				Enlace enlace(position2di(actual->inicio.X,posHueco),position2di(regionIzquierda->final.X,posHueco));
 				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
 				cout<<"Nuevo enlace izquierda"<<endl;
+			}
+			if (actual->inicio.Y == 0)
+			{
+				cout<<"Salgo de {"<<actual->inicio.X<<",0}"<<endl;
 			}
 		}
 
@@ -208,19 +216,10 @@ Camino* pathfinding::calcularCamino(position2di origen, position2di destino){
 }
 
 void pathfinding::run(){
+	grafoRegiones.clear();
 	createRegions();
-	
-	cout<<"He creado "<<num_vertices(grafoRegiones)<<" regiones"<<endl;
-	std::pair<vertex_iter, vertex_iter> vp;
-	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first){
-		std::cout << "Reg"<<*vp.first<<"{"<<grafoRegiones[*vp.first].inicio.X << ", " << grafoRegiones[*vp.first].inicio.Y <<"}"<< std::endl;
-	}
-	std::cout << std::endl;
-
 	analyzeRegions();
-
-	findInnerPaths();
-
+	//findInnerPaths();
 }
 void pathfinding::A(std::vector<Camino> caminos,position2di origen,position2di destino,Region* regionActual){
 	std::vector<Nodo> listaInterior;

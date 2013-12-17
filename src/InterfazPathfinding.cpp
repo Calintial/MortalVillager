@@ -99,9 +99,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 
 			case BUTTON_NEXT:{ 
 				cout<<"Soy un boton!"<<endl;
-				mapa->getPathfinding()->createRegions();
-				mapa->getPathfinding()->analyzeRegions();
-				//mapa->getPathfinding()->findInnerPaths();
+				mapa->getPathfinding()->run();
 				}
 				break;
 		}					

@@ -7,7 +7,6 @@ Enlace::Enlace(position2di _origen,position2di _destino)
 Enlace::Enlace(const Enlace& copia){
 	origen = copia.origen;
 	destino = copia.destino;
-	#pragma GCC warning "Esta copia huele mal"
 	intracaminos = copia.intracaminos;
 }
 
