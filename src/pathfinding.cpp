@@ -3,6 +3,7 @@
 #include <boost/graph/graphviz.hpp>
 #include <queue>
 #include "mapa2D.h"
+#include <limits.h>
 pathfinding::pathfinding(mapa2D* _mapa):width(WIDTH),height(HEIGHT),mapa(_mapa){}
 
 pathfinding::~pathfinding(){}
@@ -150,7 +151,7 @@ void pathfinding::findInnerPaths(){
 				if (j != i)
 				{
 
-					pathfinding::A(caminos,puntoI,puntoJ,regionActual);
+					A(caminos,puntoI,puntoJ,regionActual);
 					// calculo el camino entre puntoI y puntoJ
 					cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
 				}
@@ -213,18 +214,16 @@ void pathfinding::A(std::vector<Camino> caminos,position2di origen,position2di d
 	Nodo nuevo;
 	Nodo nodoantiguo;
 	nuevo.origen=origen;
+	nuevo.h=abs((destino.X-nuevo.origen.X)+abs(destino.Y-nuevo.origen.Y));
 	listaFrontera.push_back(nuevo);
 	queueFrontera.push(nuevo);
 	while(listaFrontera.size()>0){
 		mejor=menorF(listaFrontera);
-		listaFrontera.erase(listaFrontera.begin()+mejor);
 		nuevo=listaFrontera.at(mejor);
+		listaFrontera.erase(listaFrontera.begin()+mejor);		
 		listaInterior.push_back(nuevo);
 		if(nuevo.origen==destino){
-			Camino nuevocamino;
-			nuevocamino.addNodoCamino(nuevo);
-			caminos.push_back(nuevocamino);
-			//construir camino
+			listaFrontera.clear();
 		}
 		else{
 			for(Nodo o: hijos(& nuevo,regionActual)){
@@ -232,7 +231,7 @@ void pathfinding::A(std::vector<Camino> caminos,position2di origen,position2di d
 				o.h=abs((destino.X-o.origen.X)+abs(destino.Y-o.origen.Y));
 				o.f=o.g+o.h;
 				index=estaEnlistaFrontera(listaFrontera,o);
-				if(index!=-1){
+				if(index==-1){
 
 					listaFrontera.push_back(o);
 				}
@@ -270,9 +269,10 @@ std::vector<Nodo> pathfinding::hijos(Nodo* n,Region * regionActual){
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
-	if(regionActual->isInside(n->origen.X+1,n->origen.Y+1)){
+	if(regionActual->isInside(n->origen.X+1,n->origen.Y)){
 		nueva_pos.X=n->origen.X+1;
-		nueva_pos.Y=n->origen.Y+1;
+		nueva_pos.Y=n->origen.Y
+		;
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
@@ -292,10 +292,10 @@ std::vector<Nodo> pathfinding::hijos(Nodo* n,Region * regionActual){
 }
 int pathfinding::menorF(std::vector<Nodo> listaFrontera){
 
-	int f=0;
+	int f=INT_MAX;
 	int iter=0;
 	for(int i=0;i<listaFrontera.size();i++){
-		if(f<listaFrontera.at(i).f){
+		if(f>listaFrontera.at(i).f){
 			f=listaFrontera.at(i).f;
 			iter=i;
 		}

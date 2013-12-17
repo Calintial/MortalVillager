@@ -18,7 +18,7 @@ Nodo::Nodo(const Nodo& copia){
 }
 
 Nodo::~Nodo(){
-	delete this->p;
+	
 }
 Nodo::Nodo(){
 	this->g=0;
