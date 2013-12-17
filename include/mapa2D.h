@@ -62,6 +62,7 @@ public:
     //Graficos
     void Pintar();
     void PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY);
+	position2di getDrawPosition(position2di pos);
 	
 	//Eventos
 	Unidades* OnEventMapa(const SEvent& event);
