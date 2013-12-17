@@ -362,26 +362,16 @@ void mapa2D::DrawIAUnits()
 	position2di DrawPosition;
 
 	int n_ia = ia_units->size();	
-	int newposX = 0;
-	int newposY = 0;
 	for(int i=0; i<n_ia; i++)
 	{
-		position2di pos = ia_units->at(i)->getPosition();
-		newposX = pos.X - CameraScroll.X;
-		newposY = pos.Y - CameraScroll.Y;
-		if(newposX> 0 && newposY > 0)
-		{
-			DrawPosition = position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
-			ia_units->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
-		}
+		DrawPosition = getDrawPosition(ia_units->at(i)->getPosition());
+		ia_units->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
 	}
 }
 
 void mapa2D::DrawUserUnits()
 {
 	int n_user = user_units->size();
-	int newposX = 0;
-	int newposY = 0;
 	position2di DrawPosition;
 	for(int i=0; i<n_user; i++)
 	{
