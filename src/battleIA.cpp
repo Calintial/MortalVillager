@@ -20,7 +20,7 @@ battleIA::~battleIA()
 	//delete enemy_pos;
 }
 
-int battleIA::updateIA(vector<IDibujable*>* user)
+void battleIA::updateIA(vector<IDibujable*>* user)
 {
 	switch(state)
 	{
@@ -83,11 +83,7 @@ int battleIA::attack(vector<IDibujable*>* user)
 {
 	//cout<<"Attack"<<endl;
 	enemy_pos = this->searchEnemy(user);
-	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
-	{
-		return SEARCHING;
-	}
-	else
+	if(!(enemy_pos.X == -1 && enemy_pos.Y == -1))
 	{
 		if(this->enemy_in_attack_range(enemy_pos) && this->getLife() > 25)
 		{
@@ -103,6 +99,8 @@ int battleIA::attack(vector<IDibujable*>* user)
 			return FLEE;
 		}
 	}
+	return SEARCHING;
+
 }
 
 int battleIA::flee(vector<IDibujable*>* user)

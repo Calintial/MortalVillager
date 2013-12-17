@@ -10,6 +10,7 @@ using namespace core;
 
 class IDibujable{
 	public:
+		virtual ~IDibujable(){}
 		ITexture* getTextura() const {
 			return textura;
 		}

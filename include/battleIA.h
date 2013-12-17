@@ -26,7 +26,7 @@ public:
 	battleIA();
 	battleIA(int,int);
 	~battleIA();
-	int updateIA(vector<IDibujable*>*);
+	void updateIA(vector<IDibujable*>*);
 	virtual void Pintar(IVideoDriver*,int,int);
 	void TexturaSeleccionada(IVideoDriver*,bool);
 	virtual void aplicarTextura(IVideoDriver* driver);

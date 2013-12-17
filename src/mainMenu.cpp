@@ -60,7 +60,6 @@ bool mainMenu::OnEvent(const SEvent& event)
 	if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
-		IGUIEnvironment* env = MenuDevice->getGUIEnvironment();
 		
 		switch(id)
 		{
@@ -88,7 +87,6 @@ bool mainMenu::OnEvent(const SEvent& event)
     else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
     {
         s32 id = event.GUIEvent.Caller->getID();
-        IGUIEnvironment* env = MenuDevice->getGUIEnvironment();
 
         switch(id)
         {

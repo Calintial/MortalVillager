@@ -68,8 +68,14 @@ bool mapa2D::free()
 	if(vTiles) 
     {
 		for(int i = 0; i < WIDTH; i++)
-			delete[] vTiles[i];
-		delete[] vTiles;
+		{
+			for (int j = 0; j < HEIGHT; j++)
+			{
+				delete vTiles[i][j];
+			}			
+		}
+
+		//delete[] vTiles;
 
 	}
     
@@ -158,6 +164,7 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
 										   }
 										   break;
+			default:;
 		}
 	}
 	return NULL;
@@ -345,38 +352,29 @@ void mapa2D::DrawIAUnits()
 	position2di DrawPosition;
 
 	int n_ia = ia_units->size();	
-	int newposX = 0;
-	int newposY = 0;
 	for(int i=0; i<n_ia; i++)
 	{
-		position2di pos = ia_units->at(i)->getPosition();
-		newposX = pos.X - CameraScroll.X;
-		newposY = pos.Y - CameraScroll.Y;
-		if(newposX> 0 && newposY > 0)
-		{
-			DrawPosition = position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
-			ia_units->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
-		}
+		DrawPosition = getDrawPosition(ia_units->at(i)->getPosition());
+		ia_units->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
 	}
 }
 
 void mapa2D::DrawUserUnits()
 {
 	int n_user = user_units->size();
-	int newposX = 0;
-	int newposY = 0;
 	position2di DrawPosition;
 	for(int i=0; i<n_user; i++)
 	{
-		position2di pos = user_units->at(i)->getPosition();
-		newposX = pos.X - CameraScroll.X;
-		newposY = pos.Y - CameraScroll.Y;
-		if(newposX> 0 && newposY > 0)
-		{
-			DrawPosition = position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
-			user_units->at(i)->Pintar(driver, DrawPosition.X, DrawPosition.Y);
-		}
+		DrawPosition = getDrawPosition(user_units->at(i)->getPosition());
+		user_units->at(i)->Pintar(driver, DrawPosition.X, DrawPosition.Y);
 	}
+
+}
+
+position2di mapa2D::getDrawPosition(position2di pos){
+	int newposX = pos.X - CameraScroll.X;
+	int newposY = pos.Y - CameraScroll.Y;
+	return position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
 
 }
 
