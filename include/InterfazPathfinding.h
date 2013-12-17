@@ -43,6 +43,7 @@ public:
 
 	void Draw();
 	void DrawRegiones();
+	void DrawEnlaces();
 	void init();
 	bool OnEvent(const SEvent& event);
 };

@@ -16,6 +16,7 @@ typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;
 typedef boost::graph_traits<Graph>::edge_descriptor edge_t;
 
 typedef boost::graph_traits<Graph>::vertex_iterator vertex_iter;
+typedef boost::graph_traits<Graph>::edge_iterator edge_iter;
 
 
 class pathfinding
@@ -28,6 +29,7 @@ public:
 	void analyzeRegions();
 	void findInnerPaths();
 	std::vector<Region*> getRegiones();
+	std::vector<Enlace*> getEnlaces();
 	Region* getCorrespondingRegion(int x, int y);
 	Camino* calcularCamino(position2di,position2di);
 	void A(std::vector<Camino> caminos,position2di,position2di,Region *);
@@ -36,7 +38,7 @@ public:
 	int estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o);
 private:
 	int width,height; 
-	const int tamRegion = 3;
+	const int tamRegion = 10;
 	mapa2D* mapa;
 	Graph grafoRegiones;
 };

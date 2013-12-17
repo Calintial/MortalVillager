@@ -174,6 +174,15 @@ std::vector<Region*> pathfinding::getRegiones(){
 	return regiones;
 }
 
+std::vector<Enlace*> pathfinding::getEnlaces(){
+	std::vector<Enlace*> enlaces;
+	std::pair<edge_iter, edge_iter> es;
+	for (es = edges(grafoRegiones); es.first != es.second; ++es.first) {
+		enlaces.push_back(&grafoRegiones[*es.first]);
+	}
+	return enlaces;
+}
+
 Region* pathfinding::getCorrespondingRegion(int x, int y){
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)

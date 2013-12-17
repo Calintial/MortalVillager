@@ -41,6 +41,7 @@ void InterfazPathfinding::Draw()
             //core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
 			DrawRegiones();
+			DrawEnlaces();
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,driver->getScreenSize().Width,driver->getScreenSize().Height));
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,driver->getScreenSize().Width,driver->getScreenSize().Height));
 
@@ -57,13 +58,30 @@ void InterfazPathfinding::DrawRegiones(){
 		{
 			position2di inicio = regiones[i]->getInicio();
 			position2di final = regiones[i]->getFinal();
-			final.X += TILE_WIDTH;
-			final.Y += TILE_HEIGHT;
+			final.X ++;
+			final.Y ++;
 			auto thick_old = driver->getMaterial2D().Thickness;
 			driver->getMaterial2D().Thickness=12.f;
 			driver->enableMaterial2D();
 			driver->draw2DRectangleOutline(core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)),video::SColor(255,0,255,0));
 			driver->getMaterial2D().Thickness=thick_old;
+		}
+	}
+	
+}
+
+void InterfazPathfinding::DrawEnlaces(){
+	if (drawEnlaces)
+	{
+		std::vector<Enlace*> enlaces = mapa->getPathfinding()->getEnlaces();
+		for (int i = 0; i < enlaces.size(); ++i)
+		{
+			position2di inicio = enlaces[i]->getDestino();
+			position2di final = enlaces[i]->getOrigen();
+			final.X ++;
+			final.Y ++;
+			
+			driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
 		}
 	}
 	
@@ -82,7 +100,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 			case BUTTON_NEXT:{ 
 				cout<<"Soy un boton!"<<endl;
 				mapa->getPathfinding()->createRegions();
-				//mapa->getPathfinding()->analyzeRegions();
+				mapa->getPathfinding()->analyzeRegions();
 				//mapa->getPathfinding()->findInnerPaths();
 				}
 				break;
