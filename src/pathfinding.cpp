@@ -46,6 +46,16 @@ void pathfinding::analyzeRegions(){
 			if (actual->inicio.Y == 0)
 			{
 				cout<<"Estoy en {"<<actual->inicio.X<<",0}"<<endl;
+				for (int i = 0; i < WIDTH; ++i)
+				{
+					for (int j = 0; j < HEIGHT; ++j)
+					{
+						if (!mapa->vTiles[i][j]->isTransitable())
+						{
+							cout<<"He encontrado un no transitable en "<<i<<","<<j<<endl;
+						}
+					}
+				}
 			}
 			Region* regionIzquierda = getCorrespondingRegion(actual->inicio.X-1,actual->inicio.Y);
 			int iterador = actual->inicio.Y;

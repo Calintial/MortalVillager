@@ -19,6 +19,7 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 Pantalla::~Pantalla(){
 
     delete mapa;
+    delete interfazPathfinding;
 }
 void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
@@ -58,7 +59,7 @@ bool Pantalla::OnEvent(const SEvent& event){
 						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT +1;
 						cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
 						Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
-						muro->Pintar(pantallaDevice->getVideoDriver());
+						muro->aplicarTextura(pantallaDevice->getVideoDriver());
 						mapa->setTile(pos_grid.X,pos_grid.Y,muro);
 					}
 					break;
@@ -70,7 +71,7 @@ bool Pantalla::OnEvent(const SEvent& event){
 						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT+1;
 						cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
 						Suelo* suelo = new Suelo(0,pos_grid.X,pos_grid.Y);
-						suelo->Pintar(pantallaDevice->getVideoDriver());
+						suelo->aplicarTextura(pantallaDevice->getVideoDriver());
 						mapa->setTile(pos_grid.X,pos_grid.Y,suelo);
 					}
 					break;
