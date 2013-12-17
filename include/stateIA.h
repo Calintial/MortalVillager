@@ -63,7 +63,7 @@ class BUSCANDO: public StateIA
 {
 	public:
 		BUSCANDO();
-		~BUSCANDO()
+		virtual ~BUSCANDO()
 		{
 			cout << "dtor-BUSCANDO" << endl;
 		};
@@ -76,7 +76,7 @@ class ACERCARSE: public StateIA
 {
 	public:
 		ACERCARSE();
-		~ACERCARSE()
+		virtual ~ACERCARSE()
 		{
 			cout << "dtor-ACERCARSE" << endl;
 		};
@@ -90,7 +90,7 @@ class ATACAR: public StateIA
 {
 	public:
 		ATACAR();
-		~ATACAR()
+		virtual ~ATACAR()
 		{
 			cout << "dtor-ATACAR" << endl;
 		};
@@ -105,7 +105,7 @@ class HUIR: public StateIA
 {
 	public:
 		HUIR();
-		~HUIR()
+		virtual ~HUIR()
 		{
 			cout << "dtor-HUIR" << endl;
 		};
@@ -119,7 +119,7 @@ class RECUPERARSE: public StateIA
 {
 	public:
 		RECUPERARSE();
-		~RECUPERARSE()
+		virtual ~RECUPERARSE()
 		{
 			cout << "dtor-RECUPERARSE" << endl;
 		};

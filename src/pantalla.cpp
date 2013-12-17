@@ -19,7 +19,8 @@ Pantalla::~Pantalla()
     delete mapa;
     delete hudmapa;
 }
-int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
+
+void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
 	if(mapa == NULL){
 		
@@ -34,6 +35,7 @@ int Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* 
 	pantallaDevice->getVideoDriver()->endScene(); 
 
 }
+
 bool Pantalla::OnEvent(const SEvent& event){
 
 cout << "PANTALLA MIRA EVENTO" << endl;
@@ -51,6 +53,7 @@ cout << "PANTALLA MIRA EVENTO" << endl;
 							
 							break;
 			case EMIE_RMOUSE_PRESSED_DOWN: mapa->OnEventMapa(event);
+			default:;
 		}
 	}
 	if(event.EventType == EET_KEY_INPUT_EVENT)

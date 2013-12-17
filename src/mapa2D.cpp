@@ -69,8 +69,14 @@ bool mapa2D::free()
 	if(vTiles) 
     {
 		for(int i = 0; i < WIDTH; i++)
-			delete[] vTiles[i];
-		delete[] vTiles;
+		{
+			for (int j = 0; j < HEIGHT; j++)
+			{
+				delete vTiles[i][j];
+			}			
+		}
+
+		//delete[] vTiles;
 
 	}
     
@@ -168,6 +174,7 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
 										   }
 										   break;
+			default:;
 		}
 	}
 	return NULL;

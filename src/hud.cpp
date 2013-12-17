@@ -10,7 +10,6 @@ hud::hud(IrrlichtDevice * IrrDevice,mapa2D * _m){
 		//Get the Video Driver from the MenuDevice.
 	driver = IrrDevice->getVideoDriver();
 
-	video::IVideoDriver* driver = IrrDevice->getVideoDriver();
 	font = env->getFont("../media/fonthaettenschweiler.bmp");
 	skin = env->getSkin();
 	if (font)
@@ -70,7 +69,7 @@ void hud::pintarMiniMapa(){
 	}
 	vector<IDibujable*>* idub= _mapa2D->getIa_units();
 
-	for(int i=0;i<idub->size();i++){
+	for(unsigned int i=0;i<idub->size();i++){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
@@ -88,7 +87,7 @@ void hud::pintarMiniMapa(){
 		
 	}
 	idub=_mapa2D->getUser_units();
-	for(int i=0;i<idub->size();i++){
+	for(unsigned int i=0;i<idub->size();i++){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
