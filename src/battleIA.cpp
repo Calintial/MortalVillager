@@ -115,7 +115,7 @@ int battleIA::flee(vector<IDibujable*>* user)
 	}
 	else
 	{
-		this->Move(0,0);
+		this->Move(1,1);
 		return FLEE;
 	}
 }
@@ -170,17 +170,26 @@ position2di battleIA::searchEnemy(vector<IDibujable*>* vUnits)
 	return pos;
 }
 
-void battleIA::Pintar(IVideoDriver* driver)
+void battleIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
-	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
+	ITexture *TTexture = getTextura();
+	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width), TPositionY - (TTexture->getSize().Height)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 
-void battleIA::PintarSeleccionada(IVideoDriver* driver)
+void battleIA::TexturaSeleccionada(IVideoDriver* driver,bool selected)
 {
-	setTextura(driver->getTexture("../media/Texturas/units/unit_test_selected.png"));
+	if(selected)
+		setTextura(driver->getTexture("../media/Texturas/units/unit_test_selected.png"));
+	else
+		setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
 }
 
 int battleIA::getState()
 {
 	return state;
+}
+
+void battleIA::aplicarTextura(IVideoDriver* driver)
+{
+	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
 }

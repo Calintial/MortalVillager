@@ -45,8 +45,8 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	drawVision = false;
 	drawAttackVision = false;
 
-	ia_selected = 0;
-	user_selected = 0;
+	ia_selected = -1;
+	user_selected = -1;
 }
 
 mapa2D::~mapa2D()
@@ -80,10 +80,12 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
+		position2di pos_grid;
+		int pos_vector = -1;
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
-							position2di pos_grid;
+							
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
 							cout<<"ViewHeight:"<< ViewSize.Height << endl;
@@ -92,14 +94,17 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
-							int pos_vector = IASelected(pos_grid);
+							pos_vector = IASelected(pos_grid);
 							if(pos_vector != -1)
 							{
 
-								((Unidades*)user_units->at(user_selected))->Pintar(driver);
-								((battleIA*)ia_units->at(ia_selected))->Pintar(driver);
+								if(ia_selected != -1)
+								{
+									((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+									ia_selected = -1;
+								}
 								ia_selected = pos_vector;
-								((battleIA*)ia_units->at(ia_selected))->PintarSeleccionada(driver);
+								((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,true);
 
 								return (Unidades*)ia_units->at(ia_selected);
 
@@ -111,21 +116,48 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 								cout << "pos_vector" << pos_vector << endl;
 								if(pos_vector != -1)
 								{
-									((Unidades*)user_units->at(user_selected))->Pintar(driver);
-									((battleIA*)ia_units->at(ia_selected))->Pintar(driver);
+									if(user_selected != -1)
+									{
+										((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
+										user_selected = -1;
+									}
+
 									user_selected = pos_vector;
 									cout<<"usuario seleccionado: "<<user_selected<<endl;
-									((Unidades*)user_units->at(user_selected))->PintarSeleccionada(driver);
+									((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,true);
 									return (Unidades*)user_units->at(user_selected);
 								}
 								else
 								{
-									((Unidades*)user_units->at(user_selected))->Pintar(driver);
-									((battleIA*)ia_units->at(ia_selected))->Pintar(driver);
-									((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
+									if(user_selected != -1)
+									{
+										((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
+										user_selected = -1;
+									}
+									if(ia_selected != -1)
+									{
+										((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+										ia_selected = -1;
+									}
+									
+									
+									
 								}
 							}
 							break;
+
+			case EMIE_RMOUSE_PRESSED_DOWN: if(user_selected != -1)
+										   {
+				   								//position2di pos_grid;
+												cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
+												cout<<"ViewWidth:"<< ViewSize.Width << endl;
+												cout<<"ViewHeight:"<< ViewSize.Height << endl;
+												pos_grid.X = event.MouseInput.X/TILE_WIDTH + 1;
+												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT + 1;
+												cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
+		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
+										   }
+										   break;
 		}
 	}
 	return NULL;
@@ -157,7 +189,7 @@ void mapa2D::AllocateMap()
 			{
 				vTiles[i][j] = new Muro(1,i,j);
 			}
-			vTiles[i][j]->Pintar(driver);
+			vTiles[i][j]->aplicarTextura(driver);
 			k++;
 		}
 	}
@@ -277,7 +309,7 @@ void mapa2D::Pintar()
 						IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
 						//Pinta
 						if(Tile->getTextura())
-							PintarTile(Tile->getTextura(), DrawPosition.X, DrawPosition.Y);
+							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
 					//}
 				}
 			}
@@ -323,7 +355,7 @@ void mapa2D::DrawIAUnits()
 		if(newposX> 0 && newposY > 0)
 		{
 			DrawPosition = position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
-			PintarTile(ia_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);
+			ia_units->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
 		}
 	}
 }
@@ -342,7 +374,7 @@ void mapa2D::DrawUserUnits()
 		if(newposX> 0 && newposY > 0)
 		{
 			DrawPosition = position2di(newposX*TILE_WIDTH,newposY*TILE_HEIGHT);
-			PintarTile(user_units->at(i)->getTextura(), DrawPosition.X, DrawPosition.Y);
+			user_units->at(i)->Pintar(driver, DrawPosition.X, DrawPosition.Y);
 		}
 	}
 
@@ -354,10 +386,10 @@ void mapa2D::InicializarGraficosUnidades()
 	int n_units = user_units->size();
 
 	for(int i=0; i<n_ia; i++)
-		ia_units->at(i)->Pintar(driver);
+		ia_units->at(i)->aplicarTextura(driver);
 
 	for(int i=0; i<n_units; i++)
-		user_units->at(i)->Pintar(driver);
+		user_units->at(i)->aplicarTextura(driver);
 }
 
 int mapa2D::IASelected(position2di coord)

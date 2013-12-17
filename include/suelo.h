@@ -18,7 +18,8 @@ public:
 	/*ITexture* getTextura() const {
 		return textura;
 	}*/
-	void Pintar(IVideoDriver* driver);
+	void Pintar(IVideoDriver*,int,int);
+	void aplicarTextura(IVideoDriver* driver);
 	//void setTextura(ITexture* tex){textura=tex;}
 };
 

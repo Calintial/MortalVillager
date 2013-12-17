@@ -75,7 +75,7 @@ void hud::pintarMiniMapa(){
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
 			if(xhud==personaje->getPosition().X && yhud==personaje->getPosition().Y){
-				driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+				driver->draw2DRectangle(video::SColor(255,255,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 			}
 			else{
 				driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);

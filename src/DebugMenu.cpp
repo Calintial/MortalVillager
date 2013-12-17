@@ -78,7 +78,11 @@ void DebugMenu::Draw()
 
 void DebugMenu::DrawMEF()
 {
-	int ia_state = ((battleIA*)vUnits->at(mapa->getIASelected()))->getState();
+	int ia_selected = mapa->getIASelected();
+	int ia_state = -1;
+
+	if(ia_selected != -1)
+		ia_state = ((battleIA*)vUnits->at(ia_selected))->getState();
 
 	if(ia_state == SEARCHING)
 	{
@@ -232,18 +236,23 @@ void DebugMenu::DrawMEF()
 
 void DebugMenu::DrawParameters()
 {
-	int ia_life = ((Unidades*)vUnits->at(mapa->getIASelected()))->getLife();
-	std::string string_life = "Vida:" + to_string(ia_life);
-	std::string string_unit_selected = "Unidad IA seleccionada: " + to_string(mapa->getIASelected());
+	int ia_selected = mapa->getIASelected();
+	if(ia_selected != -1)
+	{
+		int ia_life = ((Unidades*)vUnits->at(ia_selected))->getLife();
+		std::string string_life = "Vida:" + to_string(ia_life);
+		std::string string_unit_selected = "Unidad IA seleccionada: " + to_string(ia_selected);
 
-	font->draw(L"Parametros",
-    core::rect<s32>(dimensionPantallaX + 59,509,dimensionPantallaX + 209,534),video::SColor(255,0,0,0));
+		font->draw(L"Parametros",
+	    core::rect<s32>(dimensionPantallaX + 59,509,dimensionPantallaX + 209,534),video::SColor(255,0,0,0));
 
-	font->draw(stringw(string_unit_selected.c_str()),
-    core::rect<s32>(dimensionPantallaX + 59,540,dimensionPantallaX + 209,565),video::SColor(255,0,0,0));
+		font->draw(stringw(string_unit_selected.c_str()),
+	    core::rect<s32>(dimensionPantallaX + 59,540,dimensionPantallaX + 209,565),video::SColor(255,0,0,0));
 
-    font->draw(stringw(string_life.c_str()),
-    core::rect<s32>(dimensionPantallaX + 59,571,dimensionPantallaX + 209,596),video::SColor(255,0,0,0));
+	    font->draw(stringw(string_life.c_str()),
+	    core::rect<s32>(dimensionPantallaX + 59,571,dimensionPantallaX + 209,596),video::SColor(255,0,0,0));		
+	}
+
 }
 
 void DebugMenu::DrawVisions()
@@ -298,10 +307,7 @@ bool DebugMenu::OnEvent(const SEvent& event)
 {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
-		switch(event.MouseInput.Event)
-		{
-			case EMIE_LMOUSE_PRESSED_DOWN: mapa->OnEventMapa(event); break;
-		}
+		mapa->OnEventMapa(event);
 	}
 	else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
 	{
@@ -336,9 +342,9 @@ bool DebugMenu::OnEvent(const SEvent& event)
 
 		switch(id)
 		{
-			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
+			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->aplicarTextura(driver);
 								break;
-			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
+			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->aplicarTextura(driver);
 								  break;
 		}
 	}
