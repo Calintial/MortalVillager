@@ -26,10 +26,10 @@ void pathfinding::createRegions(){
 			}
 			//regiones.push_back();
 			vertex_t vertice = boost::add_vertex(grafoRegiones);
-			grafoRegiones[vertice].inicioX = i;
-			grafoRegiones[vertice].inicioY = j;
-			grafoRegiones[vertice].finalX = finalX;
-			grafoRegiones[vertice].finalY = finalY;
+			grafoRegiones[vertice].inicio.X = i;
+			grafoRegiones[vertice].inicio.Y = j;
+			grafoRegiones[vertice].final.X = finalX;
+			grafoRegiones[vertice].final.Y = finalY;
 			grafoRegiones[vertice].descriptor = vertice;
 		}
 	}
@@ -41,16 +41,16 @@ void pathfinding::analyzeRegions(){
 		Region* actual = &grafoRegiones[*vp.first];
 		// para cada región solo hay que mirar izquierda y arriba
 		// left edge
-		if (actual->inicioX > 0)
+		if (actual->inicio.X > 0)
 		{
-			Region* regionIzquierda = getCorrespondingRegion(actual->inicioX-1,actual->inicioY);
-			int iterador = actual->inicioY;
+			Region* regionIzquierda = getCorrespondingRegion(actual->inicio.X-1,actual->inicio.Y);
+			int iterador = actual->inicio.Y;
 
 			int tamHueco = 0;
 			int posHueco = -1;
-			while(iterador < actual->finalY && iterador < height)
+			while(iterador < actual->final.Y && iterador < height)
 			{
-				if (mapa->getTile(iterador,actual->inicioX)->isTransitable() && mapa->getTile(iterador,regionIzquierda->finalX)->isTransitable())
+				if (mapa->getTile(iterador,actual->inicio.X)->isTransitable() && mapa->getTile(iterador,regionIzquierda->final.X)->isTransitable())
 				{
 					if (posHueco == -1)
 					{
@@ -61,7 +61,7 @@ void pathfinding::analyzeRegions(){
 					if (tamHueco > 0)
 					{
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-						Enlace enlace(position2di(actual->inicioX,posHueco),position2di(regionIzquierda->finalX,posHueco));
+						Enlace enlace(position2di(actual->inicio.X,posHueco),position2di(regionIzquierda->final.X,posHueco));
 						boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
 						cout<<"Nuevo enlace izquierda"<<endl;
 						tamHueco = 0;
@@ -73,23 +73,23 @@ void pathfinding::analyzeRegions(){
 			}
 			if (tamHueco > 0)
 			{
-				Enlace enlace(position2di(actual->inicioX,posHueco),position2di(regionIzquierda->finalX,posHueco));
+				Enlace enlace(position2di(actual->inicio.X,posHueco),position2di(regionIzquierda->final.X,posHueco));
 				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
 				cout<<"Nuevo enlace izquierda"<<endl;
 			}
 		}
 
 		// upper edge
-		if (actual->inicioY > 0)
+		if (actual->inicio.Y > 0)
 		{
-			Region* regionArriba = getCorrespondingRegion(actual->inicioX,actual->inicioY-1);
-			int iterador = actual->inicioX;
+			Region* regionArriba = getCorrespondingRegion(actual->inicio.X,actual->inicio.Y-1);
+			int iterador = actual->inicio.X;
 
 			int tamHueco = 0;
 			int posHueco = -1;
-			while(iterador < actual->finalX && iterador < width)
+			while(iterador < actual->final.X && iterador < width)
 			{
-				if (mapa->getTile(actual->inicioY,iterador)->isTransitable() && mapa->getTile(regionArriba->finalY,iterador)->isTransitable())
+				if (mapa->getTile(actual->inicio.Y,iterador)->isTransitable() && mapa->getTile(regionArriba->final.Y,iterador)->isTransitable())
 				{
 					if (posHueco == -1)
 					{
@@ -100,7 +100,7 @@ void pathfinding::analyzeRegions(){
 					if (tamHueco > 0)
 					{
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-						Enlace enlace(position2di(posHueco,actual->inicioY),position2di(posHueco,regionArriba->finalY));
+						Enlace enlace(position2di(posHueco,actual->inicio.Y),position2di(posHueco,regionArriba->final.Y));
 						boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
 						cout<<"Nuevo enlace arriba"<<endl;
 						tamHueco = 0;
@@ -112,7 +112,7 @@ void pathfinding::analyzeRegions(){
 			}
 			if (tamHueco > 0)
 			{
-				Enlace enlace(position2di(posHueco,actual->inicioY),position2di(posHueco,regionArriba->finalY));
+				Enlace enlace(position2di(posHueco,actual->inicio.Y),position2di(posHueco,regionArriba->final.Y));
 				boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
 				cout<<"Nuevo enlace arriba"<<endl;
 			}
@@ -195,7 +195,7 @@ void pathfinding::run(){
 	cout<<"He creado "<<num_vertices(grafoRegiones)<<" regiones"<<endl;
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first){
-		std::cout << "Reg"<<*vp.first<<"{"<<grafoRegiones[*vp.first].inicioX << ", " << grafoRegiones[*vp.first].inicioY <<"}"<< std::endl;
+		std::cout << "Reg"<<*vp.first<<"{"<<grafoRegiones[*vp.first].inicio.X << ", " << grafoRegiones[*vp.first].inicio.Y <<"}"<< std::endl;
 	}
 	std::cout << std::endl;
 

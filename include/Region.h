@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <irrlicht.h>
 #include "Enlace.h"
 
 #include <boost/graph/adjacency_list.hpp>
@@ -24,14 +25,18 @@ public:
 	void remove(Enlace*);*/
 	bool isInside(int x, int y);
 //	std::vector<Region*> getConnectedRegions();
+	position2di getInicio();
+	position2di getFinal();
 
 
 //private:
-	int inicioX;
-	int inicioY;
+	//int inicioX;
+	//int inicioY;
+	position2di inicio;
+	position2di final;
 
-	int finalX;
-	int finalY;
+	//int finalX;
+	//int finalY;
 
 	vertex_t descriptor;
 

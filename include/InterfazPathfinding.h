@@ -42,6 +42,7 @@ public:
 	~InterfazPathfinding();
 
 	void Draw();
+	void DrawRegiones();
 	void init();
 	bool OnEvent(const SEvent& event);
 };

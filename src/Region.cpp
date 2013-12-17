@@ -4,7 +4,7 @@ Region::Region(){
 
 }
 
-Region::Region(int _inicioX, int _inicioY, int _finalX, int _finalY):inicioX(_inicioX),inicioY(_inicioY),finalX(_finalX),finalY(_finalY){
+Region::Region(int _inicioX, int _inicioY, int _finalX, int _finalY):inicio(_inicioX,_inicioY),final(_finalX,_finalY){
 	//enlaces = new std::vector<Enlace*>();
 }
 
@@ -29,7 +29,7 @@ void Region::remove(Enlace* link){
 }*/
 
 bool Region::isInside(int x, int y){
-	return ((x >= inicioX && x <= finalX) && (y >= inicioY && y <= finalY));
+	return ((x >= inicio.X && x <= final.X) && (y >= inicio.Y && y <= final.Y));
 }
 /*
 std::vector<Region*> Region::getConnectedRegions(){
@@ -40,3 +40,11 @@ std::vector<Region*> Region::getConnectedRegions(){
 	}
 	return regiones;
 }*/
+
+position2di Region::getInicio(){
+	return inicio;
+}
+
+position2di Region::getFinal(){
+	return final;
+}

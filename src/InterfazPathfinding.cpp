@@ -40,13 +40,31 @@ void InterfazPathfinding::Draw()
 			//font->draw(L"Velocidad del juego",
             //core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
-			//DrawParameters();
-			//DrawMEF();
-			//DrawVisions();
+			DrawRegiones();
 
 			env->drawAll();
 		}
 	}
+}
+
+void InterfazPathfinding::DrawRegiones(){
+	if (drawRegiones)
+	{
+		std::vector<Region*> regiones = mapa->getPathfinding()->getRegiones();
+		for (int i = 0; i < regiones.size(); ++i)
+		{
+			position2di inicio = regiones[i]->getInicio();
+			position2di final = regiones[i]->getFinal();
+			final.X += TILE_WIDTH;
+			final.Y += TILE_HEIGHT;
+			auto thick_old = driver->getMaterial2D().Thickness;
+			driver->getMaterial2D().Thickness=12.f;
+			driver->enableMaterial2D();
+			driver->draw2DRectangleOutline(core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)),video::SColor(255,0,255,0));
+			driver->getMaterial2D().Thickness=thick_old;
+		}
+	}
+	
 }
 
 
@@ -62,8 +80,8 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 			case BUTTON_NEXT:{ 
 				cout<<"Soy un boton!"<<endl;
 				mapa->getPathfinding()->createRegions();
-				mapa->getPathfinding()->analyzeRegions();
-				mapa->getPathfinding()->findInnerPaths();
+				//mapa->getPathfinding()->analyzeRegions();
+				//mapa->getPathfinding()->findInnerPaths();
 				}
 				break;
 		}					
