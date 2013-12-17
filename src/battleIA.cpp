@@ -36,7 +36,7 @@ int battleIA::updateIA(vector<IDibujable*>* user)
 		case FLEE: 		state = this->flee(user);
 						break;
 
-		case RECOVERY:  state = this->recovery();
+		case RECOVERY:  state = this->recovery(user);
 						break;
 	}
 }
@@ -120,17 +120,25 @@ int battleIA::flee(vector<IDibujable*>* user)
 	}
 }
 
-int battleIA::recovery()
+int battleIA::recovery(vector<IDibujable*>* user)
 {
 	//cout<<"Recovery"<<endl;
-	if(this->getLife() != 100)
+	enemy_pos = this->searchEnemy(user);
+	if(enemy_pos.X != -1 && enemy_pos.Y != -1)
 	{
-		this->Recovery();
-		return RECOVERY;
+		return FLEE;
 	}
 	else
 	{
-		return SEARCHING;
+		if(this->getLife() != 100)
+		{
+			this->Recovery();
+			return RECOVERY;
+		}
+		else
+		{
+			return SEARCHING;
+		}
 	}
 
 }
@@ -165,6 +173,11 @@ position2di battleIA::searchEnemy(vector<IDibujable*>* vUnits)
 void battleIA::Pintar(IVideoDriver* driver)
 {
 	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
+}
+
+void battleIA::PintarSeleccionada(IVideoDriver* driver)
+{
+	setTextura(driver->getTexture("../media/Texturas/units/unit_test_selected.png"));
 }
 
 int battleIA::getState()

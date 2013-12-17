@@ -25,6 +25,7 @@ public:
 	bool enemy_in_attack_range(position2di);
 	int getLife();
 	virtual void Pintar(IVideoDriver* driver);
+	void PintarSeleccionada(IVideoDriver* driver);
 	void Recovery();
 	void updateUnit();
 	int getVisionRange();
