@@ -12,7 +12,7 @@ using namespace core;
 class Camino{
 public:
 	Camino(position2di inicio);
-	//Camino(const Camino &c);
+	Camino(const Camino &c);
 	Camino();
 	~Camino();
 	void addNodo(position2di nodo);

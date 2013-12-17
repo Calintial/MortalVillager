@@ -23,3 +23,7 @@ int Camino::getPeso(){
 std::vector<position2di> Camino::getCamino(){
 	return posiciones;
 }
+Camino::Camino(const Camino &c){
+	posiciones=c.posiciones;	
+	peso=c.peso;
+}

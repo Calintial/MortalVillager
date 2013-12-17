@@ -146,7 +146,7 @@ void pathfinding::findInnerPaths(){
 				}else{
 					puntoJ = enlaceJ.getDestino();
 				}
-				Camino nuevo(puntoI);
+				//Camino nuevo(puntoI);
 				// el camino con el propio nodo es vacío (nuevo camino y ya está)
 				if (j != i)
 				{
@@ -155,7 +155,7 @@ void pathfinding::findInnerPaths(){
 					// calculo el camino entre puntoI y puntoJ
 					cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
 				}
-				caminos.push_back(nuevo);
+				//caminos.push_back(nuevo);
 				// para cada enlace, hacemos push_back a enlaceI.intracaminos con el camino entre enlaceI y enlaceJ
 			}
 			enlaceI.setIntraCaminos(caminos);
@@ -205,42 +205,50 @@ void pathfinding::run(){
 	findInnerPaths();
 
 }
-void pathfinding::A(std::vector<Camino> caminos,position2di origen,position2di destino,Region* regionActual){
+void pathfinding::A(std::vector<Camino> &caminos,position2di origen,position2di destino,Region* regionActual){
 	std::vector<Nodo> listaInterior;
 	std::vector<Nodo> listaFrontera;
 	std::priority_queue<Nodo> queueFrontera;
 	int mejor=0;
 	int index=0;
-	Nodo nuevo;
+	Nodo *nuevo= new Nodo();
 	Nodo nodoantiguo;
-	nuevo.origen=origen;
-	nuevo.h=abs((destino.X-nuevo.origen.X)+abs(destino.Y-nuevo.origen.Y));
-	listaFrontera.push_back(nuevo);
-	queueFrontera.push(nuevo);
+	nuevo->origen=origen;
+	nuevo->h=abs((destino.X-nuevo->origen.X)+abs(destino.Y-nuevo->origen.Y));
+	listaFrontera.push_back(*nuevo);
+	queueFrontera.push(*nuevo);
 	while(listaFrontera.size()>0){
 		mejor=menorF(listaFrontera);
-		nuevo=listaFrontera.at(mejor);
+		nuevo=new Nodo(listaFrontera.at(mejor));
 		listaFrontera.erase(listaFrontera.begin()+mejor);		
-		listaInterior.push_back(nuevo);
-		if(nuevo.origen==destino){
+		listaInterior.push_back(*nuevo);
+		if(nuevo->origen==destino){
+			Nodo * nuevopuntero=nuevo;
+			Camino camino=Camino();
+			while(nuevopuntero->p!=NULL){
+				camino.addNodo(nuevopuntero->origen);
+				nuevopuntero=nuevopuntero->p;
+			}
+			caminos.push_back(camino);
 			listaFrontera.clear();
 		}
 		else{
-			for(Nodo o: hijos(& nuevo,regionActual)){
-				o.g=nuevo.g+1;
-				o.h=abs((destino.X-o.origen.X)+abs(destino.Y-o.origen.Y));
-				o.f=o.g+o.h;
-				index=estaEnlistaFrontera(listaFrontera,o);
+			for(Nodo hijo: hijos(nuevo,regionActual)){
+				hijo.g=nuevo->g+1;
+				hijo.h=abs((destino.X-hijo.origen.X)+abs(destino.Y-hijo.origen.Y));
+				hijo.f=hijo.g+hijo.h;
+				hijo.p=nuevo;
+				index=estaEnlistaFrontera(listaFrontera,hijo);
 				if(index==-1){
 
-					listaFrontera.push_back(o);
+					listaFrontera.push_back(hijo);
 				}
 				else{
-					if(o.g<listaFrontera.at(index).g){
-						listaFrontera.at(index).g=o.g;
-						listaFrontera.at(index).h=o.h;
-						listaFrontera.at(index).f=o.f;
-						listaFrontera.at(index).p=o.p;
+					if(hijo.g<listaFrontera.at(index).g){
+						listaFrontera.at(index).g=hijo.g;
+						listaFrontera.at(index).h=hijo.h;
+						listaFrontera.at(index).f=hijo.f;
+						listaFrontera.at(index).p=hijo.p;
 	
 					}
 
@@ -271,8 +279,7 @@ std::vector<Nodo> pathfinding::hijos(Nodo* n,Region * regionActual){
 	}
 	if(regionActual->isInside(n->origen.X+1,n->origen.Y)){
 		nueva_pos.X=n->origen.X+1;
-		nueva_pos.Y=n->origen.Y
-		;
+		nueva_pos.Y=n->origen.Y;
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
