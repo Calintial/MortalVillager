@@ -47,6 +47,10 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
 	ia_selected = 0;
 	user_selected = 0;
+
+	/*Pintar unidades inicialmente seleccionadas*/
+	((battleIA*)ia_units->at(ia_selected))->PintarSeleccionada(driver);
+	((Unidades*)user_units->at(user_selected))->PintarSeleccionada(driver);
 }
 
 mapa2D::~mapa2D()
@@ -95,7 +99,9 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							int pos_vector = IASelected(pos_grid);
 							if(pos_vector != -1)
 							{
+								((battleIA*)ia_units->at(ia_selected))->Pintar(driver);
 								ia_selected = pos_vector;
+								((battleIA*)ia_units->at(ia_selected))->PintarSeleccionada(driver);
 
 								return (Unidades*)ia_units->at(ia_selected);
 
@@ -107,9 +113,10 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 								cout << "pos_vector" << pos_vector << endl;
 								if(pos_vector != -1)
 								{
-
+									((Unidades*)user_units->at(user_selected))->Pintar(driver);
 									user_selected = pos_vector;
 									cout<<"usuario seleccionado: "<<user_selected<<endl;
+									((Unidades*)user_units->at(user_selected))->PintarSeleccionada(driver);
 									return (Unidades*)user_units->at(user_selected);
 								}
 								else

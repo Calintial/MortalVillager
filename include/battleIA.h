@@ -28,6 +28,7 @@ public:
 	~battleIA();
 	int updateIA(vector<IDibujable*>*);
 	void Pintar(IVideoDriver*);
+	void PintarSeleccionada(IVideoDriver*);
 	int getState();
 
 private:

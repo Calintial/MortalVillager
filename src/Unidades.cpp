@@ -100,6 +100,11 @@ void Unidades::Pintar(IVideoDriver* driver)
 	setTextura(driver->getTexture("../media/Texturas/units/user_unit_test.png"));
 }
 
+void Unidades::PintarSeleccionada(IVideoDriver* driver)
+{
+	setTextura(driver->getTexture("../media/Texturas/units/user_unit_selected.png"));
+}
+
 void Unidades::updateUnit()
 {
 	position2di position = getPosition();

@@ -41,14 +41,14 @@ void DebugMenu::initDebugMenu()
         L"Añadir Unidad", L"Añadir unidad controlada por el usuario");
 
 	/*Spin box para obtener las coordenadas para añadir las unidades*/
-	IGUISpinBox* spbox_X = env->addSpinBox(L"0",rect<s32>(760,dimensionPantallaY+55,810,dimensionPantallaY+75),true,0,SPBOX_COORDX);
-	IGUISpinBox* spbox_Y = env->addSpinBox(L"0",rect<s32>(830,dimensionPantallaY+55,880,dimensionPantallaY+75),true,0,SPBOX_COORDY);
+	IGUISpinBox* spbox_X = env->addSpinBox(L"1",rect<s32>(760,dimensionPantallaY+55,810,dimensionPantallaY+75),true,0,SPBOX_COORDX);
+	IGUISpinBox* spbox_Y = env->addSpinBox(L"1",rect<s32>(830,dimensionPantallaY+55,880,dimensionPantallaY+75),true,0,SPBOX_COORDY);
 
 	spbox_X->setDecimalPlaces(0);
 	spbox_Y->setDecimalPlaces(0);
 
-	spbox_X->setRange(0,26);
-	spbox_Y->setRange(0,20);
+	spbox_X->setRange(1,25);
+	spbox_Y->setRange(1,19);
 
 	/*Cargar texturas imagenes*/
 	state_search = driver->getTexture("../media/Imagenes/Debug/MEF/Search.png");
@@ -95,6 +95,11 @@ void DebugMenu::DrawMEF()
         video::SColor(255,255,255,255), true);
 	}
 
+	//No hay enemigo en rango de vision
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/bucleRej.png"), core::position2d<s32>(dimensionPantallaX + 10,10),
+    core::rect<s32>(0,0,59 ,56), 0,
+    video::SColor(255,255,255,255), true);
+
 	//Enemigo en rango
 	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/der.png"), core::position2d<s32>(dimensionPantallaX + 139,20),
     core::rect<s32>(0,0,100 ,22), 0,
@@ -120,6 +125,11 @@ void DebugMenu::DrawMEF()
         video::SColor(255,255,255,255), true);
 	}
 
+	//Fuera de rango de ataque. Dentro de rango visión
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/bucleNoRej.png"), core::position2d<s32>(dimensionPantallaX + 311,10),
+    core::rect<s32>(0,0,59 ,56), 0,
+    video::SColor(255,255,255,255), true);
+
 	//En rango de ataque
 	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/inf.png"), core::position2d<s32>(dimensionPantallaX + 290,90),
     core::rect<s32>(0,0,22 ,100), 0,
@@ -131,8 +141,8 @@ void DebugMenu::DrawMEF()
     video::SColor(255,255,255,255), true);
 
     //Fuera de rango
-	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/izqSup2.png"), core::position2d<s32>(dimensionPantallaX + 150,90),
-    core::rect<s32>(0,0,76 ,100), 0,
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/supIzq2.png"), core::position2d<s32>(dimensionPantallaX + 150,90),
+    core::rect<s32>(0,0,97 ,118), 0,
     video::SColor(255,255,255,255), true);
 
 
@@ -151,15 +161,17 @@ void DebugMenu::DrawMEF()
         video::SColor(255,255,255,255), true);				
 	}
 
+	//Enemigo en rango de ataque y vida suficiente
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/bucleNoRej.png"), core::position2d<s32>(dimensionPantallaX + 311,197),
+    core::rect<s32>(0,0,59 ,56), 0,
+    video::SColor(255,255,255,255), true);
+
 	//Vida insuficiente
 	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/inf.png"), core::position2d<s32>(dimensionPantallaX + 272.5,282),
     core::rect<s32>(0,0,22 ,100), 0,
     video::SColor(255,255,255,255), true);
 
-    //Fuera de rango
-	/*driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/izqSup3.png"), core::position2d<s32>(dimensionPantallaX + 150,230),
-    core::rect<s32>(0,0,76 ,250), 0,
-    video::SColor(255,255,255,255), true);*/
+
 
 
 	if(ia_state == FLEE)
@@ -177,8 +189,13 @@ void DebugMenu::DrawMEF()
         video::SColor(255,255,255,255), true);
 	}
 
-	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/izq.png"), core::position2d<s32>(dimensionPantallaX + 139,410.5),
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/izq.png"), core::position2d<s32>(dimensionPantallaX + 139,390),
     core::rect<s32>(0,0,100 ,22), 0,
+    video::SColor(255,255,255,255), true);
+
+    //Enemigo fuera de rango
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/bucleNoRej.png"), core::position2d<s32>(dimensionPantallaX + 311,384),
+    core::rect<s32>(0,0,59 ,56), 0,
     video::SColor(255,255,255,255), true);
 
 	if(ia_state == RECOVERY)
@@ -195,6 +212,21 @@ void DebugMenu::DrawMEF()
         core::rect<s32>(0,0,75 ,75), 0,
         video::SColor(255,255,255,255), true);
 	}
+
+	//No recuperado
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/bucleRej.png"), core::position2d<s32>(dimensionPantallaX + 10,384),
+    core::rect<s32>(0,0,59 ,56), 0,
+    video::SColor(255,255,255,255), true);
+
+	/*Ya recuperado*/
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/supLarge.png"), core::position2d<s32>(dimensionPantallaX + 85,90),
+    core::rect<s32>(0,0,22 ,282), 0,
+    video::SColor(255,255,255,255), true);
+
+    /*Enemigo en rango*/
+	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/der.png"), core::position2d<s32>(dimensionPantallaX + 139,420),
+    core::rect<s32>(0,0,100 ,22), 0,
+    video::SColor(255,255,255,255), true);
 
 }
 

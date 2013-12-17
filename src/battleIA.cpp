@@ -175,6 +175,11 @@ void battleIA::Pintar(IVideoDriver* driver)
 	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
 }
 
+void battleIA::PintarSeleccionada(IVideoDriver* driver)
+{
+	setTextura(driver->getTexture("../media/Texturas/units/unit_test_selected.png"));
+}
+
 int battleIA::getState()
 {
 	return state;
