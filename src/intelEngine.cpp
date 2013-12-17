@@ -22,7 +22,7 @@ intelEngine::~intelEngine()
 
 void intelEngine::updateBattleIA()
 {
-	for(int i=0; i<ia_units->size(); i++)
+	for(unsigned int i=0; i<ia_units->size(); i++)
 	{
 		((battleIA*)ia_units->at(i))->updateIA(user_units);
 	}

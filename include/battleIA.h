@@ -26,8 +26,10 @@ public:
 	battleIA();
 	battleIA(int,int);
 	~battleIA();
-	int updateIA(vector<IDibujable*>*);
-	void Pintar(IVideoDriver*);
+	void updateIA(vector<IDibujable*>*);
+	virtual void Pintar(IVideoDriver*,int,int);
+	void TexturaSeleccionada(IVideoDriver*,bool);
+	virtual void aplicarTextura(IVideoDriver* driver);
 	int getState();
 
 private:
@@ -38,7 +40,7 @@ private:
 	int approach(vector<IDibujable*>*);
 	int attack(vector<IDibujable*>*);
 	int flee(vector<IDibujable*>*);
-	int recovery();
+	int recovery(vector<IDibujable*>*);
 	position2di searchEnemy(vector<IDibujable*>*);
 
 };

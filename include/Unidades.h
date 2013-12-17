@@ -24,7 +24,9 @@ public:
 	void Attack(position2di);
 	bool enemy_in_attack_range(position2di);
 	int getLife();
-	virtual void Pintar(IVideoDriver* driver);
+	virtual void Pintar(IVideoDriver* driver,int,int);
+	virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
+	void aplicarTextura(IVideoDriver* driver);
 	void Recovery();
 	void updateUnit();
 	int getVisionRange();

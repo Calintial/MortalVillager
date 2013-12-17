@@ -34,9 +34,6 @@ void gameEngine::run()
 {
 	//Bucle principal del juego. Mientras el estado no cambia a FINISH el programa no termina.
 	//En cada estado se llamará a los motores necesarios(IA,Graficos,etc...)
-	char aux = 0;
-	
-	int i=0;
 	while(!stado.sfinal())
 	{
 		stado.doSomething(this, graphics,ia);

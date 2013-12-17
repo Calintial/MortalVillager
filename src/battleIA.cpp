@@ -20,7 +20,7 @@ battleIA::~battleIA()
 	//delete enemy_pos;
 }
 
-int battleIA::updateIA(vector<IDibujable*>* user)
+void battleIA::updateIA(vector<IDibujable*>* user)
 {
 	switch(state)
 	{
@@ -36,7 +36,7 @@ int battleIA::updateIA(vector<IDibujable*>* user)
 		case FLEE: 		state = this->flee(user);
 						break;
 
-		case RECOVERY:  state = this->recovery();
+		case RECOVERY:  state = this->recovery(user);
 						break;
 	}
 }
@@ -83,11 +83,7 @@ int battleIA::attack(vector<IDibujable*>* user)
 {
 	//cout<<"Attack"<<endl;
 	enemy_pos = this->searchEnemy(user);
-	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
-	{
-		return SEARCHING;
-	}
-	else
+	if(!(enemy_pos.X == -1 && enemy_pos.Y == -1))
 	{
 		if(this->enemy_in_attack_range(enemy_pos) && this->getLife() > 25)
 		{
@@ -103,6 +99,8 @@ int battleIA::attack(vector<IDibujable*>* user)
 			return FLEE;
 		}
 	}
+	return SEARCHING;
+
 }
 
 int battleIA::flee(vector<IDibujable*>* user)
@@ -120,17 +118,25 @@ int battleIA::flee(vector<IDibujable*>* user)
 	}
 }
 
-int battleIA::recovery()
+int battleIA::recovery(vector<IDibujable*>* user)
 {
 	//cout<<"Recovery"<<endl;
-	if(this->getLife() != 100)
+	enemy_pos = this->searchEnemy(user);
+	if(enemy_pos.X != -1 && enemy_pos.Y != -1)
 	{
-		this->Recovery();
-		return RECOVERY;
+		return FLEE;
 	}
 	else
 	{
-		return SEARCHING;
+		if(this->getLife() != 100)
+		{
+			this->Recovery();
+			return RECOVERY;
+		}
+		else
+		{
+			return SEARCHING;
+		}
 	}
 
 }
@@ -162,12 +168,26 @@ position2di battleIA::searchEnemy(vector<IDibujable*>* vUnits)
 	return pos;
 }
 
-void battleIA::Pintar(IVideoDriver* driver)
+void battleIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
-	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
+	ITexture *TTexture = getTextura();
+	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width), TPositionY - (TTexture->getSize().Height)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+}
+
+void battleIA::TexturaSeleccionada(IVideoDriver* driver,bool selected)
+{
+	if(selected)
+		setTextura(driver->getTexture("../media/Texturas/units/unit_test_selected.png"));
+	else
+		setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
 }
 
 int battleIA::getState()
 {
 	return state;
+}
+
+void battleIA::aplicarTextura(IVideoDriver* driver)
+{
+	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
 }
