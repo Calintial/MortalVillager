@@ -183,6 +183,15 @@ std::vector<Enlace*> pathfinding::getEnlaces(){
 	return enlaces;
 }
 
+std::vector<Enlace*> pathfinding::getEnlaces(Region* region){
+	std::vector<Enlace*> enlaces;
+	auto edges = boost::in_edges(region->descriptor,grafoRegiones);
+	for(auto i = edges.first; i != edges.second; ++i){
+		enlaces.push_back(&grafoRegiones[*i]);
+	}
+	return enlaces;
+}
+
 Region* pathfinding::getCorrespondingRegion(int x, int y){
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)

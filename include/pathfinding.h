@@ -30,7 +30,9 @@ public:
 	void findInnerPaths();
 	std::vector<Region*> getRegiones();
 	std::vector<Enlace*> getEnlaces();
+	std::vector<Enlace*> getEnlaces(Region*);
 	Region* getCorrespondingRegion(int x, int y);
+
 	Camino* calcularCamino(position2di,position2di);
 	void A(std::vector<Camino> caminos,position2di,position2di,Region *);
 	int menorF(std::vector<Nodo> listaFrontera);
