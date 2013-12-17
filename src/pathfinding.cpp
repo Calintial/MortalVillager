@@ -164,6 +164,16 @@ void pathfinding::findInnerPaths(){
 	}
 }
 
+std::vector<Region*> pathfinding::getRegiones(){
+	std::vector<Region*> regiones;
+	std::pair<vertex_iter, vertex_iter> vp;
+	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)
+	{
+		regiones.push_back(&grafoRegiones[*vp.first]);
+	}
+	return regiones;
+}
+
 Region* pathfinding::getCorrespondingRegion(int x, int y){
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)
