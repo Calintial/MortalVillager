@@ -96,8 +96,8 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
 							cout<<"ViewHeight:"<< ViewSize.Height << endl;
-							pos_grid.X = event.MouseInput.X/TILE_WIDTH + 1;
-							pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT + 1;
+							pos_grid.X = event.MouseInput.X/TILE_WIDTH ;
+							pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
@@ -168,8 +168,8 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 												cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 												cout<<"ViewWidth:"<< ViewSize.Width << endl;
 												cout<<"ViewHeight:"<< ViewSize.Height << endl;
-												pos_grid.X = event.MouseInput.X/TILE_WIDTH + 1;
-												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT + 1;
+												pos_grid.X = event.MouseInput.X/TILE_WIDTH;
+												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;
 												cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
 										   }
