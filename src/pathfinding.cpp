@@ -179,7 +179,7 @@ void pathfinding::findInnerPaths(){
 			//cout<<"Soy el enlaceI entre {"<<enlaceI->getOrigen().X<<","<<enlaceI->getOrigen().Y<<"} y {"<<enlaceI->getDestino().X<<","<<enlaceI->getDestino().Y<<"}"<<endl;
 		}
 		//cout<<"Siguiente vértice"<<endl;
-		break;
+		//break;
 	}
 	position2di posPersonaje;
 	posPersonaje.X=0;

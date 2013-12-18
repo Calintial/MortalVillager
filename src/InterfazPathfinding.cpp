@@ -95,7 +95,7 @@ void InterfazPathfinding::DrawEnlacesYCaminos(){
 						position2di pasoFinal = paso;
 						pasoFinal.X++;
 						pasoFinal.Y++;
-						driver->draw2DRectangle(video::SColor(128,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
+						driver->draw2DRectangle(video::SColor(50,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
 					}
 				}
 			}
