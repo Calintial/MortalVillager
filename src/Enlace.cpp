@@ -7,15 +7,24 @@ Enlace::Enlace(position2di _origen,position2di _destino)
 Enlace::Enlace(const Enlace& copia){
 	origen = copia.origen;
 	destino = copia.destino;
-	intracaminos = copia.intracaminos;
+	intracaminos_origen = copia.intracaminos_origen;
+	intracaminos_destino = copia.intracaminos_destino;
 }
 
 Enlace::~Enlace(){}
 
-std::vector<Camino> Enlace::getIntraCaminos(){
-	return intracaminos;
+std::vector<Camino> Enlace::getIntraCaminosOrigen(){
+	return intracaminos_origen;
 }
 
-void Enlace::setIntraCaminos(const std::vector<Camino>& caminos){
-	intracaminos = caminos;
+std::vector<Camino> Enlace::getIntraCaminosDestino(){
+	return intracaminos_destino;
+}
+
+void Enlace::setIntraCaminosOrigen(const std::vector<Camino>& caminos){
+	intracaminos_origen = caminos;
+}
+
+void Enlace::setIntraCaminosDestino(const std::vector<Camino>& caminos){
+	intracaminos_destino = caminos;
 }

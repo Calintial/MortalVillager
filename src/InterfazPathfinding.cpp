@@ -71,28 +71,31 @@ void InterfazPathfinding::DrawRegiones(){
 }
 
 void InterfazPathfinding::DrawEnlacesYCaminos(){
-	if (drawEnlaces)
+	if (drawEnlaces || drawCaminosInternos)
 	{
 		std::vector<Enlace*> enlaces = mapa->getPathfinding()->getEnlaces();
 		for (int i = 0; i < enlaces.size(); ++i)
 		{
-			position2di inicio = enlaces[i]->getDestino();
-			position2di final = enlaces[i]->getOrigen();
-			final.X ++;
-			final.Y ++;
 			
-			driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
+			if (drawEnlaces)
+			{
+				position2di inicio = enlaces[i]->getDestino();
+				position2di final = enlaces[i]->getOrigen();
+				final.X ++;
+				final.Y ++;
+				driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
+			}
+			
 			if(drawCaminosInternos){
-				std::vector<Camino> caminos = enlaces[i]->getIntraCaminos();
+				std::vector<Camino> caminos = enlaces[i]->getIntraCaminosDestino();
 				for (int j = 0; j < caminos.size(); ++j)
 				{
 					for (position2di paso: caminos[j].getCamino())
 					{
-						position2di drawInicio = mapa->getDrawPosition(paso);
-						position2di drawFinal = drawInicio;
-						drawFinal.X++;
-						drawFinal.Y++;
-						driver->draw2DRectangle(video::SColor(128,128,0,128),core::rect<s32>(drawInicio,drawFinal));
+						position2di pasoFinal = paso;
+						pasoFinal.X++;
+						pasoFinal.Y++;
+						driver->draw2DRectangle(video::SColor(128,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
 					}
 				}
 			}
