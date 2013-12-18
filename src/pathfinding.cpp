@@ -153,16 +153,20 @@ void pathfinding::findInnerPaths(){
 
 					A(caminos,puntoI,puntoJ,regionActual);
 					// calculo el camino entre puntoI y puntoJ
-					cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
+					//cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
 				}
 				//caminos.push_back(nuevo);
 				// para cada enlace, hacemos push_back a enlaceI.intracaminos con el camino entre enlaceI y enlaceJ
 			}
 			enlaceI.setIntraCaminos(caminos);
-			cout<<"Soy el enlaceI entre {"<<enlaceI.getOrigen().X<<","<<enlaceI.getOrigen().Y<<"} y {"<<enlaceI.getDestino().X<<","<<enlaceI.getDestino().Y<<"}"<<endl;
+			//cout<<"Soy el enlaceI entre {"<<enlaceI.getOrigen().X<<","<<enlaceI.getOrigen().Y<<"} y {"<<enlaceI.getDestino().X<<","<<enlaceI.getDestino().Y<<"}"<<endl;
 		}
-		cout<<"Siguiente vértice"<<endl;
+		//cout<<"Siguiente vértice"<<endl;
 	}
+	position2di posPersonaje;
+	posPersonaje.X=0;
+	posPersonaje.Y=0;
+	caminosPersonajeRegion(posPersonaje);
 }
 
 std::vector<Region*> pathfinding::getRegiones(){
@@ -258,6 +262,32 @@ void pathfinding::A(std::vector<Camino> &caminos,position2di origen,position2di 
 	}
 
 }
+void pathfinding::caminosPersonajeRegion(position2di personajePosicion){
+	std::pair<vertex_iter, vertex_iter> vp;
+	std::vector<Camino> caminos;
+	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)
+	{
+		Region* regionActual = &grafoRegiones[*vp.first];
+
+		auto edges = boost::in_edges(*vp.first,grafoRegiones);
+		for(auto i = edges.first; i != edges.second; ++i){
+			Enlace enlaceI = grafoRegiones[*i];
+			position2di puntoI;
+			if(regionActual->isInside(enlaceI.getOrigen().X,enlaceI.getOrigen().Y)){
+				puntoI = enlaceI.getOrigen();
+			}else{
+				puntoI = enlaceI.getDestino();
+			}
+			
+			A(caminos,personajePosicion,puntoI,regionActual);	
+
+		}
+		break;
+	}
+}
+
+
+
 int pathfinding::estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o){
 
 	for(int i=0;i<listaFrontera.size();i++){

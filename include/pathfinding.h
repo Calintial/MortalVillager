@@ -34,6 +34,8 @@ public:
 	int menorF(std::vector<Nodo> listaFrontera);
 	std::vector<Nodo> hijos(Nodo* n,Region * regionActual);
 	int estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o);
+	void caminosPersonajeRegion(position2di);
+
 private:
 	int width,height; 
 	const int tamRegion = 10;
