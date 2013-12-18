@@ -43,7 +43,7 @@ public:
 
 	void Draw();
 	void DrawRegiones();
-	void DrawEnlaces();
+	void DrawEnlacesYCaminos();
 	void init();
 	bool OnEvent(const SEvent& event);
 };
