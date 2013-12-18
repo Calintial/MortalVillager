@@ -30,6 +30,7 @@ public:
 	void findInnerPaths();
 	std::vector<Region*> getRegiones();
 	std::vector<Enlace*> getEnlaces();
+	position2di getEnlacePorPosition(position2di pos);
 	std::vector<Enlace*> getEnlaces(Region*);
 	Region* getCorrespondingRegion(int x, int y);
 
@@ -38,8 +39,9 @@ public:
 	int menorF(std::vector<Nodo> listaFrontera);
 	std::vector<Nodo> hijos(Nodo* n,Region * regionActual);
 	int estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o);
-	void caminosPersonajeRegion(position2di);
-
+	void caminosPersonajeRegion(position2di,position2di);
+	Camino ARegiones(position2di origen,position2di destino,Region* regionActual,Region* regionFinal,std::vector<Camino> inicioCaminos,std::vector<Camino> finalCaminos);
+	std::vector<Nodo> hijosRegion(Nodo* n,position2di origen,position2di destino,Region * regionInicio,Region * regionFinal,std::vector<Camino> inicioCaminos,std::vector<Camino> finalCaminos);
 private:
 	int width,height; 
 	const int tamRegion = 10;
