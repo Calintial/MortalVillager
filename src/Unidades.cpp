@@ -95,7 +95,21 @@ void Unidades::Recovery()
 	life++;
 }
 
-void Unidades::Pintar(IVideoDriver* driver)
+void Unidades::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
+{
+	ITexture *TTexture = getTextura();
+	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width), TPositionY - (TTexture->getSize().Height)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+}
+
+void Unidades::TexturaSeleccionada(IVideoDriver* driver,bool selected)
+{
+	if(selected)
+		setTextura(driver->getTexture("../media/Texturas/units/user_unit_selected.png"));
+	else
+		setTextura(driver->getTexture("../media/Texturas/units/user_unit_test.png"));
+}
+
+void Unidades::aplicarTextura(IVideoDriver* driver)
 {
 	setTextura(driver->getTexture("../media/Texturas/units/user_unit_test.png"));
 }

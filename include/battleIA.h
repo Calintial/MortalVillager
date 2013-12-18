@@ -27,8 +27,10 @@ public:
 	battleIA();
 	battleIA(int,int);
 	~battleIA();
-	int updateIA(vector<IDibujable*>*);
-	void Pintar(IVideoDriver*);
+	void updateIA(vector<IDibujable*>*);
+	virtual void Pintar(IVideoDriver*,int,int);
+	void TexturaSeleccionada(IVideoDriver*,bool);
+	virtual void aplicarTextura(IVideoDriver* driver);
 	int getState();
 	static CurrentIA stadoIA;
 	position2di enemy_pos;

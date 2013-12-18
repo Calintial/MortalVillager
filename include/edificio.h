@@ -12,7 +12,8 @@ public:
 	edificio(int t, IDibujable* partes);
 	~edificio();
 
-	void Pintar(IVideoDriver* driver);
+	void Pintar(IVideoDriver*,int,int);
+	void aplicarTextura(IVideoDriver* driver);
 	
 	//void doSomething();
 	
