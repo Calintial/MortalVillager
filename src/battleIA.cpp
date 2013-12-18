@@ -24,8 +24,8 @@ battleIA::~battleIA()
 
 void battleIA::updateIA(vector<IDibujable*>* user)
 {
-	stadoIA.doSomething(this, user);
-	/*switch(state)
+	//stadoIA.doSomething(this, user);
+	switch(state)
 	{
 		case SEARCHING: state = this->searching(user);
 						break;
@@ -41,7 +41,7 @@ void battleIA::updateIA(vector<IDibujable*>* user)
 
 		case RECOVERY:  state = this->recovery(user);
 						break;
-	}*/
+	}
 }
 
 int battleIA::searching(vector<IDibujable*>* user)
