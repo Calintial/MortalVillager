@@ -323,6 +323,12 @@ void mapa2D::Pintar()
 					DrawPosition = position2di(i*TILE_WIDTH,j*TILE_HEIGHT);
 					// Validar coordenada
 					//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
+						if(GridPosition.X == 0 && GridPosition.Y==1)
+						{
+							IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
+							cout << "0,1 --> " << Tile->getTipo() << endl;
+							
+						}
 						IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
 						//Pinta
 						if(Tile->getTextura())
