@@ -35,7 +35,7 @@ bool CurrentIA::inicial()
 	return current->inicial();
 }
 
-void CurrentIA::doSomething(battleIA bIA, vector<IDibujable*>* user)
+void CurrentIA::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
 	current->doSomething(bIA, user);
 }
@@ -47,9 +47,13 @@ BUSCANDO::BUSCANDO()
 	cout << "BUSCANDO-ctor " << endl;
 }
 
-void BUSCANDO::doSomething(battleIA bIA, vector<IDibujable*>* user)
+void BUSCANDO::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
-	
+	bIA->enemy_pos = bIA->searchEnemy(user);
+	if(!(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1))
+	{
+		//this->acercarse();
+	}
 }
 
 void BUSCANDO::acercarse(CurrentIA *c)
@@ -65,7 +69,7 @@ ACERCARSE::ACERCARSE()
 	cout << "ACERCARSE-ctor " << endl;
 }
 
-void ACERCARSE::doSomething(battleIA bIA, vector<IDibujable*>* user)
+void ACERCARSE::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
 	
 }
@@ -90,7 +94,7 @@ ATACAR::ATACAR()
 	cout << "ATACAR-ctor " << endl;
 }
 
-void ATACAR::doSomething(battleIA bIA, vector<IDibujable*>* user)
+void ATACAR::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
 	
 }
@@ -122,7 +126,7 @@ HUIR::HUIR()
 	cout << "HUIR-ctor " << endl;
 }
 
-void HUIR::doSomething(battleIA bIA, vector<IDibujable*>* user)
+void HUIR::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
 	
 }
@@ -141,7 +145,7 @@ RECUPERARSE::RECUPERARSE()
 	cout << "RECUPERARSE-ctor " << endl;
 }
 
-void RECUPERARSE::doSomething(battleIA bIA, vector<IDibujable*>* user)
+void RECUPERARSE::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
 	
 }

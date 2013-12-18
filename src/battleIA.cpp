@@ -1,5 +1,7 @@
 #include "battleIA.h"
 
+CurrentIA battleIA::stadoIA;
+
 battleIA::battleIA()
 {
 	state = 0;
@@ -22,7 +24,8 @@ battleIA::~battleIA()
 
 int battleIA::updateIA(vector<IDibujable*>* user)
 {
-	switch(state)
+	stadoIA.doSomething(this, user);
+	/*switch(state)
 	{
 		case SEARCHING: state = this->searching(user);
 						break;
@@ -38,7 +41,7 @@ int battleIA::updateIA(vector<IDibujable*>* user)
 
 		case RECOVERY:  state = this->recovery(user);
 						break;
-	}
+	}*/
 }
 
 int battleIA::searching(vector<IDibujable*>* user)

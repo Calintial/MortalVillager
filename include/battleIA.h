@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Unidades.h"
 #include "gameEngine.h"
+#include "stateIA.h"
 
 
 using namespace std;
@@ -17,7 +18,7 @@ enum{
 	RECOVERY = 4,
 };
 
-
+class CurrentIA;
 
 class battleIA : public Unidades
 {
@@ -29,18 +30,19 @@ public:
 	int updateIA(vector<IDibujable*>*);
 	void Pintar(IVideoDriver*);
 	int getState();
+	static CurrentIA stadoIA;
+	position2di enemy_pos;
+	position2di searchEnemy(vector<IDibujable*>*);
 
 private:
 	int state;
-	position2di enemy_pos;
+	
 
 	int searching(vector<IDibujable*>*);
 	int approach(vector<IDibujable*>*);
 	int attack(vector<IDibujable*>*);
 	int flee(vector<IDibujable*>*);
 	int recovery(vector<IDibujable*>*);
-	position2di searchEnemy(vector<IDibujable*>*);
-
 };
 
 
