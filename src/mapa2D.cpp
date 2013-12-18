@@ -331,7 +331,7 @@ void mapa2D::Pintar()
 						if(GridPosition.X == 0 && GridPosition.Y==1)
 						{
 							IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
-							cout << "0,1 --> " << Tile->getTipo() << endl;
+							//cout << "0,1 --> " << Tile->getTipo() << endl;
 							
 						}
 						IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];

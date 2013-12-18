@@ -46,23 +46,13 @@ void pathfinding::analyzeRegions(){
 			if (actual->inicio.Y == 0)
 			{
 				cout<<"Estoy en {"<<actual->inicio.X<<",0}"<<endl;
-				for (int i = 0; i < WIDTH; ++i)
-				{
-					for (int j = 0; j < HEIGHT; ++j)
-					{
-						if (!mapa->vTiles[i][j]->isTransitable())
-						{
-							cout<<"He encontrado un no transitable en "<<i<<","<<j<<endl;
-						}
-					}
-				}
 			}
 			Region* regionIzquierda = getCorrespondingRegion(actual->inicio.X-1,actual->inicio.Y);
 			int iterador = actual->inicio.Y;
 
 			int tamHueco = 0;
 			int posHueco = -1;
-			while(iterador < actual->final.Y && iterador < height)
+			while(iterador <= actual->final.Y && iterador < height)
 			{
 				if (mapa->getTile(iterador,actual->inicio.X)->isTransitable() && mapa->getTile(iterador,regionIzquierda->final.X)->isTransitable())
 				{
@@ -105,7 +95,7 @@ void pathfinding::analyzeRegions(){
 
 			int tamHueco = 0;
 			int posHueco = -1;
-			while(iterador < actual->final.X && iterador < width)
+			while(iterador <= actual->final.X && iterador < width)
 			{
 				if (mapa->getTile(actual->inicio.Y,iterador)->isTransitable() && mapa->getTile(regionArriba->final.Y,iterador)->isTransitable())
 				{
