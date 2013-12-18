@@ -18,9 +18,10 @@ public:
 	/*ITexture* getTextura() const {
 		return textura;
 	}*/
-	void Pintar(IVideoDriver* driver) override;
+	void Pintar(IVideoDriver*,int,int) override;
 	//void setTextura(ITexture* tex){textura=tex;}
 	bool isTransitable() override;
+	void aplicarTextura(IVideoDriver* driver);
 };
 
 #endif

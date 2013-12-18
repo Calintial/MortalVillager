@@ -10,7 +10,6 @@ hud::hud(IrrlichtDevice * IrrDevice,mapa2D * _m){
 		//Get the Video Driver from the MenuDevice.
 	driver = IrrDevice->getVideoDriver();
 
-	video::IVideoDriver* driver = IrrDevice->getVideoDriver();
 	font = env->getFont("../media/fonthaettenschweiler.bmp");
 	skin = env->getSkin();
 	if (font)
@@ -70,12 +69,12 @@ void hud::pintarMiniMapa(){
 	}
 	vector<IDibujable*>* idub= _mapa2D->getIa_units();
 
-	for(int i=0;i<idub->size();i++){
+	for(unsigned int i=0;i<idub->size();i++){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
 			if(xhud==personaje->getPosition().X && yhud==personaje->getPosition().Y){
-				driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
+				driver->draw2DRectangle(video::SColor(255,255,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 			}
 			else{
 				driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
@@ -88,7 +87,7 @@ void hud::pintarMiniMapa(){
 		
 	}
 	idub=_mapa2D->getUser_units();
-	for(int i=0;i<idub->size();i++){
+	for(unsigned int i=0;i<idub->size();i++){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){

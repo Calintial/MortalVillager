@@ -62,7 +62,7 @@ class MAINS: public State
 {
 	public:
 		MAINS();
-		~MAINS()
+		virtual ~MAINS()
 		{
 			cout << "dtor-MAINS" << endl;
 		};
@@ -77,7 +77,7 @@ class INGAME: public State
 {
 	public:
 		INGAME();
-		~INGAME()
+		virtual ~INGAME()
 		{
 			cout << "dtor-INGAME" << endl;
 		};
@@ -92,7 +92,7 @@ class PAUSE: public State
 {
 	public:
 		PAUSE();
-		~PAUSE()
+		virtual ~PAUSE()
 		{
 			cout << "dtor-PAUSE" << endl;
 		};
@@ -110,7 +110,7 @@ class FINISH: public State
 		{
 			cout << "FINISH-ctor " << endl;
 		};
-		~FINISH()
+		virtual ~FINISH()
 		{
 			cout << "dtor-FINISH" << endl;
 		};

@@ -12,7 +12,8 @@ class IDibujable{
 	public:
 		virtual ~IDibujable() =0;
 		ITexture* getTextura() const;
-		virtual void Pintar(IVideoDriver* ) = 0;
+		virtual void Pintar(IVideoDriver*,int,int) = 0;
+		virtual void aplicarTextura(IVideoDriver* driver) = 0;
 		position2di getPosition();
 		void setPosition(int x, int y);
 		void setPosition(position2di p);
