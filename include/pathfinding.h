@@ -30,6 +30,8 @@ public:
 	void findInnerPaths();
 	std::vector<Region*> getRegiones();
 	std::vector<Enlace*> getEnlaces();
+	std::vector<position2di> getCaminodoEnlace(position2di inicio, position2di fin);
+	Enlace* getEnlacePorPositionEnlace(position2di);
 	position2di getEnlacePorPosition(position2di pos);
 	std::vector<Enlace*> getEnlaces(Region*);
 	Region* getCorrespondingRegion(int x, int y);

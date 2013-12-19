@@ -18,10 +18,10 @@ public:
 	void addNodo(position2di nodo);
 	int getPeso();
 	std::vector<position2di> getCamino();
-	
+	std::vector<position2di> posiciones;
 
 private:
-	std::vector<position2di> posiciones;
+	
 	
 	int peso;
 };
