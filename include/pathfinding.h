@@ -41,7 +41,7 @@ public:
 	int menorF(std::vector<Nodo> listaFrontera);
 	std::vector<Nodo> hijos(Nodo* n,Region * regionActual);
 	int estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o);
-	Camino caminosPersonajeRegion(position2di,position2di);
+	Camino caminosPersonajeRegion(const position2di&,const position2di&);
 	Camino ARegiones(position2di origen,position2di destino,Region* regionActual,Region* regionFinal,std::vector<Camino> inicioCaminos,std::vector<Camino> finalCaminos);
 	std::vector<Nodo> hijosRegion(Nodo* n,position2di origen,position2di destino,Region * regionInicio,Region * regionFinal,std::vector<Camino> inicioCaminos,std::vector<Camino> finalCaminos);
 private:
