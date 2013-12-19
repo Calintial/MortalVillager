@@ -8,6 +8,7 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D* map)
     init();
 
     mapa = map;
+    caminoFinal = NULL;
 	
 	drawRegiones = false;
 	drawEnlaces = false;
@@ -41,7 +42,8 @@ void InterfazPathfinding::Draw()
             //core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
 			DrawRegiones();
-			DrawEnlaces();
+			DrawEnlacesYCaminos();
+			DrawCaminoFinal();
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,driver->getScreenSize().Width,driver->getScreenSize().Height));
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,driver->getScreenSize().Width,driver->getScreenSize().Height));
 
@@ -70,23 +72,50 @@ void InterfazPathfinding::DrawRegiones(){
 	
 }
 
-void InterfazPathfinding::DrawEnlaces(){
-	if (drawEnlaces)
+void InterfazPathfinding::DrawEnlacesYCaminos(){
+	if (drawEnlaces || drawCaminosInternos)
 	{
 		std::vector<Enlace*> enlaces = mapa->getPathfinding()->getEnlaces();
 		for (int i = 0; i < enlaces.size(); ++i)
 		{
-			position2di inicio = enlaces[i]->getDestino();
-			position2di final = enlaces[i]->getOrigen();
-			final.X ++;
-			final.Y ++;
 			
-			driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
+			if (drawEnlaces)
+			{
+				position2di inicio = enlaces[i]->getDestino();
+				position2di final = enlaces[i]->getOrigen();
+				final.X ++;
+				final.Y ++;
+				driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
+			}
+			
+			if(drawCaminosInternos){
+				std::vector<Camino> caminos = enlaces[i]->getIntraCaminosDestino();
+				for (int j = 0; j < caminos.size(); ++j)
+				{
+					for (position2di paso: caminos[j].getCamino())
+					{
+						position2di pasoFinal = paso;
+						pasoFinal.X++;
+						pasoFinal.Y++;
+						driver->draw2DRectangle(video::SColor(50,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
+					}
+				}
+			}
 		}
-	}
-	
+	}	
 }
 
+void InterfazPathfinding::DrawCaminoFinal(){
+	if (drawCaminoFinal && caminoFinal != NULL)
+	{
+		for(position2di paso: caminoFinal->getCamino()){
+			position2di pasoFinal = paso;
+			pasoFinal.X++;
+			pasoFinal.Y++;
+			driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
+		}
+	}
+}
 
 bool InterfazPathfinding::OnEvent(const SEvent& event)
 {
@@ -100,6 +129,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 			case BUTTON_NEXT:{ 
 				cout<<"Soy un boton!"<<endl;
 				mapa->getPathfinding()->run();
+				caminoFinal = mapa->getPathfinding()->calcularCamino(position2di(5,5),position2di(15,15));
 				}
 				break;
 		}					

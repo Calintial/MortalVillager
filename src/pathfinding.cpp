@@ -46,24 +46,15 @@ void pathfinding::analyzeRegions(){
 		{
 			if (actual->inicio.Y == 0)
 			{
-				//cout<<"Estoy en {"<<actual->inicio.X<<",0}"<<endl;
-				for (int i = 0; i < WIDTH; ++i)
-				{
-					for (int j = 0; j < HEIGHT; ++j)
-					{
-						if (!mapa->getTile(i,j)/*vTiles[i][j]*/->isTransitable())
-						{
-							//cout<<"He encontrado un no transitable en "<<i<<","<<j<<endl;
-						}
-					}
-				}
+
+				cout<<"Estoy en {"<<actual->inicio.X<<",0}"<<endl;
 			}
 			Region* regionIzquierda = getCorrespondingRegion(actual->inicio.X-1,actual->inicio.Y);
 			int iterador = actual->inicio.Y;
 
 			int tamHueco = 0;
 			int posHueco = -1;
-			while(iterador < actual->final.Y && iterador < height)
+			while(iterador <= actual->final.Y && iterador < height)
 			{
 				if (mapa->getTile(iterador,actual->inicio.X)->isTransitable() && mapa->getTile(iterador,regionIzquierda->final.X)->isTransitable())
 				{
@@ -106,7 +97,7 @@ void pathfinding::analyzeRegions(){
 
 			int tamHueco = 0;
 			int posHueco = -1;
-			while(iterador < actual->final.X && iterador < width)
+			while(iterador <= actual->final.X && iterador < width)
 			{
 				if (mapa->getTile(actual->inicio.Y,iterador)->isTransitable() && mapa->getTile(regionArriba->final.Y,iterador)->isTransitable())
 				{
@@ -148,12 +139,15 @@ void pathfinding::findInnerPaths(){
 
 		auto edges = boost::in_edges(*vp.first,grafoRegiones);
 		for(auto i = edges.first; i != edges.second; ++i){
-			Enlace enlaceI = grafoRegiones[*i];
+			Enlace* enlaceI = &grafoRegiones[*i];
 			position2di puntoI;
-			if(regionActual->isInside(enlaceI.getOrigen().X,enlaceI.getOrigen().Y)){
-				puntoI = enlaceI.getOrigen();
+			bool origen;
+			if(regionActual->isInside(enlaceI->getOrigen().X,enlaceI->getOrigen().Y)){
+				puntoI = enlaceI->getOrigen();
+				origen = true;
 			}else{
-				puntoI = enlaceI.getDestino();
+				puntoI = enlaceI->getDestino();
+				origen = false;
 			}
 			std::vector<Camino> caminos;
 			for(auto j = edges.first; j != edges.second; ++j){
@@ -174,12 +168,19 @@ void pathfinding::findInnerPaths(){
 					////cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
 				}
 				//caminos.push_back(nuevo);
-				// para cada enlace, hacemos push_back a enlaceI.intracaminos con el camino entre enlaceI y enlaceJ
+				// para cada enlace, hacemos push_back a enlaceI->intracaminos con el camino entre enlaceI y enlaceJ
 			}
-			enlaceI.setIntraCaminos(caminos);
-			////cout<<"Soy el enlaceI entre {"<<enlaceI.getOrigen().X<<","<<enlaceI.getOrigen().Y<<"} y {"<<enlaceI.getDestino().X<<","<<enlaceI.getDestino().Y<<"}"<<endl;
+			if (origen)
+			{
+				enlaceI->setIntraCaminosOrigen(caminos);
+			}else{
+				enlaceI->setIntraCaminosDestino(caminos);
+			}
+			
+			//cout<<"Soy el enlaceI entre {"<<enlaceI->getOrigen().X<<","<<enlaceI->getOrigen().Y<<"} y {"<<enlaceI->getDestino().X<<","<<enlaceI->getDestino().Y<<"}"<<endl;
 		}
-		////cout<<"Siguiente vértice"<<endl;
+		//cout<<"Siguiente vértice"<<endl;
+		//break;
 	}
 	position2di posPersonaje;
 	posPersonaje.X=0;
@@ -187,7 +188,7 @@ void pathfinding::findInnerPaths(){
 	position2di posPersonajeFinal;
 	posPersonajeFinal.X=10;
 	posPersonajeFinal.Y=10;
-	caminosPersonajeRegion(posPersonaje,posPersonajeFinal);
+	//caminosPersonajeRegion(posPersonaje,posPersonajeFinal);
 }
 
 std::vector<Region*> pathfinding::getRegiones(){

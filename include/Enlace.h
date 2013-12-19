@@ -18,14 +18,17 @@ public:
 	position2di getOrigen() const {return origen;}
 	position2di getDestino() const {return destino;}
 
-	std::vector<Camino> getIntraCaminos();
-	void setIntraCaminos(const std::vector<Camino>& caminos);
+	std::vector<Camino> getIntraCaminosOrigen();
+	std::vector<Camino> getIntraCaminosDestino();
+	void setIntraCaminosOrigen(const std::vector<Camino>& caminos);
+	void setIntraCaminosDestino(const std::vector<Camino>& caminos);
 
 private:
 	position2di origen;
 	position2di destino;
 
-	std::vector<Camino> intracaminos;
+	std::vector<Camino> intracaminos_origen;
+	std::vector<Camino> intracaminos_destino;
 
 };
 #endif

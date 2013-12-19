@@ -98,8 +98,8 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 							cout<<"ViewWidth:"<< ViewSize.Width << endl;
 							cout<<"ViewHeight:"<< ViewSize.Height << endl;
-							pos_grid.X = event.MouseInput.X/TILE_WIDTH + 1;
-							pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT + 1;
+							pos_grid.X = event.MouseInput.X/TILE_WIDTH ;
+							pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;
 							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
@@ -170,8 +170,8 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 												cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
 												cout<<"ViewWidth:"<< ViewSize.Width << endl;
 												cout<<"ViewHeight:"<< ViewSize.Height << endl;
-												pos_grid.X = event.MouseInput.X/TILE_WIDTH + 1;
-												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT + 1;
+												pos_grid.X = event.MouseInput.X/TILE_WIDTH;
+												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;
 												cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
 										   }
@@ -328,6 +328,12 @@ void mapa2D::Pintar()
 					DrawPosition = position2di(i*TILE_WIDTH,j*TILE_HEIGHT);
 					// Validar coordenada
 					//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
+						if(GridPosition.X == 0 && GridPosition.Y==1)
+						{
+							IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
+							//cout << "0,1 --> " << Tile->getTipo() << endl;
+							
+						}
 						IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
 						//Pinta
 						if(Tile->getTextura())
