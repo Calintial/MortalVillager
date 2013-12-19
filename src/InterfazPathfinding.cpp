@@ -129,7 +129,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 			case BUTTON_NEXT:{ 
 				cout<<"Soy un boton!"<<endl;
 				mapa->getPathfinding()->run();
-				caminoFinal = mapa->getPathfinding()->calcularCamino(position2di(5,5),position2di(15,15));
+				caminoFinal = mapa->getPathfinding()->calcularCamino(position2di(5,5),position2di(6,6));
 				}
 				break;
 		}					
