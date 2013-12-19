@@ -46,14 +46,14 @@ void pathfinding::analyzeRegions(){
 		{
 			if (actual->inicio.Y == 0)
 			{
-				cout<<"Estoy en {"<<actual->inicio.X<<",0}"<<endl;
+				//cout<<"Estoy en {"<<actual->inicio.X<<",0}"<<endl;
 				for (int i = 0; i < WIDTH; ++i)
 				{
 					for (int j = 0; j < HEIGHT; ++j)
 					{
 						if (!mapa->getTile(i,j)/*vTiles[i][j]*/->isTransitable())
 						{
-							cout<<"He encontrado un no transitable en "<<i<<","<<j<<endl;
+							//cout<<"He encontrado un no transitable en "<<i<<","<<j<<endl;
 						}
 					}
 				}
@@ -78,7 +78,7 @@ void pathfinding::analyzeRegions(){
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
 						Enlace enlace(position2di(actual->inicio.X,posHueco),position2di(regionIzquierda->final.X,posHueco));
 						boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
-						cout<<"Nuevo enlace izquierda"<<endl;
+						//cout<<"Nuevo enlace izquierda"<<endl;
 						tamHueco = 0;
 						posHueco = -1;
 					}
@@ -90,11 +90,11 @@ void pathfinding::analyzeRegions(){
 			{
 				Enlace enlace(position2di(actual->inicio.X,posHueco),position2di(regionIzquierda->final.X,posHueco));
 				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
-				cout<<"Nuevo enlace izquierda"<<endl;
+				//cout<<"Nuevo enlace izquierda"<<endl;
 			}
 			if (actual->inicio.Y == 0)
 			{
-				cout<<"Salgo de {"<<actual->inicio.X<<",0}"<<endl;
+				//cout<<"Salgo de {"<<actual->inicio.X<<",0}"<<endl;
 			}
 		}
 
@@ -121,7 +121,7 @@ void pathfinding::analyzeRegions(){
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
 						Enlace enlace(position2di(posHueco,actual->inicio.Y),position2di(posHueco,regionArriba->final.Y));
 						boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
-						cout<<"Nuevo enlace arriba"<<endl;
+						//cout<<"Nuevo enlace arriba"<<endl;
 						tamHueco = 0;
 						posHueco = -1;
 					}
@@ -133,7 +133,7 @@ void pathfinding::analyzeRegions(){
 			{
 				Enlace enlace(position2di(posHueco,actual->inicio.Y),position2di(posHueco,regionArriba->final.Y));
 				boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
-				cout<<"Nuevo enlace arriba"<<endl;
+				//cout<<"Nuevo enlace arriba"<<endl;
 			}
 		}
 
@@ -171,15 +171,15 @@ void pathfinding::findInnerPaths(){
 
 					A(caminos,puntoI,puntoJ,regionActual);
 					// calculo el camino entre puntoI y puntoJ
-					//cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
+					////cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
 				}
 				//caminos.push_back(nuevo);
 				// para cada enlace, hacemos push_back a enlaceI.intracaminos con el camino entre enlaceI y enlaceJ
 			}
 			enlaceI.setIntraCaminos(caminos);
-			//cout<<"Soy el enlaceI entre {"<<enlaceI.getOrigen().X<<","<<enlaceI.getOrigen().Y<<"} y {"<<enlaceI.getDestino().X<<","<<enlaceI.getDestino().Y<<"}"<<endl;
+			////cout<<"Soy el enlaceI entre {"<<enlaceI.getOrigen().X<<","<<enlaceI.getOrigen().Y<<"} y {"<<enlaceI.getDestino().X<<","<<enlaceI.getDestino().Y<<"}"<<endl;
 		}
-		//cout<<"Siguiente vértice"<<endl;
+		////cout<<"Siguiente vértice"<<endl;
 	}
 	position2di posPersonaje;
 	posPersonaje.X=0;
@@ -257,11 +257,11 @@ void pathfinding::A(std::vector<Camino> &caminos,position2di origen,position2di 
 		listaFrontera.erase(listaFrontera.begin()+mejor);		
 		listaInterior.push_back(*nuevo);
 		if(nuevo->origen==destino){
-			cout<<nuevo->origen.X<<" "<<nuevo->origen.Y<<endl;
+		//	//cout<<nuevo->origen.X<<" "<<nuevo->origen.Y<<endl;
 			Nodo * nuevopuntero=nuevo;
 			Camino camino=Camino();
 			camino.addNodo(position2di(nuevo->g,-1));
-			while(nuevopuntero->p!=NULL){
+			while(nuevopuntero!=NULL){
 				camino.addNodo(nuevopuntero->origen);
 				nuevopuntero=nuevopuntero->p;
 			}
@@ -295,6 +295,11 @@ void pathfinding::A(std::vector<Camino> &caminos,position2di origen,position2di 
 
 }
 Camino pathfinding::ARegiones( position2di origen,position2di destino,Region* regionInicio,Region* regionFinal,std::vector<Camino> inicioCaminos,std::vector<Camino> finalCaminos){
+	for(Camino caminosss:finalCaminos){
+		//cout<<caminosss.getCamino()[1].X <<" "<<caminosss.getCamino()[1].Y<<endl;
+
+	}
+
 	std::vector<Nodo> listaInterior;
 	std::vector<Nodo> listaFrontera;
 	std::priority_queue<Nodo> queueFrontera;
@@ -312,10 +317,11 @@ Camino pathfinding::ARegiones( position2di origen,position2di destino,Region* re
 		listaFrontera.erase(listaFrontera.begin()+mejor);		
 		listaInterior.push_back(*nuevo);
 		if(regionFinal->isInside(nuevo->origen.X,nuevo->origen.Y)){
+			Camino c;
 			for(Camino camino: finalCaminos){
 				cout<<camino.getCamino()[1].X <<" "<<camino.getCamino()[1].Y<<"y origen"<<nuevo->origen.X<<" "<<nuevo->origen.Y<<endl;
 				if(camino.getCamino()[1]==nuevo->origen){					
-					Camino c;
+					
 						for(int i=camino.getCamino().size()-1; i>=1;i--){
 							c.addNodo(camino.getCamino()[i]);
 
@@ -326,6 +332,7 @@ Camino pathfinding::ARegiones( position2di origen,position2di destino,Region* re
 						}
 					
 				}
+				return c;
 			}
 
 		}
@@ -369,7 +376,7 @@ void pathfinding::caminosPersonajeRegion(position2di personajePosicion,position2
 			A(caminos,personajePosicion,puntoI,regionInicio);	
 
 	}
-	cout<<"final"<<endl;
+	//cout<<"final"<<endl;
 		Region* regionFinal = getCorrespondingRegion(finalPosicion.X,finalPosicion.Y);
 		enlacesVector.clear();
 		enlacesVector=getEnlaces(regionFinal);
@@ -385,6 +392,11 @@ void pathfinding::caminosPersonajeRegion(position2di personajePosicion,position2
 			A(caminosFinal,finalPosicion,puntoI,regionFinal);	
 
 	}
+		for(Camino caminosss:caminosFinal){
+		//cout<<caminosss.getCamino()[1].X <<" "<<caminosss.getCamino()[1].Y<<endl;
+
+	}
+	//cout<<"-------------------------------------------------------------------------------"<<endl;
 	Camino c= ARegiones(personajePosicion,finalPosicion,regionInicio,regionFinal,caminos,caminosFinal);
 }
 
