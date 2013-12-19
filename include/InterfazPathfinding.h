@@ -23,7 +23,13 @@ enum{
 	CB_ENLACES = 1,
 	CB_CAMINOS_INTERNOS = 2,
 	CB_CAMINO_FINAL = 3,
-	BUTTON_NEXT = 4
+	BUTTON_NEXT = 4,
+	BUTTON_CLEAR = 5
+};
+
+enum Estado{
+	ESTADO_PINTAR,
+	ESTADO_CAMINO
 };
 
 class InterfazPathfinding
@@ -38,6 +44,7 @@ private:
 	Camino* caminoFinal;
 
 	bool drawRegiones, drawEnlaces, drawCaminosInternos, drawCaminoFinal;
+	Estado estado;
 public:
 	InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D*);
 	~InterfazPathfinding();
@@ -48,6 +55,7 @@ public:
 	void DrawCaminoFinal();
 	void init();
 	bool OnEvent(const SEvent& event);
+	position2di origen,destino;
 };
 
 #endif

@@ -18,7 +18,6 @@ private:
 	IrrlichtDevice * pantallaDevice;
 	mapa2D * mapa;
 	InterfazPathfinding * interfazPathfinding;
-	ITexture* vision_texture;
 
 
 };

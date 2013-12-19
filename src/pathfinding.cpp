@@ -254,6 +254,7 @@ void pathfinding::A(std::vector<Camino> &caminos,position2di origen,position2di 
 	listaFrontera.push_back(*nuevo);
 	queueFrontera.push(*nuevo);
 	while(listaFrontera.size()>0){
+		cout<<listaFrontera.size()<<endl;
 		mejor=menorF(listaFrontera);
 		nuevo=new Nodo(listaFrontera.at(mejor));
 		listaFrontera.erase(listaFrontera.begin()+mejor);		
@@ -418,7 +419,7 @@ std::vector<position2di> pathfinding::getCaminodoEnlace(position2di inicio, posi
 			}
 		}
 	}
-	cerr<<"######## ERROR!! #########"<<endl;
+	cerr<<"######## ERROR!! Me has pedido el camino entre "<<inicio.X<<","<<inicio.Y<<" y "<<fin.X<<","<<fin.Y<<" #########"<<endl;
 	return nuevo_v;
 }
 Enlace* pathfinding::getEnlacePorPositionEnlace(position2di pos){
@@ -627,3 +628,6 @@ int main(){
 	return 0;
 }
 */
+void pathfinding::clear(){
+	grafoRegiones.clear();
+}

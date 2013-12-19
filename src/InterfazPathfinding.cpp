@@ -14,6 +14,8 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D* map)
 	drawEnlaces = false;
 	drawCaminosInternos = false;
 	drawCaminoFinal = false;
+	estado = ESTADO_PINTAR;
+	origen = destino = position2di(-1,-1);
 }
 
 InterfazPathfinding::~InterfazPathfinding(){}
@@ -29,7 +31,8 @@ void InterfazPathfinding::init(){
 							   L"Ver camino final");
 	env->addButton(rect<s32>(dimensionPantallaX + 10,dimensionPantallaY+35,dimensionPantallaX + 210,dimensionPantallaY+60), 0, BUTTON_NEXT,
         L"Procesar", L"Iniciar análisis del mapa, generación de regiones y cálculo de caminos internos");
-
+	env->addButton(rect<s32>(dimensionPantallaX + 220,dimensionPantallaY+35,dimensionPantallaX + 430,dimensionPantallaY+60), 0, BUTTON_CLEAR,
+        L"Vaciar", L"");
 }
 
 void InterfazPathfinding::Draw()
@@ -97,7 +100,7 @@ void InterfazPathfinding::DrawEnlacesYCaminos(){
 						position2di pasoFinal = paso;
 						pasoFinal.X++;
 						pasoFinal.Y++;
-						driver->draw2DRectangle(video::SColor(64,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
+						driver->draw2DRectangle(video::SColor(128,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
 					}
 				}
 			}
@@ -119,19 +122,77 @@ void InterfazPathfinding::DrawCaminoFinal(){
 
 bool InterfazPathfinding::OnEvent(const SEvent& event)
 {
-	
-	if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
+	if (event.EventType == EET_MOUSE_INPUT_EVENT)
+	{
+		if (event.MouseInput.X < dimensionPantallaX || event.MouseInput.Y < dimensionPantallaY)
+		{
+			switch(event.MouseInput.Event)
+			{
+				case EMIE_LMOUSE_PRESSED_DOWN:
+					{
+						// Esto está copiapegado de mapa2D, cuidado por si cambia
+						position2di pos_grid;
+						pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
+						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;
+						cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+						if (estado == ESTADO_PINTAR)
+						{
+							Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
+							muro->aplicarTextura(device->getVideoDriver());
+							mapa->setTile(pos_grid.X,pos_grid.Y,muro);
+						}else{
+							origen = pos_grid;
+						}
+						
+					}
+					break;
+				case EMIE_RMOUSE_PRESSED_DOWN:
+					{
+						// Esto está copiapegado de mapa2D, cuidado por si cambia
+						position2di pos_grid;
+						pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
+						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;
+						cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+						if (estado == ESTADO_PINTAR)
+						{
+							Suelo* suelo = new Suelo(0,pos_grid.X,pos_grid.Y);
+							suelo->aplicarTextura(device->getVideoDriver());
+							mapa->setTile(pos_grid.X,pos_grid.Y,suelo);
+						}else{
+							destino = pos_grid;
+						}
+						
+					}
+					break;
+			}
+		}
+	}else if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
 		switch(id)
 		{
 
 			case BUTTON_NEXT:{ 
-				cout<<"Soy un boton!"<<endl;
-				mapa->getPathfinding()->run();
-				caminoFinal = mapa->getPathfinding()->calcularCamino(position2di(5,5),position2di(15,15));
+					cout<<"Soy un boton!"<<endl;
+					if (estado == ESTADO_PINTAR){
+						mapa->getPathfinding()->run();
+						estado = ESTADO_CAMINO;
+					}else{
+						if (origen.X != -1 && origen.Y != -1 && destino.X != -1 && destino.Y != -1)
+						{
+							caminoFinal = mapa->getPathfinding()->calcularCamino(origen,destino);
+						}else{
+							cerr<<"Debes poner origen y destino"<<endl;
+						}
+					}
 				}
 				break;
+			case BUTTON_CLEAR:{
+				estado = ESTADO_PINTAR;
+				origen = destino = position2di(-1,-1);
+				caminoFinal = NULL;
+				mapa->getPathfinding()->clear();
+			}
 		}					
 	}
 	else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
@@ -150,34 +211,5 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 		}
 		
 	}
-
-	/*
-	else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-
-		switch(id)
-		{
-			case SCROLL_SPEED: s32 pos = ((IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
-                 			   gameEngine::setSpeed(pos);
-							   break;
-		}
-	}
-
-	else if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-
-		IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
-		IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
-
-		switch(id)
-		{
-			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
-								break;
-			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->Pintar(driver);
-								  break;
-		}
-	}*/
 	return false;
 }
