@@ -257,6 +257,7 @@ void pathfinding::A(std::vector<Camino> &caminos,position2di origen,position2di 
 		listaFrontera.erase(listaFrontera.begin()+mejor);		
 		listaInterior.push_back(*nuevo);
 		if(nuevo->origen==destino){
+			cout<<nuevo->origen.X<<" "<<nuevo->origen.Y<<endl;
 			Nodo * nuevopuntero=nuevo;
 			Camino camino=Camino();
 			camino.addNodo(position2di(nuevo->g,-1));
@@ -312,6 +313,7 @@ Camino pathfinding::ARegiones( position2di origen,position2di destino,Region* re
 		listaInterior.push_back(*nuevo);
 		if(regionFinal->isInside(nuevo->origen.X,nuevo->origen.Y)){
 			for(Camino camino: finalCaminos){
+				cout<<camino.getCamino()[1].X <<" "<<camino.getCamino()[1].Y<<"y origen"<<nuevo->origen.X<<" "<<nuevo->origen.Y<<endl;
 				if(camino.getCamino()[1]==nuevo->origen){					
 					Camino c;
 						for(int i=camino.getCamino().size()-1; i>=1;i--){
@@ -367,6 +369,7 @@ void pathfinding::caminosPersonajeRegion(position2di personajePosicion,position2
 			A(caminos,personajePosicion,puntoI,regionInicio);	
 
 	}
+	cout<<"final"<<endl;
 		Region* regionFinal = getCorrespondingRegion(finalPosicion.X,finalPosicion.Y);
 		enlacesVector.clear();
 		enlacesVector=getEnlaces(regionFinal);
@@ -430,6 +433,7 @@ std::vector<Nodo> pathfinding::hijosRegion(Nodo* n,position2di origen,position2d
 	/*else if(regionActual==regionFinal){
 		for(Camino c: finalCaminos){
 			
+
 			nueva_pos.X=c.getCamino().at(1).X;
 			nueva_pos.Y=c.getCamino().at(1).Y;
 			nuevo.origen=nueva_pos;
@@ -447,7 +451,7 @@ std::vector<Nodo> pathfinding::hijosRegion(Nodo* n,position2di origen,position2d
 				nueva_pos.X=enlace->getOrigen().X;
 				nueva_pos.Y=enlace->getOrigen().Y;
 				nuevo.origen=nueva_pos;
-				nuevo.g=abs((enlace->getOrigen().X-n->origen.X)+abs(enlace->getOrigen().Y-n->origen.Y));
+				nuevo.g=abs((enlace->getOrigen().X-n->origen.X)+abs(enlace->getOrigen().Y-n->origen.Y))+n->g;
 				nuevo.h=abs((destino.X-nuevo.origen.X)+abs(destino.Y-nuevo.origen.Y));
 				nuevo.f=nuevo.g+nuevo.h;
 				nuevoshijos.push_back(nuevo);
@@ -456,7 +460,7 @@ std::vector<Nodo> pathfinding::hijosRegion(Nodo* n,position2di origen,position2d
 				nueva_pos.X=enlace->getDestino().X;
 				nueva_pos.Y=enlace->getDestino().Y;
 				nuevo.origen=nueva_pos;destino;
-				nuevo.g=abs((enlace->getDestino().X-n->origen.X)+abs(enlace->getDestino().Y-n->origen.Y));
+				nuevo.g=abs((enlace->getDestino().X-n->origen.X)+abs(enlace->getDestino().Y-n->origen.Y))+n->g;
 				nuevo.h=abs((destino.X-nuevo.origen.X)+abs(destino.Y-nuevo.origen.Y));
 				nuevo.f=nuevo.g+nuevo.h;
 				nuevoshijos.push_back(nuevo);
