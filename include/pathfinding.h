@@ -37,7 +37,7 @@ public:
 	Region* getCorrespondingRegion(int x, int y);
 
 	Camino* calcularCamino(position2di,position2di);
-	void A(std::vector<Camino> &caminos,position2di,position2di,Region *);
+	Camino A(position2di,position2di,Region *);
 	int menorF(std::vector<Nodo> listaFrontera);
 	std::vector<Nodo> hijos(Nodo* n,Region * regionActual);
 	int estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o);

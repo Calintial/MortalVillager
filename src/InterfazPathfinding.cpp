@@ -88,7 +88,7 @@ void InterfazPathfinding::DrawEnlacesYCaminos(){
 				position2di final = enlaces[i]->getOrigen();
 				final.X ++;
 				final.Y ++;
-				driver->draw2DRectangle(video::SColor(64,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
+				driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
 			}
 			
 			if(drawCaminosInternos){
