@@ -276,20 +276,31 @@ void pathfinding::A(std::vector<Camino> &caminos,position2di origen,position2di 
 				hijo.h=abs((destino.X-hijo.origen.X)+abs(destino.Y-hijo.origen.Y));
 				hijo.f=hijo.g+hijo.h;
 				hijo.p=nuevo;
-				index=estaEnlistaFrontera(listaFrontera,hijo);
-				if(index==-1){
+				index = estaEnlistaInterior(listaInterior,hijo);
+				if (index == -1)
+				{
+					int otroindex=estaEnlistaFrontera(listaFrontera,hijo);
+					if(otroindex==-1){
 
-					listaFrontera.push_back(hijo);
-				}
-				else{
-					if(hijo.g<listaFrontera.at(index).g){
-						listaFrontera.at(index).g=hijo.g;
-						listaFrontera.at(index).h=hijo.h;
-						listaFrontera.at(index).f=hijo.f;
-						listaFrontera.at(index).p=hijo.p;
+						listaFrontera.push_back(hijo);
+					}
+					else{
+						if(hijo.g<listaFrontera.at(otroindex).g){
+							listaFrontera.at(otroindex).g=hijo.g;
+							listaFrontera.at(otroindex).h=hijo.h;
+							listaFrontera.at(otroindex).f=hijo.f;
+							listaFrontera.at(otroindex).p=hijo.p;
+		
+						}
+					}
+				}else{
+					if(hijo.g<listaInterior.at(index).g){
+						listaInterior.at(index).g=hijo.g;
+						listaInterior.at(index).h=hijo.h;
+						listaInterior.at(index).f=hijo.f;
+						listaInterior.at(index).p=hijo.p;
 	
 					}
-
 				}
 			}
 		}
@@ -343,28 +354,39 @@ Camino pathfinding::ARegiones( position2di origen,position2di destino,Region* re
 								}
 							}
 						}
-					
+					return c;
 				}
-				return c;
+				
 			}
 
 		}
 		else{
 			for(Nodo hijo: hijosRegion(nuevo,origen,destino,regionInicio,regionFinal,inicioCaminos, finalCaminos)){
-				index=estaEnlistaFrontera(listaFrontera,hijo);
-				if(index==-1){
+				index = estaEnlistaInterior(listaInterior,hijo);
+				if (index == -1)
+				{
+					int otroindex=estaEnlistaFrontera(listaFrontera,hijo);
+					if(otroindex==-1){
 
-					listaFrontera.push_back(hijo);
-				}
-				else{
-					if(hijo.g<listaFrontera.at(index).g){
-						listaFrontera.at(index).g=hijo.g;
-						listaFrontera.at(index).h=hijo.h;
-						listaFrontera.at(index).f=hijo.f;
-						listaFrontera.at(index).p=hijo.p;
+						listaFrontera.push_back(hijo);
+					}
+					else{
+						if(hijo.g<listaFrontera.at(otroindex).g){
+							listaFrontera.at(otroindex).g=hijo.g;
+							listaFrontera.at(otroindex).h=hijo.h;
+							listaFrontera.at(otroindex).f=hijo.f;
+							listaFrontera.at(otroindex).p=hijo.p;
+		
+						}
+					}
+				}else{
+					if(hijo.g<listaInterior.at(index).g){
+						listaInterior.at(index).g=hijo.g;
+						listaInterior.at(index).h=hijo.h;
+						listaInterior.at(index).f=hijo.f;
+						listaInterior.at(index).p=hijo.p;
 	
 					}
-
 				}
 			}
 		}
@@ -465,6 +487,16 @@ int pathfinding::estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o){
 	}
 	return -1;
 }
+
+int pathfinding::estaEnlistaInterior(std::vector<Nodo> listaInterior,Nodo o){
+
+	for(int i=0;i<listaInterior.size();i++){
+		if(listaInterior.at(i).origen==o.origen)
+			return i;
+	}
+	return -1;
+}
+
 position2di pathfinding::getEnlacePorPosition(position2di pos){
 	std::vector<Enlace*> vectorEnlace= getEnlaces();
 	for(Enlace* enlace:vectorEnlace){
