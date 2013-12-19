@@ -41,14 +41,14 @@ void DebugMenu::initDebugMenu()
         L"Añadir Unidad", L"Añadir unidad controlada por el usuario");
 
 	/*Spin box para obtener las coordenadas para añadir las unidades*/
-	IGUISpinBox* spbox_X = env->addSpinBox(L"1",rect<s32>(760,dimensionPantallaY+65,810,dimensionPantallaY+85),true,0,SPBOX_COORDX);
-	IGUISpinBox* spbox_Y = env->addSpinBox(L"1",rect<s32>(830,dimensionPantallaY+65,880,dimensionPantallaY+85),true,0,SPBOX_COORDY);
+	IGUISpinBox* spbox_X = env->addSpinBox(L"0",rect<s32>(760,dimensionPantallaY+65,810,dimensionPantallaY+85),true,0,SPBOX_COORDX);
+	IGUISpinBox* spbox_Y = env->addSpinBox(L"0",rect<s32>(830,dimensionPantallaY+65,880,dimensionPantallaY+85),true,0,SPBOX_COORDY);
 
 	spbox_X->setDecimalPlaces(0);
 	spbox_Y->setDecimalPlaces(0);
 
-	spbox_X->setRange(1,25);
-	spbox_Y->setRange(1,19);
+	spbox_X->setRange(0,25);
+	spbox_Y->setRange(0,19);
 
 	/*Cargar texturas imagenes*/
 	state_search = driver->getTexture("../media/Imagenes/Debug/MEF/Search.png");

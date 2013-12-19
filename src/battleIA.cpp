@@ -116,7 +116,7 @@ int battleIA::flee(vector<IDibujable*>* user)
 	}
 	else
 	{
-		this->Move(1,1);
+		this->Move(0,0);
 		return FLEE;
 	}
 }
