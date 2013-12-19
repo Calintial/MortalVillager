@@ -343,7 +343,7 @@ void mapa2D::Pintar()
 //Pinta alrededor de una posicion
 void mapa2D::PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY)
 {
-	driver->draw2DImage(TTexture, position2di(TPositionX - (TTexture->getSize().Width), TPositionY - (TTexture->getSize().Height)), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+	driver->draw2DImage(TTexture, position2di(TPositionX, TPositionY), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 
 vector<IDibujable*>* mapa2D::getIa_units(){
