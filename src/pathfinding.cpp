@@ -276,20 +276,31 @@ Camino pathfinding::A(position2di origen,position2di destino,Region* regionActua
 				hijo.h=abs((destino.X-hijo.origen.X)+abs(destino.Y-hijo.origen.Y));
 				hijo.f=hijo.g+hijo.h;
 				hijo.p=nuevo;
-				index=estaEnlistaFrontera(listaFrontera,hijo);
-				if(index==-1){
+				index = estaEnlistaInterior(listaInterior,hijo);
+				if (index == -1)
+				{
+					int otroindex=estaEnlistaFrontera(listaFrontera,hijo);
+					if(otroindex==-1){
 
-					listaFrontera.push_back(hijo);
-				}
-				else{
-					if(hijo.g<listaFrontera.at(index).g){
-						listaFrontera.at(index).g=hijo.g;
-						listaFrontera.at(index).h=hijo.h;
-						listaFrontera.at(index).f=hijo.f;
-						listaFrontera.at(index).p=hijo.p;
+						listaFrontera.push_back(hijo);
+					}
+					else{
+						if(hijo.g<listaFrontera.at(otroindex).g){
+							listaFrontera.at(otroindex).g=hijo.g;
+							listaFrontera.at(otroindex).h=hijo.h;
+							listaFrontera.at(otroindex).f=hijo.f;
+							listaFrontera.at(otroindex).p=hijo.p;
+		
+						}
+					}
+				}else{
+					if(hijo.g<listaInterior.at(index).g){
+						listaInterior.at(index).g=hijo.g;
+						listaInterior.at(index).h=hijo.h;
+						listaInterior.at(index).f=hijo.f;
+						listaInterior.at(index).p=hijo.p;
 	
 					}
-
 				}
 			}
 		}
@@ -343,28 +354,39 @@ Camino pathfinding::ARegiones( position2di origen,position2di destino,Region* re
 								}
 							}
 						}
-					
+					return c;
 				}
-				return c;
+				
 			}
 
 		}
 		else{
 			for(Nodo hijo: hijosRegion(nuevo,origen,destino,regionInicio,regionFinal,inicioCaminos, finalCaminos)){
-				index=estaEnlistaFrontera(listaFrontera,hijo);
-				if(index==-1){
+				index = estaEnlistaInterior(listaInterior,hijo);
+				if (index == -1)
+				{
+					int otroindex=estaEnlistaFrontera(listaFrontera,hijo);
+					if(otroindex==-1){
 
-					listaFrontera.push_back(hijo);
-				}
-				else{
-					if(hijo.g<listaFrontera.at(index).g){
-						listaFrontera.at(index).g=hijo.g;
-						listaFrontera.at(index).h=hijo.h;
-						listaFrontera.at(index).f=hijo.f;
-						listaFrontera.at(index).p=hijo.p;
+						listaFrontera.push_back(hijo);
+					}
+					else{
+						if(hijo.g<listaFrontera.at(otroindex).g){
+							listaFrontera.at(otroindex).g=hijo.g;
+							listaFrontera.at(otroindex).h=hijo.h;
+							listaFrontera.at(otroindex).f=hijo.f;
+							listaFrontera.at(otroindex).p=hijo.p;
+		
+						}
+					}
+				}else{
+					if(hijo.g<listaInterior.at(index).g){
+						listaInterior.at(index).g=hijo.g;
+						listaInterior.at(index).h=hijo.h;
+						listaInterior.at(index).f=hijo.f;
+						listaInterior.at(index).p=hijo.p;
 	
 					}
-
 				}
 			}
 		}
@@ -451,12 +473,12 @@ Camino pathfinding::caminosPersonajeRegion(const position2di& personajePosicion,
 			caminosFinal.push_back(A(finalPosicion,puntoI,regionFinal));	
 
 	}
-		for(Camino caminosss:caminosFinal){
-		//cout<<caminosss.getCamino()[1].X <<" "<<caminosss.getCamino()[1].Y<<endl;
-
+	if (caminos.size()== 0 || caminosFinal.size()==0)
+	{
+		return Camino(personajePosicion);
+	}else{
+		return ARegiones(personajePosicion,finalPosicion,regionInicio,regionFinal,caminos,caminosFinal);
 	}
-	//cout<<"-------------------------------------------------------------------------------"<<endl;
-	return ARegiones(personajePosicion,finalPosicion,regionInicio,regionFinal,caminos,caminosFinal);
 }
 
 
@@ -469,6 +491,16 @@ int pathfinding::estaEnlistaFrontera(std::vector<Nodo> listaFrontera,Nodo o){
 	}
 	return -1;
 }
+
+int pathfinding::estaEnlistaInterior(std::vector<Nodo> listaInterior,Nodo o){
+
+	for(int i=0;i<listaInterior.size();i++){
+		if(listaInterior.at(i).origen==o.origen)
+			return i;
+	}
+	return -1;
+}
+
 position2di pathfinding::getEnlacePorPosition(position2di pos){
 	std::vector<Enlace*> vectorEnlace= getEnlaces();
 	for(Enlace* enlace:vectorEnlace){
@@ -554,25 +586,25 @@ std::vector<Nodo> pathfinding::hijos(Nodo* n,Region * regionActual){
 	Nodo nuevo;
 	position2di nueva_pos;
 	nuevo.p=n;
-	if(regionActual->isInside(n->origen.X,n->origen.Y+1)){
+	if(regionActual->isInside(n->origen.X,n->origen.Y+1) && mapa->getTile(n->origen.Y+1,n->origen.X)->isTransitable()){ // getTile está del revés, hay que verlo en mapa2d.cpp
 		nueva_pos.X=n->origen.X;
 		nueva_pos.Y=n->origen.Y+1;
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
-	if(regionActual->isInside(n->origen.X+1,n->origen.Y)){
+	if(regionActual->isInside(n->origen.X+1,n->origen.Y) && mapa->getTile(n->origen.Y,n->origen.X+1)->isTransitable()){
 		nueva_pos.X=n->origen.X+1;
 		nueva_pos.Y=n->origen.Y;
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
-	if(regionActual->isInside(n->origen.X-1,n->origen.Y)){
+	if(regionActual->isInside(n->origen.X-1,n->origen.Y) && mapa->getTile(n->origen.Y,n->origen.X-1)->isTransitable()){
 		nueva_pos.X=n->origen.X-1;
 		nueva_pos.Y=n->origen.Y;
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
-	if(regionActual->isInside(n->origen.X,n->origen.Y-1)){
+	if(regionActual->isInside(n->origen.X,n->origen.Y-1) && mapa->getTile(n->origen.Y-1,n->origen.X)->isTransitable()){
 		nueva_pos.X=n->origen.X;
 		nueva_pos.Y=n->origen.Y-1;
 		nuevo.origen=nueva_pos;
