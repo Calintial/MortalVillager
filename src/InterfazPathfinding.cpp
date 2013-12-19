@@ -8,6 +8,7 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D* map)
     init();
 
     mapa = map;
+    caminoFinal = NULL;
 	
 	drawRegiones = false;
 	drawEnlaces = false;
@@ -42,6 +43,7 @@ void InterfazPathfinding::Draw()
 			
 			DrawRegiones();
 			DrawEnlacesYCaminos();
+			DrawCaminoFinal();
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,driver->getScreenSize().Width,driver->getScreenSize().Height));
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,driver->getScreenSize().Width,driver->getScreenSize().Height));
 
@@ -103,6 +105,18 @@ void InterfazPathfinding::DrawEnlacesYCaminos(){
 	}	
 }
 
+void InterfazPathfinding::DrawCaminoFinal(){
+	if (drawCaminoFinal && caminoFinal != NULL)
+	{
+		for(position2di paso: caminoFinal->getCamino()){
+			position2di pasoFinal = paso;
+			pasoFinal.X++;
+			pasoFinal.Y++;
+			driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
+		}
+	}
+}
+
 bool InterfazPathfinding::OnEvent(const SEvent& event)
 {
 	
@@ -115,6 +129,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 			case BUTTON_NEXT:{ 
 				cout<<"Soy un boton!"<<endl;
 				mapa->getPathfinding()->run();
+				caminoFinal = mapa->getPathfinding()->calcularCamino(position2di(5,5),position2di(15,15));
 				}
 				break;
 		}					

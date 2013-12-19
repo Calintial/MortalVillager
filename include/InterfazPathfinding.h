@@ -35,6 +35,7 @@ private:
 	IGUIFont* font;
 
 	mapa2D* mapa;
+	Camino* caminoFinal;
 
 	bool drawRegiones, drawEnlaces, drawCaminosInternos, drawCaminoFinal;
 public:
@@ -44,6 +45,7 @@ public:
 	void Draw();
 	void DrawRegiones();
 	void DrawEnlacesYCaminos();
+	void DrawCaminoFinal();
 	void init();
 	bool OnEvent(const SEvent& event);
 };
