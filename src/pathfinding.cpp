@@ -447,12 +447,12 @@ Camino pathfinding::caminosPersonajeRegion(const position2di& personajePosicion,
 			A(caminosFinal,finalPosicion,puntoI,regionFinal);	
 
 	}
-		for(Camino caminosss:caminosFinal){
-		//cout<<caminosss.getCamino()[1].X <<" "<<caminosss.getCamino()[1].Y<<endl;
-
+	if (caminos.size()== 0 || caminosFinal.size()==0)
+	{
+		return Camino(personajePosicion);
+	}else{
+		return ARegiones(personajePosicion,finalPosicion,regionInicio,regionFinal,caminos,caminosFinal);
 	}
-	//cout<<"-------------------------------------------------------------------------------"<<endl;
-	return ARegiones(personajePosicion,finalPosicion,regionInicio,regionFinal,caminos,caminosFinal);
 }
 
 
@@ -550,25 +550,25 @@ std::vector<Nodo> pathfinding::hijos(Nodo* n,Region * regionActual){
 	Nodo nuevo;
 	position2di nueva_pos;
 	nuevo.p=n;
-	if(regionActual->isInside(n->origen.X,n->origen.Y+1)){
+	if(regionActual->isInside(n->origen.X,n->origen.Y+1) && mapa->getTile(n->origen.Y+1,n->origen.X)->isTransitable()){ // getTile está del revés, hay que verlo en mapa2d.cpp
 		nueva_pos.X=n->origen.X;
 		nueva_pos.Y=n->origen.Y+1;
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
-	if(regionActual->isInside(n->origen.X+1,n->origen.Y)){
+	if(regionActual->isInside(n->origen.X+1,n->origen.Y) && mapa->getTile(n->origen.Y,n->origen.X+1)->isTransitable()){
 		nueva_pos.X=n->origen.X+1;
 		nueva_pos.Y=n->origen.Y;
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
-	if(regionActual->isInside(n->origen.X-1,n->origen.Y)){
+	if(regionActual->isInside(n->origen.X-1,n->origen.Y) && mapa->getTile(n->origen.Y,n->origen.X-1)->isTransitable()){
 		nueva_pos.X=n->origen.X-1;
 		nueva_pos.Y=n->origen.Y;
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
-	if(regionActual->isInside(n->origen.X,n->origen.Y-1)){
+	if(regionActual->isInside(n->origen.X,n->origen.Y-1) && mapa->getTile(n->origen.Y-1,n->origen.X)->isTransitable()){
 		nueva_pos.X=n->origen.X;
 		nueva_pos.Y=n->origen.Y-1;
 		nuevo.origen=nueva_pos;
