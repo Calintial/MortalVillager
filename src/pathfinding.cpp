@@ -231,6 +231,7 @@ Region* pathfinding::getCorrespondingRegion(int x, int y){
 }
 
 Camino* pathfinding::calcularCamino(position2di origen, position2di destino){
+	return new Camino(caminosPersonajeRegion(origen,destino));
 	
 }
 
@@ -364,7 +365,7 @@ Camino pathfinding::ARegiones( position2di origen,position2di destino,Region* re
 std::vector<position2di> pathfinding::getCaminodoEnlace(position2di inicio, position2di fin){
 	Enlace * e=getEnlacePorPositionEnlace(inicio);
 	std::vector<position2di> nuevo_v;
-	for(Camino c:e->getIntraCaminos()){
+	for(Camino c:e->getIntraCaminosDestino()){
 		if(c.getCamino().at(c.getCamino().size()-1)==fin){
 			int i=0;
 			for(position2di p:c.getCamino()){
@@ -394,7 +395,7 @@ Enlace* pathfinding::getEnlacePorPositionEnlace(position2di pos){
 
 
 }
-void pathfinding::caminosPersonajeRegion(position2di personajePosicion,position2di finalPosicion){
+Camino pathfinding::caminosPersonajeRegion(position2di personajePosicion,position2di finalPosicion){
 	std::vector<Enlace*> enlacesVector;
 	std::vector<Camino> caminos;
 	std::vector<Camino> caminosFinal;
@@ -433,7 +434,7 @@ void pathfinding::caminosPersonajeRegion(position2di personajePosicion,position2
 
 	}
 	//cout<<"-------------------------------------------------------------------------------"<<endl;
-	Camino c= ARegiones(personajePosicion,finalPosicion,regionInicio,regionFinal,caminos,caminosFinal);
+	return ARegiones(personajePosicion,finalPosicion,regionInicio,regionFinal,caminos,caminosFinal);
 }
 
 
