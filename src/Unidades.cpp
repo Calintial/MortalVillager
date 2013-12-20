@@ -52,7 +52,6 @@ void Unidades::Move(int x, int y)
 			position.Y--;
 			
 		setPosition(position);
-		cout<<"New position:"<<position.X<<","<<position.Y<<endl;
 		last_clicked.X = x;
 		last_clicked.Y = y;		
 	}
