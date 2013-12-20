@@ -12,7 +12,7 @@ using namespace std;
 using namespace core;
 
 
-mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits)
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, bool suelo)
 {
 	ia_units = IAunits;
 	user_units = Userunits;
@@ -39,7 +39,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
     
     InicializarGraficosUnidades();
 
-    AllocateMap();
+    AllocateMap(suelo);
 
 
 	drawVision = false;
@@ -94,13 +94,9 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
-							
-							cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
-							cout<<"ViewWidth:"<< ViewSize.Width << endl;
-							cout<<"ViewHeight:"<< ViewSize.Height << endl;
 							pos_grid.X = event.MouseInput.X/TILE_WIDTH ;
 							pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;
-							cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
+							cout<<"Boton izquierdo, pulsado en:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
 							pos_vector = IASelected(pos_grid);
@@ -122,7 +118,6 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							else
 							{
 								pos_vector = UserSelected(pos_grid);
-								cout << "pos_vector" << pos_vector << endl;
 								if(pos_vector != -1)
 								{
 									if(user_selected != -1)
@@ -157,13 +152,9 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 
 			case EMIE_RMOUSE_PRESSED_DOWN: if(user_selected != -1)
 										   {
-				   								//position2di pos_grid;
-												cout<<"Evento X:"<< event.MouseInput.X << "," << event.MouseInput.Y << endl;
-												cout<<"ViewWidth:"<< ViewSize.Width << endl;
-												cout<<"ViewHeight:"<< ViewSize.Height << endl;
 												pos_grid.X = event.MouseInput.X/TILE_WIDTH;
 												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;
-												cout<<"Posicion final:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
+												cout<<"Boton derecho, pulsado en:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
 										   }
 										   break;
@@ -174,37 +165,49 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 }
 
 
-void mapa2D::AllocateMap()
+void mapa2D::AllocateMap(bool suelo)
 {
-	int k=0;
-    srand(time(0));
-    std::string mapatext = "";
-    
-    ifstream myfile ("../media/mapa.txt");
-	if (myfile.is_open())
+	if(suelo)
 	{
-		getline (myfile,mapatext);
-		myfile.close();
-	}
-    
-	for(int i = 0; i < WIDTH; i++) 
-    {
-		for(int j=0; j < HEIGHT; j++) 
+		for(int i = 0; i < WIDTH; i++) 
 		{
-			if(mapatext[k]=='0')
+			for(int j=0; j < HEIGHT; j++) 
 			{
 				vTiles[i][j] = new Suelo(0,i,j);
 			}
-			else
+		}
+		
+	}
+	else
+	{
+		int k=0;
+		//srand(time(0));
+		std::string mapatext = "";
+		
+		ifstream myfile ("../media/mapa.txt");
+		if (myfile.is_open())
+		{
+			getline (myfile,mapatext);
+			myfile.close();
+		}
+		
+		for(int i = 0; i < WIDTH; i++) 
+		{
+			for(int j=0; j < HEIGHT; j++) 
 			{
-				vTiles[i][j] = new Muro(1,i,j);
+				if(mapatext[k]=='0')
+				{
+					vTiles[i][j] = new Suelo(0,i,j);
+				}
+				else
+				{
+					vTiles[i][j] = new Muro(1,i,j);
+				}
+				vTiles[i][j]->aplicarTextura(driver);
+				k++;
 			}
-			vTiles[i][j]->aplicarTextura(driver);
-			k++;
 		}
 	}
-
-
 }
 
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
@@ -270,8 +273,6 @@ void mapa2D::GenerarMapa()
 			}
 		}
 	}
-					
-			cout << mapatext.size() << endl;
 			std::ofstream file("../media/mapa.txt", std::ios_base::binary);
 			std::string fileString;
 

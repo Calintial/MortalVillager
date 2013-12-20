@@ -16,7 +16,7 @@ Pantalla::~Pantalla(){
 void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
 	if(mapa == NULL)
-		mapa = new mapa2D(pantallaDevice,ia_units,user_units);
+		mapa = new mapa2D(pantallaDevice,ia_units,user_units,true);
 
 
 	if(debug == NULL)

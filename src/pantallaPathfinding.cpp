@@ -24,7 +24,7 @@ void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>*
 
 	if(mapa == NULL){
 		
-		mapa = new mapa2D(pantallaDevice,ia_units,user_units);
+		mapa = new mapa2D(pantallaDevice,ia_units,user_units,false);
 		
 	}
 	if(interfazPathfinding == NULL){

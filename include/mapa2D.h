@@ -43,7 +43,7 @@ public:
 	};
 
 
-	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*);
+	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*,bool);
 	~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
@@ -92,7 +92,7 @@ private:
 	stringc MapaText;
 	pathfinding *pathFinding;
 	void Init();
-	void AllocateMap();
+	void AllocateMap(bool suelo);
 	//void LoadEvents(STile *Tile, int i, int j);
 
 	IDibujable* vTiles[WIDTH][HEIGHT];
