@@ -174,7 +174,8 @@ void mapa2D::AllocateMap(bool suelo)
 			for(int j=0; j < HEIGHT; j++) 
 			{
 				vTiles[i][j] = new Suelo(0,i,j);
-			}
+				vTiles[i][j]->aplicarTextura(driver);
+			}		
 		}
 		
 	}
