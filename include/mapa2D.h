@@ -81,6 +81,8 @@ public:
 
 	dimension2di ViewSize;
 
+	void InicializarGraficosUnidades();
+
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -119,7 +121,6 @@ private:
 
 	void DrawIAUnits();
 	void DrawUserUnits();
-	void InicializarGraficosUnidades();
 	int IASelected(position2di);
 	int UserSelected(position2di);
 };

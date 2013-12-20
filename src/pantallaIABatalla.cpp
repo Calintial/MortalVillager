@@ -5,8 +5,9 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	debug = NULL;
-	
-	
+	(gameEngine::addIAUnit(0,0))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addIAUnit(10,10))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addUserUnit(24,12))->aplicarTextura(pantallaDevice->getVideoDriver());
 }
 Pantalla::~Pantalla(){
 
@@ -16,7 +17,10 @@ Pantalla::~Pantalla(){
 void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
 	if(mapa == NULL)
+	{
 		mapa = new mapa2D(pantallaDevice,ia_units,user_units);
+	}
+
 
 
 	if(debug == NULL)

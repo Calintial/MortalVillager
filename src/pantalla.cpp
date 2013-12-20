@@ -12,7 +12,11 @@ using namespace core;
 Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
-	pantallaDevice->setEventReceiver(this); 
+	pantallaDevice->setEventReceiver(this);
+	
+	(gameEngine::addIAUnit(0,0))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addIAUnit(10,10))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addUserUnit(24,12))->aplicarTextura(pantallaDevice->getVideoDriver());
 }
 Pantalla::~Pantalla()
 {
