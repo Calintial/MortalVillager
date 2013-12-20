@@ -11,7 +11,6 @@
 #include "muro.h"
 #include "edificio.h"
 #include "Unidades.h"
-
 #include "pathfinding.h"
 
 #include <string>
@@ -29,12 +28,13 @@ using namespace scene;
 
 const int TILE_WIDTH	= 32;
 const int TILE_HEIGHT = 32;
+
 #define WIDTH 200
 #define HEIGHT 200
 
 
-
 class mapa2D {
+
 public:
 	enum EventType {
 			EVENT_NONE,
@@ -78,6 +78,9 @@ public:
 	int getIASelected();
 	int getUserSelected();
 	pathfinding* getPathfinding();
+
+	dimension2di ViewSize;
+
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -98,7 +101,7 @@ private:
 
 	//Vista
 	//int ViewWidth,ViewHeight;
-	dimension2di ViewSize;
+	
 	position2di CameraScroll;
 	
 	//Texturas

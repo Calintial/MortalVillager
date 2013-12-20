@@ -5,6 +5,7 @@
 #include "gameEngine.h"
 #include "IDibujable.h"
 #include "DebugMenu.h"
+#include "pantalla.h"
 #include <iostream>
 #include "pantalla.h"
 using namespace std;

@@ -96,14 +96,18 @@ int gameEngine::getSpeed()
 	return game_speed;
 }
 
-void gameEngine::addIAUnit(int x,int y)
-{
-	Add_IAUnits.push_back(new battleIA(x,y));
+IDibujable* gameEngine::addIAUnit(int x,int y)
+{	
+	battleIA* new_unit = new battleIA(x,y);
+	Add_IAUnits.push_back(new_unit);
+	return new_unit;
 }
 
-void gameEngine::addUserUnit(int x,int y)
+IDibujable* gameEngine::addUserUnit(int x,int y)
 {
-	Add_UserUnits.push_back(new Unidades(x,y));
+	Unidades* new_unit = new Unidades(x,y);
+	Add_UserUnits.push_back(new_unit);
+	return new_unit;
 }
 
 void gameEngine::addNewUnits()
@@ -112,9 +116,12 @@ void gameEngine::addNewUnits()
 	{
 		IAUnits.push_back(ia);
 	}
-
+	Add_IAUnits.clear();
 	for(Unidades* unit : Add_UserUnits)
 	{
 		UserUnits.push_back(unit);
 	}
+	
+	Add_UserUnits.clear();
 }
+

@@ -1,5 +1,5 @@
-#ifndef STATE_H
-#define STATE_H
+#ifndef STATEIA_H
+#define STATEIA_H
 
 using namespace std;
 
@@ -9,7 +9,6 @@ using namespace std;
 
 class IDibujable;
 class battleIA;
-
 
 class CurrentIA
 {
@@ -26,7 +25,7 @@ class CurrentIA
 		void huir();
 		void recuperarse();
 		bool inicial();
-		void doSomething(battleIA bIA, vector<IDibujable*>* user);
+		void doSomething(battleIA* bIA, vector<IDibujable*>* user);
 };
 
 class StateIA
@@ -54,9 +53,7 @@ class StateIA
 		}
 		virtual bool inicial() = 0;
 
-		virtual void doSomething(battleIA bIA, vector<IDibujable*>* user)
-		{
-		}
+		virtual void doSomething(battleIA* bIA, vector<IDibujable*>* user) = 0;
 };
 
 class BUSCANDO: public StateIA
@@ -69,7 +66,7 @@ class BUSCANDO: public StateIA
 		};
 		void acercarse(CurrentIA *c);
 		bool inicial(){return true;}
-		void doSomething(battleIA bIA, vector<IDibujable*>* user);
+		void doSomething(battleIA* bIA, vector<IDibujable*>* user);
 };
 
 class ACERCARSE: public StateIA
@@ -83,7 +80,7 @@ class ACERCARSE: public StateIA
 		void buscando(CurrentIA *c);
 		void atacar(CurrentIA *c);
 		bool inicial(){return false;}
-		void doSomething(battleIA bIA, vector<IDibujable*>* user);
+		void doSomething(battleIA* bIA, vector<IDibujable*>* user);
 };
 
 class ATACAR: public StateIA
@@ -98,7 +95,7 @@ class ATACAR: public StateIA
 		void acercarse(CurrentIA *c);
 		void huir(CurrentIA *c);
 		bool inicial(){return false;}
-		void doSomething(battleIA bIA, vector<IDibujable*>* user);
+		void doSomething(battleIA* bIA, vector<IDibujable*>* user);
 };
 
 class HUIR: public StateIA
@@ -111,7 +108,7 @@ class HUIR: public StateIA
 		};
 		void recuperarse(CurrentIA *c);
 		bool inicial(){return false;}
-		void doSomething(battleIA bIA, vector<IDibujable*>* user);
+		void doSomething(battleIA* bIA, vector<IDibujable*>* user);
 };
 
 
@@ -126,7 +123,7 @@ class RECUPERARSE: public StateIA
 		void buscando(CurrentIA *c);
 		void huir(CurrentIA *c);
 		bool inicial(){return false;}
-		void doSomething(battleIA bIA, vector<IDibujable*>* user);
+		void doSomething(battleIA* bIA, vector<IDibujable*>* user);
 };
 
 

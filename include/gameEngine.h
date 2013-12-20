@@ -37,13 +37,17 @@ public:
 
 	static void setSpeed(int);
 	static int getSpeed();
-	static void addIAUnit(int,int);
-	static void addUserUnit(int,int);
+
+	static IDibujable* addIAUnit(int,int);
+	static IDibujable* addUserUnit(int,int);
+
 	void sleep(unsigned int);
 	static Current stado;
 	void addNewUnits();
-	
+
+
 private:
+
 	graphicEngine* graphics;
 	intelEngine* ia;
 	int gameState;
