@@ -110,7 +110,7 @@ void hud::paint(){
 
 	if (MenuDevice->run())
 	{        
-		if(MenuDevice->isWindowActive() && driver)
+		if(driver)
 		{
 			
 			driver->draw2DRectangle(video::SColor(100,154,147,129),core::rect<s32>(0,400,800 ,600),0);

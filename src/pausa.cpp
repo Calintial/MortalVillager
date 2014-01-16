@@ -70,7 +70,7 @@ void pausa::run()
 {
     if (PausaDevice->run())
     {        
-        if(PausaDevice->isWindowActive() && driver)
+        if(driver)
         {
             //Esta instrucción borra la pantalla y la repinta ;) (Cada vez que cambiemos de menu deberiamos usarla)
             driver->beginScene(true, true, SColor(0,200,200,200));
