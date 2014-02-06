@@ -7,11 +7,11 @@
 #include <irrlicht.h>
 
 class mapa2D;
-class Pantalla : public IEventReceiver
+class PantallaPathfinding : public IEventReceiver
 {
 public:
-		Pantalla(IrrlichtDevice * IrrDevice);
-		~Pantalla();
+		PantallaPathfinding(IrrlichtDevice * IrrDevice);
+		~PantallaPathfinding();
 		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*);
 		virtual bool OnEvent(const SEvent& event);
 private:

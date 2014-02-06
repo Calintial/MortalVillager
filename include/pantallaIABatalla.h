@@ -16,11 +16,11 @@ using namespace std;
 using namespace core;
 
 class mapa2D;
-class Pantalla : public IEventReceiver
+class PantallaIABatalla : public IEventReceiver
 {
 public:
-		Pantalla(IrrlichtDevice * IrrDevice);
-		~Pantalla();
+		PantallaIABatalla(IrrlichtDevice * IrrDevice);
+		~PantallaIABatalla();
 		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*);
 private:
 	IrrlichtDevice * pantallaDevice;

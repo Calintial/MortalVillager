@@ -28,6 +28,7 @@ public:
 	void DrawMainMenu();
 	void DrawMap(vector<IDibujable*>*,vector<IDibujable*>*);
 	void DrawPausa();
+	void setPantalla(Pantalla* _pantalla);
 
 private:
 	IrrlichtDevice * IrrDevice;

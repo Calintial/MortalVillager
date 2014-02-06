@@ -1,4 +1,5 @@
 #include "graphicEngine.h"
+#include "pantallaBasica.h"
 
 graphicEngine::graphicEngine()
 {
@@ -56,9 +57,14 @@ void graphicEngine::DrawPausa()
 void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
 	if(pantalla == NULL){
-		pantalla= new Pantalla(IrrDevice);
+		pantalla= new PantallaBasica(IrrDevice);
 	}
 	pantalla->pintarPantalla(ia_units,user_units);
 	pause = NULL;
 	menu = NULL;
+}
+
+void graphicEngine::setPantalla(Pantalla* _pantalla){
+       delete pantalla;
+       pantalla = _pantalla;
 }

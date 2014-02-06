@@ -1,7 +1,7 @@
 #include "pantallaIABatalla.h"
 
 
-Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
+PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	debug = NULL;
@@ -9,12 +9,12 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 	(gameEngine::addIAUnit(10,10))->aplicarTextura(pantallaDevice->getVideoDriver());
 	(gameEngine::addUserUnit(24,12))->aplicarTextura(pantallaDevice->getVideoDriver());
 }
-Pantalla::~Pantalla(){
+PantallaIABatalla::~PantallaIABatalla(){
 
     delete mapa;
     delete debug;
 }
-void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
+void PantallaIABatalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
 	if(mapa == NULL)
 	{

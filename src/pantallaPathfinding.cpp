@@ -9,18 +9,18 @@ using namespace irr;
 using namespace video;
 using namespace std;
 using namespace core;
-Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
+PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	interfazPathfinding = NULL;
 	pantallaDevice->setEventReceiver(this); 
 }
-Pantalla::~Pantalla(){
+PantallaPathfinding::~PantallaPathfinding(){
 
     delete mapa;
     delete interfazPathfinding;
 }
-void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
+void PantallaPathfinding::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
 	if(mapa == NULL){
 		
@@ -38,7 +38,7 @@ void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>*
 	pantallaDevice->getVideoDriver()->endScene(); 
 
 }
-bool Pantalla::OnEvent(const SEvent& event){
+bool PantallaPathfinding::OnEvent(const SEvent& event){
 
 	return interfazPathfinding->OnEvent(event);
 	
