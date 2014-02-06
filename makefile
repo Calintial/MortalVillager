@@ -1,6 +1,6 @@
 CC=g++
 
-OPTS=-Wall -std=c++11 -O0
+OPTS=-Wall -std=c++11 -O0 -g
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 

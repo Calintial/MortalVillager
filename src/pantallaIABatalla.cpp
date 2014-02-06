@@ -1,7 +1,7 @@
 #include "pantallaIABatalla.h"
 
 
-PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice){
+PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine):Pantalla(IrrDevice,_grEngine){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	debug = NULL;

@@ -1,16 +1,18 @@
-#ifndef PANTALLA_H
-#define PANTALLA_H
+#ifndef PANTALLA_PATHFINDING_H
+#define PANTALLA_PATHFINDING_H
 
+#include <irrlicht.h>
+#include "pantalla.h"
 #include "mapa2D.h"
 #include "InterfazPathfinding.h"
 #include "muro.h"
-#include <irrlicht.h>
+
 
 class mapa2D;
-class PantallaPathfinding : public IEventReceiver
+class PantallaPathfinding : public Pantalla
 {
 public:
-		PantallaPathfinding(IrrlichtDevice * IrrDevice);
+		PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine);
 		~PantallaPathfinding();
 		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*);
 		virtual bool OnEvent(const SEvent& event);

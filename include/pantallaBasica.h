@@ -10,7 +10,7 @@ class hud;*/
 class PantallaBasica : public Pantalla
 {
 public:
-		PantallaBasica(IrrlichtDevice * IrrDevice);
+		PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine);
 		~PantallaBasica();
 		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*);
 		virtual bool OnEvent(const SEvent& event);

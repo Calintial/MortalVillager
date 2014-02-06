@@ -9,7 +9,7 @@ using namespace irr;
 using namespace video;
 using namespace std;
 using namespace core;
-PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice){
+PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine):Pantalla(IrrDevice,_grEngine){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	interfazPathfinding = NULL;
@@ -40,7 +40,12 @@ void PantallaPathfinding::pintarPantalla(vector<IDibujable*>* ia_units,vector<ID
 }
 bool PantallaPathfinding::OnEvent(const SEvent& event){
 
-	return interfazPathfinding->OnEvent(event);
+	if(event.EventType == EET_KEY_INPUT_EVENT)
+	{
+		return Pantalla::OnEvent(event);
+	}else{
+		return interfazPathfinding->OnEvent(event);
+	}
 	
 	//return false;
 }

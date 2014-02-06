@@ -6,18 +6,18 @@
 #include <vector>
 #include <iostream>
 #include "IDibujable.h"
-#include "gameEngine.h"
 
-
+class graphicEngine;
 class Pantalla : public IEventReceiver
 {
 public:
-		Pantalla(IrrlichtDevice * IrrDevice);
+		Pantalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine);
 		virtual ~Pantalla() {};
 		virtual void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*) = 0;
 		virtual bool OnEvent(const SEvent& event);
 private:
 	IrrlichtDevice * pantallaDevice;
+	graphicEngine * grEngine;
 
 
 };

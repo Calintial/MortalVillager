@@ -1,6 +1,6 @@
 #include "pantallaBasica.h"
 
-PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice):Pantalla(IrrDevice){
+PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine):Pantalla(IrrDevice,_grEngine){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	pantallaDevice->setEventReceiver(this);
