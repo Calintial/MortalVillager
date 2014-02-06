@@ -56,6 +56,9 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 		{
 			cout << "PAUSA LA PANTALLA" << endl;
 			gameEngine::stado.pause();
+			return true;
+		}else{
+			return Pantalla::OnEvent(event);
 		}
 	}
 	return false;
