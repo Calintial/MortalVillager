@@ -12,16 +12,20 @@
 #include "pantallaBasica.h"
 #include "pantallaPathfinding.h"
 #include "pantallaIABatalla.h"
+#include "gameEngine.h"
 
 Pantalla::Pantalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine){
 	pantallaDevice= IrrDevice;
 	pantallaDevice->setEventReceiver(this);
 	grEngine = _grEngine;
+	(gameEngine::addIAUnit(0,0))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addIAUnit(10,10))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addUserUnit(24,12))->aplicarTextura(pantallaDevice->getVideoDriver());
 }
 
 bool Pantalla::OnEvent(const SEvent& event){
     if (event.EventType == irr::EET_KEY_INPUT_EVENT){
-    	// TODO: mostrar la pantalla
+    	// TODO: mostrar la pantalla // constructor de copia con las distintas pantallas?
 
     	if (event.KeyInput.Key == irr::KEY_F2 && event.KeyInput.PressedDown)
     	{
