@@ -7,6 +7,7 @@
 #include "DebugMenu.h"
 #include "pantalla.h"
 #include <iostream>
+#include <memory>
 #include "pantalla.h"
 using namespace std;
 
@@ -28,13 +29,13 @@ public:
 	void DrawMainMenu();
 	void DrawMap(vector<IDibujable*>*,vector<IDibujable*>*);
 	void DrawPausa();
-	void setPantalla(Pantalla* _pantalla);
+	void setPantalla(shared_ptr<Pantalla> _pantalla);
 
 private:
 	IrrlichtDevice * IrrDevice;
 	mainMenu* menu;
 
-	Pantalla * pantalla;
+	shared_ptr<Pantalla> pantalla;
 
 	DebugMenu* debug;
 

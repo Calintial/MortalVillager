@@ -20,12 +20,11 @@ class mapa2D;
 class PantallaIABatalla : public Pantalla
 {
 public:
-		PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine);
+		PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa);
 		~PantallaIABatalla();
 		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*);
 private:
 	IrrlichtDevice * pantallaDevice;
-	mapa2D * mapa;
-	DebugMenu* debug;
+	shared_ptr<DebugMenu> debug;
 };
 #endif 

@@ -1,6 +1,6 @@
 		#include "hud.h"
 
-hud::hud(IrrlichtDevice * IrrDevice,mapa2D * _m){
+hud::hud(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D> _m):_mapa2D(_m){
 
 	MenuDevice = IrrDevice;
 	env = IrrDevice->getGUIEnvironment();
@@ -26,7 +26,6 @@ hud::hud(IrrlichtDevice * IrrDevice,mapa2D * _m){
 	personaje=NULL;
 	ensenyarInformacion=false;
 	mapa="";
-	_mapa2D=_m;
 
 }
 
@@ -139,9 +138,9 @@ void hud::paint(){
 hud::~hud()
 {
 		//delete MenuDevice;
-	delete driver;
+	/*delete driver;
 	delete smgr;
 	delete env;
 	delete skin;
-	delete font;
+	delete font;*/
 }

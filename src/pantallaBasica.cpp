@@ -1,23 +1,22 @@
 #include "pantallaBasica.h"
 
-PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine):Pantalla(IrrDevice,_grEngine){
+PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
 	pantallaDevice= IrrDevice;
-	mapa = NULL;
 	pantallaDevice->setEventReceiver(this);
 }
 
 PantallaBasica::~PantallaBasica()
 {
-    delete mapa;
-    delete hudmapa;
+    //delete mapa;
+    //delete hudmapa;
 }
 
 void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
-	if(mapa == NULL){
-		
-		mapa = new mapa2D(pantallaDevice,ia_units,user_units,false);
-		hudmapa= new hud(pantallaDevice,mapa);
+	if(mapa.get() == NULL){
+		cout<<"creando mapa"<<endl;
+		mapa = shared_ptr<mapa2D>(new mapa2D(pantallaDevice,ia_units,user_units,false));
+		hudmapa= shared_ptr<hud>(new hud(pantallaDevice,mapa));
 		
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
