@@ -29,17 +29,17 @@ bool Pantalla::OnEvent(const SEvent& event){
     	if (event.KeyInput.Key == irr::KEY_F2 && event.KeyInput.PressedDown)
     	{
     		cout<<"F2 presionado -> pantallaBasica"<<endl;
-    		grEngine->setPantalla(shared_ptr<Pantalla>(new PantallaBasica(pantallaDevice,grEngine,mapa)));
+    		grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
     		return true;
     	}else if (event.KeyInput.Key == irr::KEY_F3 && event.KeyInput.PressedDown)
     	{
     		cout<<"F3 presionado -> pantallaPathfinding"<<endl;
-    		grEngine->setPantalla(shared_ptr<Pantalla>(new PantallaPathfinding(pantallaDevice,grEngine,mapa)));
+    		grEngine->setPantalla(new PantallaPathfinding(pantallaDevice,grEngine,mapa));
     		return true;
     	}else if (event.KeyInput.Key == irr::KEY_F4 && event.KeyInput.PressedDown)
     	{
     		cout<<"F4 presionado -> pantallaIABatalla"<<endl;
-    		grEngine->setPantalla(shared_ptr<Pantalla>(new PantallaIABatalla(pantallaDevice,grEngine,mapa)));
+    		grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa));
 
     		return true;
     	}else{

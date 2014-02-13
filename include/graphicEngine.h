@@ -29,13 +29,13 @@ public:
 	void DrawMainMenu();
 	void DrawMap(vector<IDibujable*>*,vector<IDibujable*>*);
 	void DrawPausa();
-	void setPantalla(shared_ptr<Pantalla> _pantalla);
+	void setPantalla(Pantalla* _pantalla);
 
-private:
+//private:
 	IrrlichtDevice * IrrDevice;
 	mainMenu* menu;
 
-	shared_ptr<Pantalla> pantalla;
+	Pantalla* pantalla;
 
 	DebugMenu* debug;
 

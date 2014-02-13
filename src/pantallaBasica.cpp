@@ -1,8 +1,8 @@
 #include "pantallaBasica.h"
 
 PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
-	pantallaDevice= IrrDevice;
 	pantallaDevice->setEventReceiver(this);
+	hudmapa = NULL;
 }
 
 PantallaBasica::~PantallaBasica()
@@ -16,8 +16,9 @@ void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibuja
 	if(mapa.get() == NULL){
 		cout<<"creando mapa"<<endl;
 		mapa = shared_ptr<mapa2D>(new mapa2D(pantallaDevice,ia_units,user_units,false));
-		hudmapa= shared_ptr<hud>(new hud(pantallaDevice,mapa));
-		
+	}
+	if(hudmapa == NULL){
+		hudmapa= new hud(pantallaDevice,mapa);
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	pantallaDevice->setEventReceiver(this); 
@@ -37,9 +38,11 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 								cout<<"Has clicado en el minimapa en la posición X:"<<event.MouseInput.X<<", Y"<<event.MouseInput.Y<<endl;
 							}
 							else{
-								hudmapa->paintInformation(mapa->OnEventMapa(event));
+								if (mapa != NULL && hudmapa != NULL)
+								{
+									hudmapa->paintInformation(mapa->OnEventMapa(event));
+								}
 							}
-							
 							break;
 			case EMIE_RMOUSE_PRESSED_DOWN: mapa->OnEventMapa(event);
 			default:;

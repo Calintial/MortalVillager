@@ -10,7 +10,6 @@ using namespace video;
 using namespace std;
 using namespace core;
 PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
-	pantallaDevice= IrrDevice;
 	interfazPathfinding = NULL;
 	pantallaDevice->setEventReceiver(this); 
 }
@@ -21,14 +20,14 @@ PantallaPathfinding::~PantallaPathfinding(){
 }
 void PantallaPathfinding::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
-	if(mapa == NULL){
+	if(mapa.get() == NULL){
 		cout<<"creando mapa"<<endl;
 		mapa = shared_ptr<mapa2D>(new mapa2D(pantallaDevice,ia_units,user_units,false));
 		
 	}
 	if(interfazPathfinding == NULL){
 		
-		interfazPathfinding = shared_ptr<InterfazPathfinding>(new InterfazPathfinding(pantallaDevice,mapa));
+		interfazPathfinding = new InterfazPathfinding(pantallaDevice,mapa);
 		
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
@@ -43,8 +42,12 @@ bool PantallaPathfinding::OnEvent(const SEvent& event){
 	{
 		return Pantalla::OnEvent(event);
 	}else{
-		return interfazPathfinding->OnEvent(event);
+		if (interfazPathfinding != NULL)
+		{
+			return interfazPathfinding->OnEvent(event);
+		}
+		
 	}
 	
-	//return false;
+	return false;
 }

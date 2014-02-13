@@ -17,8 +17,7 @@ public:
 		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*);
 		virtual bool OnEvent(const SEvent& event);
 private:
-	IrrlichtDevice * pantallaDevice;
-	shared_ptr<InterfazPathfinding> interfazPathfinding;
+	InterfazPathfinding* interfazPathfinding;
 
 
 };

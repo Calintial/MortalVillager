@@ -56,14 +56,15 @@ void graphicEngine::DrawPausa()
 
 void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
 {
-	if(pantalla.get() == NULL){
-		pantalla= shared_ptr<Pantalla>(new PantallaBasica(IrrDevice,this, NULL));
+	if(pantalla == NULL){
+		pantalla= new PantallaBasica(IrrDevice,this, NULL);
 	}
 	pantalla->pintarPantalla(ia_units,user_units);
 	pause = NULL;
 	menu = NULL;
 }
 
-void graphicEngine::setPantalla(shared_ptr<Pantalla> _pantalla){
-       pantalla = _pantalla;
+void graphicEngine::setPantalla(Pantalla* _pantalla){
+	//delete pantalla;
+	pantalla = _pantalla;
 }

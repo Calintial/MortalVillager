@@ -18,10 +18,11 @@ public:
 		virtual void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*) = 0;
 		virtual bool OnEvent(const SEvent& event);
 private:
-	IrrlichtDevice * pantallaDevice;
 	graphicEngine * grEngine;
 protected:
+	IrrlichtDevice * pantallaDevice;
 	shared_ptr<mapa2D> mapa;
+
 
 
 };

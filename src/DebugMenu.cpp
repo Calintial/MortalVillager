@@ -12,7 +12,7 @@ DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<IDibujable*>* ia_units, 
     vUnits = ia_units;
     mapa = map;
 
-	DebugDevice->setEventReceiver(this); 
+	//DebugDevice->setEventReceiver(this); 
 	drawVision = false;
 	drawAttackVision = false;
 }
