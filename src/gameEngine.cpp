@@ -96,16 +96,34 @@ int gameEngine::getSpeed()
 	return game_speed;
 }
 
-IDibujable* gameEngine::addIAUnit(int x,int y)
+IDibujable* gameEngine::addIAUnit(int x,int y,int tipo)
 {	
-	battleIA* new_unit = new battleIA(x,y);
+	battleIA* new_unit;
+	switch(tipo)
+	{
+		case 0: new_unit = new AldeanoIA(x,y); break;
+		case 1: new_unit = new EspadachinIA(x,y); break;
+		case 2: new_unit = new LanceroIA(x,y); break;
+		case 3: new_unit = new ArqueroIA(x,y); break;
+		
+	}
+	
 	Add_IAUnits.push_back(new_unit);
 	return new_unit;
 }
 
-IDibujable* gameEngine::addUserUnit(int x,int y)
+IDibujable* gameEngine::addUserUnit(int x,int y, int tipo)
 {
-	Unidades* new_unit = new Unidades(x,y);
+	Unidades* new_unit;
+	switch(tipo)
+	{
+		case 0: new_unit = new Aldeano(x,y); break;
+		case 1: new_unit = new Espadachin(x,y); break;
+		case 2: new_unit = new Lancero(x,y); break;
+		case 3: new_unit = new Arquero(x,y); break;
+		
+	}
+
 	Add_UserUnits.push_back(new_unit);
 	return new_unit;
 }

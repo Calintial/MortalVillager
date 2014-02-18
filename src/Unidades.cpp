@@ -2,35 +2,26 @@
 
 Unidades::Unidades()
 {
-	life = 100;
 	setPosition(1,1);
 	state = 0;
 	last_clicked.X = 1;
 	last_clicked.Y = 1;
-	vision_range = 3;
-	attack_range = 1;
 }
 
 Unidades::Unidades(int x, int y)
 {
-	life = 100;
 	setPosition(x,y);
 	state = 0;
 	last_clicked.X = x;
 	last_clicked.Y = y;
-	vision_range = 3;
-	attack_range = 1;
 }
 
 Unidades::~Unidades()
 {
-	life = 0;
 	setPosition(0,0);
 	last_clicked.X = 0;
 	last_clicked.Y = 0;
 	state = 0;
-	vision_range = 0;
-	attack_range = 0;
 }
 
 
@@ -57,62 +48,6 @@ void Unidades::Move(int x, int y)
 	}
 }
 
-void Unidades::Attack(position2di pos)
-{
-	if(enemy_in_attack_range(pos))
-		life--;
-		/*Hay un enemigo, atacar*/
-	//cout<<"Attacking!!"<<endl;
-	
-	//cout<<"life: "<<life<<endl;
-}
-
-bool Unidades::enemy_in_attack_range(position2di pos)
-{
-	position2di mypos = getPosition();
-	/*Comprobar si esta en rango de ataque el enemigo*/
-	for(int x = mypos.X - attack_range; x <= mypos.X + attack_range; x++)
-	{
-		for(int y = mypos.Y - attack_range; y <= mypos.Y + attack_range; y++)
-		{
-			if(pos.X == x && pos.Y == y)
-			{
-				return true;
-			}
-		}
-	}
-	return false;	
-}
-
-int Unidades::getLife()
-{
-	return life;
-}
-
-void Unidades::Recovery()
-{
-	life++;
-}
-
-void Unidades::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
-{
-	ITexture *TTexture = getTextura();
-	driver->draw2DImage(TTexture, position2di(TPositionX, TPositionY), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
-}
-
-void Unidades::TexturaSeleccionada(IVideoDriver* driver,bool selected)
-{
-	if(selected)
-		setTextura(driver->getTexture("../media/Texturas/units/user_unit_selected.png"));
-	else
-		setTextura(driver->getTexture("../media/Texturas/units/user_unit_test.png"));
-}
-
-void Unidades::aplicarTextura(IVideoDriver* driver)
-{
-	setTextura(driver->getTexture("../media/Texturas/units/user_unit_test.png"));
-}
-
 void Unidades::updateUnit()
 {
 	position2di position = getPosition();
@@ -124,14 +59,4 @@ void Unidades::updateUnit()
 			state = NOTHING;
 		}
 	}
-}
-
-int Unidades::getVisionRange()
-{
-	return vision_range;
-}
-
-int Unidades::getAttackRange()
-{
-	return attack_range;
 }

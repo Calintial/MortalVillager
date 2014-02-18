@@ -50,6 +50,13 @@ void DebugMenu::initDebugMenu()
 	spbox_X->setRange(0,25);
 	spbox_Y->setRange(0,19);
 
+	/*Desplegables para seleccionar unidad a insertar*/
+	IGUIComboBox* combo_unidades = env->addComboBox (rect<s32>(900,dimensionPantallaY+65,1000,dimensionPantallaY+85), 0,COMBO_UNIDADES);
+	combo_unidades->addItem(L"Aldeano");
+	combo_unidades->addItem(L"Espadachin");
+	combo_unidades->addItem(L"Lancero");
+	combo_unidades->addItem(L"Arquero");
+
 	/*Cargar texturas imagenes*/
 	state_search = driver->getTexture("../media/Imagenes/Debug/MEF/Search.png");
 	state_approach = driver->getTexture("../media/Imagenes/Debug/MEF/Approach.png");
@@ -340,11 +347,14 @@ bool DebugMenu::OnEvent(const SEvent& event)
 		IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
 		IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
 
+		IGUIComboBox* combo_unidades = (IGUIComboBox*) env->getRootGUIElement()->getElementFromId(COMBO_UNIDADES);
+		int tipo_unidad = combo_unidades->getSelected();
+
 		switch(id)
 		{
-			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->aplicarTextura(driver);
+			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
 								break;
-			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue()))->aplicarTextura(driver);
+			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
 								  break;
 		}
 	}

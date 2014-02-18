@@ -171,26 +171,9 @@ position2di battleIA::searchEnemy(vector<IDibujable*>* vUnits)
 	return pos;
 }
 
-void battleIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
-{
-	ITexture *TTexture = getTextura();
-	driver->draw2DImage(TTexture, position2di(TPositionX, TPositionY), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
-}
-
-void battleIA::TexturaSeleccionada(IVideoDriver* driver,bool selected)
-{
-	if(selected)
-		setTextura(driver->getTexture("../media/Texturas/units/unit_test_selected.png"));
-	else
-		setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
-}
 
 int battleIA::getState()
 {
 	return state;
 }
 
-void battleIA::aplicarTextura(IVideoDriver* driver)
-{
-	setTextura(driver->getTexture("../media/Texturas/units/unit_test.png"));
-}

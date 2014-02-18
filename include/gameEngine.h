@@ -6,6 +6,14 @@
 #include "battleIA.h"
 #include "IDibujable.h"
 #include "Unidades.h"
+#include "Arquero.h"
+#include "ArqueroIA.h"
+#include "Espadachin.h"
+#include "EspadachinIA.h"
+#include "Aldeano.h"
+#include "AldeanoIA.h"
+#include "Lancero.h"
+#include "LanceroIA.h"
 #include "state.h"
 #include <iostream>
 #include <time.h>
@@ -38,8 +46,8 @@ public:
 	static void setSpeed(int);
 	static int getSpeed();
 
-	static IDibujable* addIAUnit(int,int);
-	static IDibujable* addUserUnit(int,int);
+	static IDibujable* addIAUnit(int,int,int);
+	static IDibujable* addUserUnit(int,int,int);
 
 	void sleep(unsigned int);
 	static Current stado;

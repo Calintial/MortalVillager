@@ -4,10 +4,11 @@ OPTS=-W -std=c++11 -O3
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 
-OBJECTS=graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMenu.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o DebugMenu.o hud.o pausa.o state.o muro.o stateIA.o Region.o Enlace.o Camino.o pathfinding.o Nodo.o
-OBJECTS_MAIN=pantalla.o $(OBJECTS)
-OBJECTS_PATHFINDING=pantallaPathfinding.o InterfazPathfinding.o $(OBJECTS)
-OBJECTS_IA_BATALLA=pantallaIABatalla.o DebugMenu.o $(OBJECTS)
+OBJECTS=battleIA.o graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMenu.o Unidades.o suelo.o mapa2D.o IDibujable.o DebugMenu.o hud.o pausa.o state.o muro.o stateIA.o Region.o Enlace.o Camino.o pathfinding.o Nodo.o
+OBJECTS_CLASES=Arquero.o Lancero.o Aldeano.o Espadachin.o ArqueroIA.o LanceroIA.o AldeanoIA.o EspadachinIA.o
+OBJECTS_MAIN=pantalla.o $(OBJECTS) $(OBJECTS_CLASES)
+OBJECTS_PATHFINDING=pantallaPathfinding.o InterfazPathfinding.o $(OBJECTS) $(OBJECTS_CLASES)
+OBJECTS_IA_BATALLA=pantallaIABatalla.o DebugMenu.o $(OBJECTS) $(OBJECTS_CLASES)
 
 
 .PHONY: all clean

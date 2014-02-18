@@ -5,9 +5,9 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
 	pantallaDevice= IrrDevice;
 	mapa = NULL;
 	debug = NULL;
-	(gameEngine::addIAUnit(0,0))->aplicarTextura(pantallaDevice->getVideoDriver());
-	(gameEngine::addIAUnit(10,10))->aplicarTextura(pantallaDevice->getVideoDriver());
-	(gameEngine::addUserUnit(24,12))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addIAUnit(0,0,0))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addIAUnit(10,10,0))->aplicarTextura(pantallaDevice->getVideoDriver());
+	(gameEngine::addUserUnit(24,12,0))->aplicarTextura(pantallaDevice->getVideoDriver());
 }
 Pantalla::~Pantalla(){
 

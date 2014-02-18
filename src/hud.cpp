@@ -22,7 +22,7 @@ hud::hud(IrrlichtDevice * IrrDevice,mapa2D * _m){
 	P1Y=403;
 	P2X=800;
 	P2Y=600;
-	personaje= new Unidades();
+	personaje= new Arquero();
 	personaje=NULL;
 	ensenyarInformacion=false;
 	mapa="";

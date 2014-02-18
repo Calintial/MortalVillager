@@ -26,7 +26,8 @@ enum{
 	BUTTON_ADD_IA = 3,
 	BUTTON_ADD_UNIT = 4,
 	SPBOX_COORDX = 5,
-	SPBOX_COORDY = 6
+	SPBOX_COORDY = 6,
+	COMBO_UNIDADES = 7
 };
 
 class mapa2D;
