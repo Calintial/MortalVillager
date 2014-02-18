@@ -73,12 +73,12 @@ void LanceroIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 void LanceroIA::TexturaSeleccionada(IVideoDriver* driver,bool selected)
 {
 	if(selected)
-		setTextura(driver->getTexture("../media/Texturas/units/user_unit_selected.png"));
+		setTextura(driver->getTexture("../media/Texturas/units/ia_unit_selected.png"));
 	else
-		setTextura(driver->getTexture("../media/Texturas/units/user_spearman.png"));
+		setTextura(driver->getTexture("../media/Texturas/units/ia_spearman.png"));
 }
 
 void LanceroIA::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/units/user_spearman.png"));
+	setTextura(driver->getTexture("../media/Texturas/units/ia_spearman.png"));
 }

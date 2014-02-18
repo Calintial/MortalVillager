@@ -73,12 +73,12 @@ void AldeanoIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 void AldeanoIA::TexturaSeleccionada(IVideoDriver* driver,bool selected)
 {
 	if(selected)
-		setTextura(driver->getTexture("../media/Texturas/units/user_unit_selected.png"));
+		setTextura(driver->getTexture("../media/Texturas/units/ia_unit_selected.png"));
 	else
-		setTextura(driver->getTexture("../media/Texturas/units/user_villager.png"));
+		setTextura(driver->getTexture("../media/Texturas/units/ia_villager.png"));
 }
 
 void AldeanoIA::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/units/user_villager.png"));
+	setTextura(driver->getTexture("../media/Texturas/units/ia_villager.png"));
 }

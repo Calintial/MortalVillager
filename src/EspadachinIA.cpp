@@ -73,12 +73,12 @@ void EspadachinIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 void EspadachinIA::TexturaSeleccionada(IVideoDriver* driver,bool selected)
 {
 	if(selected)
-		setTextura(driver->getTexture("../media/Texturas/units/user_unit_selected.png"));
+		setTextura(driver->getTexture("../media/Texturas/units/ia_unit_selected.png"));
 	else
-		setTextura(driver->getTexture("../media/Texturas/units/user_swordman.png"));
+		setTextura(driver->getTexture("../media/Texturas/units/ia_swordman.png"));
 }
 
 void EspadachinIA::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/units/user_swordman.png"));
+	setTextura(driver->getTexture("../media/Texturas/units/ia_swordman.png"));
 }
