@@ -6,9 +6,10 @@ LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 
 OBJECTS=battleIA.o graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMenu.o Unidades.o suelo.o mapa2D.o IDibujable.o DebugMenu.o hud.o pausa.o state.o muro.o stateIA.o Region.o Enlace.o Camino.o pathfinding.o Nodo.o
 OBJECTS_CLASES=Arquero.o Lancero.o Aldeano.o Espadachin.o ArqueroIA.o LanceroIA.o AldeanoIA.o EspadachinIA.o
-OBJECTS_MAIN=pantalla.o $(OBJECTS) $(OBJECTS_CLASES)
-OBJECTS_PATHFINDING=pantallaPathfinding.o InterfazPathfinding.o $(OBJECTS) $(OBJECTS_CLASES)
-OBJECTS_IA_BATALLA=pantallaIABatalla.o DebugMenu.o $(OBJECTS) $(OBJECTS_CLASES)
+OBJECTS_EDIFICIOS=CentroCiudad.o
+OBJECTS_MAIN=pantalla.o $(OBJECTS) $(OBJECTS_CLASES) $(OBJECTS_EDIFICIOS)
+OBJECTS_PATHFINDING=pantallaPathfinding.o InterfazPathfinding.o $(OBJECTS) $(OBJECTS_CLASES) $(OBJECTS_EDIFICIOS)
+OBJECTS_IA_BATALLA=pantallaIABatalla.o DebugMenu.o $(OBJECTS) $(OBJECTS_CLASES) $(OBJECTS_EDIFICIOS)
 
 
 .PHONY: all clean

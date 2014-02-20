@@ -15,6 +15,8 @@
 #include "Lancero.h"
 #include "LanceroIA.h"
 #include "state.h"
+#include "edificio.h"
+#include "CentroCiudad.h"
 #include <iostream>
 #include <time.h>
 using namespace std;
@@ -42,12 +44,14 @@ public:
 
 	vector<IDibujable*> getIAUnits(){ return IAUnits; }
 	vector<IDibujable*> getUserUnits(){ return UserUnits; }
+	vector<IDibujable*> getBuildings(){ return buildings; }
 
 	static void setSpeed(int);
 	static int getSpeed();
 
 	static IDibujable* addIAUnit(int,int,int);
 	static IDibujable* addUserUnit(int,int,int);
+	static IDibujable* addBuildings(int,int,int);
 
 	void sleep(unsigned int);
 	static Current stado;
@@ -64,10 +68,12 @@ private:
 	static int game_speed;
 	vector<IDibujable*> IAUnits;
 	vector<IDibujable*> UserUnits;
+	vector<IDibujable*> buildings;
 
 	/*Añadir unidades dinamicamente*/
 	static vector<battleIA*> Add_IAUnits;
 	static vector<Unidades*> Add_UserUnits;
+	static vector<edificio*> Add_Buildings;
 };
 
 

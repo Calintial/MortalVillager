@@ -53,12 +53,12 @@ void graphicEngine::DrawPausa()
     pause->run();
 }
 
-void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)
+void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units, vector<IDibujable*>* buildings)
 {
 	if(pantalla == NULL){
 		pantalla= new Pantalla(IrrDevice);
 	}
-	pantalla->pintarPantalla(ia_units,user_units);
+	pantalla->pintarPantalla(ia_units,user_units,buildings);
 	pause = NULL;
 	menu = NULL;
 }

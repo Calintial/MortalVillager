@@ -12,10 +12,11 @@ using namespace std;
 using namespace core;
 
 
-mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, bool suelo)
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* b, bool suelo)
 {
 	ia_units = IAunits;
 	user_units = Userunits;
+	buildings = b;
 
 	MapaDevice = IrrDevice;
 
@@ -337,6 +338,7 @@ void mapa2D::Pintar()
 
 			DrawIAUnits();
 			DrawUserUnits();
+			DrawBuildings();
 			
 			env->drawAll();
 			      	
@@ -359,6 +361,18 @@ vector<IDibujable*>* mapa2D::getIa_units(){
 }
 vector<IDibujable*>* mapa2D::getUser_units(){
 	return user_units;
+}
+
+void mapa2D::DrawBuildings()
+{
+	position2di DrawPosition;
+
+	int n_build = buildings->size();	
+	for(int i=0; i<n_build; i++)
+	{
+		DrawPosition = getDrawPosition(buildings->at(i)->getPosition());
+		buildings->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
+	}
 }
 
 void mapa2D::DrawIAUnits()

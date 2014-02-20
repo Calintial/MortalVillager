@@ -43,7 +43,7 @@ public:
 	};
 
 
-	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*,bool);
+	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*,bool);
 	~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
@@ -100,6 +100,7 @@ private:
 	IDibujable* vTiles[WIDTH][HEIGHT];
 	vector<IDibujable*>* ia_units;
 	vector<IDibujable*>* user_units;
+	vector<IDibujable*>* buildings;
 
 	//Vista
 	//int ViewWidth,ViewHeight;
@@ -121,6 +122,7 @@ private:
 
 	void DrawIAUnits();
 	void DrawUserUnits();
+	void DrawBuildings();
 	int IASelected(position2di);
 	int UserSelected(position2di);
 };
