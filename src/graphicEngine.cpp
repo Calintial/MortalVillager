@@ -65,6 +65,6 @@ void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* u
 }
 
 void graphicEngine::setPantalla(Pantalla* _pantalla){
-	//delete pantalla;
+	delete pantalla;
 	pantalla = _pantalla;
 }

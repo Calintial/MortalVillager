@@ -8,7 +8,7 @@ PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * 
 PantallaIABatalla::~PantallaIABatalla(){
 
     //delete mapa;
-    //delete debug;
+    delete debug;
 }
 void PantallaIABatalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 

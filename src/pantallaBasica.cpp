@@ -8,7 +8,7 @@ PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEng
 PantallaBasica::~PantallaBasica()
 {
     //delete mapa;
-    //delete hudmapa;
+    delete hudmapa;
 }
 
 void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units)

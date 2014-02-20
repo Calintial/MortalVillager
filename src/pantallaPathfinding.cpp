@@ -16,7 +16,7 @@ PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngin
 PantallaPathfinding::~PantallaPathfinding(){
 
     //delete mapa;
-    //delete interfazPathfinding;
+    delete interfazPathfinding;
 }
 void PantallaPathfinding::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
