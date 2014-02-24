@@ -44,7 +44,7 @@ void CurrentIA::doSomething(battleIA* bIA, position2di enemy_pos)
 //---BUSCANDO--//
 BUSCANDO::BUSCANDO()
 {
-	//cout << "BUSCANDO-ctor " << endl;
+	cout << "BUSCANDO-ctor " << endl;
 }
 
 void BUSCANDO::doSomething(battleIA* bIA, position2di enemy_pos)
@@ -66,16 +66,13 @@ void BUSCANDO::acercarse(CurrentIA *c)
 //---ACERCARSE--//
 ACERCARSE::ACERCARSE()
 {
-	//cout << "ACERCARSE-ctor " << endl;
+	cout << "ACERCARSE-ctor " << endl;
 }
 
 void ACERCARSE::doSomething(battleIA* bIA, position2di enemy_pos)
 {
-	cout << "ACERCARSE" << endl;
-
 	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
-		cout << "ACERCARSECONTRUE" << endl;
 		bIA->stadoIA->buscando();
 	}
 	else
@@ -94,7 +91,7 @@ void ACERCARSE::doSomething(battleIA* bIA, position2di enemy_pos)
 
 void ACERCARSE::buscando(CurrentIA *c)
 {
-	//cout << "cambio de ACERCARSE a BUSCANDO" << endl;
+	cout << "cambio de ACERCARSE a BUSCANDO" << endl;
 	c->setCurrent(new BUSCANDO());
 	delete this;
 }
