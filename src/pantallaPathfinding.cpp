@@ -20,11 +20,11 @@ Pantalla::~Pantalla(){
     delete mapa;
     delete interfazPathfinding;
 }
-void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
+void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings){
 
 	if(mapa == NULL){
 		
-		mapa = new mapa2D(pantallaDevice,ia_units,user_units,false);
+		mapa = new mapa2D(pantallaDevice,ia_units,user_units,buildings,false);
 		
 	}
 	if(interfazPathfinding == NULL){
