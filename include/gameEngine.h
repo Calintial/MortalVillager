@@ -17,6 +17,10 @@
 #include "state.h"
 #include "edificio.h"
 #include "CentroCiudad.h"
+#include "Cuartel.h"
+#include "Granja.h"
+#include "Arqueria.h"
+#include "Lanceria.h"
 #include <iostream>
 #include <time.h>
 using namespace std;
