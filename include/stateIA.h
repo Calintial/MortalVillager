@@ -4,10 +4,8 @@
 using namespace std;
 
 #include <iostream>
-#include "IDibujable.h"
 #include "battleIA.h"
 
-class IDibujable;
 class battleIA;
 
 class CurrentIA

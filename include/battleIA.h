@@ -31,7 +31,7 @@ public:
 	virtual void TexturaSeleccionada(IVideoDriver*,bool);
 	virtual void aplicarTextura(IVideoDriver* driver);*/
 	int getState();
-	static CurrentIA stadoIA;
+	CurrentIA* stadoIA;
 	position2di enemy_pos;
 	position2di searchEnemy(vector<IDibujable*>*);
 

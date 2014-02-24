@@ -1,12 +1,11 @@
 #include "battleIA.h"
 
-CurrentIA battleIA::stadoIA;
-
 battleIA::battleIA()
 {
 	state = 0;
 	enemy_pos.X = -1;
 	enemy_pos.Y = -1;
+	stadoIA = new CurrentIA();
 }
 
 battleIA::battleIA(int x, int y)
@@ -15,6 +14,7 @@ battleIA::battleIA(int x, int y)
 	state = 0;
 	enemy_pos.X = -1;
 	enemy_pos.Y = -1;
+	stadoIA = new CurrentIA();
 }
 
 battleIA::~battleIA()
@@ -26,7 +26,7 @@ void battleIA::updateIA(vector<IDibujable*>* user)
 {
 	enemy_pos = searchEnemy(user);
 		
-	stadoIA.doSomething(this, enemy_pos);
+	stadoIA->doSomething(this, enemy_pos);
 	/*switch(state)
 	{
 		case SEARCHING: state = this->searching(user);
