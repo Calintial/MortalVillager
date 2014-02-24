@@ -24,7 +24,9 @@ battleIA::~battleIA()
 
 void battleIA::updateIA(vector<IDibujable*>* user)
 {
-	stadoIA.doSomething(this, user);
+	enemy_pos = searchEnemy(user);
+		
+	stadoIA.doSomething(this, enemy_pos);
 	/*switch(state)
 	{
 		case SEARCHING: state = this->searching(user);
@@ -131,7 +133,7 @@ int battleIA::recovery(vector<IDibujable*>* user)
 	else
 	{
 		if(this->getLife() != 100)
-		{
+		{		
 			this->Recovery();
 			return RECOVERY;
 		}
@@ -147,8 +149,6 @@ position2di battleIA::searchEnemy(vector<IDibujable*>* vUnits)
 	/*Busca a un enemigo en su rango establecido y devuelve un puntero con un array de sus coordenadas*/
 	int nUnits = vUnits->size();
 	position2di mypos = getPosition();
-	
-	cout << "AX: " << mypos.X << "  AY: " << mypos.Y << endl; 
 	
 	position2di pos;
 	int v_range = getVisionRange();

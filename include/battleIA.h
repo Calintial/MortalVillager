@@ -42,7 +42,6 @@ public:
 
 private:
 	int state;
-	
 
 	int searching(vector<IDibujable*>*);
 	int approach(vector<IDibujable*>*);

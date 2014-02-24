@@ -35,9 +35,9 @@ bool CurrentIA::inicial()
 	return current->inicial();
 }
 
-void CurrentIA::doSomething(battleIA* bIA, vector<IDibujable*>* user)
+void CurrentIA::doSomething(battleIA* bIA, position2di enemy_pos)
 {
-	current->doSomething(bIA, user);
+	current->doSomething(bIA, enemy_pos);
 }
 
 
@@ -47,14 +47,13 @@ BUSCANDO::BUSCANDO()
 	//cout << "BUSCANDO-ctor " << endl;
 }
 
-void BUSCANDO::doSomething(battleIA* bIA, vector<IDibujable*>* user)
+void BUSCANDO::doSomething(battleIA* bIA, position2di enemy_pos)
 {
 	cout << "BUSCANDO" << endl;
-	bIA->enemy_pos = bIA->searchEnemy(user);
-	if(!(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1))
+	if(!(enemy_pos.X == -1 && enemy_pos.Y == -1))
 	{
 		bIA->stadoIA.acercarse();
-	}
+	}	
 }
 
 void BUSCANDO::acercarse(CurrentIA *c)
@@ -70,13 +69,13 @@ ACERCARSE::ACERCARSE()
 	//cout << "ACERCARSE-ctor " << endl;
 }
 
-void ACERCARSE::doSomething(battleIA* bIA, vector<IDibujable*>* user)
+void ACERCARSE::doSomething(battleIA* bIA, position2di enemy_pos)
 {
 	cout << "ACERCARSE" << endl;
-	
-	bIA->enemy_pos = bIA->searchEnemy(user);
-	if(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1)
+
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
+		cout << "ACERCARSECONTRUE" << endl;
 		bIA->stadoIA.buscando();
 	}
 	else
@@ -113,10 +112,9 @@ ATACAR::ATACAR()
 	cout << "ATACAR-ctor " << endl;
 }
 
-void ATACAR::doSomething(battleIA* bIA, vector<IDibujable*>* user)
+void ATACAR::doSomething(battleIA* bIA, position2di enemy_pos)
 {
-	bIA->enemy_pos = bIA->searchEnemy(user);
-	if(!(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1))
+	if(!(enemy_pos.X == -1 && enemy_pos.Y == -1))
 	{
 		if(bIA->enemy_in_attack_range(bIA->enemy_pos) && bIA->getLife() > 25)
 		{
@@ -132,7 +130,7 @@ void ATACAR::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 		}
 	}
 	bIA->stadoIA.buscando();
-}
+	}
 
 void ATACAR::buscando(CurrentIA *c)
 {
@@ -161,10 +159,9 @@ HUIR::HUIR()
 	cout << "HUIR-ctor " << endl;
 }
 
-void HUIR::doSomething(battleIA* bIA, vector<IDibujable*>* user)
+void HUIR::doSomething(battleIA* bIA, position2di enemy_pos)
 {
-	bIA->enemy_pos = bIA->searchEnemy(user);
-	if(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1)
+	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
 		bIA->stadoIA.recuperarse();
 	}
@@ -188,10 +185,9 @@ RECUPERARSE::RECUPERARSE()
 	cout << "RECUPERARSE-ctor " << endl;
 }
 
-void RECUPERARSE::doSomething(battleIA* bIA, vector<IDibujable*>* user)
+void RECUPERARSE::doSomething(battleIA* bIA, position2di enemy_pos)
 {
-	bIA->enemy_pos = bIA->searchEnemy(user);
-	if(bIA->enemy_pos.X != -1 && bIA->enemy_pos.Y != -1)
+	if(enemy_pos.X != -1 && enemy_pos.Y != -1)
 	{
 		bIA->stadoIA.huir();
 	}
@@ -218,6 +214,6 @@ void RECUPERARSE::huir(CurrentIA *c)
 void RECUPERARSE::buscando(CurrentIA *c)
 {
 	cout << "cambio de RECUPERARSE a BUSCANDO" << endl;
-	c->setCurrent(new HUIR());
+	c->setCurrent(new BUSCANDO());
 	delete this;
 }
