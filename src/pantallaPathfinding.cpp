@@ -33,7 +33,10 @@ void PantallaPathfinding::pintarPantalla(vector<IDibujable*>* ia_units,vector<ID
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	mapa->Pintar();
 	interfazPathfinding->Draw();
-	pantallaDevice->getVideoDriver()->endScene(); 
+	pantallaDevice->getVideoDriver()->endScene();
+	if(eliminar){
+		delete this;
+	}
 
 }
 bool PantallaPathfinding::OnEvent(const SEvent& event){

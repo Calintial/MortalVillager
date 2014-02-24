@@ -17,11 +17,13 @@ public:
 		virtual ~Pantalla() {};
 		virtual void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*) = 0;
 		virtual bool OnEvent(const SEvent& event);
+		void dispose();
 private:
 	graphicEngine * grEngine;
 protected:
 	IrrlichtDevice * pantallaDevice;
 	shared_ptr<mapa2D> mapa;
+	bool eliminar;
 
 
 

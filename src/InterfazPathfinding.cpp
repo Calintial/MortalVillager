@@ -5,6 +5,7 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,shared_ptr<m
     env = IrrDevice->getGUIEnvironment();
     driver = IrrDevice->getVideoDriver();
     font = env->getFont("../media/fonthaettenschweiler.bmp");
+    env->clear();
     init();
 
     mapa = map;

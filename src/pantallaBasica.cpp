@@ -24,7 +24,10 @@ void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibuja
 	pantallaDevice->setEventReceiver(this); 
 	mapa->Pintar();
 	hudmapa->paint();
-	pantallaDevice->getVideoDriver()->endScene(); 
+	pantallaDevice->getVideoDriver()->endScene();
+	if(eliminar){
+		delete this;
+	}
 
 }
 

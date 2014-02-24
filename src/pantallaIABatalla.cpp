@@ -26,7 +26,10 @@ void PantallaIABatalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDib
 	mapa->Pintar();
 	
 	debug->Draw();
-	pantallaDevice->getVideoDriver()->endScene();  
+	pantallaDevice->getVideoDriver()->endScene();
+	if(eliminar){
+		delete this;
+	}
 
 }
 

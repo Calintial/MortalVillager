@@ -17,9 +17,13 @@
 Pantalla::Pantalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):grEngine(_grEngine),mapa(_mapa){
 	pantallaDevice= IrrDevice;
 	pantallaDevice->setEventReceiver(this);
+    eliminar = false;
 	(gameEngine::addIAUnit(0,0))->aplicarTextura(pantallaDevice->getVideoDriver());
 	(gameEngine::addIAUnit(10,10))->aplicarTextura(pantallaDevice->getVideoDriver());
 	(gameEngine::addUserUnit(24,12))->aplicarTextura(pantallaDevice->getVideoDriver());
+}
+void Pantalla::dispose(){
+    eliminar = true;
 }
 
 bool Pantalla::OnEvent(const SEvent& event){
@@ -30,17 +34,16 @@ bool Pantalla::OnEvent(const SEvent& event){
     	{
     		cout<<"F2 presionado -> pantallaBasica"<<endl;
     		grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
-    		return true;
+            return true;
     	}else if (event.KeyInput.Key == irr::KEY_F3 && event.KeyInput.PressedDown)
     	{
     		cout<<"F3 presionado -> pantallaPathfinding"<<endl;
     		grEngine->setPantalla(new PantallaPathfinding(pantallaDevice,grEngine,mapa));
-    		return true;
+            return true;
     	}else if (event.KeyInput.Key == irr::KEY_F4 && event.KeyInput.PressedDown)
     	{
     		cout<<"F4 presionado -> pantallaIABatalla"<<endl;
     		grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa));
-
     		return true;
     	}else{
     		cout<<"presionado "<<event.KeyInput.Key<<endl;
