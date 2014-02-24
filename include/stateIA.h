@@ -33,11 +33,11 @@ class StateIA
 	public:
 		virtual void buscando(CurrentIA *c)
 		{
-			cout << "buscando"<<endl;
+			//cout << "buscando"<<endl;
 		}	
 		virtual void acercarse(CurrentIA *c)
 		{
-			cout << "acercarse"<<endl;
+			//cout << "acercarse"<<endl;
 		}
 		virtual void atacar(CurrentIA *c)
 		{
@@ -62,7 +62,7 @@ class BUSCANDO: public StateIA
 		BUSCANDO();
 		virtual ~BUSCANDO()
 		{
-			cout << "dtor-BUSCANDO" << endl;
+			//cout << "dtor-BUSCANDO" << endl;
 		};
 		void acercarse(CurrentIA *c);
 		bool inicial(){return true;}
@@ -75,7 +75,7 @@ class ACERCARSE: public StateIA
 		ACERCARSE();
 		virtual ~ACERCARSE()
 		{
-			cout << "dtor-ACERCARSE" << endl;
+			//cout << "dtor-ACERCARSE" << endl;
 		};
 		void buscando(CurrentIA *c);
 		void atacar(CurrentIA *c);

@@ -44,21 +44,22 @@ void CurrentIA::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 //---BUSCANDO--//
 BUSCANDO::BUSCANDO()
 {
-	cout << "BUSCANDO-ctor " << endl;
+	//cout << "BUSCANDO-ctor " << endl;
 }
 
 void BUSCANDO::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
+	cout << "BUSCANDO" << endl;
 	bIA->enemy_pos = bIA->searchEnemy(user);
 	if(!(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1))
 	{
-		//this->acercarse();
+		bIA->stadoIA.acercarse();
 	}
 }
 
 void BUSCANDO::acercarse(CurrentIA *c)
 {
-	cout << "cambio de BUSCANDO a ACERCARSE" << endl;
+	//cout << "cambio de BUSCANDO a ACERCARSE" << endl;
 	c->setCurrent(new ACERCARSE());
 	delete this;
 }
@@ -66,17 +67,35 @@ void BUSCANDO::acercarse(CurrentIA *c)
 //---ACERCARSE--//
 ACERCARSE::ACERCARSE()
 {
-	cout << "ACERCARSE-ctor " << endl;
+	//cout << "ACERCARSE-ctor " << endl;
 }
 
 void ACERCARSE::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
+	cout << "ACERCARSE" << endl;
 	
+	bIA->enemy_pos = bIA->searchEnemy(user);
+	if(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1)
+	{
+		bIA->stadoIA.buscando();
+	}
+	else
+	{
+		/*Comprobar si el enemigo está dentro de rango*/
+		if(bIA->enemy_in_attack_range(bIA->enemy_pos))
+		{
+			bIA->stadoIA.atacar();
+		}
+		else
+		{
+			bIA->Move(bIA->enemy_pos.X,bIA->enemy_pos.Y);
+		}
+	}
 }
 
 void ACERCARSE::buscando(CurrentIA *c)
 {
-	cout << "cambio de ACERCARSE a BUSCANDO" << endl;
+	//cout << "cambio de ACERCARSE a BUSCANDO" << endl;
 	c->setCurrent(new BUSCANDO());
 	delete this;
 }
@@ -96,7 +115,23 @@ ATACAR::ATACAR()
 
 void ATACAR::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
-	
+	bIA->enemy_pos = bIA->searchEnemy(user);
+	if(!(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1))
+	{
+		if(bIA->enemy_in_attack_range(bIA->enemy_pos) && bIA->getLife() > 25)
+		{
+			bIA->Attack(bIA->enemy_pos);
+		}
+		else if(!bIA->enemy_in_attack_range(bIA->enemy_pos))
+		{
+			bIA->stadoIA.acercarse();
+		}		
+		else if(bIA->getLife() <= 25)
+		{
+			bIA->stadoIA.huir();
+		}
+	}
+	bIA->stadoIA.buscando();
 }
 
 void ATACAR::buscando(CurrentIA *c)
@@ -128,7 +163,15 @@ HUIR::HUIR()
 
 void HUIR::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
-	
+	bIA->enemy_pos = bIA->searchEnemy(user);
+	if(bIA->enemy_pos.X == -1 && bIA->enemy_pos.Y == -1)
+	{
+		bIA->stadoIA.recuperarse();
+	}
+	else
+	{
+		bIA->Move(0,0);
+	}
 }
 
 void HUIR::recuperarse(CurrentIA *c)
@@ -147,7 +190,22 @@ RECUPERARSE::RECUPERARSE()
 
 void RECUPERARSE::doSomething(battleIA* bIA, vector<IDibujable*>* user)
 {
-	
+	bIA->enemy_pos = bIA->searchEnemy(user);
+	if(bIA->enemy_pos.X != -1 && bIA->enemy_pos.Y != -1)
+	{
+		bIA->stadoIA.huir();
+	}
+	else
+	{
+		if(bIA->getLife() != 100)
+		{
+			bIA->Recovery();
+		}
+		else
+		{
+			bIA->stadoIA.buscando();
+		}
+	}
 }
 
 void RECUPERARSE::huir(CurrentIA *c)
