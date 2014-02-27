@@ -28,7 +28,6 @@ void Pantalla::dispose(){
 
 bool Pantalla::OnEvent(const SEvent& event){
     if (event.EventType == irr::EET_KEY_INPUT_EVENT){
-    	// TODO: mostrar la pantalla // constructor de copia con las distintas pantallas?
 
     	if (event.KeyInput.Key == irr::KEY_F2 && event.KeyInput.PressedDown)
     	{

@@ -66,10 +66,16 @@ void pathfinding::analyzeRegions(){
 				}else{
 					if (tamHueco > 0)
 					{
-						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-						Enlace enlace(position2di(actual->inicio.X,posHueco),position2di(regionIzquierda->final.X,posHueco));
-						boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
-						//cout<<"Nuevo enlace izquierda"<<endl;
+						/*if (tamHueco > 3)
+						{
+							Enlace enlace(position2di(actual->inicio.X,posHueco),position2di(regionIzquierda->final.X,posHueco));
+							Enlace enlace2(position2di(actual->inicio.X,posHueco+tamHueco-1),position2di(regionIzquierda->final.X,posHueco+tamHueco-1));
+							boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
+							boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace2,grafoRegiones);
+						}else{*/
+							Enlace enlace(position2di(actual->inicio.X,posHueco + tamHueco/2),position2di(regionIzquierda->final.X,posHueco + tamHueco/2));
+							boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);	
+						//}
 						tamHueco = 0;
 						posHueco = -1;
 					}
@@ -79,7 +85,7 @@ void pathfinding::analyzeRegions(){
 			}
 			if (tamHueco > 0)
 			{
-				Enlace enlace(position2di(actual->inicio.X,posHueco),position2di(regionIzquierda->final.X,posHueco));
+				Enlace enlace(position2di(actual->inicio.X,posHueco + tamHueco/2),position2di(regionIzquierda->final.X,posHueco + tamHueco/2));
 				boost::add_edge(actual->descriptor,regionIzquierda->descriptor,enlace,grafoRegiones);
 				//cout<<"Nuevo enlace izquierda"<<endl;
 			}
@@ -110,7 +116,7 @@ void pathfinding::analyzeRegions(){
 					if (tamHueco > 0)
 					{
 						// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-						Enlace enlace(position2di(posHueco,actual->inicio.Y),position2di(posHueco,regionArriba->final.Y));
+						Enlace enlace(position2di(posHueco+tamHueco/2,actual->inicio.Y),position2di(posHueco+tamHueco/2,regionArriba->final.Y));
 						boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
 						//cout<<"Nuevo enlace arriba"<<endl;
 						tamHueco = 0;
@@ -122,7 +128,7 @@ void pathfinding::analyzeRegions(){
 			}
 			if (tamHueco > 0)
 			{
-				Enlace enlace(position2di(posHueco,actual->inicio.Y),position2di(posHueco,regionArriba->final.Y));
+				Enlace enlace(position2di(posHueco+tamHueco/2,actual->inicio.Y),position2di(posHueco+tamHueco/2,regionArriba->final.Y));
 				boost::add_edge(actual->descriptor,regionArriba->descriptor,enlace,grafoRegiones);
 				//cout<<"Nuevo enlace arriba"<<endl;
 			}
@@ -160,8 +166,8 @@ void pathfinding::findInnerPaths(){
 				}
 				//Camino nuevo(puntoI);
 				// el camino con el propio nodo es vacío (nuevo camino y ya está)
-				if (j != i)
-				{
+				/*if (j != i)
+				{*/
 					Camino* c=A(puntoI,puntoJ,regionActual);
 					if (c != NULL)
 					{
@@ -169,7 +175,7 @@ void pathfinding::findInnerPaths(){
 					}
 					// calculo el camino entre puntoI y puntoJ
 					////cout<<"TODO: Calculo el camino entre {"<<puntoI.X<<","<<puntoI.Y<<"} y {"<<puntoJ.X<<","<<puntoJ.Y<<"}"<<endl;
-				}
+				//}
 				//caminos.push_back(nuevo);
 				// para cada enlace, hacemos push_back a enlaceI->intracaminos con el camino entre enlaceI y enlaceJ
 			}
@@ -282,6 +288,7 @@ Camino* pathfinding::A(position2di origen,position2di destino,Region* regionActu
 						listaFrontera.push_back(hijo);
 					}
 					else{
+						// TODO: igual no va bien g,h y f -> f se calcula a partir de los otros, y g es nodo.g+1,no?
 						if(hijo.g<listaFrontera.at(otroindex).g){
 							listaFrontera.at(otroindex).g=hijo.g;
 							listaFrontera.at(otroindex).h=hijo.h;
