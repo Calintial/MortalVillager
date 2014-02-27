@@ -4,7 +4,7 @@
 #include <queue>
 #include "mapa2D.h"
 #include <limits.h>
-pathfinding::pathfinding(mapa2D* _mapa):width(WIDTH),height(HEIGHT),mapa(_mapa){}
+pathfinding::pathfinding(shared_ptr<mapa2D> _mapa):width(WIDTH),height(HEIGHT),mapa(_mapa){}
 
 pathfinding::~pathfinding(){}
 

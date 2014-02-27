@@ -9,22 +9,21 @@ using namespace irr;
 using namespace video;
 using namespace std;
 using namespace core;
-Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
-	pantallaDevice= IrrDevice;
-	mapa = NULL;
+PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
 	interfazPathfinding = NULL;
 	pantallaDevice->setEventReceiver(this); 
 }
-Pantalla::~Pantalla(){
+PantallaPathfinding::~PantallaPathfinding(){
 
-    delete mapa;
+    //delete mapa;
     delete interfazPathfinding;
 }
-void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings){
 
-	if(mapa == NULL){
-		
-		mapa = new mapa2D(pantallaDevice,ia_units,user_units,buildings,false);
+void PantallaPathfinding::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings){
+
+	if(mapa.get() == NULL){
+		cout<<"creando mapa"<<endl;
+		mapa = shared_ptr<mapa2D>(new mapa2D(pantallaDevice,ia_units,user_units,buildings,false));
 		
 	}
 	if(interfazPathfinding == NULL){
@@ -35,12 +34,24 @@ void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>*
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	mapa->Pintar();
 	interfazPathfinding->Draw();
-	pantallaDevice->getVideoDriver()->endScene(); 
+	pantallaDevice->getVideoDriver()->endScene();
+	if(eliminar){
+		delete this;
+	}
 
 }
-bool Pantalla::OnEvent(const SEvent& event){
+bool PantallaPathfinding::OnEvent(const SEvent& event){
 
-	return interfazPathfinding->OnEvent(event);
+	if(event.EventType == EET_KEY_INPUT_EVENT)
+	{
+		return Pantalla::OnEvent(event);
+	}else{
+		if (interfazPathfinding != NULL)
+		{
+			return interfazPathfinding->OnEvent(event);
+		}
+		
+	}
 	
-	//return false;
+	return false;
 }

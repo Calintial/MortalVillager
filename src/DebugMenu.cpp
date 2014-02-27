@@ -1,18 +1,19 @@
 #include "DebugMenu.h"
 
 
-DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<IDibujable*>* ia_units, mapa2D* map)
+DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<IDibujable*>* ia_units, shared_ptr<mapa2D> map)
 {
 	DebugDevice = IrrDevice;
     env = IrrDevice->getGUIEnvironment();
     driver = IrrDevice->getVideoDriver();
     font = env->getFont("../media/fonthaettenschweiler.bmp");
+    env->clear();
     initDebugMenu();
 
     vUnits = ia_units;
     mapa = map;
 
-	DebugDevice->setEventReceiver(this); 
+	//DebugDevice->setEventReceiver(this); 
 	drawVision = false;
 	drawAttackVision = false;
 }

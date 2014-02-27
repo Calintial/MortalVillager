@@ -23,6 +23,7 @@ gameEngine::gameEngine()
 	graphics = new graphicEngine();
 
 	ia = new intelEngine(&IAUnits,&UserUnits);
+
 }
 
 gameEngine::~gameEngine()

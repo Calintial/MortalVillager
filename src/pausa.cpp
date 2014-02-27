@@ -35,11 +35,11 @@ pausa::pausa(IrrlichtDevice * IrrDevice)
 pausa::~pausa()
 {
 	//delete MenuDevice;
-	delete driver;
+/*	delete driver;
 	//delete smgr;
 	delete env;
 	delete skin;
-	delete font;
+	delete font;*/
 }
 
 bool pausa::OnEvent(const SEvent& event)

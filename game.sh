@@ -1,10 +1,10 @@
-if [[ $1 -eq "1" ]]; then
-	make pathfinding
-elif [[ $1 -eq "2" ]]; then
-	make ia_batalla
-else
+#if [[ $1 -eq "1" ]]; then
+#	make pathfinding
+#elif [[ $1 -eq "2" ]]; then
+#	make ia_batalla
+#else
 	make
-fi
+#fi
 
 # Si make ha funcionado:
 if [ $? -eq 0 ] ; then

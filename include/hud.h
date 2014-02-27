@@ -22,7 +22,7 @@ class mapa2D;
 class hud : public IEventReceiver
 {
 public:
-	hud(IrrlichtDevice * IrrDevice, mapa2D *);
+	hud(IrrlichtDevice * IrrDevice, shared_ptr<mapa2D>);
 	~hud();
 	void paint();
 	void paintInformation(Unidades *);
@@ -42,7 +42,7 @@ private:
 	Unidades * personaje;
 	bool ensenyarInformacion;
 	std::string mapa;
-	mapa2D * _mapa2D;
+	shared_ptr<mapa2D> _mapa2D;
 };
 
 #endif

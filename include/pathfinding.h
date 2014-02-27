@@ -22,7 +22,7 @@ typedef boost::graph_traits<Graph>::edge_iterator edge_iter;
 class pathfinding
 {
 public:
-	pathfinding(mapa2D*);
+	pathfinding(shared_ptr<mapa2D>);
 	~pathfinding();
 	void run();
 	void clear();
@@ -51,6 +51,6 @@ private:
 
 	int width,height; 
 	const int tamRegion = 5;
-	mapa2D* mapa;
+	shared_ptr<mapa2D> mapa;
 	Graph grafoRegiones;
 };

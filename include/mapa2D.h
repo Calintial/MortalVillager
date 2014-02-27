@@ -17,6 +17,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <memory>
 
 using namespace irr;
 using namespace video;
