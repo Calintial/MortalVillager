@@ -280,6 +280,31 @@ void mapa2D::GenerarMapa()
 			file << mapatext;
 }
 
+void mapa2D::GuardarMapa(){
+	std::string mapatext = "";
+	for(int i = 0; i < WIDTH; i++) 
+    {
+		for(int j=0; j < HEIGHT; j++) 
+		{
+			if (vTiles[i][j]->isTransitable())
+			{
+				mapatext+="0";
+			}else{
+				mapatext+="1";
+			}
+		}
+
+	}
+
+	std::ofstream file("../media/mapa.txt");
+	if (file.is_open())
+	{
+		file<< mapatext;
+		file.close();
+	}
+
+}
+
 IDibujable* mapa2D::getTile(int x, int y){
 	return vTiles[y][x];
 }

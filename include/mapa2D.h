@@ -52,6 +52,7 @@ public:
 	bool free();
 	
 	void GenerarMapa();
+	void GuardarMapa();
 
 	IDibujable* getTile(int x, int y);
 	void setTile(int x, int y, IDibujable* contenido);

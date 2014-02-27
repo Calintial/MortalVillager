@@ -34,6 +34,8 @@ void InterfazPathfinding::init(){
         L"Procesar", L"Iniciar análisis del mapa, generación de regiones y cálculo de caminos internos");
 	env->addButton(rect<s32>(dimensionPantallaX + 220,dimensionPantallaY+35,dimensionPantallaX + 430,dimensionPantallaY+60), 0, BUTTON_CLEAR,
         L"Vaciar", L"");
+	env->addButton(rect<s32>(dimensionPantallaX + 220,75,dimensionPantallaX + 430,100), 0, BUTTON_SAVE,
+        L"Guardar", L"");
 }
 
 void InterfazPathfinding::Draw()
@@ -193,6 +195,9 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 				origen = destino = position2di(-1,-1);
 				caminoFinal = NULL;
 				mapa->getPathfinding()->clear();
+			}
+			case BUTTON_SAVE:{
+				mapa->GuardarMapa();
 			}
 		}					
 	}
