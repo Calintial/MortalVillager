@@ -1,10 +1,11 @@
 #include "InterfazPathfinding.h"
 
-InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D* map){
+InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D> map){
 	device = IrrDevice;
     env = IrrDevice->getGUIEnvironment();
     driver = IrrDevice->getVideoDriver();
     font = env->getFont("../media/fonthaettenschweiler.bmp");
+    env->clear();
     init();
 
     mapa = map;

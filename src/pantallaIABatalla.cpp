@@ -1,24 +1,24 @@
 #include "pantallaIABatalla.h"
 
 
-Pantalla::Pantalla(IrrlichtDevice * IrrDevice){
-	pantallaDevice= IrrDevice;
-	mapa = NULL;
+PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
 	debug = NULL;
-	(gameEngine::addIAUnit(0,0,0))->aplicarTextura(pantallaDevice->getVideoDriver());
-	(gameEngine::addIAUnit(10,10,0))->aplicarTextura(pantallaDevice->getVideoDriver());
-	(gameEngine::addUserUnit(24,12,0))->aplicarTextura(pantallaDevice->getVideoDriver());
-}
-Pantalla::~Pantalla(){
 
-    delete mapa;
+	pantallaDevice->setEventReceiver(this); 
+}
+PantallaIABatalla::~PantallaIABatalla(){
+
+    //delete mapa;
     delete debug;
 }
-void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
 
-	if(mapa == NULL)
+void PantallaIABatalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units, vector<IDibujable*>* buildings){
+
+
+	if(mapa.get() == NULL)
 	{
-		mapa = new mapa2D(pantallaDevice,ia_units,user_units,true);
+		cout<<"creando mapa"<<endl;
+		mapa = shared_ptr<mapa2D>(new mapa2D(pantallaDevice,ia_units,user_units,buildings,true));
 	}
 
 
@@ -29,6 +29,20 @@ void Pantalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>*
 	mapa->Pintar();
 	
 	debug->Draw();
-	pantallaDevice->getVideoDriver()->endScene();  
+	pantallaDevice->getVideoDriver()->endScene();
+	if(eliminar){
+		delete this;
+	}
 
+}
+
+bool PantallaIABatalla::OnEvent(const SEvent& event){
+	if(event.EventType == EET_KEY_INPUT_EVENT)
+	{
+		return Pantalla::OnEvent(event);
+	}else{
+		if(debug != NULL)
+			return debug->OnEvent(event);
+	}
+	return false;
 }

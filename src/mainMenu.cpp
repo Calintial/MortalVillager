@@ -48,11 +48,11 @@ mainMenu::mainMenu(IrrlichtDevice * IrrDevice)
 mainMenu::~mainMenu()
 {
 	//delete MenuDevice;
-	delete driver;
+/*	delete driver;
 	//delete smgr;
 	delete env;
 	delete skin;
-	delete font;
+	delete font;*/
 }
 
 bool mainMenu::OnEvent(const SEvent& event)

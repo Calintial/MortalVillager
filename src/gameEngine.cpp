@@ -6,7 +6,7 @@ Current gameEngine::stado;
 
 vector<battleIA*> gameEngine::Add_IAUnits;
 vector<Unidades*> gameEngine::Add_UserUnits;
-
+vector<edificio*> gameEngine::Add_Buildings;
 
 gameEngine::gameEngine()
 {
@@ -23,6 +23,7 @@ gameEngine::gameEngine()
 	graphics = new graphicEngine();
 
 	ia = new intelEngine(&IAUnits,&UserUnits);
+
 }
 
 gameEngine::~gameEngine()
@@ -128,6 +129,23 @@ IDibujable* gameEngine::addUserUnit(int x,int y, int tipo)
 	return new_unit;
 }
 
+IDibujable* gameEngine::addBuildings(int x,int y, int tipo)
+{
+	edificio* new_build;
+	switch(tipo)
+	{
+		case 0: new_build = new CentroCiudad(x,y); break;
+		case 1: new_build = new Granja(x,y); break;
+		case 2: new_build = new Cuartel(x,y); break;
+		case 3: new_build = new Arqueria(x,y); break;
+		case 4: new_build = new Lanceria(x,y); break;
+		
+	}
+
+	Add_Buildings.push_back(new_build);
+	return new_build;
+}
+
 void gameEngine::addNewUnits()
 {
 	for(battleIA* ia : Add_IAUnits)
@@ -139,7 +157,11 @@ void gameEngine::addNewUnits()
 	{
 		UserUnits.push_back(unit);
 	}
-	
 	Add_UserUnits.clear();
+	for(edificio* build : Add_Buildings)
+	{
+		buildings.push_back(build);
+	}
+	Add_Buildings.clear();
 }
 

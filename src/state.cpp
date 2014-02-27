@@ -80,8 +80,9 @@ void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* i
 	
 	vector<IDibujable*> StIAUnits = ge->getIAUnits();
 	vector<IDibujable*> StUserUnits = ge->getUserUnits();
+	vector<IDibujable*> StBuildingsUnits = ge->getBuildings();
 	
-	graphics->DrawMap(&StIAUnits,&StUserUnits);
+	graphics->DrawMap(&StIAUnits,&StUserUnits,&StBuildingsUnits);
 	
 	ge->sleep(100-gameEngine::getSpeed());
 	//cout << "MOSTRAR PANTALLA DE JUEGO" << endl;
