@@ -24,9 +24,10 @@ battleIA::~battleIA()
 
 void battleIA::updateIA(vector<IDibujable*>* user)
 {
+	//cout << user->getLife() << endl;
 	enemy_pos = searchEnemy(user);
 		
-	stadoIA->doSomething(this, enemy_pos);
+	state=stadoIA->doSomething(this, enemy_pos);
 	/*switch(state)
 	{
 		case SEARCHING: state = this->searching(user);
@@ -46,7 +47,7 @@ void battleIA::updateIA(vector<IDibujable*>* user)
 	}*/
 }
 
-int battleIA::searching(vector<IDibujable*>* user)
+/*int battleIA::searching(vector<IDibujable*>* user)
 {
 	//cout<<"Searching"<<endl;
 	enemy_pos = this->searchEnemy(user);
@@ -70,7 +71,7 @@ int battleIA::approach(vector<IDibujable*>* user)
 	}
 	else
 	{
-		/*Comprobar si el enemigo está dentro de rango*/
+		//Comprobar si el enemigo está dentro de rango
 		if(this->enemy_in_attack_range(enemy_pos))
 		{
 			return ATTACK;
@@ -142,11 +143,11 @@ int battleIA::recovery(vector<IDibujable*>* user)
 			return SEARCHING;
 		}
 	}
-}
+}*/
 
 position2di battleIA::searchEnemy(vector<IDibujable*>* vUnits)
 {
-	/*Busca a un enemigo en su rango establecido y devuelve un puntero con un array de sus coordenadas*/
+	//Busca a un enemigo en su rango establecido y devuelve un puntero con un array de sus coordenadas
 	int nUnits = vUnits->size();
 	position2di mypos = getPosition();
 	

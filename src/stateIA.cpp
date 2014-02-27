@@ -35,9 +35,10 @@ bool CurrentIA::inicial()
 	return current->inicial();
 }
 
-void CurrentIA::doSomething(battleIA* bIA, position2di enemy_pos)
+int CurrentIA::doSomething(battleIA* bIA, position2di enemy_pos)
 {
-	current->doSomething(bIA, enemy_pos);
+	int st = current->doSomething(bIA, enemy_pos);
+	return st;
 }
 
 
@@ -47,13 +48,13 @@ BUSCANDO::BUSCANDO()
 	cout << "BUSCANDO-ctor " << endl;
 }
 
-void BUSCANDO::doSomething(battleIA* bIA, position2di enemy_pos)
+int BUSCANDO::doSomething(battleIA* bIA, position2di enemy_pos)
 {
-	cout << "BUSCANDO" << endl;
 	if(!(enemy_pos.X == -1 && enemy_pos.Y == -1))
 	{
 		bIA->stadoIA->acercarse();
-	}	
+	}
+	return SEARCHING;
 }
 
 void BUSCANDO::acercarse(CurrentIA *c)
@@ -69,7 +70,7 @@ ACERCARSE::ACERCARSE()
 	cout << "ACERCARSE-ctor " << endl;
 }
 
-void ACERCARSE::doSomething(battleIA* bIA, position2di enemy_pos)
+int ACERCARSE::doSomething(battleIA* bIA, position2di enemy_pos)
 {
 	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
@@ -87,6 +88,8 @@ void ACERCARSE::doSomething(battleIA* bIA, position2di enemy_pos)
 			bIA->Move(bIA->enemy_pos.X,bIA->enemy_pos.Y);
 		}
 	}
+	
+	return APPROACH;
 }
 
 void ACERCARSE::buscando(CurrentIA *c)
@@ -109,7 +112,7 @@ ATACAR::ATACAR()
 	cout << "ATACAR-ctor " << endl;
 }
 
-void ATACAR::doSomething(battleIA* bIA, position2di enemy_pos)
+int ATACAR::doSomething(battleIA* bIA, position2di enemy_pos)
 {
 	if(!(enemy_pos.X == -1 && enemy_pos.Y == -1))
 	{
@@ -127,7 +130,9 @@ void ATACAR::doSomething(battleIA* bIA, position2di enemy_pos)
 		}
 	}
 	bIA->stadoIA->buscando();
-	}
+	
+	return ATTACK;
+}
 
 void ATACAR::buscando(CurrentIA *c)
 {
@@ -156,8 +161,9 @@ HUIR::HUIR()
 	cout << "HUIR-ctor " << endl;
 }
 
-void HUIR::doSomething(battleIA* bIA, position2di enemy_pos)
+int HUIR::doSomething(battleIA* bIA, position2di enemy_pos)
 {
+	cout << "HUIR" << endl;
 	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
 	{
 		bIA->stadoIA->recuperarse();
@@ -166,6 +172,8 @@ void HUIR::doSomething(battleIA* bIA, position2di enemy_pos)
 	{
 		bIA->Move(0,0);
 	}
+	
+	return FLEE;
 }
 
 void HUIR::recuperarse(CurrentIA *c)
@@ -182,14 +190,15 @@ RECUPERARSE::RECUPERARSE()
 	cout << "RECUPERARSE-ctor " << endl;
 }
 
-void RECUPERARSE::doSomething(battleIA* bIA, position2di enemy_pos)
+int RECUPERARSE::doSomething(battleIA* bIA, position2di enemy_pos)
 {
 	if(enemy_pos.X != -1 && enemy_pos.Y != -1)
 	{
 		bIA->stadoIA->huir();
 	}
 	else
-	{
+	{	
+		//cout << "VIDA:" << bIA->getLife() << endl;
 		if(bIA->getLife() != 100)
 		{
 			bIA->Recovery();
@@ -199,6 +208,8 @@ void RECUPERARSE::doSomething(battleIA* bIA, position2di enemy_pos)
 			bIA->stadoIA->buscando();
 		}
 	}
+	
+	return RECOVERY;
 }
 
 void RECUPERARSE::huir(CurrentIA *c)

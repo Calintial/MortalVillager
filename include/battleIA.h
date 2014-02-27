@@ -9,15 +9,6 @@
 
 using namespace std;
 
-enum{
-	/*Estados de la IA*/
-	SEARCHING = 0,
-	APPROACH = 1,
-	ATTACK = 2,
-	FLEE = 3,
-	RECOVERY = 4,
-};
-
 class CurrentIA;
 
 class battleIA : public Unidades{

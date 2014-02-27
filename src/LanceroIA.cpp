@@ -2,6 +2,7 @@
 
 LanceroIA::LanceroIA()
 {
+	cout << "ConstruirLanceroIA" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -9,6 +10,7 @@ LanceroIA::LanceroIA()
 
 LanceroIA::LanceroIA(int x, int y) : battleIA(x,y)
 {
+	cout << "ConstruirLanceroIA" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -16,6 +18,7 @@ LanceroIA::LanceroIA(int x, int y) : battleIA(x,y)
 
 LanceroIA::~LanceroIA()
 {
+	cout << "DestruirLanceroIA" << endl;
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;

@@ -2,6 +2,7 @@
 
 Espadachin::Espadachin()
 {
+	cout << "ConstruirEspadachin" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -9,6 +10,7 @@ Espadachin::Espadachin()
 
 Espadachin::Espadachin(int x, int y) : Unidades(x,y)
 {
+	cout << "ConstruirEspadachin" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -16,6 +18,7 @@ Espadachin::Espadachin(int x, int y) : Unidades(x,y)
 
 Espadachin::~Espadachin()
 {
+	cout << "DestruirEspadachin" << endl;
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;

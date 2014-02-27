@@ -2,6 +2,7 @@
 
 EspadachinIA::EspadachinIA()
 {
+	cout << "ConstruirEspadachinIA" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -9,6 +10,7 @@ EspadachinIA::EspadachinIA()
 
 EspadachinIA::EspadachinIA(int x, int y) : battleIA(x,y)
 {
+	cout << "ConstruirEspadachinIA" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -16,6 +18,7 @@ EspadachinIA::EspadachinIA(int x, int y) : battleIA(x,y)
 
 EspadachinIA::~EspadachinIA()
 {
+	cout << "DestruirEspadachinIA" << endl;
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;

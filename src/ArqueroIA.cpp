@@ -2,6 +2,7 @@
 
 ArqueroIA::ArqueroIA()
 {
+	cout << "ConstruirArqueroIA" << endl;
 	life = 100;
 	vision_range = 5;
 	attack_range = 2;
@@ -9,6 +10,7 @@ ArqueroIA::ArqueroIA()
 
 ArqueroIA::ArqueroIA(int x, int y) : battleIA(x,y)
 {
+	cout << "ConstruirArqueroIA" << endl;
 	life = 100;
 	vision_range = 5;
 	attack_range = 2;
@@ -16,6 +18,7 @@ ArqueroIA::ArqueroIA(int x, int y) : battleIA(x,y)
 
 ArqueroIA::~ArqueroIA()
 {
+	cout << "DestroirArqueroIA" << endl;
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;

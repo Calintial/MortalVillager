@@ -2,6 +2,7 @@
 
 AldeanoIA::AldeanoIA()
 {
+	cout << "ConstruirAldeanoIA" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -9,6 +10,7 @@ AldeanoIA::AldeanoIA()
 
 AldeanoIA::AldeanoIA(int x, int y) : battleIA(x,y)
 {
+	cout << "ConstruirAldeanoIA" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -16,6 +18,7 @@ AldeanoIA::AldeanoIA(int x, int y) : battleIA(x,y)
 
 AldeanoIA::~AldeanoIA()
 {
+	cout << "DestruirAldeanoIA" << endl;
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;

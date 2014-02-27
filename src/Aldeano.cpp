@@ -2,6 +2,7 @@
 
 Aldeano::Aldeano()
 {
+	cout << "ConstruirAldeano" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -9,6 +10,7 @@ Aldeano::Aldeano()
 
 Aldeano::Aldeano(int x, int y) : Unidades(x,y)
 {
+	cout << "ConstruirAldeano" << endl;
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
@@ -16,6 +18,7 @@ Aldeano::Aldeano(int x, int y) : Unidades(x,y)
 
 Aldeano::~Aldeano()
 {
+	cout << "DestruirAldeano" << endl;
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;

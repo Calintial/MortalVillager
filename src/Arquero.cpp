@@ -2,6 +2,7 @@
 
 Arquero::Arquero()
 {
+	cout << "ConstruirArquero" << endl;
 	life = 100;
 	vision_range = 5;
 	attack_range = 2;
@@ -9,6 +10,7 @@ Arquero::Arquero()
 
 Arquero::Arquero(int x, int y) : Unidades(x,y)
 {
+	cout << "ConstruirArquero" << endl;
 	life = 100;
 	vision_range = 5;
 	attack_range = 2;
@@ -16,6 +18,7 @@ Arquero::Arquero(int x, int y) : Unidades(x,y)
 
 Arquero::~Arquero()
 {
+	cout << "DestroirArquero" << endl;
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;
