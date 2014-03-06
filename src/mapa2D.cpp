@@ -48,7 +48,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
 	ia_selected = -1;
 	user_selected = -1;
-	pathFinding=new pathfinding(this);
+	pathFinding=new pathfinding(shared_ptr<mapa2D>(this));
 }
 
 mapa2D::~mapa2D()
@@ -90,13 +90,14 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
-		position2di pos_grid;
+		position2di pos_grid = getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
 		int pos_vector = -1;
+
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
-							pos_grid.X = event.MouseInput.X/TILE_WIDTH ;
-							pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;
+							/*pos_grid.X = pos_iso.X/TILE_WIDTH ;
+							pos_grid.Y = pos_iso.Y/TILE_HEIGHT;*/
 							cout<<"Boton izquierdo, pulsado en:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 
 
@@ -153,8 +154,8 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 
 			case EMIE_RMOUSE_PRESSED_DOWN: if(user_selected != -1)
 										   {
-												pos_grid.X = event.MouseInput.X/TILE_WIDTH;
-												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;
+												/*pos_grid.X = event.MouseInput.X/TILE_WIDTH;
+												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;*/
 												cout<<"Boton derecho, pulsado en:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
 		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
 										   }
@@ -203,7 +204,7 @@ void mapa2D::AllocateMap(bool suelo)
 				}
 				else
 				{
-					vTiles[i][j] = new Muro(1,i,j);
+					vTiles[i][j] = new Suelo(0,i,j);
 				}
 				vTiles[i][j]->aplicarTextura(driver);
 				k++;
@@ -311,15 +312,15 @@ void mapa2D::Pintar()
 			position2di GridPosition, DrawPosition;
 			
 						
-		    for(int i = 0; i < ViewSize.Width; i++)
+		    for(int i = 0; i < WIDTH; i++)
 		    {
-				for(int j = 0; j < ViewSize.Height; j++)
+				for(int j = 0; j < HEIGHT; j++)
 				{
 					// Obtenermos coordenadas actuales cuadricula
-		            GridPosition.X = i + CameraScroll.X;
-		            GridPosition.Y = j + CameraScroll.Y;
+		            /*GridPosition.X = i + CameraScroll.X;
+		            GridPosition.Y = j + CameraScroll.Y;*/
 		            //DrawPosition = position2di((i - ViewSize.Width / 2) * TILE_WIDTH + 400, (j - ViewSize.Height / 2) * TILE_HEIGHT + 300);
-					DrawPosition = position2di(i*TILE_WIDTH,j*TILE_HEIGHT);
+					DrawPosition = getIsoFromTile(i,j);// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
 					// Validar coordenada
 					//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
 						if(GridPosition.X == 0 && GridPosition.Y==1)
@@ -371,6 +372,7 @@ void mapa2D::DrawBuildings()
 	for(int i=0; i<n_build; i++)
 	{
 		DrawPosition = getDrawPosition(buildings->at(i)->getPosition());
+		DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
 		buildings->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
 	}
 }
@@ -383,6 +385,7 @@ void mapa2D::DrawIAUnits()
 	for(int i=0; i<n_ia; i++)
 	{
 		DrawPosition = getDrawPosition(ia_units->at(i)->getPosition());
+		DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
 		ia_units->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
 	}
 }
@@ -394,6 +397,7 @@ void mapa2D::DrawUserUnits()
 	for(int i=0; i<n_user; i++)
 	{
 		DrawPosition = getDrawPosition(user_units->at(i)->getPosition());
+		DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
 		user_units->at(i)->Pintar(driver, DrawPosition.X, DrawPosition.Y);
 	}
 
@@ -457,4 +461,29 @@ int mapa2D::getUserSelected()
 }
 pathfinding* mapa2D::getPathfinding(){
 	return pathFinding;
+}
+
+
+
+position2di mapa2D::twoDToIso(int x, int y)
+{
+	position2di pos;
+	pos.X = x - y;
+	pos.Y = (x + y) / 2;
+	return pos;
+}
+
+position2di mapa2D::getTileCoordinates(int x, int y)
+{
+	position2di pos;
+	float ymouse=((2*y-x)/2);
+	float xmouse=(x+ymouse);
+	pos.Y=round(ymouse/TILE_WIDTH);
+	pos.X=round(xmouse/TILE_WIDTH)-1;
+	return pos;
+}
+
+position2di mapa2D::getIsoFromTile(int tilex, int tiley)
+{
+	return twoDToIso(tilex * TILE_WIDTH, tiley * TILE_HEIGHT);
 }

@@ -26,5 +26,5 @@ bool Suelo::isTransitable(){
 
 void Suelo::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/suelo/grass.png"));
+	setTextura(driver->getTexture("../media/Texturas/suelo/black.png"));
 }

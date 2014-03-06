@@ -6,6 +6,7 @@
 #include <fmod.hpp>
 #include <string>
 #include <vector>
+#include <memory>
 #include "graphicEngine.h"
 #include "mapa2D.h"
 
@@ -48,7 +49,7 @@ private:
 	video::ITexture* state_flee;
 	video::ITexture* state_recovery;
 
-	mapa2D* mapa;
+	shared_ptr<mapa2D> mapa;
 
 	bool drawVision;
 	bool drawAttackVision;
@@ -57,7 +58,7 @@ private:
 
 
 public:
-	DebugMenu(IrrlichtDevice * IrrDevice,vector<IDibujable*>* ia_units,mapa2D*);
+	DebugMenu(IrrlichtDevice * IrrDevice,vector<IDibujable*>* ia_units,shared_ptr<mapa2D>);
 	~DebugMenu();
 	void initDebugMenu();
 	void Draw();

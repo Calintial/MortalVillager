@@ -17,6 +17,8 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <memory>
+#include <math.h>
 
 using namespace irr;
 using namespace video;
@@ -83,6 +85,12 @@ public:
 
 	void InicializarGraficosUnidades();
 
+
+	static position2di isoTo2D(int x, int y);
+	static position2di twoDToIso(int x, int y);
+	static position2di getTileCoordinates(int x, int y);
+	static position2di getIsoFromTile(int x, int y);
+
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -125,6 +133,7 @@ private:
 	void DrawBuildings();
 	int IASelected(position2di);
 	int UserSelected(position2di);
+
 };
 
 #endif

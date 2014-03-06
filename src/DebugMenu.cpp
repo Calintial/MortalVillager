@@ -1,18 +1,19 @@
 #include "DebugMenu.h"
 
 
-DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<IDibujable*>* ia_units, mapa2D* map)
+DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<IDibujable*>* ia_units, shared_ptr<mapa2D> map)
 {
 	DebugDevice = IrrDevice;
     env = IrrDevice->getGUIEnvironment();
     driver = IrrDevice->getVideoDriver();
     font = env->getFont("../media/fonthaettenschweiler.bmp");
+    env->clear();
     initDebugMenu();
 
     vUnits = ia_units;
     mapa = map;
 
-	DebugDevice->setEventReceiver(this); 
+	//DebugDevice->setEventReceiver(this); 
 	drawVision = false;
 	drawAttackVision = false;
 }
@@ -282,7 +283,7 @@ void DebugMenu::DrawVisions()
 					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
-						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+						DrawPosition = mapa2D::getIsoFromTile(x,y);
 						mapa->PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);					
 					}
 
@@ -300,7 +301,7 @@ void DebugMenu::DrawVisions()
 					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
-						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+						DrawPosition = mapa2D::getIsoFromTile(x,y);
 						mapa->PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);						
 					}
 

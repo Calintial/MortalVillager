@@ -40,13 +40,13 @@ private:
 	gui::IGUIEnvironment* env;
 	IGUIFont* font;
 
-	mapa2D* mapa;
+	shared_ptr<mapa2D> mapa;
 	Camino* caminoFinal;
 
 	bool drawRegiones, drawEnlaces, drawCaminosInternos, drawCaminoFinal;
 	Estado estado;
 public:
-	InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D*);
+	InterfazPathfinding(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D>);
 	~InterfazPathfinding();
 
 	void Draw();
@@ -55,6 +55,7 @@ public:
 	void DrawCaminoFinal();
 	void init();
 	bool OnEvent(const SEvent& event);
+	void DrawIsometricRectangle(position2di ini, position2di fin);
 	position2di origen,destino;
 };
 

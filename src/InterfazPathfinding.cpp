@@ -1,10 +1,11 @@
 #include "InterfazPathfinding.h"
 
-InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,mapa2D* map){
+InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D> map){
 	device = IrrDevice;
     env = IrrDevice->getGUIEnvironment();
     driver = IrrDevice->getVideoDriver();
     font = env->getFont("../media/fonthaettenschweiler.bmp");
+    env->clear();
     init();
 
     mapa = map;
@@ -68,7 +69,8 @@ void InterfazPathfinding::DrawRegiones(){
 			auto thick_old = driver->getMaterial2D().Thickness;
 			driver->getMaterial2D().Thickness=12.f;
 			driver->enableMaterial2D();
-			driver->draw2DRectangleOutline(core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)),video::SColor(255,0,255,0));
+			DrawIsometricRectangle(inicio,final);
+			//driver->draw2DRectangleOutline(core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)),video::SColor(255,0,255,0));
 			driver->getMaterial2D().Thickness=thick_old;
 		}
 	}
@@ -212,4 +214,20 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 		
 	}
 	return false;
+}
+
+void InterfazPathfinding::DrawIsometricRectangle(position2di sup_izq, position2di inf_der)
+{
+	/*Convertir posiciones a isometrico*/
+	position2di sup_der = mapa2D::twoDToIso(inf_der.X,sup_izq.Y);
+	position2di inf_izq = mapa2D::twoDToIso(sup_izq.X,inf_der.Y);
+	
+	/*sup_izq = mapa2D::twoDToIso(sup_izq.X,sup_izq.Y);
+	inf_der = mapa2D::twoDToIso(inf_der.X,inf_der.Y);*/
+
+
+	driver->draw2DLine(sup_izq,inf_der,video::SColor(255,0,255,0));
+	/*driver->draw2DLine(sup_der,inf_der,video::SColor(255,0,255,0));
+	driver->draw2DLine(inf_der,inf_izq,video::SColor(255,0,255,0));
+	driver->draw2DLine(inf_izq,sup_izq,video::SColor(255,0,255,0));*/
 }

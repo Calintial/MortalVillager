@@ -25,7 +25,7 @@ void CentroCiudad::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 
 void CentroCiudad::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/building/sprite1.png"));
+	setTextura(driver->getTexture("../media/Texturas/building/city_center.png"));
 }
 
 bool CentroCiudad::isTransitable()
