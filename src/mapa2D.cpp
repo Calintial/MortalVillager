@@ -204,7 +204,7 @@ void mapa2D::AllocateMap(bool suelo)
 				}
 				else
 				{
-					vTiles[i][j] = new Suelo(0,i,j);
+					vTiles[i][j] = new Muro(1,i,j);
 				}
 				vTiles[i][j]->aplicarTextura(driver);
 				k++;
@@ -323,13 +323,7 @@ void mapa2D::Pintar()
 					DrawPosition = getIsoFromTile(i,j);// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
 					// Validar coordenada
 					//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
-						if(GridPosition.X == 0 && GridPosition.Y==1)
-						{
-							IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
-							//cout << "0,1 --> " << Tile->getTipo() << endl;
-							
-						}
-						IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
+						IDibujable *Tile = vTiles[i][j];
 						//Pinta
 						if(Tile->getTextura())
 							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);

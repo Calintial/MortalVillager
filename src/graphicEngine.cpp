@@ -23,7 +23,7 @@ graphicEngine::graphicEngine()
     (gameEngine::addIAUnit(0,0,0))->aplicarTextura(IrrDevice->getVideoDriver());
     (gameEngine::addIAUnit(10,10,0))->aplicarTextura(IrrDevice->getVideoDriver());
     (gameEngine::addUserUnit(24,12,0))->aplicarTextura(IrrDevice->getVideoDriver());
-    //(gameEngine::addBuildings(5,5,0))->aplicarTextura(IrrDevice->getVideoDriver());
+    (gameEngine::addBuildings(16,3,0))->aplicarTextura(IrrDevice->getVideoDriver());
 
     //menu = new mainMenu(IrrDevice);
     //mapa = new mapa2D(IrrDevice);
