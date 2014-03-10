@@ -35,20 +35,65 @@ bool Pantalla::OnEvent(const SEvent& event){
     		cout<<"F2 presionado -> pantallaBasica"<<endl;
     		grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
             return true;
-    	}else if (event.KeyInput.Key == irr::KEY_F3 && event.KeyInput.PressedDown)
+    	}
+    	else if (event.KeyInput.Key == irr::KEY_F3 && event.KeyInput.PressedDown)
     	{
     		cout<<"F3 presionado -> pantallaPathfinding"<<endl;
     		grEngine->setPantalla(new PantallaPathfinding(pantallaDevice,grEngine,mapa));
             return true;
-    	}else if (event.KeyInput.Key == irr::KEY_F4 && event.KeyInput.PressedDown)
+    	}
+    	else if (event.KeyInput.Key == irr::KEY_F4 && event.KeyInput.PressedDown)
     	{
     		cout<<"F4 presionado -> pantallaIABatalla"<<endl;
     		grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa));
     		return true;
-    	}else{
+    	}
+    	else if (event.KeyInput.Key == KEY_UP && event.KeyInput.PressedDown)
+		{
+			cout << "ARRIBA";
+			position2di pos = mapa->GetCameraScroll();
+			if(pos.Y>0)
+				pos.Y = pos.Y-1;
+			
+			mapa->SetCameraScroll(pos);
+			grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
+            return true;
+		}
+		else if (event.KeyInput.Key == KEY_DOWN && event.KeyInput.PressedDown)
+		{
+			cout << "ABAJO";
+			position2di pos = mapa->GetCameraScroll();
+			if(pos.Y<200)
+				pos.Y = pos.Y+1;
+			mapa->SetCameraScroll(pos);
+			grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
+            return true;
+		}
+		else if (event.KeyInput.Key == KEY_RIGHT && event.KeyInput.PressedDown)
+		{
+			cout << "DERECHA";
+			position2di pos = mapa->GetCameraScroll();
+			if(pos.X<200)
+				pos.X = pos.X+1;
+			mapa->SetCameraScroll(pos);
+			grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
+            return true;
+		}
+		else if (event.KeyInput.Key == KEY_LEFT && event.KeyInput.PressedDown)
+		{
+			cout << "IZQUIERDA";
+			position2di pos = mapa->GetCameraScroll();
+			if(pos.X>0)
+				pos.X = pos.X-1;
+			mapa->SetCameraScroll(pos);
+			grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
+            return true;
+		}
+    	else
+    	{
     		cout<<"presionado "<<event.KeyInput.Key<<endl;
     	}
-    }
+    }	
     return false;
 }
 

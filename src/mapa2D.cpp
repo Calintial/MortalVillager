@@ -317,23 +317,24 @@ void mapa2D::Pintar()
 				for(int j = 0; j < HEIGHT; j++)
 				{
 					// Obtenermos coordenadas actuales cuadricula
-		            /*GridPosition.X = i + CameraScroll.X;
-		            GridPosition.Y = j + CameraScroll.Y;*/
+		            GridPosition.X = i + CameraScroll.X;
+		            GridPosition.Y = j + CameraScroll.Y;
 		            //DrawPosition = position2di((i - ViewSize.Width / 2) * TILE_WIDTH + 400, (j - ViewSize.Height / 2) * TILE_HEIGHT + 300);
-					DrawPosition = getIsoFromTile(i,j);// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
-					// Validar coordenada
-					//if(GridPosition.X >= 0 && GridPosition.X < Width && GridPosition.Y >= 0 && GridPosition.Y < Height) {
-						if(GridPosition.X == 0 && GridPosition.Y==1)
+					DrawPosition = getIsoFromTile(i+ CameraScroll.X,j+ CameraScroll.Y);
+					// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
+					//Validar coordenada
+					if(GridPosition.X >= 0 && GridPosition.X < WIDTH && GridPosition.Y >= 0 && GridPosition.Y < HEIGHT) {
+						/*if(GridPosition.X == 0 && GridPosition.Y==1)
 						{
 							IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
 							//cout << "0,1 --> " << Tile->getTipo() << endl;
-							
-						}
+						}*/
+						//cout << GridPosition.X << endl;
 						IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
 						//Pinta
 						if(Tile->getTextura())
 							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
-					//}
+					}
 				}
 			}
 
