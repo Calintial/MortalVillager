@@ -98,10 +98,10 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 			case EMIE_LMOUSE_PRESSED_DOWN:
 							/*pos_grid.X = pos_iso.X/TILE_WIDTH ;
 							pos_grid.Y = pos_iso.Y/TILE_HEIGHT;*/
-							cout<<"Boton izquierdo, pulsado en:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
+							cout<<"Boton izquierdo, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
 
 
-							pos_vector = IASelected(pos_grid);
+							pos_vector = IASelected(pos_grid+CameraScroll);
 							if(pos_vector != -1)
 							{
 
@@ -145,9 +145,6 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 										((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
 										ia_selected = -1;
 									}
-									
-									
-									
 								}
 							}
 							break;
@@ -156,8 +153,8 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 										   {
 												/*pos_grid.X = event.MouseInput.X/TILE_WIDTH;
 												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;*/
-												cout<<"Boton derecho, pulsado en:"<<pos_grid.X << "," << pos_grid.Y <<endl; 
-		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X,pos_grid.Y);
+												cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
+		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
 										   }
 										   break;
 			default:;
@@ -204,7 +201,7 @@ void mapa2D::AllocateMap(bool suelo)
 				}
 				else
 				{
-					vTiles[i][j] = new Suelo(0,i,j);
+					vTiles[i][j] = new Muro(1,i,j);
 				}
 				vTiles[i][j]->aplicarTextura(driver);
 				k++;
@@ -317,24 +314,14 @@ void mapa2D::Pintar()
 				for(int j = 0; j < HEIGHT; j++)
 				{
 					// Obtenermos coordenadas actuales cuadricula
-		            GridPosition.X = i + CameraScroll.X;
-		            GridPosition.Y = j + CameraScroll.Y;
-		            //DrawPosition = position2di((i - ViewSize.Width / 2) * TILE_WIDTH + 400, (j - ViewSize.Height / 2) * TILE_HEIGHT + 300);
-					DrawPosition = getIsoFromTile(i+ CameraScroll.X,j+ CameraScroll.Y);
+		            //DrawPosition = position2di(((i - ViewSize.Width / 2) * TILE_WIDTH + 400)- CameraScroll.X, ((j - ViewSize.Height / 2) * TILE_HEIGHT + 300))- CameraScroll.Y;
+					DrawPosition = getIsoFromTile(i - CameraScroll.X, j - CameraScroll.Y);
 					// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
-					//Validar coordenada
-					if(GridPosition.X >= 0 && GridPosition.X < WIDTH && GridPosition.Y >= 0 && GridPosition.Y < HEIGHT) {
-						/*if(GridPosition.X == 0 && GridPosition.Y==1)
-						{
-							IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
-							//cout << "0,1 --> " << Tile->getTipo() << endl;
-						}*/
-						//cout << GridPosition.X << endl;
-						IDibujable *Tile = vTiles[GridPosition.X][GridPosition.Y];
+					// Validar coordenada
+						IDibujable *Tile = vTiles[i][j];
 						//Pinta
 						if(Tile->getTextura())
 							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
-					}
 				}
 			}
 

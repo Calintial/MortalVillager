@@ -1,9 +1,10 @@
 #include "pantallaIABatalla.h"
 
 
-PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
+PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	debug = NULL;
-	pantallaDevice->setEventReceiver(this); 
+	pantallaDevice->setEventReceiver(this);
+	setTipo(tipo);
 }
 PantallaIABatalla::~PantallaIABatalla(){
 

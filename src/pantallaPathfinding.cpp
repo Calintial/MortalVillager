@@ -9,9 +9,10 @@ using namespace irr;
 using namespace video;
 using namespace std;
 using namespace core;
-PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
+PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	interfazPathfinding = NULL;
-	pantallaDevice->setEventReceiver(this); 
+	pantallaDevice->setEventReceiver(this);
+	setTipo(tipo);
 }
 PantallaPathfinding::~PantallaPathfinding(){
 

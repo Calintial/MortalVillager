@@ -1,8 +1,9 @@
 #include "pantallaBasica.h"
 
-PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
+PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	pantallaDevice->setEventReceiver(this);
 	hudmapa = NULL;
+	setTipo(tipo);
 }
 
 PantallaBasica::~PantallaBasica()

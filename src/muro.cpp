@@ -19,5 +19,5 @@ void Muro::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 
 void Muro::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/map/mountains0.png"));
+	setTextura(driver->getTexture("../media/Texturas/suelo/dirt.png"));
 }

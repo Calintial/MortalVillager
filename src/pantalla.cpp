@@ -19,8 +19,15 @@ Pantalla::Pantalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_p
 	pantallaDevice->setEventReceiver(this);
 
     eliminar = false;
-
+    
+    for(int i=0; i<dpos; i++)
+	{
+		pscroll[i] = false;
+	}
+	
+	tipo=0;
 }
+
 void Pantalla::dispose(){
     eliminar = true;
 }
@@ -33,66 +40,112 @@ bool Pantalla::OnEvent(const SEvent& event){
     	if (event.KeyInput.Key == irr::KEY_F2 && event.KeyInput.PressedDown)
     	{
     		cout<<"F2 presionado -> pantallaBasica"<<endl;
-    		grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
+    		setTipo(0);
+    		grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa,0));
             return true;
     	}
     	else if (event.KeyInput.Key == irr::KEY_F3 && event.KeyInput.PressedDown)
     	{
     		cout<<"F3 presionado -> pantallaPathfinding"<<endl;
-    		grEngine->setPantalla(new PantallaPathfinding(pantallaDevice,grEngine,mapa));
+    		setTipo(1);
+    		grEngine->setPantalla(new PantallaPathfinding(pantallaDevice,grEngine,mapa,1));
             return true;
     	}
     	else if (event.KeyInput.Key == irr::KEY_F4 && event.KeyInput.PressedDown)
     	{
     		cout<<"F4 presionado -> pantallaIABatalla"<<endl;
-    		grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa));
+    		setTipo(2);
+    		grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa,2));
     		return true;
     	}
-    	else if (event.KeyInput.Key == KEY_UP && event.KeyInput.PressedDown)
+    	
+    	if (event.KeyInput.Key == KEY_UP && event.KeyInput.PressedDown)
 		{
-			cout << "ARRIBA";
+			cout << "ARRIBA pulsado";
+			//arriba
+			pscroll[0] = true;
+		}
+		if (event.KeyInput.Key == KEY_DOWN && event.KeyInput.PressedDown)
+		{
+			cout << "ABAJO pulsado";
+			//abajo
+			pscroll[1] = true;
+		}
+		if (event.KeyInput.Key == KEY_RIGHT && event.KeyInput.PressedDown)
+		{
+			cout << "DERECHA pulsado";
+			//derecha
+			pscroll[2] = true;
+		}
+		if (event.KeyInput.Key == KEY_LEFT && event.KeyInput.PressedDown)
+		{
+			cout << "IZQUIERDA pulsado";
+			//izquierda
+			pscroll[3] = true;
+		}
+		
+		if (event.KeyInput.Key == KEY_UP && !event.KeyInput.PressedDown)
+		{
+			cout << "ARRIBA soltado";
+			//arriba
+			pscroll[0] = false;
+		}
+		if (event.KeyInput.Key == KEY_DOWN && !event.KeyInput.PressedDown)
+		{
+			cout << "ABAJO soltado";
+			//abajo
+			pscroll[1] = false;
+		}
+		if (event.KeyInput.Key == KEY_RIGHT && !event.KeyInput.PressedDown)
+		{
+			cout << "DERECHA soltado";
+			//derecha
+			pscroll[2] = false;
+		}
+		if (event.KeyInput.Key == KEY_LEFT && !event.KeyInput.PressedDown)
+		{
+			cout << "IZQUIERDA soltado";
+			//izquierda
+			pscroll[3] = false;
+		}
+		
+		
+		if (pscroll[0] == true || pscroll[1] == true || pscroll[2] == true || pscroll[3] == true)
+		{
 			position2di pos = mapa->GetCameraScroll();
-			if(pos.Y>0)
-				pos.Y = pos.Y-1;
+			
+			if(pscroll[0] == true)
+			{
+				if(pos.Y>0)
+					pos.Y = pos.Y-1;
+			}
+			if(pscroll[1] == true)
+			{
+				if(pos.Y<200)
+					pos.Y = pos.Y+1;
+			}
+			if(pscroll[2] == true)
+			{
+				if(pos.X<200)
+					pos.X = pos.X+1;
+			}
+			if(pscroll[3] == true)
+			{		
+				if(pos.X>0)
+					pos.X = pos.X-1;
+			}
 			
 			mapa->SetCameraScroll(pos);
-			grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
-            return true;
+			cout << getTipo() << endl;
+			if(getTipo()==0)
+				grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa,0));
+			else if(getTipo()==1)
+				grEngine->setPantalla(new PantallaPathfinding(pantallaDevice,grEngine,mapa,1));
+			else if(getTipo()==2)
+				grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa,2));
+				
+			return true;
 		}
-		else if (event.KeyInput.Key == KEY_DOWN && event.KeyInput.PressedDown)
-		{
-			cout << "ABAJO";
-			position2di pos = mapa->GetCameraScroll();
-			if(pos.Y<200)
-				pos.Y = pos.Y+1;
-			mapa->SetCameraScroll(pos);
-			grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
-            return true;
-		}
-		else if (event.KeyInput.Key == KEY_RIGHT && event.KeyInput.PressedDown)
-		{
-			cout << "DERECHA";
-			position2di pos = mapa->GetCameraScroll();
-			if(pos.X<200)
-				pos.X = pos.X+1;
-			mapa->SetCameraScroll(pos);
-			grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
-            return true;
-		}
-		else if (event.KeyInput.Key == KEY_LEFT && event.KeyInput.PressedDown)
-		{
-			cout << "IZQUIERDA";
-			position2di pos = mapa->GetCameraScroll();
-			if(pos.X>0)
-				pos.X = pos.X-1;
-			mapa->SetCameraScroll(pos);
-			grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa));
-            return true;
-		}
-    	else
-    	{
-    		cout<<"presionado "<<event.KeyInput.Key<<endl;
-    	}
     }	
     return false;
 }
