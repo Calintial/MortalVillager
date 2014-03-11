@@ -29,7 +29,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
     //Get the Video Driver from the MapaDevice.
     driver = IrrDevice->getVideoDriver();
     
-	file = IrrDevice->getFileSystem();;
+	file = IrrDevice->getFileSystem();
 	WorkingDirectory = file->getWorkingDirectory() + "/";
 	
 	skin = env->getSkin();
@@ -42,6 +42,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
     AllocateMap(suelo);
 
+	Sel_Pulsado = false;
 
 	drawVision = false;
 	drawAttackVision = false;
@@ -50,6 +51,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	user_selected = -1;
 	pathFinding=new pathfinding(shared_ptr<mapa2D>(this));
 }
+
 
 mapa2D::~mapa2D()
 {
@@ -96,67 +98,79 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
-							/*pos_grid.X = pos_iso.X/TILE_WIDTH ;
-							pos_grid.Y = pos_iso.Y/TILE_HEIGHT;*/
-							cout<<"Boton izquierdo, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
+				cout<<"Boton izquierdo, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
+				Sel_Pulsado = true;
+				Sel_Inicio = MapaDevice->getCursorControl()->getPosition();
+		
+		
+				
+				pos_vector = IASelected(pos_grid+CameraScroll);
+				if(pos_vector != -1)
+				{
+					if(ia_selected != -1)
+					{
+						((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+						ia_selected = -1;
+					}
+					ia_selected = pos_vector;
+					((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,true);
 
-
-							pos_vector = IASelected(pos_grid+CameraScroll);
-							if(pos_vector != -1)
-							{
-
-								if(ia_selected != -1)
-								{
-									((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
-									ia_selected = -1;
-								}
-								ia_selected = pos_vector;
-								((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,true);
-
-								return (Unidades*)ia_units->at(ia_selected);
-
-
-							}
-							else
-							{
-								pos_vector = UserSelected(pos_grid);
-								if(pos_vector != -1)
-								{
-									if(user_selected != -1)
-									{
-										((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
-										user_selected = -1;
-									}
-
-									user_selected = pos_vector;
-									cout<<"usuario seleccionado: "<<user_selected<<endl;
-									((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,true);
-									return (Unidades*)user_units->at(user_selected);
-								}
-								else
-								{
-									if(user_selected != -1)
-									{
-										((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
-										user_selected = -1;
-									}
-									if(ia_selected != -1)
-									{
-										((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
-										ia_selected = -1;
-									}
-								}
-							}
-							break;
-
-			case EMIE_RMOUSE_PRESSED_DOWN: if(user_selected != -1)
-										   {
-												/*pos_grid.X = event.MouseInput.X/TILE_WIDTH;
-												pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;*/
-												cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
-		   										((Unidades*)user_units->at(user_selected))->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
-										   }
-										   break;
+					return (Unidades*)ia_units->at(ia_selected);
+				}
+				else
+				{
+					pos_vector = UserSelected(pos_grid);
+					if(pos_vector != -1)
+					{
+						if(user_selected != -1)
+						{
+							((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
+							user_selected = -1;
+						}
+						
+						user_selected = pos_vector;
+						cout<<"usuario seleccionado: "<<user_selected<<endl;
+						((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,true);
+						return (Unidades*)user_units->at(user_selected);
+					}
+					else
+					{
+						if(user_selected != -1)
+						{
+							((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
+							user_selected = -1;
+						}
+						if(ia_selected != -1)
+						{
+							((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+							ia_selected = -1;
+						}
+					}
+				}
+				break;
+			
+			case EMIE_LMOUSE_LEFT_UP:
+				cout<<"Boton izquierdo, soltado en:"<< MapaDevice->getCursorControl()->getPosition().X/TILE_WIDTH << "," << MapaDevice->getCursorControl()->getPosition().Y/TILE_HEIGHT <<endl;
+				Sel_Pulsado=false;
+				break;
+				
+			case EMIE_MOUSE_MOVED:
+				//cout << "Raton like to move it move it" << endl;
+				if(Sel_Pulsado==true)
+				{
+					Sel_Fin = MapaDevice->getCursorControl()->getPosition();
+				}
+				break;
+			
+			case EMIE_RMOUSE_PRESSED_DOWN: 
+					if(user_selected != -1)
+					{
+						/*pos_grid.X = event.MouseInput.X/TILE_WIDTH;
+						pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;*/
+						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
+		   				((Unidades*)user_units->at(user_selected))->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+					}
+					break;
 			default:;
 		}
 	}
@@ -330,7 +344,21 @@ void mapa2D::Pintar()
 			DrawBuildings();
 			
 			env->drawAll();
-			      	
+			
+			//Pintar seleccion
+			if(Sel_Pulsado==true)
+			{	
+				if(Sel_Inicio > Sel_Fin)
+				{
+					driver->draw2DRectangle(video::SColor(100,255,255,255),
+					core::rect<s32>(Sel_Fin.X, Sel_Fin.Y, Sel_Inicio.X, Sel_Inicio.Y));
+				}
+				else
+				{
+					driver->draw2DRectangle(video::SColor(100,255,255,255),
+					core::rect<s32>(Sel_Inicio.X, Sel_Inicio.Y, Sel_Fin.X, Sel_Fin.Y));		
+				}
+			}      	
         }
     }
     else

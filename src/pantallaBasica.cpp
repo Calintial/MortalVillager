@@ -48,7 +48,10 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 								}
 							}
 							break;
-			case EMIE_RMOUSE_PRESSED_DOWN: mapa->OnEventMapa(event);
+			case EMIE_RMOUSE_PRESSED_DOWN:
+			case EMIE_LMOUSE_LEFT_UP:
+			case EMIE_MOUSE_MOVED: mapa->OnEventMapa(event);
+									break;
 			default:;
 		}
 	}
