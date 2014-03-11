@@ -101,8 +101,7 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 				cout<<"Boton izquierdo, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
 				Sel_Pulsado = true;
 				Sel_Inicio = MapaDevice->getCursorControl()->getPosition();
-		
-		
+				Sel_Fin = MapaDevice->getCursorControl()->getPosition();
 				
 				pos_vector = IASelected(pos_grid+CameraScroll);
 				if(pos_vector != -1)
@@ -348,15 +347,30 @@ void mapa2D::Pintar()
 			//Pintar seleccion
 			if(Sel_Pulsado==true)
 			{	
-				if(Sel_Inicio > Sel_Fin)
+				//rect<s32>(top_left, bottom_right)
+				if(Sel_Inicio.X > Sel_Fin.X && Sel_Inicio.Y > Sel_Fin.X)
 				{
+					//cout << "CASO ARRIBA IZQUIERDA: "<< Sel_Inicio.X << "," << Sel_Inicio.Y << " a " << Sel_Fin.X << "," << Sel_Fin.Y << endl;
 					driver->draw2DRectangle(video::SColor(100,255,255,255),
 					core::rect<s32>(Sel_Fin.X, Sel_Fin.Y, Sel_Inicio.X, Sel_Inicio.Y));
 				}
-				else
+				else if(Sel_Inicio.X < Sel_Fin.X && Sel_Inicio.Y < Sel_Fin.Y)
 				{
+					//cout << "CASO ABAJO DERECHA: "<< Sel_Inicio.X << "," << Sel_Inicio.Y << " a " << Sel_Fin.X << "," << Sel_Fin.Y << endl;
 					driver->draw2DRectangle(video::SColor(100,255,255,255),
 					core::rect<s32>(Sel_Inicio.X, Sel_Inicio.Y, Sel_Fin.X, Sel_Fin.Y));		
+				}
+				else if(Sel_Inicio.X > Sel_Fin.X && Sel_Inicio.Y < Sel_Fin.Y)
+				{
+					//cout << "CASO ABAJO IZQUIERDA: "<< Sel_Inicio.X << "," << Sel_Inicio.Y << " a " << Sel_Fin.X << "," << Sel_Fin.Y << endl;
+					driver->draw2DRectangle(video::SColor(100,255,255,255),
+					core::rect<s32>(Sel_Fin.X, Sel_Inicio.Y, Sel_Inicio.X, Sel_Fin.Y));		
+				}
+				else
+				{
+					//cout << "CASO ARRIBA DERECHA: " << Sel_Inicio.X << "," << Sel_Inicio.Y << " a " << Sel_Fin.X << "," << Sel_Fin.Y << endl;			
+					driver->draw2DRectangle(video::SColor(100,255,255,255),
+					core::rect<s32>(Sel_Inicio.X, Sel_Fin.Y, Sel_Fin.X, Sel_Inicio.Y));		
 				}
 			}      	
         }
