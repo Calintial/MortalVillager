@@ -49,11 +49,14 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	ia_selected = -1;
 	user_selected = -1;
 	pathFinding=new pathfinding(shared_ptr<mapa2D>(this));
+
+	sombra_edificio = false;
 }
 
 mapa2D::~mapa2D()
 {
-	delete pathFinding;
+   sombra_edificio = false;
+   delete pathFinding;
    free();
 }
 
@@ -92,6 +95,7 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 	{
 		position2di pos_grid = getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
 		int pos_vector = -1;
+
 
 		switch(event.MouseInput.Event)
 		{
@@ -335,6 +339,9 @@ void mapa2D::Pintar()
 			DrawUserUnits();
 			DrawBuildings();
 			
+			if(sombra_edificio)
+				DrawBuildingShadow();
+
 			env->drawAll();
 			      	
         }
@@ -369,6 +376,29 @@ void mapa2D::DrawBuildings()
 		DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
 		buildings->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
 	}
+}
+
+void mapa2D::DrawBuildingShadow()
+{
+	
+	position2di aux_tile = getTileCoordinates(shadowPosition.X,shadowPosition.Y);
+	cout<<"Dibujar sombra en en:"<<aux_tile.X << "," << aux_tile.Y <<endl;
+	
+	position2di aux = getIsoFromTile(aux_tile.X,aux_tile.Y);
+	ITexture* shadow_texture = NULL;
+
+	switch(tipo_edificio)
+	{
+		case 0: shadow_texture = driver->getTexture("../media/Texturas/building/city_center_shadow.png"); break;
+		case 1: shadow_texture = driver->getTexture("../media/Texturas/building/farm_shadow.png"); break;
+		case 2: shadow_texture = driver->getTexture("../media/Texturas/building/barracks_shadow.png"); break;
+		case 3: shadow_texture = driver->getTexture("../media/Texturas/building/archer_building_shadow.png"); break;
+		case 4: shadow_texture = driver->getTexture("../media/Texturas/building/spear_build_shadow.png"); break;
+	}
+
+	if(shadow_texture != NULL)
+		PintarTile(shadow_texture, aux.X, aux.Y);	
+	
 }
 
 void mapa2D::DrawIAUnits()
@@ -480,4 +510,34 @@ position2di mapa2D::getTileCoordinates(int x, int y)
 position2di mapa2D::getIsoFromTile(int tilex, int tiley)
 {
 	return twoDToIso(tilex * TILE_WIDTH, tiley * TILE_HEIGHT);
+}
+
+void mapa2D::setSombra(bool s)
+{
+	sombra_edificio = s;
+}
+
+bool mapa2D::getSombra()
+{
+	return sombra_edificio;
+}
+
+void mapa2D::setSombraCoords(position2di pos)
+{
+	shadowPosition = pos;
+}
+
+position2di mapa2D::getSombraCoords()
+{
+	return shadowPosition;
+}
+
+void mapa2D::setTipoEdificio(int tipo)
+{
+	tipo_edificio = tipo;
+}
+
+int mapa2D::getTipoEdificio()
+{
+	return tipo_edificio;
 }

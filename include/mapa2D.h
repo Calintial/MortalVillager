@@ -91,6 +91,16 @@ public:
 	static position2di getTileCoordinates(int x, int y);
 	static position2di getIsoFromTile(int x, int y);
 
+	void setSombra(bool s);
+	bool getSombra();
+
+	void setTipoEdificio(int tipo);
+	int getTipoEdificio();
+
+	void setSombraCoords(position2di pos);
+	position2di getSombraCoords();
+
+
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -114,6 +124,8 @@ private:
 	//int ViewWidth,ViewHeight;
 	
 	position2di CameraScroll;
+
+	position2di shadowPosition;
 	
 	//Texturas
 	stringc WorkingDirectory;
@@ -126,11 +138,15 @@ private:
 	int ia_selected;
 	int user_selected;
 
+	bool sombra_edificio;
+	int tipo_edificio;
+
 	//Objetos
 
 	void DrawIAUnits();
 	void DrawUserUnits();
 	void DrawBuildings();
+	void DrawBuildingShadow();
 	int IASelected(position2di);
 	int UserSelected(position2di);
 

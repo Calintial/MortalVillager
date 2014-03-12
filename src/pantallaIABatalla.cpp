@@ -38,6 +38,7 @@ void PantallaIABatalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDib
 bool PantallaIABatalla::OnEvent(const SEvent& event){
 	if(event.EventType == EET_KEY_INPUT_EVENT)
 	{
+		cout<<"ok"<<endl;
 		return Pantalla::OnEvent(event);
 	}else{
 		if(debug != NULL)

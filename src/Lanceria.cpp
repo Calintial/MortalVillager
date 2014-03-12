@@ -22,7 +22,7 @@ void Lanceria::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 
 void Lanceria::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/building/edificio.png"));
+	setTextura(driver->getTexture("../media/Texturas/building/spear_build.png"));
 }
 
 bool Lanceria::isTransitable()
