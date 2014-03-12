@@ -70,11 +70,7 @@ public:
 	//Eventos
 	Unidades* OnEventMapa(const SEvent& event);
 	
-	// Collision
-	//bool PuedoMover(const position2di &TPosition);
-	
 	//Manejo de objetos
-	//void Update(u32 TDeltaTime);
 	vector<IDibujable*>* getIa_units();
 	vector<IDibujable*>* getUser_units();
 	int getIASelected();
@@ -84,7 +80,6 @@ public:
 	dimension2di ViewSize;
 
 	void InicializarGraficosUnidades();
-
 
 	static position2di isoTo2D(int x, int y);
 	static position2di twoDToIso(int x, int y);
@@ -113,25 +108,24 @@ private:
 	pathfinding *pathFinding;
 	void Init();
 	void AllocateMap(bool suelo);
-	//void LoadEvents(STile *Tile, int i, int j);
 
 	IDibujable* vTiles[WIDTH][HEIGHT];
 	vector<IDibujable*>* ia_units;
 	vector<IDibujable*>* user_units;
 	vector<IDibujable*>* buildings;
-
-	//Vista
-	//int ViewWidth,ViewHeight;
 	
 	position2di CameraScroll;
 
+
 	position2di shadowPosition;
+
+	bool Sel_Pulsado;
+	position2di Sel_Inicio;
+	position2di Sel_Fin;
+
 	
 	//Texturas
 	stringc WorkingDirectory;
-	
-	//Eventos
-	//array<IndexedEventStruct> IndexedEvents;
 	
 	bool drawVision;
 	bool drawAttackVision;

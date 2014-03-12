@@ -30,7 +30,7 @@ void Unidades::Move(int x, int y)
 	position2di position = getPosition();
 	state = MOVE;
 	/*Moverse a una posicion establecida*/
-	if(x<26 && y<20)
+	if(x<400 && y<400)
 	{
 		if(x > position.X)
 			position.X++;

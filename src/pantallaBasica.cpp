@@ -1,8 +1,9 @@
 #include "pantallaBasica.h"
 
-PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
+PantallaBasica::PantallaBasica(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	pantallaDevice->setEventReceiver(this);
 	hudmapa = NULL;
+	setTipo(tipo);
 }
 
 PantallaBasica::~PantallaBasica()
@@ -82,9 +83,12 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 									}
 								}
 								break;
-				case EMIE_RMOUSE_PRESSED_DOWN: mapa->OnEventMapa(event);
+				case EMIE_RMOUSE_PRESSED_DOWN:
+				case EMIE_LMOUSE_LEFT_UP:
+				case EMIE_MOUSE_MOVED: mapa->OnEventMapa(event);
+										break;
 				default:;
-			}			
+			}
 		}
 
 	}

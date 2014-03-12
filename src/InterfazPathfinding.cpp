@@ -68,6 +68,7 @@ void InterfazPathfinding::DrawRegiones(){
 		{
 			position2di inicio = regiones[i]->getInicio();
 			position2di final = regiones[i]->getFinal();
+			
 			final.X ++;
 			final.Y ++;
 			auto thick_old = driver->getMaterial2D().Thickness;

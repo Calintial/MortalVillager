@@ -62,7 +62,7 @@ void graphicEngine::DrawPausa()
 void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units, vector<IDibujable*>* buildings)
 {
 	if(pantalla == NULL){
-		pantalla= new PantallaBasica(IrrDevice,this, NULL);
+		pantalla= new PantallaBasica(IrrDevice,this, NULL,0);
 	}
 	pantalla->pintarPantalla(ia_units,user_units,buildings);
 	pause = NULL;
