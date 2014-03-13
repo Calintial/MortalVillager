@@ -5,7 +5,9 @@
 #include <iostream>
 #include <algorithm>
 #include <irrlicht.h>
-
+#include "Nodo.h"
+using namespace irr;
+using namespace core;
 
 class Region
 {
@@ -32,7 +34,7 @@ public:
 
 	//vertex_t descriptor;
 
-	//std::vector<Enlace*> enlaces;
+	std::vector<Nodo> nodos;
 };
 
 #endif
