@@ -96,11 +96,18 @@ void InterfazPathfinding::DrawEnlacesYCaminos(){
 			
 			if(drawCaminosInternos){
 				std::vector<Camino> caminos = enlaces[i]->getIntraCaminosDestino();
+				//caminos.insert( caminos.end(), enlaces[i]->getIntraCaminosOrigen().begin(), enlaces[i]->getIntraCaminosOrigen().end());
 				for (int j = 0; j < caminos.size(); ++j)
 				{
-					for (position2di paso: caminos[j].getCamino())
+					auto camino= caminos[j].getCamino();
+					for (int k = 1; k < camino.size(); ++k)
 					{
-						position2di pasoFinal = paso;
+						position2di paso = camino[k];
+						if ((paso.X == 20 && paso.Y == 11) || (paso.X == 21 && paso.Y == 10))
+						{
+							cout<<"ENLACE INVISIBLE!!!"<<endl;
+						}
+						position2di pasoFinal = camino[k];
 						pasoFinal.X++;
 						pasoFinal.Y++;
 						driver->draw2DRectangle(video::SColor(128,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));

@@ -9,6 +9,7 @@ pathfinding::pathfinding(shared_ptr<mapa2D> _mapa):width(WIDTH),height(HEIGHT),m
 pathfinding::~pathfinding(){}
 
 void pathfinding::createRegions(){
+	cout<<"Creando Regiones"<<endl;
 	int finalX,finalY;
 	for (int i = 0; i < width; i+=tamRegion)
 	{
@@ -34,9 +35,11 @@ void pathfinding::createRegions(){
 			grafoRegiones[vertice].descriptor = vertice;
 		}
 	}
+	cout<<"Regiones creadas"<<endl;
 }
 
 void pathfinding::analyzeRegions(){
+	cout<<"Analizando Regiones"<<endl;
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first){
 		Region* actual = &grafoRegiones[*vp.first];
@@ -135,9 +138,11 @@ void pathfinding::analyzeRegions(){
 		}
 
 	}
+	cout<<"Regiones Analizadas"<<endl;
 }
 
 void pathfinding::findInnerPaths(){
+	cout<<"Buscando caminos internos"<<endl;
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)
 	{
@@ -191,59 +196,73 @@ void pathfinding::findInnerPaths(){
 		//cout<<"Siguiente vértice"<<endl;
 		//break;
 	}
+	cout<<"caminos internos buscados"<<endl;
 }
 
 std::vector<Region*> pathfinding::getRegiones(){
+	cout<<"getRegiones"<<endl;
 	std::vector<Region*> regiones;
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)
 	{
 		regiones.push_back(&grafoRegiones[*vp.first]);
 	}
+	cout<<"getRegiones terminado"<<endl;
 	return regiones;
 }
 
 std::vector<Enlace*> pathfinding::getEnlaces(){
+	cout<<"getEnlaces"<<endl;
 	std::vector<Enlace*> enlaces;
 	std::pair<edge_iter, edge_iter> es;
 	for (es = edges(grafoRegiones); es.first != es.second; ++es.first) {
 		enlaces.push_back(&grafoRegiones[*es.first]);
 	}
+	cout<<"getEnlaces terminado"<<endl;
 	return enlaces;
 }
 
 std::vector<Enlace*> pathfinding::getEnlaces(Region* region){
+	cout<<"getEnlaces(region)"<<endl;
 	std::vector<Enlace*> enlaces;
 	auto edges = boost::in_edges(region->descriptor,grafoRegiones);
 	for(auto i = edges.first; i != edges.second; ++i){
 		enlaces.push_back(&grafoRegiones[*i]);
 	}
+	cout<<"getEnlaces(region) terminado"<<endl;
 	return enlaces;
 }
 
 Region* pathfinding::getCorrespondingRegion(int x, int y){
+	cout<<"getCorrespondingRegion"<<endl;
 	std::pair<vertex_iter, vertex_iter> vp;
 	for (vp = vertices(grafoRegiones); vp.first != vp.second; ++vp.first)
 	{
 		if(grafoRegiones[*vp.first].isInside(x,y)){
+			cout<<"Region encontrada"<<endl;
 			return &grafoRegiones[*vp.first];
 		}
 	}
+	cerr<<"####### ERROR: getCorrespondingRegion NO ENCONTRADA #########"<<endl;
 	return NULL;
 }
 
 Camino* pathfinding::calcularCamino(position2di origen, position2di destino){
+	cout<<"calculando camino desde ["<<origen.X<<","<<origen.Y<<"] hasta ["<<destino.X<<","<<destino.Y<<"]"<<endl;
 	return caminosPersonajeRegion(origen,destino);
 	
 }
 
 void pathfinding::run(){
+	cout<<"run"<<endl;
 	grafoRegiones.clear();
 	createRegions();
 	analyzeRegions();
 	findInnerPaths();
+	cout<<"run terminado"<<endl;
 }
 Camino* pathfinding::A(position2di origen,position2di destino,Region* regionActual){
+	cout<<"A* local"<<endl;
 	std::vector<Nodo> listaInterior;
 	std::vector<Nodo> listaFrontera;
 	std::priority_queue<Nodo> queueFrontera;
@@ -270,6 +289,7 @@ Camino* pathfinding::A(position2di origen,position2di destino,Region* regionActu
 				camino->addNodo(nuevopuntero->origen);
 				nuevopuntero=nuevopuntero->p;
 			}
+			cout<<"CAMINO LOCAL ENCONTRADO"<<endl;
 			return camino;
 
 		}
@@ -309,14 +329,11 @@ Camino* pathfinding::A(position2di origen,position2di destino,Region* regionActu
 			}
 		}
 	}
+	cerr<<"###### CAMINO LOCAL NO ENCONTRADO ########"<<endl;
 	return NULL;
 }
 Camino* pathfinding::ARegiones( position2di origen,position2di destino,Region* regionInicio,Region* regionFinal,std::vector<Camino> inicioCaminos,std::vector<Camino> finalCaminos){
-	for(Camino caminosss:finalCaminos){
-		//cout<<caminosss.getCamino()[1].X <<" "<<caminosss.getCamino()[1].Y<<endl;
-
-	}
-
+	cout<<"A* Regiones"<<endl;
 	std::vector<Nodo> listaInterior;
 	std::vector<Nodo> listaFrontera;
 	std::priority_queue<Nodo> queueFrontera;
@@ -358,6 +375,7 @@ Camino* pathfinding::ARegiones( position2di origen,position2di destino,Region* r
 								}
 							}
 						}
+						cout<<"CAMINO REGIONES ENCONTRADO"<<endl;
 					return c;
 				}
 				
@@ -395,38 +413,46 @@ Camino* pathfinding::ARegiones( position2di origen,position2di destino,Region* r
 			}
 		}
 	}
+	cerr<<"###### CAMINO REGIONES NO ENCONTRADO ########"<<endl;
 	return NULL;
 }
 std::vector<position2di> pathfinding::getCaminodoEnlace(position2di inicio, position2di fin){
+	cout<<"getCaminodoEnlace"<<endl;
 	Enlace * e=getEnlacePorPositionEnlace(inicio);
 	std::vector<position2di> nuevo_v;
 
 	if (inicio == e->getOrigen() && fin == e->getDestino()){
 		nuevo_v.push_back(fin);
+		cout<<"getCaminodoEnlace encontrado camino inicio=origen && fin = dest"<<endl;
 		return nuevo_v;
 	}else if(inicio == e->getDestino() && fin == e->getOrigen()){
 		nuevo_v.push_back(fin);
+		cout<<"getCaminodoEnlace encontrado camino inicio=dest && fin = origen"<<endl;
 		return nuevo_v;
 	}else{
 		for(Camino i:e->getIntraCaminosOrigen()){
 			std::vector<position2di> c = i.getCamino();
 			if(c.at(c.size()-1)==fin || c.at(1)==fin){
 				nuevo_v.insert(nuevo_v.end(), c.begin(), c.end());
+				cout<<"getCaminodoEnlace encontrado camino Origen"<<endl;
 				return nuevo_v;
 			}
 		}
+		cerr<<"No he encontrado intra caminos Origen entre <"<<inicio.X<<","<<inicio.Y<<"> y <"<<fin.X<<","<<fin.Y<<">. Mirando intracaminos destino"<<endl;
 		for(Camino i:e->getIntraCaminosDestino()){
 			std::vector<position2di> c = i.getCamino();
 			if(c.at(c.size()-1)==fin  || c.at(1)==fin){
 				nuevo_v.insert(nuevo_v.end(), c.begin(), c.end());
+				cout<<"getCaminodoEnlace encontrado camino Destino"<<endl;
 				return nuevo_v;
 			}
 		}
 	}
-	cerr<<"######## ERROR!! Me has pedido el camino entre "<<inicio.X<<","<<inicio.Y<<" y "<<fin.X<<","<<fin.Y<<" #########"<<endl;
+	cerr<<"######## ERROR!! Camino inexistente entre "<<inicio.X<<","<<inicio.Y<<" y "<<fin.X<<","<<fin.Y<<" #########"<<endl;
 	return nuevo_v;
 }
 Enlace* pathfinding::getEnlacePorPositionEnlace(position2di pos){
+	cout<<"getEnlacePorPositionEnlace"<<endl;
 		std::vector<Enlace*> vectorEnlace= getEnlaces();
 	for(Enlace* enlace:vectorEnlace){
 		if(enlace->getOrigen()==pos){
@@ -437,10 +463,10 @@ Enlace* pathfinding::getEnlacePorPositionEnlace(position2di pos){
 		}
 
 	}
-
-
+	cerr<<"########## ERROR: getEnlacePorPosition NO HA ENCONTRADO ENLACE #########"<<endl;
 }
 Camino* pathfinding::caminosPersonajeRegion(const position2di& personajePosicion,const position2di& finalPosicion){
+	cout<<"caminosPersonajeRegion"<<endl;
 	std::vector<Enlace*> enlacesVector;
 	std::vector<Camino> caminos;
 	std::vector<Camino> caminosFinal;
@@ -448,7 +474,14 @@ Camino* pathfinding::caminosPersonajeRegion(const position2di& personajePosicion
 		Region* regionInicio = getCorrespondingRegion(personajePosicion.X,personajePosicion.Y);
 		Region* regionFinal = getCorrespondingRegion(finalPosicion.X,finalPosicion.Y);
 		if(regionInicio==regionFinal){
-			return A(personajePosicion,finalPosicion,regionInicio);
+			Camino* c = A(personajePosicion,finalPosicion,regionInicio);
+			if (c != NULL)
+			{
+				cout<<"CAMINO: <"<<c<<">"<<endl;
+			 	return c;
+			}
+			cout<<"CAMINO es NULL"<<endl;
+			 // si no ha encontrado camino local, probamos con el externo
 		}
 		enlacesVector=getEnlaces(regionInicio);
 		for(Enlace* enlace:enlacesVector){
@@ -465,7 +498,7 @@ Camino* pathfinding::caminosPersonajeRegion(const position2di& personajePosicion
 				caminos.push_back(*c);
 			}
 
-	}
+		}
 	//cout<<"final"<<endl;
 		
 		enlacesVector.clear();
@@ -488,8 +521,10 @@ Camino* pathfinding::caminosPersonajeRegion(const position2di& personajePosicion
 	}
 	if (caminos.size()== 0 || caminosFinal.size()==0)
 	{
+		cout<<"caminosPersonajeRegion NO HA ENCONTRADO CAMINO"<<endl;
 		return NULL;
 	}else{
+		cout<<"Calculando ARegiones"<<endl;
 		return ARegiones(personajePosicion,finalPosicion,regionInicio,regionFinal,caminos,caminosFinal);
 	}
 }
@@ -529,6 +564,7 @@ position2di pathfinding::getEnlacePorPosition(position2di pos){
 
 }
 std::vector<Nodo> pathfinding::hijosRegion(Nodo* n,position2di origen,position2di destino,Region * regionInicio,Region * regionFinal,std::vector<Camino> inicioCaminos,std::vector<Camino> finalCaminos){
+	cout<<"hijosRegion"<<endl;
 	std::vector<Nodo> nuevoshijos;
 	Nodo nuevo;
 	position2di nueva_pos;
@@ -611,9 +647,16 @@ std::vector<Nodo> pathfinding::hijosRegion(Nodo* n,position2di origen,position2d
 			nuevoshijos.push_back(nuevo);
 
 	}
+	cerr<<"Hijos generados (["<<regionActual->getInicio().X<<","<<regionActual->getInicio().Y<<"] - ["<<regionActual->getFinal().X<<","<<regionActual->getFinal().Y<<"])"<<endl<<"{"<<endl;
+	for(Nodo hijo:nuevoshijos){
+		cerr<<"["<<hijo.origen.X<<","<<hijo.origen.Y<<"]"<<endl;
+	}
+	cerr<<"}"<<endl;
+	cout<<"hijosRegion terminado"<<endl;
 	return nuevoshijos;
 }
 std::vector<Nodo> pathfinding::hijos(Nodo* n,Region * regionActual){
+	cout<<"hijos"<<endl;
 	std::vector<Nodo> nuevoshijos;
 	Nodo nuevo;
 	position2di nueva_pos;
@@ -642,6 +685,7 @@ std::vector<Nodo> pathfinding::hijos(Nodo* n,Region * regionActual){
 		nuevo.origen=nueva_pos;
 		nuevoshijos.push_back(nuevo);
 	}
+	cout<<"hijos terminado"<<endl;
 	return nuevoshijos;
 }
 int pathfinding::menorF(std::vector<Nodo> listaFrontera){
