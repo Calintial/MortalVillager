@@ -4,9 +4,12 @@ Camino::Camino(position2di inicio){
 	posiciones.push_back(inicio);
 	peso = 0;
 }
-Camino::Camino(){
 
+Camino::Camino(const Camino &c){
+	posiciones=c.posiciones;	
+	peso=c.peso;
 }
+
 Camino::~Camino(){
 
 }
@@ -23,7 +26,4 @@ int Camino::getPeso(){
 std::vector<position2di> Camino::getCamino(){
 	return posiciones;
 }
-Camino::Camino(const Camino &c){
-	posiciones=c.posiciones;	
-	peso=c.peso;
-}
+

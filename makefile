@@ -4,7 +4,7 @@ OPTS=-Wall -std=c++11 -O0 -g
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 
-OBJECTS=graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMenu.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o DebugMenu.o hud.o pausa.o state.o muro.o stateIA.o Region.o Enlace.o Camino.o pathfinding.o Nodo.o pantallaBasica.o pantallaPathfinding.o InterfazPathfinding.o pantallaIABatalla.o pantalla.o DebugMenu.o
+OBJECTS=graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMenu.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o DebugMenu.o hud.o pausa.o state.o muro.o stateIA.o Region.o Enlace.o Camino.o Pathfinding.o Nodo.o pantallaBasica.o pantallaPathfinding.o InterfazPathfinding.o pantallaIABatalla.o pantalla.o DebugMenu.o
 
 
 .PHONY: all clean

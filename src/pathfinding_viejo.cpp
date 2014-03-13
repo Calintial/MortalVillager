@@ -465,6 +465,7 @@ Enlace* pathfinding::getEnlacePorPositionEnlace(position2di pos){
 	}
 	cerr<<"########## ERROR: getEnlacePorPosition NO HA ENCONTRADO ENLACE #########"<<endl;
 }
+
 Camino* pathfinding::caminosPersonajeRegion(const position2di& personajePosicion,const position2di& finalPosicion){
 	cout<<"caminosPersonajeRegion"<<endl;
 	std::vector<Enlace*> enlacesVector;

@@ -4,20 +4,24 @@
 
 #include <iostream>
 #include <irrlicht.h>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_traits.hpp>
 using namespace irr::core;
 
 class Nodo
 {
 public:
-	Nodo(int _g,int _h,int _f,position2di _or,Nodo *_nodo);
+	Nodo(position2di _pos,int _g,Nodo *_padre);
+	Nodo(position2di _pos,int _g,int _h,Nodo *_padre);
 	Nodo(const Nodo&);
 	~Nodo();
-	Nodo();
+
 	bool operator<(const Nodo& nodo) const;
-	position2di origen;
+
+	position2di posicion;
 	int g;
     int h;
     int f;
-    Nodo* p;	
+    Nodo* padre;	
 };
 #endif

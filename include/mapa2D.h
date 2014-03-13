@@ -11,7 +11,7 @@
 #include "muro.h"
 #include "edificio.h"
 #include "Unidades.h"
-#include "pathfinding.h"
+#include "Pathfinding.h"
 
 #include <string>
 #include <vector>
@@ -79,7 +79,7 @@ public:
 	vector<IDibujable*>* getUser_units();
 	int getIASelected();
 	int getUserSelected();
-	pathfinding* getPathfinding();
+	Pathfinding* getPathfinding();
 
 	dimension2di ViewSize;
 
@@ -94,7 +94,7 @@ private:
 	IGUISkin* skin;
 	int gameState;
 	stringc MapaText;
-	pathfinding *pathFinding;
+	Pathfinding *pathFinding;
 	void Init();
 	void AllocateMap(bool suelo);
 	//void LoadEvents(STile *Tile, int i, int j);
