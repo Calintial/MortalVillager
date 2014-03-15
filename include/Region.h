@@ -18,6 +18,7 @@ public:
 /*	void add(Enlace*);
 	void remove(Enlace*);*/
 	bool isInside(int x, int y);
+	bool isInside(position2di);
 //	std::vector<Region*> getConnectedRegions();
 	position2di getInicio();
 	position2di getFinal();

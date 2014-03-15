@@ -82,22 +82,20 @@ void Pathfinding::analyzeRegions(){
 							{
 								Enlace enlace(position2di(actual.inicio.X,posHueco),position2di(regionIzquierda.final.X,posHueco));
 								Enlace enlace2(position2di(actual.inicio.X,posHueco+tamHueco-1),position2di(regionIzquierda.final.X,posHueco+tamHueco-1));
-								boost::add_edge(actual.descriptor,regionIzquierda.descriptor,enlace,grafo);
-								boost::add_edge(actual.descriptor,regionIzquierda.descriptor,enlace2,grafo);
+								boost::add_edge(actual.getVertexDescriptor(),regionIzquierda.getVertexDescriptor(),enlace,grafo);
+								boost::add_edge(actual.getVertexDescriptor(),regionIzquierda.getVertexDescriptor(),enlace2,grafo);
 							}else{*/
 								vertex_t origen = boost::add_vertex(grafo);
-								grafo[origen].posicion = position2di(actual.inicio.X,posHueco + tamHueco/2);
-								grafo[origen].descriptor = origen;
+								grafo[origen].init(position2di(actual.inicio.X,posHueco + tamHueco/2),origen);
 								actual.nodos.push_back(grafo[origen]);
 
 								vertex_t destino = boost::add_vertex(grafo);
-								grafo[destino].posicion = position2di(regionIzquierda.final.X,posHueco + tamHueco/2);
-								grafo[destino].descriptor = destino;
+								grafo[destino].init(position2di(regionIzquierda.final.X,posHueco + tamHueco/2),destino);
 								regionIzquierda.nodos.push_back(grafo[destino]);
 
 
-								Camino enlace(grafo[origen].posicion);
-								enlace.addNodo(grafo[destino].posicion);
+								Camino enlace(grafo[origen].getPosicion());
+								enlace.addNodo(grafo[destino].getPosicion());
 								boost::add_edge(origen,destino,enlace,grafo);
 							//}
 							tamHueco = 0;
@@ -110,17 +108,15 @@ void Pathfinding::analyzeRegions(){
 				if (tamHueco > 0)
 				{
 					vertex_t origen = boost::add_vertex(grafo);
-					grafo[origen].posicion = position2di(actual.inicio.X,posHueco + tamHueco/2);
-					grafo[origen].descriptor = origen;
+					grafo[origen].init(position2di(actual.inicio.X,posHueco + tamHueco/2),origen);
 					actual.nodos.push_back(grafo[origen]);
 
 					vertex_t destino = boost::add_vertex(grafo);
-					grafo[destino].posicion = position2di(regionIzquierda.final.X,posHueco + tamHueco/2);
-					grafo[destino].descriptor = destino;
+					grafo[destino].init(position2di(regionIzquierda.final.X,posHueco + tamHueco/2),destino);
 					regionIzquierda.nodos.push_back(grafo[destino]);
 
-					Camino enlace(grafo[destino].posicion);
-					enlace.addNodo(grafo[origen].posicion);
+					Camino enlace(grafo[destino].getPosicion());
+					enlace.addNodo(grafo[origen].getPosicion());
 					boost::add_edge(origen,destino,enlace,grafo);
 					//cout<<"Nuevo enlace izquierda"<<endl;
 				}
@@ -148,17 +144,15 @@ void Pathfinding::analyzeRegions(){
 						{
 							// la conexión es (actual.inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
 							vertex_t origen = boost::add_vertex(grafo);
-							grafo[origen].posicion = position2di(posHueco+tamHueco/2,actual.inicio.Y);
-							grafo[origen].descriptor = origen;
+							grafo[origen].init(position2di(posHueco+tamHueco/2,actual.inicio.Y),origen);
 							actual.nodos.push_back(grafo[origen]);
 
 							vertex_t destino = boost::add_vertex(grafo);
-							grafo[destino].posicion = position2di(posHueco+tamHueco/2,regionArriba.final.Y);
-							grafo[destino].descriptor = destino;
+							grafo[destino].init(position2di(posHueco+tamHueco/2,regionArriba.final.Y),destino);
 							regionArriba.nodos.push_back(grafo[destino]);
 
-							Camino enlace(grafo[origen].posicion);
-							enlace.addNodo(grafo[destino].posicion);
+							Camino enlace(grafo[origen].getPosicion());
+							enlace.addNodo(grafo[destino].getPosicion());
 							boost::add_edge(origen,destino,enlace,grafo);
 							//cout<<"Nuevo enlace arriba"<<endl;
 							tamHueco = 0;
@@ -171,17 +165,15 @@ void Pathfinding::analyzeRegions(){
 				if (tamHueco > 0)
 				{
 					vertex_t origen = boost::add_vertex(grafo);
-					grafo[origen].posicion = position2di(posHueco+tamHueco/2,actual.inicio.Y);
-					grafo[origen].descriptor = origen;
+					grafo[origen].init(position2di(posHueco+tamHueco/2,actual.inicio.Y), origen);
 					actual.nodos.push_back(grafo[origen]);
 
 					vertex_t destino = boost::add_vertex(grafo);
-					grafo[destino].posicion = position2di(posHueco+tamHueco/2,regionArriba.final.Y);
-					grafo[destino].descriptor = destino;
+					grafo[destino].init(position2di(posHueco+tamHueco/2,regionArriba.final.Y),destino);
 					regionArriba.nodos.push_back(grafo[destino]);
 
-					Camino enlace(grafo[origen].posicion);
-					enlace.addNodo(grafo[destino].posicion);
+					Camino enlace(grafo[origen].getPosicion());
+					enlace.addNodo(grafo[destino].getPosicion());
 					boost::add_edge(origen,destino,enlace,grafo);
 					//cout<<"Nuevo enlace arriba"<<endl;
 				}
@@ -195,42 +187,56 @@ void Pathfinding::findInnerPaths(){
 	for (vp = vertices(grafo); vp.first != vp.second; ++vp.first)
 	{
 		Nodo nodo = *(&grafo[*vp.first]);
-		Region regionActual = getCorrespondingRegion(nodo.posicion);
+		Region regionActual = getCorrespondingRegion(nodo.getPosicion());
 		for(Nodo destino:regionActual.nodos){
-			Camino* c=Aestrella(nodo.posicion,destino.posicion,regionActual);
+			Camino* c=Aestrella(nodo.getPosicion(),destino.getPosicion(),regionActual);
 			if (c != NULL)
 			{
-				boost::add_edge(nodo.descriptor,destino.descriptor,*c,grafo);
+				boost::add_edge(nodo.getVertexDescriptor(),destino.getVertexDescriptor(),*c,grafo);
 			}
 		}
 	}
 }
 
 Camino* Pathfinding::Aestrella(position2di origen,position2di destino, Region regionLimite){
-	std::vector<Nodo> listaInterior;
-	std::vector<Nodo> listaFrontera;
-	std::priority_queue<Nodo> queueFrontera;
-	Nodo nuevo(origen,0,distancia(origen,destino),NULL);
+	Camino* camino = NULL;
+	std::vector<std::shared_ptr<Nodo>> listaInterior;
+	std::vector<std::shared_ptr<Nodo>> listaFrontera;
+	std::priority_queue<std::shared_ptr<Nodo>> queueFrontera;
+	std::shared_ptr<Nodo> nuevo(new Nodo(origen,0,distancia(origen,destino),NULL));
 
 	queueFrontera.push(nuevo);
 
-	while(!queueFrontera.empty()){
-		Nodo actual = queueFrontera.top();
+	while(!queueFrontera.empty() && camino == NULL){
+		std::shared_ptr<Nodo> actual = queueFrontera.top();
 		queueFrontera.pop();
 		listaInterior.push_back(actual);
 
-		if (actual == destino)
+		if (*actual == destino)
 		{
-			// deshacemos el camino y devolvemos
+			return deshacerCamino(actual);
 		}else{
-			// creamos los hijos
-			// if(!listaInterior.contains(hijo)){
-			// 		nueva_g = actual.g + 1;
-			// 		if (!listaFrontera.contains(hijo) || nueva_g < hijo.g){
-			//			actualizar_hijo
-			//			if(!listaFrontera.contains(hijo)){	queueFrontera.push(hijo); listaFrontera.push_back(hijo);}
-			//		}
-			// }
+			auto hijos = actual->getHijos(mapa,regionLimite,grafo);
+			for(std::shared_ptr<Nodo> hijo:hijos){
+				if(std::find(listaInterior.begin(), listaInterior.end(), hijo) == listaInterior.end()){
+					int nueva_g = hijo->getG();
+					auto iteratorHijo = std::find(listaFrontera.begin(), listaFrontera.end(), hijo);
+					bool contiene = iteratorHijo != listaFrontera.end();
+					if (contiene)
+					{
+						hijo = *iteratorHijo;
+						if (nueva_g < hijo->getG())
+						{
+							hijo->update(nueva_g,distancia(hijo->getPosicion(),destino),actual);
+						}
+				
+					}else{
+						hijo->update(hijo->getG(),distancia(hijo->getPosicion(),destino),hijo->getPadre());
+						queueFrontera.push(hijo);
+						listaFrontera.push_back(hijo);
+					}
+				}
+			}
 		}
 	}
 }
@@ -243,4 +249,15 @@ Region Pathfinding::getCorrespondingRegion(position2di posicion){
 
 int Pathfinding::distancia(position2di origen,position2di destino){
 	return abs((destino.X-origen.X)+abs(destino.Y-origen.Y));
+}
+
+Camino* Pathfinding::deshacerCamino(std::shared_ptr<Nodo> nodo){
+	if (nodo->getPadre() != NULL)
+	{
+		Camino* c = deshacerCamino(nodo->getPadre());
+		c->addNodo(nodo->getPosicion());
+		return c;
+	}else{
+		return new Camino(nodo->getPosicion());
+	}
 }

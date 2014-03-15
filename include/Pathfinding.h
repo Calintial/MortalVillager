@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <algorithm>
 #include "Nodo.h"
 #include "Camino.h"
 #include "Region.h"
@@ -37,6 +38,7 @@ private:
 
 	Region getCorrespondingRegion(position2di);
 	int distancia(position2di,position2di);
+	Camino* deshacerCamino(std::shared_ptr<Nodo>);
 
 	const int tamRegion = 5;
 	std::shared_ptr<mapa2D> mapa;

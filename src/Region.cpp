@@ -31,6 +31,9 @@ void Region::remove(Enlace* link){
 bool Region::isInside(int x, int y){
 	return ((x >= inicio.X && x <= final.X) && (y >= inicio.Y && y <= final.Y));
 }
+bool Region::isInside(position2di pos){
+	return (isInside(pos.X,pos.Y));
+}
 /*
 std::vector<Region*> Region::getConnectedRegions(){
 	std::vector<Region*> regiones;

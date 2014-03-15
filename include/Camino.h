@@ -10,6 +10,7 @@ using namespace core;
 
 class Camino{
 public:
+	Camino();
 	Camino(position2di inicio);
 	Camino(const Camino &c);
 	~Camino();
