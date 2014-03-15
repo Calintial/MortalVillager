@@ -12,9 +12,10 @@ class mapa2D;
 class PantallaPathfinding : public Pantalla
 {
 public:
-		PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa);
+
+		PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo);
 		~PantallaPathfinding();
-		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*);
+		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*);
 		virtual bool OnEvent(const SEvent& event);
 private:
 	InterfazPathfinding* interfazPathfinding;

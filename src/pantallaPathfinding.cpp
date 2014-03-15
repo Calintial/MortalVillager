@@ -9,20 +9,22 @@ using namespace irr;
 using namespace video;
 using namespace std;
 using namespace core;
-PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
+PantallaPathfinding::PantallaPathfinding(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	interfazPathfinding = NULL;
-	pantallaDevice->setEventReceiver(this); 
+	pantallaDevice->setEventReceiver(this);
+	setTipo(tipo);
 }
 PantallaPathfinding::~PantallaPathfinding(){
 
     //delete mapa;
     delete interfazPathfinding;
 }
-void PantallaPathfinding::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units){
+
+void PantallaPathfinding::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings){
 
 	if(mapa.get() == NULL){
 		cout<<"creando mapa"<<endl;
-		mapa = shared_ptr<mapa2D>(new mapa2D(pantallaDevice,ia_units,user_units,false));
+		mapa = shared_ptr<mapa2D>(new mapa2D(pantallaDevice,ia_units,user_units,buildings,false));
 		
 	}
 	if(interfazPathfinding == NULL){

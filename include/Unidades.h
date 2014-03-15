@@ -19,25 +19,22 @@ public:
 	Unidades();
 	Unidades(int,int);
 	~Unidades();
-	void updateIA();
+	//void updateIA();
+	//Metodos de movimiento y actualización de la unidad
 	void Move(int,int);
-	void Attack(position2di);
-	bool enemy_in_attack_range(position2di);
-	int getLife();
-	virtual void Pintar(IVideoDriver* driver,int,int);
-	virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
-	void aplicarTextura(IVideoDriver* driver);
-	void Recovery();
 	void updateUnit();
-	int getVisionRange();
-	int getAttackRange();
 
+	//Getters virtuales
+	virtual int getLife() = 0;
+	virtual int getVisionRange() = 0;
+	virtual int getAttackRange() = 0;
+
+	//Pintado
+	virtual void TexturaSeleccionada(IVideoDriver* driver,bool) = 0;
+	
 private:
-	int life;
 	position2di last_clicked;
 	int state;
-	int vision_range;
-	int attack_range;
 
 };
 

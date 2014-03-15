@@ -12,8 +12,6 @@
 
 using namespace std;
 
-class battleIA;
-
 class intelEngine {
 public:
 	intelEngine();

@@ -18,6 +18,7 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <math.h>
 
 using namespace irr;
 using namespace video;
@@ -44,7 +45,7 @@ public:
 	};
 
 
-	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*,bool);
+	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*,bool);
 	~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
@@ -70,11 +71,7 @@ public:
 	//Eventos
 	Unidades* OnEventMapa(const SEvent& event);
 	
-	// Collision
-	//bool PuedoMover(const position2di &TPosition);
-	
 	//Manejo de objetos
-	//void Update(u32 TDeltaTime);
 	vector<IDibujable*>* getIa_units();
 	vector<IDibujable*>* getUser_units();
 	int getIASelected();
@@ -84,6 +81,21 @@ public:
 	dimension2di ViewSize;
 
 	void InicializarGraficosUnidades();
+
+	static position2di isoTo2D(int x, int y);
+	static position2di twoDToIso(int x, int y);
+	static position2di getTileCoordinates(int x, int y);
+	static position2di getIsoFromTile(int x, int y);
+
+	void setSombra(bool s);
+	bool getSombra();
+
+	void setTipoEdificio(int tipo);
+	int getTipoEdificio();
+
+	void setSombraCoords(position2di pos);
+	position2di getSombraCoords();
+
 
 private:
 	IrrlichtDevice * MapaDevice;
@@ -97,34 +109,42 @@ private:
 	Pathfinding *pathFinding;
 	void Init();
 	void AllocateMap(bool suelo);
-	//void LoadEvents(STile *Tile, int i, int j);
 
 	IDibujable* vTiles[WIDTH][HEIGHT];
 	vector<IDibujable*>* ia_units;
 	vector<IDibujable*>* user_units;
-
-	//Vista
-	//int ViewWidth,ViewHeight;
+	vector<IDibujable*>* buildings;
 	
 	position2di CameraScroll;
+
+
+	position2di shadowPosition;
+
+	bool Sel_Pulsado;
+	position2di Sel_Inicio;
+	position2di Sel_Fin;
+
 	
 	//Texturas
 	stringc WorkingDirectory;
-	
-	//Eventos
-	//array<IndexedEventStruct> IndexedEvents;
 	
 	bool drawVision;
 	bool drawAttackVision;
 	int ia_selected;
 	int user_selected;
 
+	bool sombra_edificio;
+	int tipo_edificio;
+
 	//Objetos
 
 	void DrawIAUnits();
 	void DrawUserUnits();
+	void DrawBuildings();
+	void DrawBuildingShadow();
 	int IASelected(position2di);
 	int UserSelected(position2di);
+
 };
 
 #endif

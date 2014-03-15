@@ -9,16 +9,14 @@
 
 class edificio  : public IDibujable{
 public:
-	edificio(int t, IDibujable* partes);
+	edificio(int,int,int);
+	edificio(int);
 	~edificio();
 
-	void Pintar(IVideoDriver*,int,int);
-	void aplicarTextura(IVideoDriver* driver);
+	virtual void Pintar(IVideoDriver*,int,int) = 0;
+	virtual void aplicarTextura(IVideoDriver* driver) = 0;
+	virtual bool isTransitable() = 0;
 	
-	//void doSomething();
-	
-private:
-	IDibujable* partes;
 };
 
 #endif

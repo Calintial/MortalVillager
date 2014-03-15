@@ -9,17 +9,25 @@
 #include "mapa2D.h"
 #include "IDibujable.h"
 
+#define dpos 4
+
 class graphicEngine;
 class Pantalla : public IEventReceiver
 {
 public:
+
 		Pantalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa);
 		virtual ~Pantalla() {};
-		virtual void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*) = 0;
+		virtual void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*) = 0;
+
 		virtual bool OnEvent(const SEvent& event);
 		void dispose();
+		bool pscroll [dpos];
+		int getTipo() { return tipo;}
+		void setTipo(int t){cout << "TIPONUEVO:" << t << endl; tipo=t;}
 private:
 	graphicEngine * grEngine;
+	int tipo;
 protected:
 	IrrlichtDevice * pantallaDevice;
 	shared_ptr<mapa2D> mapa;

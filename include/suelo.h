@@ -3,6 +3,7 @@
 
 //#include <irrlicht.h>
 #include "IDibujable.h"
+#include "mapa2D.h"
 
 #include <string>
 #include <vector>

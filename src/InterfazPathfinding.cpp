@@ -17,6 +17,10 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,shared_ptr<m
 	drawCaminoFinal = false;
 	estado = ESTADO_PINTAR;
 	origen = destino = position2di(-1,-1);
+
+	enlaces_textura = driver->getTexture("../media/Texturas/debug_pathfinding/enlaces.png");
+	caminos_internos_textura = driver->getTexture("../media/Texturas/debug_pathfinding/caminos_internos.png");
+	caminos_textura = driver->getTexture("../media/Texturas/debug_pathfinding/caminos.png");
 }
 
 InterfazPathfinding::~InterfazPathfinding(){}
@@ -66,12 +70,14 @@ void InterfazPathfinding::DrawRegiones(){
 		{
 			position2di inicio = regiones[i]->getInicio();
 			position2di final = regiones[i]->getFinal();
+			
 			final.X ++;
 			final.Y ++;
 			auto thick_old = driver->getMaterial2D().Thickness;
 			driver->getMaterial2D().Thickness=12.f;
 			driver->enableMaterial2D();
-			driver->draw2DRectangleOutline(core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)),video::SColor(255,0,255,0));
+			DrawIsometricRectangle(inicio,final,video::SColor(255,0,255,0));
+			//driver->draw2DRectangleOutline(core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)),video::SColor(255,0,255,0));
 			driver->getMaterial2D().Thickness=thick_old;
 		}
 	}
@@ -89,9 +95,10 @@ void InterfazPathfinding::DrawEnlacesYCaminos(){
 			{
 				position2di inicio = enlaces[i]->getDestino();
 				position2di final = enlaces[i]->getOrigen();
-				final.X ++;
-				final.Y ++;
-				driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
+				/*final.X ++;
+				final.Y ++;*/
+				DrawIsometricRectangleFilled(inicio,final,enlaces_textura);
+				//driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
 			}
 			
 			if(drawCaminosInternos){
@@ -103,14 +110,11 @@ void InterfazPathfinding::DrawEnlacesYCaminos(){
 					for (int k = 1; k < camino.size(); ++k)
 					{
 						position2di paso = camino[k];
-						if ((paso.X == 20 && paso.Y == 11) || (paso.X == 21 && paso.Y == 10))
-						{
-							cout<<"ENLACE INVISIBLE!!!"<<endl;
-						}
 						position2di pasoFinal = camino[k];
-						pasoFinal.X++;
-						pasoFinal.Y++;
-						driver->draw2DRectangle(video::SColor(128,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
+						/*pasoFinal.X++;
+						pasoFinal.Y++;*/
+						DrawIsometricRectangleFilled(paso,pasoFinal,caminos_internos_textura);
+						//driver->draw2DRectangle(video::SColor(128,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
 					}
 				}
 			}
@@ -123,9 +127,10 @@ void InterfazPathfinding::DrawCaminoFinal(){
 	{
 		for(position2di paso: caminoFinal->getCamino()){
 			position2di pasoFinal = paso;
-			pasoFinal.X++;
-			pasoFinal.Y++;
-			driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
+			/*pasoFinal.X++;
+			pasoFinal.Y++;*/
+			DrawIsometricRectangleFilled(paso,pasoFinal,caminos_textura);
+			//driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
 		}
 	}
 }
@@ -141,36 +146,44 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 				case EMIE_LMOUSE_PRESSED_DOWN:
 					{
 						// Esto está copiapegado de mapa2D, cuidado por si cambia
-						position2di pos_grid;
-						pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
-						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;
-						cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
-						if (estado == ESTADO_PINTAR)
+						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
+						/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
+						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
+						if(pos_grid.X >= 0 && pos_grid.Y >= 0)
 						{
-							Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
-							muro->aplicarTextura(device->getVideoDriver());
-							mapa->setTile(pos_grid.X,pos_grid.Y,muro);
-						}else{
-							origen = pos_grid;
+							cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+							if (estado == ESTADO_PINTAR)
+							{
+								Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
+								muro->aplicarTextura(device->getVideoDriver());
+								mapa->setTile(pos_grid.X,pos_grid.Y,muro);
+							}else{
+								origen = pos_grid;
+							}							
 						}
+
 						
 					}
 					break;
 				case EMIE_RMOUSE_PRESSED_DOWN:
 					{
 						// Esto está copiapegado de mapa2D, cuidado por si cambia
-						position2di pos_grid;
-						pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
-						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;
-						cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
-						if (estado == ESTADO_PINTAR)
+						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
+						/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
+						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
+						if(pos_grid.X >= 0 && pos_grid.Y >= 0)
 						{
-							Suelo* suelo = new Suelo(0,pos_grid.X,pos_grid.Y);
-							suelo->aplicarTextura(device->getVideoDriver());
-							mapa->setTile(pos_grid.X,pos_grid.Y,suelo);
-						}else{
-							destino = pos_grid;
+							cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+							if (estado == ESTADO_PINTAR)
+							{
+								Suelo* suelo = new Suelo(0,pos_grid.X,pos_grid.Y);
+								suelo->aplicarTextura(device->getVideoDriver());
+								mapa->setTile(pos_grid.X,pos_grid.Y,suelo);
+							}else{
+								destino = pos_grid;
+							}							
 						}
+
 						
 					}
 					break;
@@ -225,4 +238,36 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 		
 	}
 	return false;
+}
+
+void InterfazPathfinding::DrawIsometricRectangle(position2di sup_izq, position2di inf_der,video::SColor color)
+{
+	/*Convertir posiciones a isometrico*/
+	position2di sup_der = mapa2D::twoDToIso((inf_der.X * TILE_WIDTH) + TILE_WIDTH/2,(sup_izq.Y * TILE_HEIGHT) - TILE_HEIGHT/2);
+	position2di inf_izq = mapa2D::twoDToIso((sup_izq.X * TILE_WIDTH) + TILE_WIDTH/2,(inf_der.Y * TILE_HEIGHT) - TILE_HEIGHT/2);
+	
+	sup_izq = mapa2D::twoDToIso((sup_izq.X * TILE_WIDTH) + TILE_WIDTH/2,(sup_izq.Y * TILE_HEIGHT) - TILE_HEIGHT/2);
+	inf_der = mapa2D::twoDToIso((inf_der.X * TILE_WIDTH) + TILE_WIDTH/2,(inf_der.Y * TILE_HEIGHT) - TILE_HEIGHT/2);
+
+
+	driver->draw2DLine(sup_izq,sup_der,color);
+	driver->draw2DLine(sup_der,inf_der,color);
+	driver->draw2DLine(inf_der,inf_izq,color);
+	driver->draw2DLine(inf_izq,sup_izq,color);
+}
+
+void InterfazPathfinding::DrawIsometricRectangleFilled(position2di sup_izq, position2di inf_der,ITexture * textura)
+{
+	/*sup_izq = mapa->getDrawPosition(sup_izq);
+	inf_der = mapa->getDrawPosition(inf_der);
+
+	position2di pos_ini; pos_ini.X = sup_izq.X;
+	position2di pos_fin; pos_fin.X = inf_der.X;
+	for(int i = sup_izq.Y; i<= inf_der.Y; i++)
+	{
+		pos_ini.Y = pos_fin.Y = i;
+		driver->draw2DLine(mapa2D::twoDToIso(pos_ini.X, pos_ini.Y),mapa2D::twoDToIso(pos_fin.X, pos_fin.Y),color);
+	}*/
+	driver->draw2DImage(textura, mapa2D::getIsoFromTile(sup_izq.X,sup_izq.Y), rect<s32>(0, 0, textura->getSize().Width, textura->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+	driver->draw2DImage(textura, mapa2D::getIsoFromTile(inf_der.X,inf_der.Y), rect<s32>(0, 0, textura->getSize().Width, textura->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
