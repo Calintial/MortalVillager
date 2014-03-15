@@ -65,21 +65,25 @@ void InterfazPathfinding::Draw()
 void InterfazPathfinding::DrawRegiones(){
 	if (drawRegiones)
 	{
-		// std::vector<Region*> regiones = mapa->getPathfinding()->getRegiones();
-		// for (int i = 0; i < regiones.size(); ++i)
-		// {
-		// 	position2di inicio = regiones[i]->getInicio();
-		// 	position2di final = regiones[i]->getFinal();
-			
-		// 	final.X ++;
-		// 	final.Y ++;
-		// 	auto thick_old = driver->getMaterial2D().Thickness;
-		// 	driver->getMaterial2D().Thickness=12.f;
-		// 	driver->enableMaterial2D();
-		// 	DrawIsometricRectangle(inicio,final,video::SColor(255,0,255,0));
-		// 	//driver->draw2DRectangleOutline(core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)),video::SColor(255,0,255,0));
-		// 	driver->getMaterial2D().Thickness=thick_old;
-		// }
+		std::vector<std::vector<Region>> regiones = mapa->getPathfinding()->getRegiones();
+		for (int i = 0; i < regiones.size(); i++)
+		{
+			std::vector<Region> fila = regiones.at(i);
+			for (int j = 0; j < fila.size(); j++)
+			{
+				Region actual = fila[j];
+				position2di inicio = actual.getInicio();
+				position2di final = actual.getFinal();
+				
+				final.X ++;
+				final.Y ++;
+				auto thick_old = driver->getMaterial2D().Thickness;
+				driver->getMaterial2D().Thickness=12.f;
+				driver->enableMaterial2D();
+				DrawIsometricRectangle(inicio,final,video::SColor(255,0,255,0));
+				driver->getMaterial2D().Thickness=thick_old;
+			}
+		}
 	}
 	
 }

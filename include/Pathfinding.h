@@ -28,8 +28,9 @@ public:
 	void preprocesar();
 	void clear();
 	Camino* calcularCamino(position2di,position2di);
-	//std::vector<Region*> getRegiones();
+	std::vector<std::vector<Region>> getRegiones(){return regiones;}
 	//std::vector<Enlace*> getEnlaces();
+	
 private:
 	void createRegions();
 	void analyzeRegions();
