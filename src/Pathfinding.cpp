@@ -41,8 +41,8 @@ void Pathfinding::createRegions(){
 		std::vector<Region> fila;
 		for (int j = 0; j < WIDTH; j+=tamRegion)
 		{
-			finalX = i+tamRegion-1;
-			finalY = j+tamRegion-1;
+			finalX = j+tamRegion-1;
+			finalY = i+tamRegion-1;
 			if (finalY > HEIGHT)
 			{
 				finalY = HEIGHT - 1;
@@ -52,7 +52,7 @@ void Pathfinding::createRegions(){
 			{
 				finalX = WIDTH -1;
 			}
-			Region nueva(i,j,finalX,finalY);
+			Region nueva(j,i,finalX,finalY);
 			fila.push_back(nueva);
 		}
 		regiones.push_back(fila);
