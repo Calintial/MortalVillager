@@ -65,13 +65,11 @@ void InterfazPathfinding::Draw()
 void InterfazPathfinding::DrawRegiones(){
 	if (drawRegiones)
 	{
-		std::vector<std::vector<Region>> regiones = mapa->getPathfinding()->getRegiones();
-		for (int i = 0; i < regiones.size(); i++)
+		auto regiones = mapa->getPathfinding()->getRegiones();
+		for (auto fila: regiones)
 		{
-			std::vector<Region> fila = regiones.at(i);
-			for (int j = 0; j < fila.size(); j++)
+			for (Region actual: fila)
 			{
-				Region actual = fila[j];
 				position2di inicio = actual.getInicio();
 				position2di final = actual.getFinal();
 				
@@ -91,19 +89,15 @@ void InterfazPathfinding::DrawRegiones(){
 void InterfazPathfinding::DrawEnlacesYCaminos(){
 	if (drawEnlaces || drawCaminosInternos)
 	{
-		// std::vector<Enlace*> enlaces = mapa->getPathfinding()->getEnlaces();
-		// for (int i = 0; i < enlaces.size(); ++i)
-		// {
+		std::vector<position2di> enlaces = mapa->getPathfinding()->getEnlaces();
+		for(position2di casilla: enlaces){
+			if (drawEnlaces)
+			{
+				driver->draw2DImage(enlaces_textura, mapa2D::getIsoFromTile(casilla.X,casilla.Y), rect<s32>(0, 0, enlaces_textura->getSize().Width, enlaces_textura->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			}
+		}
 			
-		// 	if (drawEnlaces)
-		// 	{
-		// 		position2di inicio = enlaces[i]->getDestino();
-		// 		position2di final = enlaces[i]->getOrigen();
-		// 		/*final.X ++;
-		// 		final.Y ++;*/
-		// 		DrawIsometricRectangleFilled(inicio,final,enlaces_textura);
-		// 		//driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
-		// 	}
+			
 			
 		// 	if(drawCaminosInternos){
 		// 		std::vector<Camino> caminos = enlaces[i]->getIntraCaminosDestino();

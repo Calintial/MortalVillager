@@ -23,6 +23,16 @@ Camino* Pathfinding::calcularCamino(position2di,position2di){
 	cout<<"TODO: COPIAR DE PATHFINDING VIEJO"<<endl;
 }
 
+std::vector<position2di> Pathfinding::getEnlaces(){
+	std::vector<position2di> enlaces;
+	std::pair<vertex_iter, vertex_iter> vp;
+	for (vp = vertices(grafo); vp.first != vp.second; ++vp.first)
+	{
+		enlaces.push_back((&grafo[*vp.first])->getPosicion());
+	}
+	return enlaces;
+}
+
 void Pathfinding::createRegions(){
 	cout<<"Creando Regiones"<<endl;
 	int finalX,finalY;
