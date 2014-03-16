@@ -35,6 +35,7 @@ public:
 	void init(position2di _pos);
 	void update(int _g,int _h,Nodo* _padre);
 	virtual std::vector<Nodo*> getHijos() = 0;
+	virtual Camino* getCaminoDesdePadre() = 0;
 
 	bool operator<(const Nodo& nodo) const;
 	bool operator==(const Nodo& nodo) const;

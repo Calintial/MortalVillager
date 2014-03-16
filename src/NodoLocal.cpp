@@ -62,3 +62,14 @@ std::vector<Nodo*> NodoLocal::getHijos(){
 	
 	return hijos;
 }
+Camino* NodoLocal::getCaminoDesdePadre(){
+	if (padre != NULL)
+	{
+		Camino* c = new Camino(padre->getPosicion());
+		c->addNodo(posicion);
+		return c;
+	}else{
+		return NULL;
+	}
+	
+}

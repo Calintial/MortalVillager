@@ -37,7 +37,21 @@ std::vector<Nodo*> NodoRegional::getHijos(){
 	auto neighbours = boost::adjacent_vertices(descriptor,*grafo);
 	for(auto i = neighbours.first; i != neighbours.second; ++i){
 		Nodo* vecino = (NodoRegional*)&grafo->operator[](*i);
+		if (vecino->getG() == 9999)
+		{
+			vecino->update(g,0,this);
+		}
 		hijos.push_back(vecino);
 	}
 	return hijos;
+}
+
+Camino* NodoRegional::getCaminoDesdePadre(){
+	if (padre != NULL)
+	{
+		auto edge = boost::edge(((NodoRegional*)padre)->getVertexDescriptor(),descriptor,*grafo);
+		return &(*grafo)[edge.first];
+	}else{
+		return NULL;
+	}
 }

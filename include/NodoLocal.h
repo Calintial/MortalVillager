@@ -19,6 +19,7 @@ public:
 	void update(int _g,int _h,Nodo* _padre);
 
 	std::vector<Nodo*> getHijos();
+	Camino* getCaminoDesdePadre();
 
 private:
 	Region* regionActual;

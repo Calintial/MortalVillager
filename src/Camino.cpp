@@ -27,17 +27,23 @@ void Camino::addNodo(position2di nodo){
 	}
 }
 
-int Camino::getPeso(){
+int Camino::getPeso() const{
 	return peso;
 }
 
-std::vector<position2di> Camino::getCamino(){
+std::vector<position2di> Camino::getCamino() const{
 	return posiciones;
 }
 
-position2di Camino::getInicio(){
+position2di Camino::getInicio() const{
 	return posiciones[0];
 }
-position2di Camino::getFinal(){
+position2di Camino::getFinal() const{
 	return posiciones[posiciones.size()-1];		
+}
+
+void Camino::addCamino(const Camino& nuevoCamino){
+	for(position2di casilla: nuevoCamino.getCamino()){
+		addNodo(casilla);
+	}
 }

@@ -16,11 +16,11 @@ public:
 	~Camino();
 
 	void addNodo(position2di nodo);
-	int getPeso();
-	std::vector<position2di> getCamino();
-	position2di getInicio();
-	position2di getFinal();
-
+	int getPeso() const;
+	std::vector<position2di> getCamino() const;
+	position2di getInicio() const;
+	position2di getFinal() const;
+	void addCamino(const Camino&);
 
 private:
 	std::vector<position2di> posiciones;

@@ -19,6 +19,7 @@ public:
 	//void update(int _g,int _h,Nodo* _padre);
 	vertex_t getVertexDescriptor();
 	std::vector<Nodo*> getHijos();
+	Camino* getCaminoDesdePadre();
 
 private:
     vertex_t descriptor;

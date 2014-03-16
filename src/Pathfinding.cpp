@@ -111,7 +111,13 @@ Camino* Pathfinding::calcularCamino(position2di posicionPersonaje,position2di po
 		cout<<"NO HA ENCONTRADO CAMINO ni local ni entre personaje y final de region"<<endl;
 		return NULL;
 	}else{
-		return ARegiones(posicionPersonaje,posicionFinal,regionInicio,regionFinal,caminosInicio,caminosFinal);
+		Camino* c = ARegiones(posicionPersonaje,posicionFinal,regionInicio,regionFinal,caminosInicio,caminosFinal);
+		if (c != NULL)
+		{
+			return c;
+		}else{
+			cout<<"Camino no encontrado"<<endl;
+		}
 	}
 
 }
@@ -367,7 +373,7 @@ Camino* Pathfinding::Aestrella(Nodo* origen,position2di destino){
 			for(Nodo* hijo:hijos){				
 				if(std::find_if(listaInterior.begin(), listaInterior.end(), find_by_nodo(hijo)) == listaInterior.end()){
 					//cout<<"Hijo ["<<hijo->getPosicion().X<<","<<hijo->getPosicion().Y<<"] NO contenido en LISTA INTERIOR"<<endl;
-					int nueva_g = hijo->getG();
+					int nueva_g = actual->getG() + 1;
 					auto iteratorHijo = std::find_if(listaFrontera.begin(), listaFrontera.end(), find_by_nodo(hijo));
 					bool contiene = iteratorHijo != listaFrontera.end();
 					if (contiene)
@@ -439,7 +445,10 @@ Camino* Pathfinding::ARegiones(position2di origen, position2di destino, Region* 
 
 	Camino* c = Aestrella(&grafo[descriptorOrigen],destino);
 
-	
+	boost::clear_vertex(descriptorOrigen,grafo);
+	boost::clear_vertex(descriptorDestino,grafo);
+	boost::remove_vertex(descriptorOrigen,grafo);
+	boost::remove_vertex(descriptorDestino,grafo);
 	return c;
 }
 
@@ -459,7 +468,11 @@ Camino* Pathfinding::deshacerCamino(Nodo* nodo){
 	if (nodo->getPadre())
 	{
 		Camino* c = deshacerCamino(nodo->getPadre());
-		c->addNodo(nodo->getPosicion());
+		Camino* caminoDesdePadre = nodo->getCaminoDesdePadre();
+		if (caminoDesdePadre != NULL)
+		{
+			c->addCamino(*caminoDesdePadre);
+		}
 		return c;
 	}else{
 		return new Camino(nodo->getPosicion());
