@@ -108,13 +108,13 @@ void InterfazPathfinding::DrawEnlacesYCaminos(){
 void InterfazPathfinding::DrawCaminoFinal(){
 	if (drawCaminoFinal && caminoFinal != NULL)
 	{
-		// for(position2di paso: caminoFinal->getCamino()){
-		// 	position2di pasoFinal = paso;
-		// 	/*pasoFinal.X++;
-		// 	pasoFinal.Y++;*/
-		// 	DrawIsometricRectangleFilled(paso,pasoFinal,caminos_textura);
-		// 	//driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
-		// }
+		for(position2di paso: caminoFinal->getCamino()){
+			position2di pasoFinal = paso;
+			/*pasoFinal.X++;
+			pasoFinal.Y++;*/
+			DrawIsometricRectangleFilled(paso,pasoFinal,caminos_textura);
+			//driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
+		}
 	}
 }
 

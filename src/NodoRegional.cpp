@@ -33,5 +33,11 @@ vertex_t NodoRegional::getVertexDescriptor(){
 }
 
 std::vector<Nodo*> NodoRegional::getHijos(){
-	cout<<"TODO"<<endl;
+	std::vector<Nodo*> hijos;
+	auto neighbours = boost::adjacent_vertices(descriptor,*grafo);
+	for(auto i = neighbours.first; i != neighbours.second; ++i){
+		Nodo* vecino = (NodoRegional*)&grafo->operator[](*i);
+		hijos.push_back(vecino);
+	}
+	return hijos;
 }
