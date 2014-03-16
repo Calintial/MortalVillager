@@ -56,6 +56,7 @@ public:
 	void GuardarMapa();
 
 	IDibujable* getTile(int x, int y);
+	IDibujable* getTile(position2di);
 	void setTile(int x, int y, IDibujable* contenido);
 
 	//VISTAS

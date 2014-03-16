@@ -21,21 +21,21 @@ typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;
 class Nodo
 {
 public:
-	Nodo(position2di _pos,int _g,int _h,std::shared_ptr<Nodo> _padre);
+	Nodo(position2di _pos,int _g,int _h,Nodo* _padre);
 	Nodo();
 	Nodo(const Nodo&);
 	~Nodo();
 
-	position2di getPosicion(){return posicion;}
-	int getG(){return g;}
-	int getH(){return h;}
-	int getF(){return f;}
-	std::shared_ptr<Nodo> getPadre(){return padre;}
-	vertex_t getVertexDescriptor(){return descriptor;}
+	position2di getPosicion();
+	int getG();
+	int getH();
+	int getF();
+	Nodo* getPadre();
+	vertex_t getVertexDescriptor();
 
 	void init(position2di _pos,vertex_t _desc);
-	void update(int _g,int _h,std::shared_ptr<Nodo> _padre);
-	std::vector<std::shared_ptr<Nodo>> getHijos(std::shared_ptr<mapa2D>,Region,Graph);
+	void update(int _g,int _h,Nodo* _padre);
+	std::vector<Nodo*> getHijos(std::shared_ptr<mapa2D>,Region*);
 
 	bool operator<(const Nodo& nodo) const;
 	bool operator==(const Nodo& nodo) const;
@@ -46,7 +46,7 @@ private:
 	int g;
     int h;
     int f;
-    std::shared_ptr<Nodo> padre;
+    Nodo* padre;
     vertex_t descriptor;
 };
 #endif

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <set>
 #include <algorithm>
 #include "Nodo.h"
 #include "Camino.h"
@@ -28,21 +29,22 @@ public:
 	void preprocesar();
 	void clear();
 	Camino* calcularCamino(position2di,position2di);
-	std::vector<std::vector<Region>> getRegiones(){return regiones;}
+	std::vector<std::vector<Region*>> getRegiones(){return regiones;}
 	std::vector<position2di> getEnlaces();
+	std::vector<Camino> getIntraCaminos();
 
 private:
 	void createRegions();
 	void analyzeRegions();
 	void findInnerPaths();
-	Camino* Aestrella(position2di,position2di,Region);
+	Camino* Aestrella(position2di,position2di,Region*);
 
-	Region getCorrespondingRegion(position2di);
+	Region* getCorrespondingRegion(position2di);
 	int distancia(position2di,position2di);
-	Camino* deshacerCamino(std::shared_ptr<Nodo>);
+	Camino* deshacerCamino(Nodo*);
 
 	const int tamRegion = 5;
 	std::shared_ptr<mapa2D> mapa;
 	Graph grafo;
-	std::vector<std::vector<Region> > regiones;
+	std::vector<std::vector<Region*> > regiones;
 };

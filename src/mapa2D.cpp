@@ -320,8 +320,20 @@ void mapa2D::GuardarMapa(){
 
 }
 
-IDibujable* mapa2D::getTile(int x, int y){
-	return vTiles[y][x];
+IDibujable* mapa2D::getTile(int y, int x){
+	if (x >= WIDTH || y >= HEIGHT)
+	{
+		return NULL;
+	}
+	return vTiles[x][y];
+}
+
+IDibujable* mapa2D::getTile(position2di pos){
+	if (pos.X >= WIDTH || pos.Y >= HEIGHT)
+	{
+		return NULL;
+	}
+	return vTiles[pos.X][pos.Y];
 }
 
 void mapa2D::setTile(int x, int y, IDibujable* contenido){

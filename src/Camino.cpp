@@ -6,7 +6,7 @@ Camino::Camino(position2di inicio){
 }
 
 Camino::Camino(){
-	peso = 9999;
+	peso = -1;
 }
 
 Camino::Camino(const Camino &c){
