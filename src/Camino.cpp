@@ -35,3 +35,9 @@ std::vector<position2di> Camino::getCamino(){
 	return posiciones;
 }
 
+position2di Camino::getInicio(){
+	return posiciones[0];
+}
+position2di Camino::getFinal(){
+	return posiciones[posiciones.size()-1];		
+}

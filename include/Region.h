@@ -35,7 +35,7 @@ public:
 
 	//vertex_t descriptor;
 
-	std::vector<Nodo> nodos;
+	std::vector<Nodo*> nodos;
 };
 
 #endif

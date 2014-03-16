@@ -11,10 +11,8 @@
 #include "Region.h"
 
 class mapa2D;
-typedef boost::adjacency_list<boost::listS, boost::vecS, boost::undirectedS, Nodo,Camino > Graph;
 
 //Some typedefs for simplicity
-typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;
 typedef boost::graph_traits<Graph>::edge_descriptor edge_t;
 
 typedef boost::graph_traits<Graph>::vertex_iterator vertex_iter;
@@ -37,11 +35,14 @@ private:
 	void createRegions();
 	void analyzeRegions();
 	void findInnerPaths();
-	Camino* Aestrella(position2di,position2di,Region*);
+	Camino* Aestrella(Nodo*,position2di);
+	Camino* ALocal(position2di,position2di,Region*);
+	Camino* ARegiones(position2di,position2di,Region*,Region*,std::vector<Camino>,std::vector<Camino>);
 
 	Region* getCorrespondingRegion(position2di);
 	int distancia(position2di,position2di);
 	Camino* deshacerCamino(Nodo*);
+	void insertarOrdenado(const std::vector<Nodo*>&, Nodo*);
 
 	const int tamRegion = 5;
 	std::shared_ptr<mapa2D> mapa;

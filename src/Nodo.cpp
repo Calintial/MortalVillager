@@ -9,6 +9,7 @@ Nodo::Nodo(position2di _pos,int _g,int _h,Nodo*_padre){
         this->h=_h;
         this->f=_g + _h;
         this->padre=_padre;
+        this->descriptor = -1;
 }
 
 Nodo::Nodo(){
@@ -17,6 +18,7 @@ Nodo::Nodo(){
 	this->h=9999;
 	this->f=9999;
 	this->padre=NULL;
+	this->descriptor = -1;
 }
 
 Nodo::Nodo(const Nodo& copia){

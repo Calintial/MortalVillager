@@ -13,7 +13,7 @@ class Nodo;
 class Camino;
 class mapa2D;
 class Region;
-typedef boost::adjacency_list<boost::listS, boost::vecS, boost::undirectedS, Nodo,Camino > Graph;
+typedef boost::adjacency_list<boost::listS, boost::listS, boost::undirectedS, Nodo,Camino > Graph;
 
 //Some typedefs for simplicity
 typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;
