@@ -7,6 +7,8 @@
 #include <set>
 #include <algorithm>
 #include "Nodo.h"
+#include "NodoRegional.h"
+#include "NodoLocal.h"
 #include "Camino.h"
 #include "Region.h"
 
@@ -42,7 +44,7 @@ private:
 	Region* getCorrespondingRegion(position2di);
 	int distancia(position2di,position2di);
 	Camino* deshacerCamino(Nodo*);
-	void insertarOrdenado(const std::vector<Nodo*>&, Nodo*);
+	void insertarOrdenado(std::vector<Nodo*>&, Nodo*);
 
 	const int tamRegion = 5;
 	std::shared_ptr<mapa2D> mapa;

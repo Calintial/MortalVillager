@@ -4,6 +4,8 @@
 #include "mapa2D.h"
 #include "Camino.h"
 #include <limits.h>
+#include "NodoLocal.h"
+#include "NodoRegional.h"
 
 struct find_caminoInicio_by_pos {
     find_caminoInicio_by_pos(position2di _pos) : pos(_pos) {}
@@ -200,11 +202,11 @@ void Pathfinding::analyzeRegions(){
 								boost::add_edge(actual->getVertexDescriptor(),regionIzquierda->getVertexDescriptor(),enlace2,grafo);
 							}else{*/
 								vertex_t origen = boost::add_vertex(grafo);
-								grafo[origen].init(position2di(actual->inicio.X,posHueco + tamHueco/2),origen);
+								grafo[origen].init(position2di(actual->inicio.X,posHueco + tamHueco/2),origen,&grafo);
 								actual->nodos.push_back(&grafo[origen]);
 
 								vertex_t destino = boost::add_vertex(grafo);
-								grafo[destino].init(position2di(regionIzquierda->final.X,posHueco + tamHueco/2),destino);
+								grafo[destino].init(position2di(regionIzquierda->final.X,posHueco + tamHueco/2),destino,&grafo);
 								regionIzquierda->nodos.push_back(&grafo[destino]);
 
 
@@ -222,11 +224,11 @@ void Pathfinding::analyzeRegions(){
 				if (tamHueco > 0)
 				{
 					vertex_t origen = boost::add_vertex(grafo);
-					grafo[origen].init(position2di(actual->inicio.X,posHueco + tamHueco/2),origen);
+					grafo[origen].init(position2di(actual->inicio.X,posHueco + tamHueco/2),origen,&grafo);
 					actual->nodos.push_back(&grafo[origen]);
 
 					vertex_t destino = boost::add_vertex(grafo);
-					grafo[destino].init(position2di(regionIzquierda->final.X,posHueco + tamHueco/2),destino);
+					grafo[destino].init(position2di(regionIzquierda->final.X,posHueco + tamHueco/2),destino,&grafo);
 					regionIzquierda->nodos.push_back(&grafo[destino]);
 
 					Camino enlace(grafo[destino].getPosicion());
@@ -258,11 +260,11 @@ void Pathfinding::analyzeRegions(){
 						{
 							// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
 							vertex_t origen = boost::add_vertex(grafo);
-							grafo[origen].init(position2di(posHueco+tamHueco/2,actual->inicio.Y),origen);
+							grafo[origen].init(position2di(posHueco+tamHueco/2,actual->inicio.Y),origen,&grafo);
 							actual->nodos.push_back(&grafo[origen]);
 
 							vertex_t destino = boost::add_vertex(grafo);
-							grafo[destino].init(position2di(posHueco+tamHueco/2,regionArriba->final.Y),destino);
+							grafo[destino].init(position2di(posHueco+tamHueco/2,regionArriba->final.Y),destino,&grafo);
 							regionArriba->nodos.push_back(&grafo[destino]);
 
 							Camino enlace(grafo[origen].getPosicion());
@@ -279,11 +281,11 @@ void Pathfinding::analyzeRegions(){
 				if (tamHueco > 0)
 				{
 					vertex_t origen = boost::add_vertex(grafo);
-					grafo[origen].init(position2di(posHueco+tamHueco/2,actual->inicio.Y), origen);
+					grafo[origen].init(position2di(posHueco+tamHueco/2,actual->inicio.Y), origen,&grafo);
 					actual->nodos.push_back(&grafo[origen]);
 
 					vertex_t destino = boost::add_vertex(grafo);
-					grafo[destino].init(position2di(posHueco+tamHueco/2,regionArriba->final.Y),destino);
+					grafo[destino].init(position2di(posHueco+tamHueco/2,regionArriba->final.Y),destino,&grafo);
 					regionArriba->nodos.push_back(&grafo[destino]);
 
 					Camino enlace(grafo[origen].getPosicion());
@@ -306,12 +308,12 @@ void Pathfinding::findInnerPaths(){
 			cout<<"Region: {["<<regionActual->inicio.X<<","<<regionActual->inicio.Y<<"] - ["<<regionActual->final.X<<","<<regionActual->final.Y<<"]}"<<endl;
 			for (int i = 0; i < regionActual->nodos.size(); ++i)
 			{
-				Nodo* nodo = regionActual->nodos[i];
+				NodoRegional* nodo = regionActual->nodos[i];
 				for (int j = 0; j < regionActual->nodos.size(); ++j)
 				{
 					if (i != j)
 					{
-						Nodo* destino = regionActual->nodos[j];
+						NodoRegional* destino = regionActual->nodos[j];
 						auto edge = boost::edge(nodo->getVertexDescriptor(),destino->getVertexDescriptor(),grafo);
 						if (!edge.second)
 						{
@@ -360,7 +362,7 @@ Camino* Pathfinding::Aestrella(Nodo* origen,position2di destino){
 			//cout<<"Camino encontrado"<<endl;
 			camino = deshacerCamino(actual);
 		}else{
-			auto hijos = actual->getHijos(mapa,regionLimite);
+			auto hijos = actual->getHijos();
 			//cout<<"Hijos generados: <"<<hijos.size()<<">"<<endl;
 			for(Nodo* hijo:hijos){				
 				if(std::find_if(listaInterior.begin(), listaInterior.end(), find_by_nodo(hijo)) == listaInterior.end()){
@@ -406,7 +408,7 @@ Camino* Pathfinding::Aestrella(Nodo* origen,position2di destino){
 }
 
 Camino* Pathfinding::ALocal(position2di origen,position2di destino,Region* regionActual){
-	Nodo* nodoOrigen = new Nodo(origen,0,distancia(origen,destino),NULL);
+	Nodo* nodoOrigen = new NodoLocal(origen,0,distancia(origen,destino),NULL,regionActual,mapa);
 
 	return Aestrella(nodoOrigen,destino);
 
@@ -417,11 +419,11 @@ Camino* Pathfinding::ARegiones(position2di origen, position2di destino, Region* 
 	std::vector<Nodo*> listaDestino;
 
 	vertex_t descriptorOrigen = boost::add_vertex(grafo);
-	grafo[descriptorOrigen].init(origen,descriptorOrigen);
+	grafo[descriptorOrigen].init(origen,descriptorOrigen,&grafo);
 	grafo[descriptorOrigen].update(0,distancia(origen,destino),NULL);
 
 	vertex_t descriptorDestino = boost::add_vertex(grafo);
-	grafo[descriptorDestino].init(destino,descriptorDestino);
+	grafo[descriptorDestino].init(destino,descriptorDestino,&grafo);
 	grafo[descriptorDestino].update(0,0,NULL);
 
 	for (Camino camino: caminosInicio)
@@ -464,7 +466,7 @@ Camino* Pathfinding::deshacerCamino(Nodo* nodo){
 	}
 }
 
-void insertarOrdenado(std::vector<Nodo*>& lista, Nodo* nodo){
+void Pathfinding::insertarOrdenado(std::vector<Nodo*>& lista, Nodo* nodo){
 	bool insertado = false;
 	for (std::vector<Nodo*>::iterator it = lista.begin(); it != lista.end(); ++it)
 	{
