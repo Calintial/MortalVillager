@@ -94,6 +94,7 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 	{
 		position2di pos_grid = getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
 		int pos_vector = -1;
+		vector<int>* pos_multivector = new vector<int>();
 
 		switch(event.MouseInput.Event)
 		{
@@ -103,7 +104,7 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 				Sel_Inicio = MapaDevice->getCursorControl()->getPosition();
 				Sel_Fin = MapaDevice->getCursorControl()->getPosition();
 				
-				pos_vector = IASelected(pos_grid+CameraScroll);
+				/*pos_vector = IASelected(pos_grid+CameraScroll);
 				if(pos_vector != -1)
 				{
 					if(ia_selected != -1)
@@ -145,12 +146,28 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 							ia_selected = -1;
 						}
 					}
-				}
-				break;
+				}*/
+				break;	
 			
 			case EMIE_LMOUSE_LEFT_UP:
 				cout<<"Boton izquierdo, soltado en:"<< MapaDevice->getCursorControl()->getPosition().X/TILE_WIDTH << "," << MapaDevice->getCursorControl()->getPosition().Y/TILE_HEIGHT <<endl;
 				Sel_Pulsado=false;
+				
+				pos_multivector = IASelected();
+				if(pos_multivector->size() == 1)
+					if(pos_multivector->at(0) != -1)
+					{
+						if(ia_selected != -1)
+						{
+							((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
+							ia_selected = -1;
+						}
+						ia_selected = pos_multivector->at(0);
+						((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,true);
+
+						return (Unidades*)ia_units->at(ia_selected);
+					}
+				
 				break;
 				
 			case EMIE_MOUSE_MOVED:
@@ -466,6 +483,83 @@ int mapa2D::IASelected(position2di coord)
 	return -1;
 }
 
+vector<int>* mapa2D::IASelected()
+{
+	int n_ia = ia_units->size();
+
+	vector<int>* Sel_IA = new vector<int>();
+
+	cout << "INICIO: " << (Sel_Inicio.X/TILE_WIDTH)+CameraScroll.X << "," << (Sel_Inicio.Y/TILE_HEIGHT)+CameraScroll.Y << endl;
+	cout << "FIN: " << (Sel_Fin.X/TILE_WIDTH)+CameraScroll.X << "," << (Sel_Fin.Y/TILE_HEIGHT)+CameraScroll.Y << endl;
+
+	position2di IsoSel_Inicio = getTileCoordinates(Sel_Inicio.X,Sel_Inicio.Y)+CameraScroll;
+	position2di IsoSel_Fin = getTileCoordinates(Sel_Fin.X,Sel_Fin.Y)+CameraScroll;
+
+	cout << "INICIOISO: " << IsoSel_Inicio.X << "," << IsoSel_Inicio.Y << endl;
+	cout << "FINISO: " << IsoSel_Fin.X << "," << IsoSel_Fin.Y << endl;
+
+	for(int i=0; i<n_ia; i++)
+	{
+		if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y < IsoSel_Fin.Y)
+		{
+			cout << "pos ia1" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			/*pos ia es 0,0 y 10,10
+			selinicio 8,8
+			selfin 14,12*/
+			
+			
+			if( ia_units->at(i)->getPosition().X > IsoSel_Inicio.X &&
+				ia_units->at(i)->getPosition().Y > IsoSel_Inicio.Y &&
+				ia_units->at(i)->getPosition().X < IsoSel_Fin.X &&
+				ia_units->at(i)->getPosition().Y < IsoSel_Fin.Y)
+			{
+				Sel_IA->push_back(i);
+				cout << "1)Pos IA encontrada:" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X > IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos ia2" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			if( ia_units->at(i)->getPosition().X < IsoSel_Inicio.X &&
+				ia_units->at(i)->getPosition().Y < IsoSel_Inicio.Y &&
+				ia_units->at(i)->getPosition().X > IsoSel_Fin.X &&
+				ia_units->at(i)->getPosition().Y > IsoSel_Fin.Y)
+			{
+				Sel_IA->push_back(i);
+				cout << "2)Pos IA encontrada:" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos ia3" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			if( ia_units->at(i)->getPosition().X > IsoSel_Inicio.X &&
+				ia_units->at(i)->getPosition().X < IsoSel_Fin.X &&
+				ia_units->at(i)->getPosition().Y < IsoSel_Inicio.Y &&
+				ia_units->at(i)->getPosition().Y > IsoSel_Fin.Y)
+			{
+				Sel_IA->push_back(i);
+				cout << "3)Pos IA encontrada:" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos ia4" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			if( ia_units->at(i)->getPosition().X < IsoSel_Inicio.X &&
+				ia_units->at(i)->getPosition().X > IsoSel_Fin.X &&
+				ia_units->at(i)->getPosition().Y > IsoSel_Inicio.Y &&
+				ia_units->at(i)->getPosition().Y < IsoSel_Fin.Y)
+			{
+				Sel_IA->push_back(i);
+				cout << "4)Pos IA encontrada:" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else
+			Sel_IA->push_back(-1);
+	}
+	
+	return Sel_IA;
+}
+
 int mapa2D::UserSelected(position2di coord)
 {
 	int n_units = user_units->size();
@@ -503,6 +597,7 @@ position2di mapa2D::twoDToIso(int x, int y)
 	return pos;
 }
 
+//Le doy una coordenada y me dice en que tile esta
 position2di mapa2D::getTileCoordinates(int x, int y)
 {
 	position2di pos;

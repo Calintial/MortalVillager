@@ -123,6 +123,7 @@ private:
 	void DrawUserUnits();
 	void DrawBuildings();
 	int IASelected(position2di);
+	vector<int>* IASelected();
 	int UserSelected(position2di);
 
 };
