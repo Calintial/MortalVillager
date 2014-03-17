@@ -129,7 +129,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 				case EMIE_LMOUSE_PRESSED_DOWN:
 					{
 						// Esto está copiapegado de mapa2D, cuidado por si cambia
-						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
+						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y) + mapa->GetCameraScroll();
 						/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
 						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
 						if(pos_grid.X >= 0 && pos_grid.Y >= 0)
@@ -151,7 +151,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 				case EMIE_RMOUSE_PRESSED_DOWN:
 					{
 						// Esto está copiapegado de mapa2D, cuidado por si cambia
-						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
+						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y) + mapa->GetCameraScroll();
 						/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
 						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
 						if(pos_grid.X >= 0 && pos_grid.Y >= 0)

@@ -60,7 +60,7 @@ Pathfinding::~Pathfinding(){
 }
 
 void Pathfinding::preprocesar(){
-	grafo.clear();
+	clear();
 	createRegions();
 	analyzeRegions();
 	findInnerPaths();
