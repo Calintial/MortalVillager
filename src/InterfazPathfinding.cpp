@@ -199,9 +199,11 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 				origen = destino = position2di(-1,-1);
 				caminoFinal = NULL;
 				mapa->getPathfinding()->clear();
+				break;
 			}
 			case BUTTON_SAVE:{
 				mapa->GuardarMapa();
+				break;
 			}
 		}					
 	}
