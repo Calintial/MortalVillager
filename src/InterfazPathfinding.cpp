@@ -226,12 +226,12 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 
 void InterfazPathfinding::DrawIsometricRectangle(position2di sup_izq, position2di inf_der,video::SColor color)
 {
-	position2di camera = mapa->GetCameraScroll();
+	/*position2di camera = mapa->GetCameraScroll();
 	sup_izq.X = sup_izq.X - camera.X;
 	sup_izq.Y = sup_izq.Y - camera.Y;
 
 	inf_der.X = inf_der.X - camera.X;
-	inf_der.Y = inf_der.Y - camera.Y;
+	inf_der.Y = inf_der.Y - camera.Y;*/
 
 	/*Convertir posiciones a isometrico*/
 	position2di sup_der = mapa2D::twoDToIso((inf_der.X * TILE_WIDTH) + TILE_WIDTH/2,(sup_izq.Y * TILE_HEIGHT) - TILE_HEIGHT/2);
@@ -250,12 +250,12 @@ void InterfazPathfinding::DrawIsometricRectangle(position2di sup_izq, position2d
 void InterfazPathfinding::DrawIsometricRectangleFilled(position2di sup_izq, position2di inf_der,ITexture * textura)
 {
 
-	position2di camera = mapa->GetCameraScroll();
+	/*position2di camera = mapa->GetCameraScroll();
 	sup_izq.X = sup_izq.X - camera.X;
 	sup_izq.Y = sup_izq.Y - camera.Y;
 
 	inf_der.X = inf_der.X - camera.X;
-	inf_der.Y = inf_der.Y - camera.Y;
+	inf_der.Y = inf_der.Y - camera.Y;*/
 
 	/*sup_izq = mapa->getDrawPosition(sup_izq);
 	inf_der = mapa->getDrawPosition(inf_der);
