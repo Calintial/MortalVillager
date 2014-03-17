@@ -22,7 +22,7 @@ void Cuartel::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 
 void Cuartel::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/building/edificio.png"));
+	setTextura(driver->getTexture("../media/Texturas/building/barracks.png"));
 }
 
 bool Cuartel::isTransitable()

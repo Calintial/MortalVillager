@@ -22,7 +22,7 @@ void Arqueria::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 
 void Arqueria::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/building/edificio.png"));
+	setTextura(driver->getTexture("../media/Texturas/building/archer_building.png"));
 }
 
 bool Arqueria::isTransitable()

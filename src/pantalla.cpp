@@ -35,7 +35,6 @@ void Pantalla::dispose(){
 
 bool Pantalla::OnEvent(const SEvent& event){
     if (event.EventType == irr::EET_KEY_INPUT_EVENT){
-    	// TODO: mostrar la pantalla // constructor de copia con las distintas pantallas?
 
     	if (event.KeyInput.Key == irr::KEY_F2 && event.KeyInput.PressedDown)
     	{
@@ -137,12 +136,12 @@ bool Pantalla::OnEvent(const SEvent& event){
 			
 			mapa->SetCameraScroll(pos);
 			cout << getTipo() << endl;
-			if(getTipo()==0)
+			/*if(getTipo()==0)
 				grEngine->setPantalla(new PantallaBasica(pantallaDevice,grEngine,mapa,0));
 			else if(getTipo()==1)
 				grEngine->setPantalla(new PantallaPathfinding(pantallaDevice,grEngine,mapa,1));
 			else if(getTipo()==2)
-				grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa,2));
+				grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa,2));*/
 				
 			return true;
 		}

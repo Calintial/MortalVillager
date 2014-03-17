@@ -11,7 +11,7 @@
 #include "muro.h"
 #include "edificio.h"
 #include "Unidades.h"
-#include "pathfinding.h"
+#include "Pathfinding.h"
 
 #include <string>
 #include <vector>
@@ -53,8 +53,10 @@ public:
 	bool free();
 	
 	void GenerarMapa();
+	void GuardarMapa();
 
 	IDibujable* getTile(int x, int y);
+	IDibujable* getTile(position2di);
 	void setTile(int x, int y, IDibujable* contenido);
 
 	//VISTAS
@@ -75,7 +77,7 @@ public:
 	vector<IDibujable*>* getUser_units();
 	int getIASelected();
 	int getUserSelected();
-	pathfinding* getPathfinding();
+	Pathfinding* getPathfinding();
 
 	dimension2di ViewSize;
 
@@ -86,6 +88,16 @@ public:
 	static position2di getTileCoordinates(int x, int y);
 	static position2di getIsoFromTile(int x, int y);
 
+	void setSombra(bool s);
+	bool getSombra();
+
+	void setTipoEdificio(int tipo);
+	int getTipoEdificio();
+
+	void setSombraCoords(position2di pos);
+	position2di getSombraCoords();
+
+
 private:
 	IrrlichtDevice * MapaDevice;
 	video::IVideoDriver* driver;
@@ -95,7 +107,7 @@ private:
 	IGUISkin* skin;
 	int gameState;
 	stringc MapaText;
-	pathfinding *pathFinding;
+	Pathfinding *pathFinding;
 	void Init();
 	void AllocateMap(bool suelo);
 
@@ -105,9 +117,14 @@ private:
 	vector<IDibujable*>* buildings;
 	
 	position2di CameraScroll;
+
+
+	position2di shadowPosition;
+
 	bool Sel_Pulsado;
 	position2di Sel_Inicio;
 	position2di Sel_Fin;
+
 	
 	//Texturas
 	stringc WorkingDirectory;
@@ -117,11 +134,15 @@ private:
 	int ia_selected;
 	int user_selected;
 
+	bool sombra_edificio;
+	int tipo_edificio;
+
 	//Objetos
 
 	void DrawIAUnits();
 	void DrawUserUnits();
 	void DrawBuildings();
+	void DrawBuildingShadow();
 	int IASelected(position2di);
 	vector<int>* IASelected();
 	int UserSelected(position2di);

@@ -4,25 +4,26 @@
 #include <vector>
 #include <iostream>
 #include <irrlicht.h>
-#include "Nodo.h"
 
 using namespace irr;
 using namespace core;
 
 class Camino{
 public:
+	Camino();
 	Camino(position2di inicio);
 	Camino(const Camino &c);
-	Camino();
 	~Camino();
+
 	void addNodo(position2di nodo);
-	int getPeso();
-	std::vector<position2di> getCamino();
-	std::vector<position2di> posiciones;
+	int getPeso() const;
+	std::vector<position2di> getCamino() const;
+	position2di getInicio() const;
+	position2di getFinal() const;
+	void addCamino(const Camino&);
 
 private:
-	
-	
+	std::vector<position2di> posiciones;
 	int peso;
 };
 

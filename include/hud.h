@@ -18,6 +18,11 @@ using namespace io;
 using namespace gui;
 
 using namespace std;
+
+enum{
+	COMBO_EDIFICIOS = 9,
+};
+
 class mapa2D;
 class hud : public IEventReceiver
 {

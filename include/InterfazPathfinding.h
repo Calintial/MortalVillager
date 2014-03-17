@@ -24,7 +24,8 @@ enum{
 	CB_CAMINOS_INTERNOS = 2,
 	CB_CAMINO_FINAL = 3,
 	BUTTON_NEXT = 4,
-	BUTTON_CLEAR = 5
+	BUTTON_CLEAR = 5,
+	BUTTON_SAVE = 6
 };
 
 enum Estado{
