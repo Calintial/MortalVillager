@@ -49,8 +49,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
 	ia_selected = -1;
 	user_selected = -1;
-	pathFinding=new pathfinding(shared_ptr<mapa2D>(this));
-
+	pathFinding=new Pathfinding(shared_ptr<mapa2D>(this));
 	sombra_edificio = false;
 }
 
@@ -296,8 +295,45 @@ void mapa2D::GenerarMapa()
 			file << mapatext;
 }
 
-IDibujable* mapa2D::getTile(int x, int y){
-	return vTiles[y][x];
+void mapa2D::GuardarMapa(){
+	std::string mapatext = "";
+	for(int i = 0; i < WIDTH; i++) 
+    {
+		for(int j=0; j < HEIGHT; j++) 
+		{
+			if (vTiles[i][j]->isTransitable())
+			{
+				mapatext+="0";
+			}else{
+				mapatext+="1";
+			}
+		}
+
+	}
+
+	std::ofstream file("../media/mapa.txt");
+	if (file.is_open())
+	{
+		file<< mapatext;
+		file.close();
+	}
+
+}
+
+IDibujable* mapa2D::getTile(int y, int x){
+	if (x >= WIDTH || y >= HEIGHT)
+	{
+		return NULL;
+	}
+	return vTiles[x][y];
+}
+
+IDibujable* mapa2D::getTile(position2di pos){
+	if (pos.X >= WIDTH || pos.Y >= HEIGHT)
+	{
+		return NULL;
+	}
+	return vTiles[pos.X][pos.Y];
 }
 
 void mapa2D::setTile(int x, int y, IDibujable* contenido){
@@ -519,7 +555,7 @@ int mapa2D::getUserSelected()
 {
 	return user_selected;
 }
-pathfinding* mapa2D::getPathfinding(){
+Pathfinding* mapa2D::getPathfinding(){
 	return pathFinding;
 }
 

@@ -38,6 +38,8 @@ void InterfazPathfinding::init(){
         L"Procesar", L"Iniciar análisis del mapa, generación de regiones y cálculo de caminos internos");
 	env->addButton(rect<s32>(dimensionPantallaX + 220,dimensionPantallaY+35,dimensionPantallaX + 430,dimensionPantallaY+60), 0, BUTTON_CLEAR,
         L"Vaciar", L"");
+	env->addButton(rect<s32>(dimensionPantallaX + 220,75,dimensionPantallaX + 430,100), 0, BUTTON_SAVE,
+        L"Guardar", L"");
 }
 
 void InterfazPathfinding::Draw()
@@ -63,55 +65,41 @@ void InterfazPathfinding::Draw()
 void InterfazPathfinding::DrawRegiones(){
 	if (drawRegiones)
 	{
-		std::vector<Region*> regiones = mapa->getPathfinding()->getRegiones();
-		for (int i = 0; i < regiones.size(); ++i)
+		auto regiones = mapa->getPathfinding()->getRegiones();
+		for (auto fila: regiones)
 		{
-			position2di inicio = regiones[i]->getInicio();
-			position2di final = regiones[i]->getFinal();
-			
-			final.X ++;
-			final.Y ++;
-			auto thick_old = driver->getMaterial2D().Thickness;
-			driver->getMaterial2D().Thickness=12.f;
-			driver->enableMaterial2D();
-			DrawIsometricRectangle(inicio,final,video::SColor(255,0,255,0));
-			//driver->draw2DRectangleOutline(core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)),video::SColor(255,0,255,0));
-			driver->getMaterial2D().Thickness=thick_old;
+			for (Region* actual: fila)
+			{
+				position2di inicio = actual->getInicio() - mapa->GetCameraScroll();
+				position2di final = actual->getFinal() - mapa->GetCameraScroll();
+				
+				final.X ++;
+				final.Y ++;
+				auto thick_old = driver->getMaterial2D().Thickness;
+				driver->getMaterial2D().Thickness=12.f;
+				driver->enableMaterial2D();
+				DrawIsometricRectangle(inicio,final,video::SColor(255,0,255,0));
+				driver->getMaterial2D().Thickness=thick_old;
+			}
 		}
 	}
 	
 }
 
 void InterfazPathfinding::DrawEnlacesYCaminos(){
-	if (drawEnlaces || drawCaminosInternos)
+	if (drawEnlaces)
 	{
-		std::vector<Enlace*> enlaces = mapa->getPathfinding()->getEnlaces();
-		for (int i = 0; i < enlaces.size(); ++i)
-		{
+		std::vector<position2di> enlaces = mapa->getPathfinding()->getEnlaces();
+		for(position2di casilla: enlaces){
+			driver->draw2DImage(enlaces_textura, mapa2D::getIsoFromTile((casilla - mapa->GetCameraScroll()).X,(casilla - mapa->GetCameraScroll()).Y), rect<s32>(0, 0, enlaces_textura->getSize().Width, enlaces_textura->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+		}
+	}
 			
-			if (drawEnlaces)
-			{
-				position2di inicio = enlaces[i]->getDestino();
-				position2di final = enlaces[i]->getOrigen();
-				/*final.X ++;
-				final.Y ++;*/
-				DrawIsometricRectangleFilled(inicio,final,enlaces_textura);
-				//driver->draw2DRectangle(video::SColor(128,0,255,128),core::rect<s32>(mapa->getDrawPosition(inicio),mapa->getDrawPosition(final)));
-			}
-			
-			if(drawCaminosInternos){
-				std::vector<Camino> caminos = enlaces[i]->getIntraCaminosDestino();
-				for (int j = 0; j < caminos.size(); ++j)
-				{
-					for (position2di paso: caminos[j].getCamino())
-					{
-						position2di pasoFinal = paso;
-						/*pasoFinal.X++;
-						pasoFinal.Y++;*/
-						DrawIsometricRectangleFilled(paso,pasoFinal,caminos_internos_textura);
-						//driver->draw2DRectangle(video::SColor(128,128,0,128),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
-					}
-				}
+	if(drawCaminosInternos){
+		std::vector<Camino> caminos = mapa->getPathfinding()->getIntraCaminos();
+		for(Camino camino: caminos){
+			for(position2di casilla: camino.getCamino()){
+				driver->draw2DImage(caminos_internos_textura, mapa2D::getIsoFromTile((casilla - mapa->GetCameraScroll()).X,(casilla - mapa->GetCameraScroll()).Y), rect<s32>(0, 0, caminos_internos_textura->getSize().Width, caminos_internos_textura->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);	
 			}
 		}
 	}	
@@ -121,10 +109,10 @@ void InterfazPathfinding::DrawCaminoFinal(){
 	if (drawCaminoFinal && caminoFinal != NULL)
 	{
 		for(position2di paso: caminoFinal->getCamino()){
-			position2di pasoFinal = paso;
 			/*pasoFinal.X++;
 			pasoFinal.Y++;*/
-			DrawIsometricRectangleFilled(paso,pasoFinal,caminos_textura);
+			driver->draw2DImage(caminos_textura, mapa2D::getIsoFromTile((paso - mapa->GetCameraScroll()).X,(paso - mapa->GetCameraScroll()).Y), rect<s32>(0, 0, caminos_textura->getSize().Width, caminos_textura->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);	
+			//DrawIsometricRectangleFilled(paso,pasoFinal,caminos_textura);
 			//driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(mapa->getDrawPosition(paso),mapa->getDrawPosition(pasoFinal)));
 		}
 	}
@@ -141,7 +129,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 				case EMIE_LMOUSE_PRESSED_DOWN:
 					{
 						// Esto está copiapegado de mapa2D, cuidado por si cambia
-						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
+						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y) + mapa->GetCameraScroll();
 						/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
 						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
 						if(pos_grid.X >= 0 && pos_grid.Y >= 0)
@@ -163,7 +151,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 				case EMIE_RMOUSE_PRESSED_DOWN:
 					{
 						// Esto está copiapegado de mapa2D, cuidado por si cambia
-						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
+						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y) + mapa->GetCameraScroll();
 						/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
 						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
 						if(pos_grid.X >= 0 && pos_grid.Y >= 0)
@@ -193,11 +181,12 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 			case BUTTON_NEXT:{ 
 					cout<<"Soy un boton!"<<endl;
 					if (estado == ESTADO_PINTAR){
-						mapa->getPathfinding()->run();
+						mapa->getPathfinding()->preprocesar();
 						estado = ESTADO_CAMINO;
 					}else{
 						if (origen.X != -1 && origen.Y != -1 && destino.X != -1 && destino.Y != -1)
 						{
+							delete caminoFinal;
 							caminoFinal = mapa->getPathfinding()->calcularCamino(origen,destino);
 						}else{
 							cerr<<"Debes poner origen y destino"<<endl;
@@ -210,6 +199,9 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 				origen = destino = position2di(-1,-1);
 				caminoFinal = NULL;
 				mapa->getPathfinding()->clear();
+			}
+			case BUTTON_SAVE:{
+				mapa->GuardarMapa();
 			}
 		}					
 	}
