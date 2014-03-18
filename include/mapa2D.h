@@ -96,6 +96,7 @@ public:
 
 	void setSombraCoords(position2di pos);
 	position2di getSombraCoords();
+	bool puede_colocar(position2di pos);
 
 
 private:

@@ -39,21 +39,33 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 		{
 			if(event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
 			{
-				mapa->setSombra(false);
 				position2di pos_colocar = mapa->getSombraCoords();
-				pos_colocar = mapa->getTileCoordinates(pos_colocar.X,pos_colocar.Y);
+				pos_colocar = mapa->getTileCoordinates(pos_colocar.X,pos_colocar.Y) + mapa->GetCameraScroll();
+
 				cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
 
-				switch(mapa->getTipoEdificio())
+				if(mapa->puede_colocar(pos_colocar))
 				{
-					case 0: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-					case 1: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-					case 2: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-					case 3: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-					case 4: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+					mapa->setSombra(false);
+					
+					cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
+
+					switch(mapa->getTipoEdificio())
+					{
+						case 0: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 1: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 2: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 3: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 4: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+					}
+					
+					cout<<"colocar"<<endl;					
 				}
-				
-				cout<<"colocar"<<endl;
+				else
+				{
+					cout<<"no se puede colocar"<<endl;	
+				}
+
 			}
 			else if(event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN)
 			{
@@ -119,3 +131,4 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 	}
 	return false;
 }
+

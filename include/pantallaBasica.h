@@ -17,6 +17,5 @@ public:
 private:
 	hud* hudmapa;
 
-
 };
 #endif 
