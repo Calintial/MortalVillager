@@ -173,6 +173,7 @@ void Pathfinding::createRegions(){
 }
 
 void Pathfinding::analyzeRegions(){
+	cout<<"####### TODO: HACER QUE CUANDO YA HAYA UN NODO EN ESA POSICIÓN, NO SE CREE EL NODO, SE AÑADA EL ENLACE AL QUE YA HAY ######"<<endl;
 	// Poner un nodo en el grafo para cada lado del enlace. Camino de peso 1 entre los dos (new Camino(origen).addNodo(destino))
 	for (int i = 0; i < regiones.size(); i++)
 	{
@@ -370,32 +371,33 @@ Camino* Pathfinding::Aestrella(Nodo* origen,position2di destino){
 		}else{
 			auto hijos = actual->getHijos();
 			//cout<<"Hijos generados: <"<<hijos.size()<<">"<<endl;
-			for(Nodo* hijo:hijos){				
-				if(std::find_if(listaInterior.begin(), listaInterior.end(), find_by_nodo(hijo)) == listaInterior.end()){
-					//cout<<"Hijo ["<<hijo->getPosicion().X<<","<<hijo->getPosicion().Y<<"] NO contenido en LISTA INTERIOR"<<endl;
+			for(Nodo* hijo:hijos){
+				Nodo* nuevoHijo = hijo;		
+				if(std::find_if(listaInterior.begin(), listaInterior.end(), find_by_nodo(nuevoHijo)) == listaInterior.end()){
+					//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] NO contenido en LISTA INTERIOR"<<endl;
 					int nueva_g = actual->getG() + 1;
-					auto iteratorHijo = std::find_if(listaFrontera.begin(), listaFrontera.end(), find_by_nodo(hijo));
+					auto iteratorHijo = std::find_if(listaFrontera.begin(), listaFrontera.end(), find_by_nodo(nuevoHijo));
 					bool contiene = iteratorHijo != listaFrontera.end();
 					if (contiene)
 					{
-						//cout<<"Hijo ["<<hijo->getPosicion().X<<","<<hijo->getPosicion().Y<<"] contenido en LISTA FRONTERA"<<endl;
+						//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] contenido en LISTA FRONTERA"<<endl;
 						if (nueva_g < (*iteratorHijo)->getG())
 						{
-							//cout<<"Hijo ["<<hijo->getPosicion().X<<","<<hijo->getPosicion().Y<<"] mejora la G anterior"<<endl;
+							//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] mejora la G anterior"<<endl;
 							listaFrontera.erase(iteratorHijo);
-							hijo->update(nueva_g,distancia(hijo->getPosicion(),destino),actual);
-							insertarOrdenado(listaFrontera,hijo);
+							nuevoHijo->update(nueva_g,distancia(nuevoHijo->getPosicion(),destino),actual);
+							insertarOrdenado(listaFrontera,nuevoHijo);
 
 						}
 				
 					}else{
-						//cout<<"Hijo ["<<hijo->getPosicion().X<<","<<hijo->getPosicion().Y<<"] añadido a LISTA FRONTERA"<<endl;
-						hijo->update(hijo->getG(),distancia(hijo->getPosicion(),destino),hijo->getPadre());
-						insertarOrdenado(listaFrontera,hijo);
+						//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] añadido a LISTA FRONTERA"<<endl;
+						nuevoHijo->update(nuevoHijo->getG(),distancia(nuevoHijo->getPosicion(),destino),actual);
+						insertarOrdenado(listaFrontera,nuevoHijo);
 						
 					}
 				}else{
-					//cout<<"Hijo ["<<hijo->getPosicion().X<<","<<hijo->getPosicion().Y<<"] contenido en LISTA INTERIOR"<<endl;
+					//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] contenido en LISTA INTERIOR"<<endl;
 				}
 			}
 			//cout<<"Hijos generados"<<endl;
