@@ -46,6 +46,8 @@ private:
 	Camino* deshacerCamino(Nodo*);
 	void insertarOrdenado(std::vector<Nodo*>&, Nodo*);
 
+	std::string addVertex();
+
 	const int tamRegion = 5;
 	std::shared_ptr<mapa2D> mapa;
 	Graph grafo;

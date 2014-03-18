@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <irrlicht.h>
+#include <boost/graph/labeled_graph.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_traits.hpp>
 using namespace irr::core;
@@ -13,7 +14,10 @@ class NodoRegional;
 class Camino;
 class mapa2D;
 class Region;
-typedef boost::adjacency_list<boost::listS, boost::listS, boost::undirectedS, NodoRegional,Camino > Graph;
+typedef boost::labeled_graph<
+    boost::adjacency_list<boost::listS, boost::listS, boost::undirectedS, NodoRegional,Camino >,
+    std::string
+> Graph;
 
 //Some typedefs for simplicity
 typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;

@@ -172,6 +172,21 @@ void Pathfinding::createRegions(){
 	cout<<"Regiones creadas"<<endl;
 }
 
+vertex_t Pathfinding::addVertex(position2di posEnlace, std::string label,Region* region){
+	vertex_t origen = boost::add_vertex(label, grafo);
+	grafo[label].init(posEnlace,origen,&grafo);
+	region->nodos.push_back(&grafo[label]);
+	return origen;
+/*
+	
+	vertex_t destino = boost::add_vertex(labelDestino,grafo);
+	grafo[labelDestino].init(posDestino,destino,&grafo);
+	regionIzquierda->nodos.push_back(&grafo[labelDestino]);
+*/
+
+	
+}
+
 void Pathfinding::analyzeRegions(){
 	cout<<"####### TODO: HACER QUE CUANDO YA HAYA UN NODO EN ESA POSICIÓN, NO SE CREE EL NODO, SE AÑADA EL ENLACE AL QUE YA HAY ######"<<endl;
 	// Poner un nodo en el grafo para cada lado del enlace. Camino de peso 1 entre los dos (new Camino(origen).addNodo(destino))
@@ -208,17 +223,15 @@ void Pathfinding::analyzeRegions(){
 								boost::add_edge(actual->getVertexDescriptor(),regionIzquierda->getVertexDescriptor(),enlace,grafo);
 								boost::add_edge(actual->getVertexDescriptor(),regionIzquierda->getVertexDescriptor(),enlace2,grafo);
 							}else{*/
-								vertex_t origen = boost::add_vertex(grafo);
-								grafo[origen].init(position2di(actual->inicio.X,posHueco + tamHueco/2),origen,&grafo);
-								actual->nodos.push_back(&grafo[origen]);
+								position2di posOrigen = position2di(actual->inicio.X,posHueco + tamHueco/2);
+								std::string labelOrigen = std::to_string(posOrigen.X) + "," + std::to_string(posOrigen.Y);
+								vertex_t origen = addVertex(posOrigen,labelOrigen,actual);
+								position2di posDestino = position2di(regionIzquierda->final.X,posHueco + tamHueco/2);
+								std::string labelDestino = std::to_string(posDestino.X) + "," + std::to_string(posDestino.Y);
+								vertex_t destino = addVertex(posDestino,labelDestino,regionIzquierda);
 
-								vertex_t destino = boost::add_vertex(grafo);
-								grafo[destino].init(position2di(regionIzquierda->final.X,posHueco + tamHueco/2),destino,&grafo);
-								regionIzquierda->nodos.push_back(&grafo[destino]);
-
-
-								Camino enlace(grafo[origen].getPosicion());
-								enlace.addNodo(grafo[destino].getPosicion());
+								Camino enlace(grafo[labelOrigen].getPosicion());
+								enlace.addNodo(grafo[labelDestino].getPosicion());
 								boost::add_edge(origen,destino,enlace,grafo);
 							//}
 							tamHueco = 0;
@@ -230,16 +243,15 @@ void Pathfinding::analyzeRegions(){
 				}
 				if (tamHueco > 0)
 				{
-					vertex_t origen = boost::add_vertex(grafo);
-					grafo[origen].init(position2di(actual->inicio.X,posHueco + tamHueco/2),origen,&grafo);
-					actual->nodos.push_back(&grafo[origen]);
+					position2di posOrigen = position2di(actual->inicio.X,posHueco + tamHueco/2);
+					std::string labelOrigen = std::to_string(posOrigen.X) + "," + std::to_string(posOrigen.Y);
+					vertex_t origen = addVertex(posOrigen,labelOrigen,actual);
+					position2di posDestino = position2di(regionIzquierda->final.X,posHueco + tamHueco/2);
+					std::string labelDestino = std::to_string(posDestino.X) + "," + std::to_string(posDestino.Y);
+					vertex_t destino = addVertex(posDestino,labelDestino,regionIzquierda);
 
-					vertex_t destino = boost::add_vertex(grafo);
-					grafo[destino].init(position2di(regionIzquierda->final.X,posHueco + tamHueco/2),destino,&grafo);
-					regionIzquierda->nodos.push_back(&grafo[destino]);
-
-					Camino enlace(grafo[destino].getPosicion());
-					enlace.addNodo(grafo[origen].getPosicion());
+					Camino enlace(grafo[labelOrigen].getPosicion());
+					enlace.addNodo(grafo[labelDestino].getPosicion());
 					boost::add_edge(origen,destino,enlace,grafo);
 					//cout<<"Nuevo enlace izquierda"<<endl;
 				}
@@ -266,17 +278,18 @@ void Pathfinding::analyzeRegions(){
 						if (tamHueco > 0)
 						{
 							// la conexión es (actual->inicioX,posHueco + tamHueco/2)<===>(regionIzquierda->finalX,posHueco + tamHueco/2)
-							vertex_t origen = boost::add_vertex(grafo);
-							grafo[origen].init(position2di(posHueco+tamHueco/2,actual->inicio.Y),origen,&grafo);
-							actual->nodos.push_back(&grafo[origen]);
+							position2di posOrigen = position2di(posHueco+tamHueco/2,actual->inicio.Y);
+							std::string labelOrigen = std::to_string(posOrigen.X) + "," + std::to_string(posOrigen.Y);
+							vertex_t origen = addVertex(posOrigen,labelOrigen,actual);
 
-							vertex_t destino = boost::add_vertex(grafo);
-							grafo[destino].init(position2di(posHueco+tamHueco/2,regionArriba->final.Y),destino,&grafo);
-							regionArriba->nodos.push_back(&grafo[destino]);
+							position2di posDestino = position2di(posHueco+tamHueco/2,regionArriba->final.Y);
+							std::string labelDestino = std::to_string(posDestino.X) + "," + std::to_string(posDestino.Y);
+							vertex_t destino = addVertex(posDestino,labelDestino,regionIzquierda);
 
-							Camino enlace(grafo[origen].getPosicion());
-							enlace.addNodo(grafo[destino].getPosicion());
+							Camino enlace(grafo[labelOrigen].getPosicion());
+							enlace.addNodo(grafo[labelDestino].getPosicion());
 							boost::add_edge(origen,destino,enlace,grafo);
+							
 							//cout<<"Nuevo enlace arriba"<<endl;
 							tamHueco = 0;
 							posHueco = -1;
@@ -287,16 +300,16 @@ void Pathfinding::analyzeRegions(){
 				}
 				if (tamHueco > 0)
 				{
-					vertex_t origen = boost::add_vertex(grafo);
-					grafo[origen].init(position2di(posHueco+tamHueco/2,actual->inicio.Y), origen,&grafo);
-					actual->nodos.push_back(&grafo[origen]);
+					position2di posOrigen = position2di(posHueco+tamHueco/2,actual->inicio.Y);
+					std::string labelOrigen = std::to_string(posOrigen.X) + "," + std::to_string(posOrigen.Y);
+					vertex_t origen = addVertex(posOrigen,labelOrigen,actual);
 
-					vertex_t destino = boost::add_vertex(grafo);
-					grafo[destino].init(position2di(posHueco+tamHueco/2,regionArriba->final.Y),destino,&grafo);
-					regionArriba->nodos.push_back(&grafo[destino]);
+					position2di posDestino = position2di(posHueco+tamHueco/2,regionArriba->final.Y);
+					std::string labelDestino = std::to_string(posDestino.X) + "," + std::to_string(posDestino.Y);
+					vertex_t destino = addVertex(posDestino,labelDestino,regionIzquierda);
 
-					Camino enlace(grafo[origen].getPosicion());
-					enlace.addNodo(grafo[destino].getPosicion());
+					Camino enlace(grafo[labelOrigen].getPosicion());
+					enlace.addNodo(grafo[labelDestino].getPosicion());
 					boost::add_edge(origen,destino,enlace,grafo);
 					//cout<<"Nuevo enlace arriba"<<endl;
 				}
