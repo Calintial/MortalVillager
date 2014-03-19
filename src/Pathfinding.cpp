@@ -387,30 +387,28 @@ Camino* Pathfinding::Aestrella(Nodo* origen,position2di destino){
 			//cout<<"Camino encontrado"<<endl;
 			camino = deshacerCamino(actual);
 		}else{
-			auto hijos = actual->getHijos();
+			auto hijos = actual->getHijos(destino);
 			//cout<<"Hijos generados: <"<<hijos.size()<<">"<<endl;
 			for(Nodo* hijo:hijos){
 				Nodo* nuevoHijo = hijo;		
 				if(std::find_if(listaInterior.begin(), listaInterior.end(), find_by_nodo(nuevoHijo)) == listaInterior.end()){
 					//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] NO contenido en LISTA INTERIOR"<<endl;
-					int nueva_g = actual->getG() + 1;
 					auto iteratorHijo = std::find_if(listaFrontera.begin(), listaFrontera.end(), find_by_nodo(nuevoHijo));
 					bool contiene = iteratorHijo != listaFrontera.end();
 					if (contiene)
 					{
 						//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] contenido en LISTA FRONTERA"<<endl;
-						if (nueva_g < (*iteratorHijo)->getG())
+						if (nuevoHijo->getG() < (*iteratorHijo)->getG())
 						{
 							//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] mejora la G anterior"<<endl;
 							listaFrontera.erase(iteratorHijo);
-							nuevoHijo->update(nueva_g,distancia(nuevoHijo->getPosicion(),destino),actual);
 							insertarOrdenado(listaFrontera,nuevoHijo);
 
 						}
 				
 					}else{
 						//cout<<"Hijo ["<<nuevoHijo->getPosicion().X<<","<<nuevoHijo->getPosicion().Y<<"] añadido a LISTA FRONTERA"<<endl;
-						nuevoHijo->update(nuevoHijo->getG(),distancia(nuevoHijo->getPosicion(),destino),actual);
+						//nuevoHijo->update(nuevoHijo->getG(),nuevoHijo->distancia(destino),destino),actual);
 						insertarOrdenado(listaFrontera,nuevoHijo);
 						
 					}
@@ -434,7 +432,7 @@ Camino* Pathfinding::Aestrella(Nodo* origen,position2di destino){
 }
 
 Camino* Pathfinding::ALocal(position2di origen,position2di destino,Region* regionActual){
-	Nodo* nodoOrigen = new NodoLocal(origen,0,distancia(origen,destino),NULL,regionActual,mapa);
+	Nodo* nodoOrigen = new NodoLocal(origen,0,Nodo::distancia(origen,destino),NULL,regionActual,mapa);
 
 	return Aestrella(nodoOrigen,destino);
 
@@ -452,7 +450,7 @@ Camino* Pathfinding::ARegiones(position2di origen, position2di destino, Region* 
 	std::string labelDestino = std::to_string(destino.X) + "," + std::to_string(destino.Y);
 	bool borrarDestino = addVertex(destino,labelDestino);
 
-	grafo[labelOrigen].update(0,distancia(origen,destino),NULL);
+	grafo[labelOrigen].update(0,Nodo::distancia(origen,destino),NULL);
 	grafo[labelDestino].update(0,0,NULL);
 
 	cout<<"Añadiendo edges origen. Num_edges antes: <"<<boost::num_edges(grafo)<<">"<<endl;
@@ -513,10 +511,6 @@ Region* Pathfinding::getCorrespondingRegion(position2di posicion){
 	int i = posicion.Y / tamRegion;
 	int j = posicion.X / tamRegion;
 	return regiones[i][j];
-}
-
-int Pathfinding::distancia(position2di origen,position2di destino){
-	return abs((destino.X-origen.X)+abs(destino.Y-origen.Y));
 }
 
 Camino* Pathfinding::deshacerCamino(Nodo* nodo){

@@ -25,10 +25,14 @@ typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;
 class Nodo
 {
 public:
+
 	Nodo(position2di _pos,int _g,int _h,Nodo* _padre);
 	Nodo();
 	Nodo(const Nodo&);
 	virtual ~Nodo();
+
+	static int distancia(position2di,position2di);
+	int distancia(position2di destino);
 
 	position2di getPosicion() const;
 	int getG() const;
@@ -38,7 +42,7 @@ public:
 
 	void init(position2di _pos);
 	void update(int _g,int _h,Nodo* _padre);
-	virtual std::vector<Nodo*> getHijos() = 0;
+	virtual std::vector<Nodo*> getHijos(position2di destino) = 0;
 	virtual Camino* getCaminoDesdePadre() = 0;
 
 	bool operator<(const Nodo& nodo) const;
@@ -46,6 +50,8 @@ public:
 	bool operator==(const position2di& pos) const;
 
 protected:
+	
+
 	position2di posicion;
 	int g;
     int h;

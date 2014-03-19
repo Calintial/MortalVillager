@@ -42,7 +42,6 @@ private:
 	Camino* ARegiones(position2di,position2di,Region*,Region*,std::vector<Camino>,std::vector<Camino>);
 
 	Region* getCorrespondingRegion(position2di);
-	int distancia(position2di,position2di);
 	Camino* deshacerCamino(Nodo*);
 	void insertarOrdenado(std::vector<Nodo*>&, Nodo*);
 

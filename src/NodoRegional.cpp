@@ -32,15 +32,14 @@ vertex_t NodoRegional::getVertexDescriptor(){
 	return descriptor;
 }
 
-std::vector<Nodo*> NodoRegional::getHijos(){
+std::vector<Nodo*> NodoRegional::getHijos(position2di destino){
 	std::vector<Nodo*> hijos;
+
 	auto neighbours = boost::adjacent_vertices(descriptor,grafo->graph());
 	for(auto i = neighbours.first; i != neighbours.second; ++i){
-		Nodo* vecino = (NodoRegional*)&grafo->graph()[*i];
-		if (vecino->getG() == 9999)
-		{
-			vecino->update(g,0,this);
-		}
+		Nodo* vecino = new NodoRegional(*(NodoRegional*)&grafo->graph()[*i]);
+		Camino camino = (*grafo)[boost::edge(descriptor,*i,grafo->graph()).first];
+		vecino->update(g + camino.getPeso(),vecino->distancia(destino),this);
 		hijos.push_back(vecino);
 	}
 	return hijos;
