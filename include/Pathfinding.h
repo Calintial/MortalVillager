@@ -48,7 +48,7 @@ private:
 	bool addVertex(position2di posEnlace, std::string label);
 	bool addVertex(position2di posEnlace, std::string label,Region* region);
 
-	const int tamRegion = 5;
+	const int tamRegion = 20;
 	std::shared_ptr<mapa2D> mapa;
 	Graph grafo;
 	std::vector<std::vector<Region*> > regiones;

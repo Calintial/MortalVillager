@@ -193,7 +193,6 @@ bool Pathfinding::addVertex(position2di posEnlace, std::string label,Region* reg
 }
 
 void Pathfinding::analyzeRegions(){
-	cout<<"####### TODO: HACER QUE CUANDO YA HAYA UN NODO EN ESA POSICIÓN, NO SE CREE EL NODO, SE AÑADA EL ENLACE AL QUE YA HAY ######"<<endl;
 	// Poner un nodo en el grafo para cada lado del enlace. Camino de peso 1 entre los dos (new Camino(origen).addNodo(destino))
 	for (int i = 0; i < regiones.size(); i++)
 	{
