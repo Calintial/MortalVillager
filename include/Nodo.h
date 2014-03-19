@@ -49,6 +49,8 @@ public:
 	bool operator==(const Nodo& nodo) const;
 	bool operator==(const position2di& pos) const;
 
+	std::string toString() const;
+
 protected:
 	
 

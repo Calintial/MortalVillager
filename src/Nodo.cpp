@@ -73,3 +73,7 @@ int Nodo::distancia(position2di origen, position2di destino){
 int Nodo::distancia(position2di destino){
 	return distancia(posicion,destino);
 }
+
+std::string Nodo::toString() const{
+	return std::to_string(posicion.X) + "," + std::to_string(posicion.Y);
+}

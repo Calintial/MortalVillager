@@ -68,7 +68,7 @@ void Pathfinding::preprocesar(){
 
 void Pathfinding::clear(){
 	regiones.clear();
-	grafo.graph().clear();
+	grafo = Graph();
 }
 
 Camino* Pathfinding::calcularCamino(position2di posicionPersonaje,position2di posicionFinal){
