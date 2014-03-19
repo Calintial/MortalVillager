@@ -46,7 +46,8 @@ private:
 	Camino* deshacerCamino(Nodo*);
 	void insertarOrdenado(std::vector<Nodo*>&, Nodo*);
 
-	std::string addVertex();
+	bool addVertex(position2di posEnlace, std::string label);
+	bool addVertex(position2di posEnlace, std::string label,Region* region);
 
 	const int tamRegion = 5;
 	std::shared_ptr<mapa2D> mapa;

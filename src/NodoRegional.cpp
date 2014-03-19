@@ -34,9 +34,9 @@ vertex_t NodoRegional::getVertexDescriptor(){
 
 std::vector<Nodo*> NodoRegional::getHijos(){
 	std::vector<Nodo*> hijos;
-	auto neighbours = boost::adjacent_vertices(descriptor,*grafo);
+	auto neighbours = boost::adjacent_vertices(descriptor,grafo->graph());
 	for(auto i = neighbours.first; i != neighbours.second; ++i){
-		Nodo* vecino = (NodoRegional*)&grafo->operator[](*i);
+		Nodo* vecino = (NodoRegional*)&grafo->graph()[*i];
 		if (vecino->getG() == 9999)
 		{
 			vecino->update(g,0,this);
