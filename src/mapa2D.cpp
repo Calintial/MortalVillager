@@ -456,7 +456,7 @@ void mapa2D::DrawBuildingShadow()
 	position2di aux_tile = getTileCoordinates(shadowPosition.X,shadowPosition.Y);
 	//cout<<"Dibujar sombra en en:"<<aux_tile.X << "," << aux_tile.Y <<endl;
 	
-	position2di aux = getIsoFromTile(aux_tile.X,aux_tile.Y);
+	position2di aux;
 	ITexture* shadow_texture = NULL;
 
 	switch(tipo_edificio)
@@ -468,8 +468,22 @@ void mapa2D::DrawBuildingShadow()
 		case 4: shadow_texture = driver->getTexture("../media/Texturas/building/spear_build_shadow.png"); break;
 	}
 
+	ITexture* shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+	for(int i = aux_tile.X; i< aux_tile.X + 4; i++)
+	{
+		for(int j = aux_tile.Y; j< aux_tile.Y + 4; j++)
+		{
+			aux = getIsoFromTile(i,j);
+			PintarTile(shadow_texture2, aux.X, aux.Y);
+		}
+	}	
+	
+
+	aux = getIsoFromTile(aux_tile.X - 1,aux_tile.Y);
 	if(shadow_texture != NULL)
-		PintarTile(shadow_texture, aux.X, aux.Y);	
+		PintarTile(shadow_texture, aux.X, aux.Y);
+
+
 	
 }
 
@@ -618,7 +632,7 @@ bool mapa2D::puede_colocar(position2di pos)
 {
 	for(int x = pos.X; x < pos.X + 4; x++)
 	{
-		for(int y = pos.Y; y < pos.Y + 3; y++)
+		for(int y = pos.Y; y < pos.Y + 4; y++)
 		{
 			cout<<x<<","<<y<<":"<<getTile(y,x)->getTipo()<<endl;
 			if(getTile(y,x)->getTipo() == 1)

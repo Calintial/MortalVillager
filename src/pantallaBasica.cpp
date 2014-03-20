@@ -41,7 +41,7 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 			{
 				position2di pos_colocar = mapa->getSombraCoords();
 				pos_colocar = mapa->getTileCoordinates(pos_colocar.X,pos_colocar.Y) + mapa->GetCameraScroll();
-
+				pos_colocar.X = pos_colocar.X -1;
 				cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
 
 				if(mapa->puede_colocar(pos_colocar))
