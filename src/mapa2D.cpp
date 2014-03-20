@@ -661,7 +661,8 @@ bool mapa2D::puede_colocar(position2di pos)
 
 			for(int i=0; i<buildings->size(); i++)
 			{
-				if(buildings->at(i)->getPosition().X == x && buildings->at(i)->getPosition().Y == y)
+				position2di shadow; shadow.X = x; shadow.Y = y;
+				if(collide(buildings->at(i)->getPosition(),shadow))
 				{
 					cout<<x<<","<<y<<":"<<"Hay un edificio"<<endl;
 					return false;
@@ -672,4 +673,19 @@ bool mapa2D::puede_colocar(position2di pos)
 	}
 
 	return true;
+}
+
+bool mapa2D::collide(position2di build, position2di shadow)
+{
+	int left = build.X;
+	int right = build.Y + 4;
+	int top = build.Y + 4;
+	int bottom = build.Y;
+
+	int r_left = shadow.X;
+	int r_right = shadow.X + 4;
+	int r_top = shadow.Y + 4;
+	int r_bottom =  shadow.Y;
+
+	return right >= r_left && left <= r_right && top >= r_bottom && bottom <= r_top;
 }
