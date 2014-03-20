@@ -65,3 +65,15 @@ bool Nodo::operator==(const Nodo& nodo) const
 bool Nodo::operator==(const position2di& pos) const{
 	return posicion == pos;
 }
+
+int Nodo::distancia(position2di origen, position2di destino){
+	return abs((destino.X-origen.X)+abs(destino.Y-origen.Y));
+}
+
+int Nodo::distancia(position2di destino){
+	return distancia(posicion,destino);
+}
+
+std::string Nodo::toString() const{
+	return std::to_string(posicion.X) + "," + std::to_string(posicion.Y);
+}

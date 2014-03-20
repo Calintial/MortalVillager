@@ -37,7 +37,10 @@ bin/main: src/main.cpp $(OBJECTS_MAIN)
 # 	$(CC) -o bin/ia_batalla $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
 # To obtain object files
-%.o: src/%.cpp include/%.h
+Nodo.o: src/Nodo.cpp include/Nodo.h include/boost/graph/labeled_graph.hpp
+	$(CC) -c $< $(OPTS) $(INCLUDES) -o $@
+
+%.o: src/%.cpp include/%.h 
 	$(CC) -c $< $(OPTS) $(INCLUDES) -o $@
 
 clean:

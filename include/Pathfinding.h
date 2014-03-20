@@ -42,11 +42,13 @@ private:
 	Camino* ARegiones(position2di,position2di,Region*,Region*,std::vector<Camino>,std::vector<Camino>);
 
 	Region* getCorrespondingRegion(position2di);
-	int distancia(position2di,position2di);
 	Camino* deshacerCamino(Nodo*);
 	void insertarOrdenado(std::vector<Nodo*>&, Nodo*);
 
-	const int tamRegion = 5;
+	bool addVertex(position2di posEnlace, std::string label);
+	bool addVertex(position2di posEnlace, std::string label,Region* region);
+
+	const int tamRegion = 20;
 	std::shared_ptr<mapa2D> mapa;
 	Graph grafo;
 	std::vector<std::vector<Region*> > regiones;

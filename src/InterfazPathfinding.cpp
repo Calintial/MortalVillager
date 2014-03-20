@@ -122,7 +122,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
-		if (event.MouseInput.X < dimensionPantallaX || event.MouseInput.Y < dimensionPantallaY)
+		if (event.MouseInput.X < dimensionPantallaX && event.MouseInput.Y < dimensionPantallaY)
 		{
 			switch(event.MouseInput.Event)
 			{
