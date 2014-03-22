@@ -23,6 +23,7 @@ public:
 	//Metodos de movimiento y actualización de la unidad
 	void Move(int,int);
 	void updateUnit();
+	int getState();
 
 	//Getters virtuales
 	virtual int getLife() = 0;
