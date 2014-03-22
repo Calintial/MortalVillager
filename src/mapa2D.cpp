@@ -436,7 +436,9 @@ vector<IDibujable*>* mapa2D::getIa_units(){
 vector<IDibujable*>* mapa2D::getUser_units(){
 	return user_units;
 }
-
+vector<IDibujable*>* mapa2D::getBuildings(){
+	return buildings;
+}
 void mapa2D::DrawBuildings()
 {
 	position2di DrawPosition;
@@ -468,7 +470,13 @@ void mapa2D::DrawBuildingShadow()
 		case 4: shadow_texture = driver->getTexture("../media/Texturas/building/spear_build_shadow.png"); break;
 	}
 
-	ITexture* shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+	ITexture* shadow_texture2;
+	position2di colocar = aux_tile + GetCameraScroll(); colocar.X = colocar.X - 1;
+	if((aux_tile.X != -1 && aux_tile.Y != -1) && puede_colocar(colocar))
+		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+	else
+		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow_incorrect.png");
+
 	for(int i = aux_tile.X; i< aux_tile.X + 4; i++)
 	{
 		for(int j = aux_tile.Y; j< aux_tile.Y + 4; j++)
@@ -634,12 +642,13 @@ bool mapa2D::puede_colocar(position2di pos)
 	{
 		for(int y = pos.Y; y < pos.Y + 4; y++)
 		{
-			cout<<x<<","<<y<<":"<<getTile(y,x)->getTipo()<<endl;
+
+			//cout<<x<<","<<y<<":"<<getTile(y,x)->getTipo()<<endl;
 			if(getTile(y,x)->getTipo() == 1)
 			{
 				return false;
 			}
-
+			
 
 			for(int i=0; i<ia_units->size(); i++)
 			{
@@ -658,34 +667,29 @@ bool mapa2D::puede_colocar(position2di pos)
 					return false;
 				}
 			}
+		}
+	}
 
-			for(int i=0; i<buildings->size(); i++)
-			{
-				position2di shadow; shadow.X = x; shadow.Y = y;
-				if(collide(buildings->at(i)->getPosition(),shadow))
-				{
-					cout<<x<<","<<y<<":"<<"Hay un edificio"<<endl;
-					return false;
-				}
-			}
-	
+	for(int i=0; i<buildings->size(); i++)
+	{
+		cout<<buildings->at(i)->getPosition().X<<","<<buildings->at(i)->getPosition().Y<<":"<<"Edificio"<<endl;
+		cout<<pos.X<<","<<pos.Y<<":"<<"Sombra"<<endl;
+		if(collide(buildings->at(i)->getPosition(),4,4,pos,4,4))
+		{
+			cout<<pos.X<<","<<pos.Y<<":"<<"Hay un edificio"<<endl;
+			return false;
 		}
 	}
 
 	return true;
 }
 
-bool mapa2D::collide(position2di build, position2di shadow)
+bool mapa2D::collide(position2di obj1, int w_obj1, int h_obj1, position2di obj2, int w_obj2, int h_obj2)
 {
-	int left = build.X;
-	int right = build.Y + 4;
-	int top = build.Y + 4;
-	int bottom = build.Y;
-
-	int r_left = shadow.X;
-	int r_right = shadow.X + 4;
-	int r_top = shadow.Y + 4;
-	int r_bottom =  shadow.Y;
-
-	return right >= r_left && left <= r_right && top >= r_bottom && bottom <= r_top;
+    if ( (obj1.X < obj2.X + w_obj2) && (obj2.X < obj1.X + w_obj1) && (obj1.Y < obj2.Y + h_obj2))
+    {
+        return obj2.Y < obj1.Y + h_obj1;
+    }
+     
+    return false;
 }
