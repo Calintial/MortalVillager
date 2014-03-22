@@ -80,7 +80,7 @@ void DebugMenu::Draw()
             core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
 			DrawVisions();
-			
+
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,driver->getScreenSize().Width,driver->getScreenSize().Height));
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,driver->getScreenSize().Width,driver->getScreenSize().Height));
 
@@ -281,15 +281,20 @@ void DebugMenu::DrawVisions()
 		position2di pos = vUnits->at(i)->getPosition() - mapa->GetCameraScroll();
 		int v_range = ((Unidades*)vUnits->at(i))->getVisionRange();
 		int a_range = ((Unidades*)vUnits->at(i))->getAttackRange();
+
+		position2di limits;
+		limits.X = WIDTH;
+		limits.Y = HEIGHT;
+		limits = limits - mapa->GetCameraScroll();
+
 		/*Pintar vision de la unidad*/
-		cout<<pos.X<<","<<pos.Y<<endl;
 		if(drawVision)
 		{
 			for(int x = pos.X - v_range; x <= pos.X + v_range; x++)
 			{
 				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
 				{
-					if((x>= 0 && x < WIDTH) && (y>= 0 && y < HEIGHT))
+					if((x>= 0 && x < limits.X) && (y>= 0 && y < limits.Y))
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);
@@ -307,7 +312,7 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
 				{
-					if((x>= 0 && x < WIDTH) && (y>= 0 && y < HEIGHT))
+					if((x>= 0 && x < limits.X) && (y>= 0 && y < limits.Y))
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);
