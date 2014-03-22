@@ -277,17 +277,18 @@ void DebugMenu::DrawVisions()
 	int n_ia = vUnits->size();	
 	for(int i=0; i<n_ia; i++)
 	{
-		position2di pos = vUnits->at(i)->getPosition();
+		position2di pos = vUnits->at(i)->getPosition() - mapa->GetCameraScroll();
 		int v_range = ((Unidades*)vUnits->at(i))->getVisionRange();
 		int a_range = ((Unidades*)vUnits->at(i))->getAttackRange();
 		/*Pintar vision de la unidad*/
+		cout<<pos.X<<","<<pos.Y<<endl;
 		if(drawVision)
 		{
 			for(int x = pos.X - v_range; x <= pos.X + v_range; x++)
 			{
 				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
 				{
-					if(x < mapa->WIDTH && y < mapa->HEIGHT)
+					if(x < WIDTH && y < HEIGHT)
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);
@@ -305,7 +306,7 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
 				{
-					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
+					if(x < WIDTH && y < HEIGHT)
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);
