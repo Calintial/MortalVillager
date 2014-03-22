@@ -288,7 +288,7 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
 				{
-					if(x < WIDTH && y < HEIGHT)
+					if((x>= 0 && x < WIDTH) && (y>= 0 && y < HEIGHT))
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);
@@ -306,7 +306,7 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
 				{
-					if(x < WIDTH && y < HEIGHT)
+					if((x>= 0 && x < WIDTH) && (y>= 0 && y < HEIGHT))
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);
