@@ -79,6 +79,9 @@ void DebugMenu::Draw()
 			font->draw(L"Velocidad del juego",
             core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
+			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,driver->getScreenSize().Width,driver->getScreenSize().Height));
+			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,driver->getScreenSize().Width,driver->getScreenSize().Height));
+
 			DrawParameters();
 			DrawMEF();
 			DrawVisions();

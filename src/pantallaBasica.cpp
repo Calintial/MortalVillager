@@ -22,9 +22,12 @@ void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibuja
 		hudmapa= new hud(pantallaDevice,mapa);
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
-	pantallaDevice->setEventReceiver(this); 
+	pantallaDevice->setEventReceiver(this);
 	mapa->Pintar();
 	hudmapa->paint();
+
+	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
+	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
 	pantallaDevice->getVideoDriver()->endScene();
 	if(eliminar){
 		delete this;
