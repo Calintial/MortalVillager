@@ -36,6 +36,7 @@ public:
 	position2di dimensionHUD1;
 	position2di dimensionHUD2;
 	void pintarMiniMapa();
+	void selectButton(int);
 private:
 	IrrlichtDevice * MenuDevice;
 	video::IVideoDriver* driver;
@@ -48,6 +49,9 @@ private:
 	bool ensenyarInformacion;
 	std::string mapa;
 	shared_ptr<mapa2D> _mapa2D;
+	ITexture *hud_sprite;
+	ITexture *hud_buttons;
+	int button_selected;
 };
 
 #endif

@@ -61,7 +61,7 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 						case 3: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
 						case 4: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
 					}
-					
+					hudmapa->selectButton(-1);
 					cout<<"colocar"<<endl;					
 				}
 				else
@@ -72,6 +72,7 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 			}
 			else if(event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN)
 			{
+				hudmapa->selectButton(-1);
 				mapa->setSombra(false);
 				cout<<"no colocar"<<endl;
 			}
@@ -90,6 +91,30 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 				case EMIE_LMOUSE_PRESSED_DOWN:
 								if(event.MouseInput.X>=hudmapa->dimensionHUD1.X && event.MouseInput.X<=hudmapa->dimensionHUD2.X && event.MouseInput.Y >=hudmapa->dimensionHUD1.Y && event.MouseInput.Y<=hudmapa->dimensionHUD2.Y){
 									cout<<"Has clicado en el minimapa en la posición X:"<<event.MouseInput.X<<", Y"<<event.MouseInput.Y<<endl;
+								}
+								else if((event.MouseInput.X>=396 && event.MouseInput.X<=457 && event.MouseInput.Y >= 468 && event.MouseInput.Y<=523))
+								{
+									mapa->setSombra(true);
+									mapa->setTipoEdificio(1);
+									hudmapa->selectButton(1);
+								}
+								else if((event.MouseInput.X>=458 && event.MouseInput.X<=520 && event.MouseInput.Y >= 468 && event.MouseInput.Y<=523))
+								{
+									mapa->setSombra(true);
+									mapa->setTipoEdificio(2);
+									hudmapa->selectButton(2);
+								}
+								else if((event.MouseInput.X>=521 && event.MouseInput.X<=580 && event.MouseInput.Y >= 468 && event.MouseInput.Y<=523))
+								{
+									mapa->setSombra(true);
+									mapa->setTipoEdificio(3);
+									hudmapa->selectButton(3);
+								}
+								else if((event.MouseInput.X>=396 && event.MouseInput.X<=457 && event.MouseInput.Y >= 524 && event.MouseInput.Y<=579))
+								{
+									mapa->setSombra(true);
+									mapa->setTipoEdificio(4);
+									hudmapa->selectButton(4);
 								}
 								else{
 									if (mapa != NULL && hudmapa != NULL)

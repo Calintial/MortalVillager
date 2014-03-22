@@ -39,6 +39,10 @@ hud::hud(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D> _m):_mapa2D(_m){
 	combo_edificios->addItem(L"Arqueria");
 	combo_edificios->addItem(L"Lanceria");
 
+	hud_sprite = driver->getTexture("../media/Texturas/hud/HUD.png");
+	hud_buttons = driver->getTexture("../media/Texturas/hud/botones.png");
+	button_selected = -1;
+
 }
 
 bool hud::OnEvent(const SEvent& event)
@@ -59,8 +63,8 @@ void hud::paintInformation(Unidades * pers){
 }
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
 void hud::pintarMiniMapa(){
-	int x=600;
-	int y=400;
+	int x=595;
+	int y=395;
 	int xhud=0;
 	int yhud=0;
 	position2di dimPantalla=_mapa2D->GetCameraScroll();
@@ -131,8 +135,32 @@ void hud::paint(){
 		if(driver)
 		{
 			
-			driver->draw2DRectangle(video::SColor(100,154,147,129),core::rect<s32>(0,400,800 ,600),0);
-			driver->draw2DRectangle(video::SColor(255,154,147,129),core::rect<s32>(600,400,800 ,600),0);
+			/*driver->draw2DRectangle(video::SColor(100,154,147,129),core::rect<s32>(0,400,800 ,600),0);
+			driver->draw2DRectangle(video::SColor(255,154,147,129),core::rect<s32>(600,400,800 ,600),0);*/
+			driver->draw2DImage(hud_sprite, position2di(0,392), rect<s32>(0, 0, hud_sprite->getSize().Width, hud_sprite->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			
+			//Botones edificios HUD
+
+			if(button_selected == 1)
+				driver->draw2DImage(hud_buttons, position2di(396,468), rect<s32>(60, 0, 120, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			else
+				driver->draw2DImage(hud_buttons, position2di(396,468), rect<s32>(0, 0, 60, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+
+			if(button_selected == 2)
+				driver->draw2DImage(hud_buttons, position2di(458,468), rect<s32>(180, 0, 240, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			else
+				driver->draw2DImage(hud_buttons, position2di(458,468), rect<s32>(120, 0, 180, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			
+			if(button_selected == 3)
+				driver->draw2DImage(hud_buttons, position2di(521,468), rect<s32>(300, 0, 360, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			else
+				driver->draw2DImage(hud_buttons, position2di(521,468), rect<s32>(240, 0, 300, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			
+			if(button_selected == 4)
+				driver->draw2DImage(hud_buttons, position2di(396,524), rect<s32>(420, 0, 480, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			else
+				driver->draw2DImage(hud_buttons, position2di(396,524), rect<s32>(360, 0, 420, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+
 			font->draw(L"Información del personaje:",
 				core::rect<s32>(200,450,200,450),
 				video::SColor(255,0,0,0));
@@ -163,4 +191,9 @@ hud::~hud()
 	delete env;
 	delete skin;
 	delete font;*/
+}
+
+void hud::selectButton(int b)
+{
+	button_selected = b;
 }
