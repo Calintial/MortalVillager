@@ -287,7 +287,7 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
 				{
-					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
+					if(x < mapa->WIDTH && y < mapa->HEIGHT)
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);
