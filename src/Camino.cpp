@@ -47,3 +47,10 @@ void Camino::addCamino(const Camino& nuevoCamino){
 		addNodo(casilla);
 	}
 }
+
+position2di Camino::darPaso(){
+	position2di paso = getInicio();
+	posiciones.erase(posiciones.begin());
+	peso--;
+	return paso;
+}

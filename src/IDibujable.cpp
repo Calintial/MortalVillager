@@ -1,4 +1,7 @@
 #include "IDibujable.h"
+IDibujable::IDibujable(){
+	pathfinding = NULL;
+}
 IDibujable::~IDibujable() {
 	delete textura;
 }
@@ -29,4 +32,7 @@ void IDibujable::setTipo(int t){
 bool IDibujable::isTransitable(){
 	return true;
 
+}
+void IDibujable::setPathfinding(Pathfinding* _pathfinding){
+	pathfinding = _pathfinding;
 }

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "IDibujable.h"
+#include "Camino.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ public:
 	//void updateIA();
 	//Metodos de movimiento y actualización de la unidad
 	void Move(int,int);
+	void Move(Camino*);
 	void updateUnit();
 
 	//Getters virtuales
@@ -34,6 +36,7 @@ public:
 	
 private:
 	position2di last_clicked;
+	Camino* camino;
 	int state;
 
 };

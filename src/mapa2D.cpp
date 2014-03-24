@@ -50,6 +50,16 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	ia_selected = -1;
 	user_selected = -1;
 	pathFinding=new Pathfinding(shared_ptr<mapa2D>(this));
+	// Esto es bastante sucio, pero bueno...
+	for(IDibujable* unidad: *IAunits){
+		unidad->setPathfinding(pathFinding);
+	}
+	for(IDibujable* unidad: *Userunits){
+		unidad->setPathfinding(pathFinding);
+	}
+	for(IDibujable* unidad: *b){
+		unidad->setPathfinding(pathFinding);
+	}
 	sombra_edificio = false;
 }
 
@@ -170,7 +180,8 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 						/*pos_grid.X = event.MouseInput.X/TILE_WIDTH;
 						pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;*/
 						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
-		   				((Unidades*)user_units->at(user_selected))->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+		   				Unidades* unidad = ((Unidades*)user_units->at(user_selected));
+		   				unidad->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
 					}
 					break;
 			default:;
