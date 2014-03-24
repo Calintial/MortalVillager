@@ -1,17 +1,19 @@
 #include "Camino.h"
 
-Camino::Camino(position2di inicio){
-	posiciones.push_back(inicio);
+Camino::Camino(position2di _inicio){
+	//posiciones.push_back(_inicio);
 	peso = 0;
+	inicio = _inicio;
 }
 
-Camino::Camino(){
+Camino::Camino():inicio(position2di(-1,-1)){
 	peso = -1;
 }
 
 Camino::Camino(const Camino &c){
-	posiciones=c.posiciones;	
-	peso=c.peso;
+	posiciones=c.getCamino();
+	peso=c.getPeso();
+	inicio=c.getInicio();
 }
 
 Camino::~Camino(){
@@ -36,7 +38,8 @@ std::vector<position2di> Camino::getCamino() const{
 }
 
 position2di Camino::getInicio() const{
-	return posiciones[0];
+	//return posiciones[0];
+	return inicio;
 }
 position2di Camino::getFinal() const{
 	return posiciones[posiciones.size()-1];		
@@ -49,8 +52,9 @@ void Camino::addCamino(const Camino& nuevoCamino){
 }
 
 position2di Camino::darPaso(){
-	position2di paso = getInicio();
+	position2di paso = *posiciones.begin();
 	posiciones.erase(posiciones.begin());
 	peso--;
+	inicio = paso;
 	return paso;
 }

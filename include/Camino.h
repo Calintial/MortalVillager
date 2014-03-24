@@ -25,6 +25,7 @@ public:
 	//Camino invertir();
 
 private:
+	position2di inicio;
 	std::vector<position2di> posiciones;
 	int peso;
 };
