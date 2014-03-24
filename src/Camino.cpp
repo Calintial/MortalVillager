@@ -58,3 +58,15 @@ position2di Camino::darPaso(){
 	inicio = paso;
 	return paso;
 }
+
+Camino* Camino::invertir(){
+	Camino* nuevoCamino= new Camino(getFinal());
+	std::vector<position2di> posicionesViejas = getCamino();
+	posicionesViejas.pop_back();
+	for (int i = 0; i < posicionesViejas.size(); ++i)
+	{
+		nuevoCamino->addNodo(posicionesViejas[posicionesViejas.size()-1]);
+		posicionesViejas.pop_back();
+	}
+	return nuevoCamino;
+}
