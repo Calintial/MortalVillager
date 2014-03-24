@@ -4,6 +4,7 @@ Unidades::Unidades()
 {
 	setPosition(1,1);
 	state = 0;
+	select = false;
 	last_clicked.X = 1;
 	last_clicked.Y = 1;
 }
@@ -12,6 +13,7 @@ Unidades::Unidades(int x, int y)
 {
 	setPosition(x,y);
 	state = 0;
+	select = false;
 	last_clicked.X = x;
 	last_clicked.Y = y;
 }
@@ -21,6 +23,7 @@ Unidades::~Unidades()
 	setPosition(0,0);
 	last_clicked.X = 0;
 	last_clicked.Y = 0;
+	select = false;
 	state = 0;
 }
 

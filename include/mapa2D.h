@@ -75,6 +75,7 @@ public:
 	//Manejo de objetos
 	vector<IDibujable*>* getIa_units();
 	vector<IDibujable*>* getUser_units();
+	
 	vector<IDibujable*>* getBuildings();
 	int getIASelected();
 	vector<int>* getUserSelected();

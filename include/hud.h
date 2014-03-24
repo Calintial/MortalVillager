@@ -31,6 +31,7 @@ public:
 	~hud();
 	void paint();
 	void paintInformation(vector<Unidades*>*);
+	void dibujaEnHUD(int ,Unidades* );
 	virtual bool OnEvent(const SEvent& event);
 	int P1X,P1Y,P2X,P2Y;
 	position2di dimensionHUD1;

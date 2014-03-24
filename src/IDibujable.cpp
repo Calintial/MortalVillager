@@ -28,5 +28,4 @@ void IDibujable::setTipo(int t){
 }
 bool IDibujable::isTransitable(){
 	return true;
-
 }

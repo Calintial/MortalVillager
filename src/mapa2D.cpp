@@ -116,8 +116,9 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 				//deseleccionar a todos
 				for(int i=0; i<user_units->size(); i++)
 				{
-					cout << "Deselecciono" << endl;
+					cout << "Deselecciono users" << endl;
 					((Unidades*)user_units->at(i))->TexturaSeleccionada(driver,false);
+					((Unidades*)user_units->at(i))->SetSelect(false);
 				}
 				
 				if(user_selvector->size() >= 1)
@@ -129,6 +130,7 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					for(int i=0; i<user_selvector->size(); i++)
 					{
 						((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,true);
+						((Unidades*)user_units->at(user_selvector->at(i)))->SetSelect(true);
 						usuarios_Seleccionados->push_back((Unidades*)user_units->at(user_selvector->at(i)));
 					}
 										
@@ -139,24 +141,29 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					cout << "IA search" << endl;
 					ia_selvector = new vector<int>();
 					ia_selvector = IASelected();
-					if(ia_selvector->size() == 1)
+					
+					for(int i=0; i<ia_units->size(); i++)
 					{
-						if(ia_selvector->at(0) != -1)
+						cout << "Deselecciono ia" << endl;
+						((Unidades*)ia_units->at(i))->TexturaSeleccionada(driver,false);
+						((Unidades*)ia_units->at(i))->SetSelect(false);
+					}
+					
+					if(ia_selvector->size() >= 1)
+					{
+						vector<Unidades*>* ia_Seleccionados = new vector<Unidades*>();
+						ia_Seleccionados->clear();
+					
+						cout << "CANTIDAD DE IA SELECCIONADOS:" << ia_selvector->size() << endl;
+						
+						for(int i=0; i<ia_selvector->size(); i++)
 						{
-							if(ia_selected != -1)
-							{
-								((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
-								ia_selected = -1;
-							}
-							
-							ia_selected = ia_selvector->at(0);
-							((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,true);
-
-							vector<Unidades*>* ia_Seleccionada = new vector<Unidades*>();
-							ia_Seleccionada->push_back((Unidades*)ia_units->at(ia_selected));
-
-							return ia_Seleccionada;
+							((battleIA*)ia_units->at(ia_selvector->at(i)))->TexturaSeleccionada(driver,true);
+							((battleIA*)ia_units->at(ia_selvector->at(i)))->SetSelect(true);
+							ia_Seleccionados->push_back((Unidades*)ia_units->at(ia_selvector->at(i)));
 						}
+										
+						return ia_Seleccionados;
 					}
 					else
 					{
@@ -165,12 +172,16 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 							for(int i=0; i<user_selvector->size(); i++)
 							{
 								((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								((Unidades*)user_units->at(ia_selvector->at(i)))->SetSelect(false);
 							}
 						}
-						if(ia_selected != -1)
+						if(ia_selvector->size() > 1)
 						{
-							((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
-							ia_selected = -1;
+							for(int i=0; i<ia_selvector->size(); i++)
+							{
+								((battleIA*)ia_units->at(ia_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								((battleIA*)ia_units->at(ia_selvector->at(i)))->SetSelect(false);
+							}
 						}
 					}
 				}
@@ -460,6 +471,9 @@ vector<IDibujable*>* mapa2D::getIa_units(){
 vector<IDibujable*>* mapa2D::getUser_units(){
 	return user_units;
 }
+
+
+
 vector<IDibujable*>* mapa2D::getBuildings(){
 	return buildings;
 }
@@ -742,7 +756,10 @@ int mapa2D::UserSelected(position2di coord)
 
 int mapa2D::getIASelected()
 {
-	return ia_selected;
+	if(ia_selvector != NULL)
+		if(ia_selvector->size() >= 1)
+			return ia_selvector->at(0);
+	return -1;
 }
 
 vector<int>* mapa2D::getUserSelected()

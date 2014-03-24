@@ -52,13 +52,13 @@ void hud::paintInformation(vector<Unidades*>* pers){
 	if(personajes!=NULL)
 	{
 		cout << "Algo en personajes, hay" << endl;
-		/*if(personajes->size()>1){
+		if(personajes->size()>=1){
 			cout << "Hay personajes, mostrar en hud a true" << endl;
 			ensenyarInformacion=true;
 		}
 		else{
 			ensenyarInformacion=false;
-		}*/
+		}
 	 }
 
 }
@@ -83,13 +83,13 @@ void hud::pintarMiniMapa(){
 			}
 		}
 	}
-	vector<IDibujable*>* idub= _mapa2D->getIa_units();
+	vector<battleIA*>* idub= (vector<battleIA*>*)_mapa2D->getIa_units();
 
 	for(unsigned int i=0;i<idub->size();i++){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
-			if(xhud==personajes->at(i)->getPosition().X && yhud==personajes->at(i)->getPosition().Y){
+			if(idub->at(i)->getSelect()==true){
 				driver->draw2DRectangle(video::SColor(255,255,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 			}
 			else{
@@ -101,12 +101,12 @@ void hud::pintarMiniMapa(){
 		}
 		
 	}
-	idub=_mapa2D->getUser_units();
-	for(unsigned int i=0;i<idub->size();i++){
-		xhud=idub->at(i)->getPosition().X;
-		yhud=idub->at(i)->getPosition().Y;
+	vector<Unidades*>* udub= (vector<Unidades*>*)_mapa2D->getUser_units();
+	for(unsigned int i=0;i<udub->size();i++){
+		xhud=udub->at(i)->getPosition().X;
+		yhud=udub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
-			if(xhud==personajes->at(i)->getPosition().X && yhud==personajes->at(i)->getPosition().Y){
+			if(udub->at(i)->getSelect()==true){
 				driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 			}
 			else{
@@ -118,10 +118,10 @@ void hud::pintarMiniMapa(){
 		}
 	}
 
-	idub=_mapa2D->getBuildings();
-	for(unsigned int i=0;i<idub->size();i++){
-		xhud=idub->at(i)->getPosition().X;
-		yhud=idub->at(i)->getPosition().Y;
+	vector<IDibujable*>* bdub=_mapa2D->getBuildings();
+	for(unsigned int i=0;i<bdub->size();i++){
+		xhud=bdub->at(i)->getPosition().X;
+		yhud=bdub->at(i)->getPosition().Y;
 		driver->draw2DRectangle(video::SColor(255,0,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+8 ,y+yhud+8),0);
 	}
 
@@ -142,27 +142,50 @@ void hud::paint(){
 
 			pintarMiniMapa();
 			if(ensenyarInformacion==true){
-				for(int i=0; i<personajes->size(); i++)
+				vector<battleIA*>* idub= (vector<battleIA*>*)_mapa2D->getIa_units();
+				vector<Unidades*>* udub= (vector<Unidades*>*)_mapa2D->getUser_units();
+				int numper = 0;
+				
+				for(int i=0; i<idub->size(); i++)
 				{
-					core::stringw posx="";
-					posx+=personajes->at(i)->getPosition().X;
-					core::stringw posy="";
-					posy+= personajes->at(i)->getPosition().Y;
-				
-					font->draw(posx,
-					core::rect<s32>(200,550+(50*i),200,550+(50*i)),
-					video::SColor(255,0,0,0));
-					
-					font->draw(posy,
-					core::rect<s32>(300,550+(50*i),300,550+(50*i)),
-					video::SColor(255,0,0,0));
+					if(idub->at(i)->getSelect())
+					{
+						cout << "PONER IA " << i << " EN HUD" << endl;
+						dibujaEnHUD(numper,idub->at(i));
+						numper++;
+					}
 				}
-				
+				for(int i=0; i<udub->size(); i++)
+				{
+					if(udub->at(i)->getSelect())
+					{
+						cout << "PONER BICHO "<< i << " EN HUD" << endl;
+						dibujaEnHUD(numper,udub->at(i));
+						numper++;
+					}
+				}
 			}
 		}
 	}
 
 }
+
+void hud::dibujaEnHUD(int numper,Unidades* posuni)
+{
+	core::stringw posx="";
+	posx+=posuni->getPosition().X;
+	core::stringw posy="";
+	posy+= posuni->getPosition().Y;
+					
+	font->draw(posx,
+	core::rect<s32>(200,470+(15*numper),200,470+(15*numper)),
+	video::SColor(255,0,0,0));
+						
+	font->draw(posy,
+	core::rect<s32>(300,470+(15*numper),300,470+(15*numper)),
+	video::SColor(255,0,0,0));
+}
+
 hud::~hud()
 {
 		//delete MenuDevice;
