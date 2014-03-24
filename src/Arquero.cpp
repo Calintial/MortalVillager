@@ -67,6 +67,16 @@ int Arquero::getAttackRange()
 	return attack_range;
 }
 
+int Arquero::getAttackValue()
+{
+	return attack_value;
+}
+
+int Arquero::getType()
+{
+	return 1;
+}
+
 void Arquero::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
 	ITexture *TTexture = getTextura();

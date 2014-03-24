@@ -67,6 +67,16 @@ int Lancero::getAttackRange()
 	return attack_range;
 }
 
+int Lancero::getAttackValue()
+{
+	return attack_value;
+}
+
+int Lancero::getType()
+{
+	return 3;
+}
+
 void Lancero::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
 	ITexture *TTexture = getTextura();

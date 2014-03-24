@@ -67,6 +67,16 @@ int Espadachin::getAttackRange()
 	return attack_range;
 }
 
+int Espadachin::getAttackValue()
+{
+	return attack_value;
+}
+
+int Espadachin::getType()
+{
+	return 2;
+}
+
 void Espadachin::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
 	ITexture *TTexture = getTextura();

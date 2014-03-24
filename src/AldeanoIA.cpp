@@ -67,6 +67,16 @@ int AldeanoIA::getAttackRange()
 	return attack_range;
 }
 
+int AldeanoIA::getAttackValue()
+{
+	return attack_value;
+}
+
+int AldeanoIA::getType()
+{
+	return 0;
+}
+
 void AldeanoIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
 	ITexture *TTexture = getTextura();

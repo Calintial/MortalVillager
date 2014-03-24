@@ -67,6 +67,16 @@ int ArqueroIA::getAttackRange()
 	return attack_range;
 }
 
+int ArqueroIA::getAttackValue()
+{
+	return attack_value;
+}
+
+int ArqueroIA::getType()
+{
+	return 1;
+}
+
 void ArqueroIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
 	ITexture *TTexture = getTextura();

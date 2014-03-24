@@ -29,6 +29,8 @@ public:
 	virtual int getLife() = 0;
 	virtual int getVisionRange() = 0;
 	virtual int getAttackRange() = 0;
+	virtual int getAttackValue() = 0;
+	virtual int getType() = 0;
 
 	//Pintado
 	virtual void TexturaSeleccionada(IVideoDriver* driver,bool) = 0;

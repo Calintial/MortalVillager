@@ -75,6 +75,16 @@ int Aldeano::getAttackRange()
 	return attack_range;
 }
 
+int Aldeano::getAttackValue()
+{
+	return attack_value;
+}
+
+int Aldeano::getType()
+{
+	return 0;
+}
+
 void Aldeano::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
 	ITexture *TTexture_Suelo = getTextura();

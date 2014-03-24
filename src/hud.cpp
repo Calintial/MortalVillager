@@ -162,8 +162,8 @@ void hud::paint(){
 				driver->draw2DImage(hud_buttons, position2di(396,524), rect<s32>(360, 0, 420, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 
 			font->draw(L"Información del personaje:",
-				core::rect<s32>(200,450,200,450),
-				video::SColor(255,0,0,0));
+				core::rect<s32>(25,425,25,425),
+				video::SColor(255,255,255,255));
 
 			pintarMiniMapa();
 			if(ensenyarInformacion==true)
@@ -191,14 +191,29 @@ void hud::selectButton(int b)
 
 void hud::drawUnitInfo()
 {
-	core::stringw posx="";
-	posx+=personaje->getPosition().X;
-	core::stringw posy="";
-	posy+= personaje->getPosition().Y;
-	font->draw(posx,
-		core::rect<s32>(200,550,200,550),
-		video::SColor(255,0,0,0));
-	font->draw(posy,
-		core::rect<s32>(300,550,300,550),
-		video::SColor(255,0,0,0));
+
+
+	core::stringw Tipo = "Tipo: ";
+	switch(personaje->getType())
+	{
+		case 0: Tipo += "Aldeano"; break;
+		case 1: Tipo += "Arquero"; break;
+		case 2: Tipo += "Espadachin"; break;
+		case 3: Tipo += "Lancero"; break;
+	}
+
+	core::stringw Vida="Vida: ";
+	Vida+=personaje->getLife();
+	core::stringw Ataque="Ataque: ";
+	Ataque+= personaje->getAttackValue();
+
+	font->draw(Tipo,
+		core::rect<s32>(25,445,25,445),
+		video::SColor(255,255,255,255));
+	font->draw(Vida,
+		core::rect<s32>(25,465,25,465),
+		video::SColor(255,255,255,255));
+	font->draw(Ataque,
+		core::rect<s32>(25,485,25,485),
+		video::SColor(255,255,255,255));
 }
