@@ -24,6 +24,8 @@ public:
 	void Move(int,int);
 	void updateUnit();
 	int getState();
+	bool getSelect(){return select;};
+	void SetSelect(bool sel){select=sel;};
 
 	//Getters virtuales
 	virtual int getLife() = 0;
@@ -38,6 +40,7 @@ public:
 private:
 	position2di last_clicked;
 	int state;
+	bool select;
 
 };
 

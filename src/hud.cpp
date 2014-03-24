@@ -22,22 +22,9 @@ hud::hud(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D> _m):_mapa2D(_m){
 	P1Y=403;
 	P2X=800;
 	P2Y=600;
-	personaje= new Arquero();
-	personaje=NULL;
+	personajes= NULL;
 	ensenyarInformacion=false;
 	mapa="";
-
-	/*Botón para añadir edificios*/
-	/*env->addButton(rect<s32>(200,500,300,550), 0, BUTTON_ADD_BUILDING,
-			 L"Añadir Edificio", L"Añadir un edificio");*/
-
-	/*Desplegables para seleccionar unidad a insertar*/
-	/*IGUIComboBox* combo_edificios = env->addComboBox (rect<s32>(350,500,450,550), 0,COMBO_EDIFICIOS);
-	combo_edificios->addItem(L"Centro ciudad");
-	combo_edificios->addItem(L"Granja");
-	combo_edificios->addItem(L"Cuartel");
-	combo_edificios->addItem(L"Arqueria");
-	combo_edificios->addItem(L"Lanceria");*/
 
 	hud_sprite = driver->getTexture("../media/Texturas/hud/HUD.png");
 	hud_buttons = driver->getTexture("../media/Texturas/hud/botones.png");
@@ -50,15 +37,22 @@ bool hud::OnEvent(const SEvent& event)
 	printf("Estas clickando en el hud \n" );
 	return true;
 }
-void hud::paintInformation(Unidades * pers){
+void hud::paintInformation(vector<Unidades*>* pers){
 
-	personaje=pers;
-	if(personaje!=NULL){
-		ensenyarInformacion=true;
-	}
-	else{
-		ensenyarInformacion=false;
-	}
+	if(pers!=NULL)
+		personajes=pers;
+	cout << "Pinto hud" << endl;
+	if(personajes!=NULL)
+	{
+		cout << "Algo en personajes, hay" << endl;
+		if(personajes->size()>=1){
+			cout << "Hay personajes, mostrar en hud a true" << endl;
+			ensenyarInformacion=true;
+		}
+		else{
+			ensenyarInformacion=false;
+		}
+	 }
 
 }
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
@@ -82,13 +76,13 @@ void hud::pintarMiniMapa(){
 			}
 		}
 	}
-	vector<IDibujable*>* idub= _mapa2D->getIa_units();
+	vector<battleIA*>* idub= (vector<battleIA*>*)_mapa2D->getIa_units();
 
 	for(unsigned int i=0;i<idub->size();i++){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
-			if(xhud==personaje->getPosition().X && yhud==personaje->getPosition().Y){
+			if(idub->at(i)->getSelect()==true){
 				driver->draw2DRectangle(video::SColor(255,255,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 			}
 			else{
@@ -97,16 +91,15 @@ void hud::pintarMiniMapa(){
 		}
 		else{
 				driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
-
 		}
 		
 	}
-	idub=_mapa2D->getUser_units();
-	for(unsigned int i=0;i<idub->size();i++){
-		xhud=idub->at(i)->getPosition().X;
-		yhud=idub->at(i)->getPosition().Y;
+	vector<Unidades*>* udub= (vector<Unidades*>*)_mapa2D->getUser_units();
+	for(unsigned int i=0;i<udub->size();i++){
+		xhud=udub->at(i)->getPosition().X;
+		yhud=udub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
-			if(xhud==personaje->getPosition().X && yhud==personaje->getPosition().Y){
+			if(udub->at(i)->getSelect()==true){
 				driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 			}
 			else{
@@ -115,14 +108,13 @@ void hud::pintarMiniMapa(){
 		}
 		else{
 			driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
-
 		}
 	}
 
-	idub=_mapa2D->getBuildings();
-	for(unsigned int i=0;i<idub->size();i++){
-		xhud=idub->at(i)->getPosition().X;
-		yhud=idub->at(i)->getPosition().Y;
+	vector<IDibujable*>* bdub=_mapa2D->getBuildings();
+	for(unsigned int i=0;i<bdub->size();i++){
+		xhud=bdub->at(i)->getPosition().X;
+		yhud=bdub->at(i)->getPosition().Y;
 		driver->draw2DRectangle(video::SColor(255,0,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+8 ,y+yhud+8),0);
 	}
 
@@ -166,14 +158,78 @@ void hud::paint(){
 				video::SColor(255,255,255,255));
 
 			pintarMiniMapa();
-			if(ensenyarInformacion==true)
-			{
-				drawUnitInfo();
+
+			if(ensenyarInformacion==true){
+				vector<battleIA*>* idub= (vector<battleIA*>*)_mapa2D->getIa_units();
+				vector<Unidades*>* udub= (vector<Unidades*>*)_mapa2D->getUser_units();
+				int numper = 0;
+				
+				for(int i=0; i<idub->size(); i++)
+				{
+					if(idub->at(i)->getSelect())
+					{
+						cout << "PONER IA " << i << " EN HUD" << endl;
+						dibujaEnHUD(numper,idub->at(i));
+						numper++;
+					}
+				}
+				for(int i=0; i<udub->size(); i++)
+				{
+					if(udub->at(i)->getSelect())
+					{
+						cout << "PONER BICHO "<< i << " EN HUD" << endl;
+						dibujaEnHUD(numper,udub->at(i));
+						numper++;
+					}
+				}
 			}
 		}
 	}
 
 }
+
+void hud::dibujaEnHUD(int numper,Unidades* posuni)
+{
+	/*core::stringw posx="";
+	posx+=posuni->getPosition().X;
+	core::stringw posy="";
+	posy+= posuni->getPosition().Y;
+					
+	font->draw(posx,
+	core::rect<s32>(200,470+(15*numper),200,470+(15*numper)),
+	video::SColor(255,0,0,0));
+						
+	font->draw(posy,
+	core::rect<s32>(300,470+(15*numper),300,470+(15*numper)),
+	video::SColor(255,0,0,0));*/
+
+
+
+	core::stringw Tipo = "Tipo: ";
+	switch(posuni->getType())
+	{
+		case 0: Tipo += "Aldeano"; break;
+		case 1: Tipo += "Arquero"; break;
+		case 2: Tipo += "Espadachin"; break;
+		case 3: Tipo += "Lancero"; break;
+	}
+
+	core::stringw Vida="Vida: ";
+	Vida+=posuni->getLife();
+	core::stringw Ataque="Ataque: ";
+	Ataque+= posuni->getAttackValue();
+
+	font->draw(Tipo,
+		core::rect<s32>(25,445+(15*numper),25,445+(15*numper)),
+		video::SColor(255,255,255,255));
+	font->draw(Vida,
+		core::rect<s32>(125,445+(15*numper),25,445+(15*numper)),
+		video::SColor(255,255,255,255));
+	font->draw(Ataque,
+		core::rect<s32>(225,445+(15*numper),25,445+(15*numper)),
+		video::SColor(255,255,255,255));
+}
+
 hud::~hud()
 {
 		//delete MenuDevice;
@@ -189,31 +245,3 @@ void hud::selectButton(int b)
 	button_selected = b;
 }
 
-void hud::drawUnitInfo()
-{
-
-
-	core::stringw Tipo = "Tipo: ";
-	switch(personaje->getType())
-	{
-		case 0: Tipo += "Aldeano"; break;
-		case 1: Tipo += "Arquero"; break;
-		case 2: Tipo += "Espadachin"; break;
-		case 3: Tipo += "Lancero"; break;
-	}
-
-	core::stringw Vida="Vida: ";
-	Vida+=personaje->getLife();
-	core::stringw Ataque="Ataque: ";
-	Ataque+= personaje->getAttackValue();
-
-	font->draw(Tipo,
-		core::rect<s32>(25,445,25,445),
-		video::SColor(255,255,255,255));
-	font->draw(Vida,
-		core::rect<s32>(25,465,25,465),
-		video::SColor(255,255,255,255));
-	font->draw(Ataque,
-		core::rect<s32>(25,485,25,485),
-		video::SColor(255,255,255,255));
-}

@@ -96,7 +96,7 @@ void Aldeano::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 
 	if(getState() == NOTHING)
 	{
-		//cout<<"NOTHING"<<endl;
+
 		if(current_sprite >= 9)
 		{
 			current_sprite = 0;
@@ -108,7 +108,7 @@ void Aldeano::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 	}
 	else if(getState() == MOVE)
 	{
-		//cout<<"MOVE"<<endl;
+
 		if(current_sprite == 9)
 		{
 			current_sprite = 10;
