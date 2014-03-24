@@ -28,16 +28,16 @@ hud::hud(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D> _m):_mapa2D(_m){
 	mapa="";
 
 	/*Botón para añadir edificios*/
-	env->addButton(rect<s32>(200,500,300,550), 0, BUTTON_ADD_BUILDING,
-			 L"Añadir Edificio", L"Añadir un edificio");
+	/*env->addButton(rect<s32>(200,500,300,550), 0, BUTTON_ADD_BUILDING,
+			 L"Añadir Edificio", L"Añadir un edificio");*/
 
 	/*Desplegables para seleccionar unidad a insertar*/
-	IGUIComboBox* combo_edificios = env->addComboBox (rect<s32>(350,500,450,550), 0,COMBO_EDIFICIOS);
+	/*IGUIComboBox* combo_edificios = env->addComboBox (rect<s32>(350,500,450,550), 0,COMBO_EDIFICIOS);
 	combo_edificios->addItem(L"Centro ciudad");
 	combo_edificios->addItem(L"Granja");
 	combo_edificios->addItem(L"Cuartel");
 	combo_edificios->addItem(L"Arqueria");
-	combo_edificios->addItem(L"Lanceria");
+	combo_edificios->addItem(L"Lanceria");*/
 
 	hud_sprite = driver->getTexture("../media/Texturas/hud/HUD.png");
 	hud_buttons = driver->getTexture("../media/Texturas/hud/botones.png");
@@ -166,18 +166,9 @@ void hud::paint(){
 				video::SColor(255,0,0,0));
 
 			pintarMiniMapa();
-			if(ensenyarInformacion==true){
-				core::stringw posx="";
-				posx+=personaje->getPosition().X;
-				core::stringw posy="";
-				posy+= personaje->getPosition().Y;
-				font->draw(posx,
-					core::rect<s32>(200,550,200,550),
-					video::SColor(255,0,0,0));
-				font->draw(posy,
-					core::rect<s32>(300,550,300,550),
-					video::SColor(255,0,0,0));
-			
+			if(ensenyarInformacion==true)
+			{
+				drawUnitInfo();
 			}
 		}
 	}
@@ -196,4 +187,18 @@ hud::~hud()
 void hud::selectButton(int b)
 {
 	button_selected = b;
+}
+
+void hud::drawUnitInfo()
+{
+	core::stringw posx="";
+	posx+=personaje->getPosition().X;
+	core::stringw posy="";
+	posy+= personaje->getPosition().Y;
+	font->draw(posx,
+		core::rect<s32>(200,550,200,550),
+		video::SColor(255,0,0,0));
+	font->draw(posy,
+		core::rect<s32>(300,550,300,550),
+		video::SColor(255,0,0,0));
 }

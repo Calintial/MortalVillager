@@ -8,6 +8,7 @@ Aldeano::Aldeano()
 	current_sprite = 0;
 	sprite_Width = 28;
 	sprite_Height = 43;
+	attack_value = 1;
 }
 
 Aldeano::Aldeano(int x, int y) : Unidades(x,y)
@@ -18,6 +19,7 @@ Aldeano::Aldeano(int x, int y) : Unidades(x,y)
 	current_sprite = 0;
 	sprite_Width = 28;
 	sprite_Height = 43;
+	attack_value = 1;
 }
 
 Aldeano::~Aldeano()
@@ -27,6 +29,7 @@ Aldeano::~Aldeano()
 	attack_range = 0;
 	current_sprite = 0;
 	TTexture = NULL;
+	attack_value = 0;
 }
 
 void Aldeano::Attack(position2di pos)

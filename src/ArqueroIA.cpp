@@ -5,6 +5,7 @@ ArqueroIA::ArqueroIA()
 	life = 100;
 	vision_range = 5;
 	attack_range = 2;
+	attack_value = 1;
 }
 
 ArqueroIA::ArqueroIA(int x, int y) : battleIA(x,y)
@@ -12,6 +13,7 @@ ArqueroIA::ArqueroIA(int x, int y) : battleIA(x,y)
 	life = 100;
 	vision_range = 5;
 	attack_range = 2;
+	attack_value = 1;
 }
 
 ArqueroIA::~ArqueroIA()
@@ -19,6 +21,7 @@ ArqueroIA::~ArqueroIA()
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;
+	attack_value = 0;
 }
 
 void ArqueroIA::Attack(position2di pos)

@@ -5,6 +5,7 @@ EspadachinIA::EspadachinIA()
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
+	attack_value = 1;
 }
 
 EspadachinIA::EspadachinIA(int x, int y) : battleIA(x,y)
@@ -12,6 +13,7 @@ EspadachinIA::EspadachinIA(int x, int y) : battleIA(x,y)
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
+	attack_value = 1;
 }
 
 EspadachinIA::~EspadachinIA()
@@ -19,6 +21,7 @@ EspadachinIA::~EspadachinIA()
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;
+	attack_value = 0;
 }
 
 void EspadachinIA::Attack(position2di pos)

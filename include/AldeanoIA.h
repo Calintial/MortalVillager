@@ -30,6 +30,7 @@ public:
 
 private:
 	int life;
+	int attack_value;
 	int vision_range;
 	int attack_range;
 };

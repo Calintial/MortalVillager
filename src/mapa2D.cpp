@@ -471,8 +471,8 @@ void mapa2D::DrawBuildingShadow()
 	}
 
 	ITexture* shadow_texture2;
-	position2di colocar = aux_tile + GetCameraScroll(); colocar.X = colocar.X - 1;
-	if((aux_tile.X != -1 && aux_tile.Y != -1) && puede_colocar(colocar))
+	//position2di colocar = aux_tile + GetCameraScroll(); colocar.X = colocar.X - 1;
+	if((aux_tile.X != -1 && aux_tile.Y != -1) && puede_colocar(aux_tile + GetCameraScroll()))
 		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
 	else
 		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow_incorrect.png");
@@ -638,12 +638,11 @@ int mapa2D::getTipoEdificio()
 
 bool mapa2D::puede_colocar(position2di pos)
 {
+
 	for(int x = pos.X; x < pos.X + 4; x++)
 	{
 		for(int y = pos.Y; y < pos.Y + 4; y++)
 		{
-
-			//cout<<x<<","<<y<<":"<<getTile(y,x)->getTipo()<<endl;
 			if(getTile(y,x)->getTipo() == 1)
 			{
 				return false;
@@ -654,7 +653,7 @@ bool mapa2D::puede_colocar(position2di pos)
 			{
 				if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
 				{
-					cout<<x<<","<<y<<":"<<"Hay una unidad IA"<<endl;
+
 					return false;
 				}
 			}
@@ -663,7 +662,6 @@ bool mapa2D::puede_colocar(position2di pos)
 			{
 				if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
 				{
-					cout<<x<<","<<y<<":"<<"Hay una unidad Usuario"<<endl;
 					return false;
 				}
 			}
@@ -672,11 +670,11 @@ bool mapa2D::puede_colocar(position2di pos)
 
 	for(int i=0; i<buildings->size(); i++)
 	{
-		cout<<buildings->at(i)->getPosition().X<<","<<buildings->at(i)->getPosition().Y<<":"<<"Edificio"<<endl;
-		cout<<pos.X<<","<<pos.Y<<":"<<"Sombra"<<endl;
+		/*cout<<buildings->at(i)->getPosition().X<<","<<buildings->at(i)->getPosition().Y<<":"<<"Edificio"<<endl;
+		cout<<pos.X<<","<<pos.Y<<":"<<"Sombra"<<endl;*/
 		if(collide(buildings->at(i)->getPosition(),4,4,pos,4,4))
 		{
-			cout<<pos.X<<","<<pos.Y<<":"<<"Hay un edificio"<<endl;
+			//cout<<pos.X<<","<<pos.Y<<":"<<"Hay un edificio"<<endl;
 			return false;
 		}
 	}
