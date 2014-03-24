@@ -22,8 +22,7 @@ hud::hud(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D> _m):_mapa2D(_m){
 	P1Y=403;
 	P2X=800;
 	P2Y=600;
-	personaje= new Arquero();
-	personaje=NULL;
+	personajes= NULL;
 	ensenyarInformacion=false;
 	mapa="";
 
@@ -38,7 +37,6 @@ hud::hud(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D> _m):_mapa2D(_m){
 	combo_edificios->addItem(L"Cuartel");
 	combo_edificios->addItem(L"Arqueria");
 	combo_edificios->addItem(L"Lanceria");
-
 }
 
 bool hud::OnEvent(const SEvent& event)
@@ -46,15 +44,22 @@ bool hud::OnEvent(const SEvent& event)
 	printf("Estas clickando en el hud \n" );
 	return true;
 }
-void hud::paintInformation(Unidades * pers){
+void hud::paintInformation(vector<Unidades*>* pers){
 
-	personaje=pers;
-	if(personaje!=NULL){
-		ensenyarInformacion=true;
-	}
-	else{
-		ensenyarInformacion=false;
-	}
+	if(pers!=NULL)
+		personajes=pers;
+	cout << "Pinto hud" << endl;
+	if(personajes!=NULL)
+	{
+		cout << "Algo en personajes, hay" << endl;
+		/*if(personajes->size()>1){
+			cout << "Hay personajes, mostrar en hud a true" << endl;
+			ensenyarInformacion=true;
+		}
+		else{
+			ensenyarInformacion=false;
+		}*/
+	 }
 
 }
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
@@ -84,7 +89,7 @@ void hud::pintarMiniMapa(){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
-			if(xhud==personaje->getPosition().X && yhud==personaje->getPosition().Y){
+			if(xhud==personajes->at(i)->getPosition().X && yhud==personajes->at(i)->getPosition().Y){
 				driver->draw2DRectangle(video::SColor(255,255,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 			}
 			else{
@@ -93,7 +98,6 @@ void hud::pintarMiniMapa(){
 		}
 		else{
 				driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
-
 		}
 		
 	}
@@ -102,7 +106,7 @@ void hud::pintarMiniMapa(){
 		xhud=idub->at(i)->getPosition().X;
 		yhud=idub->at(i)->getPosition().Y;
 		if(ensenyarInformacion==true){
-			if(xhud==personaje->getPosition().X && yhud==personaje->getPosition().Y){
+			if(xhud==personajes->at(i)->getPosition().X && yhud==personajes->at(i)->getPosition().Y){
 				driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
 			}
 			else{
@@ -111,7 +115,6 @@ void hud::pintarMiniMapa(){
 		}
 		else{
 			driver->draw2DRectangle(video::SColor(255,255,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+4 ,y+yhud+4),0);
-
 		}
 	}
 
@@ -132,17 +135,22 @@ void hud::paint(){
 
 			pintarMiniMapa();
 			if(ensenyarInformacion==true){
-				core::stringw posx="";
-				posx+=personaje->getPosition().X;
-				core::stringw posy="";
-				posy+= personaje->getPosition().Y;
-				font->draw(posx,
-					core::rect<s32>(200,550,200,550),
+				for(int i=0; i<personajes->size(); i++)
+				{
+					core::stringw posx="";
+					posx+=personajes->at(i)->getPosition().X;
+					core::stringw posy="";
+					posy+= personajes->at(i)->getPosition().Y;
+				
+					font->draw(posx,
+					core::rect<s32>(200,550+(50*i),200,550+(50*i)),
 					video::SColor(255,0,0,0));
-				font->draw(posy,
-					core::rect<s32>(300,550,300,550),
+					
+					font->draw(posy,
+					core::rect<s32>(300,550+(50*i),300,550+(50*i)),
 					video::SColor(255,0,0,0));
-			
+				}
+				
 			}
 		}
 	}

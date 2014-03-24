@@ -83,8 +83,17 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 									}
 								}
 								break;
-				case EMIE_RMOUSE_PRESSED_DOWN:
 				case EMIE_LMOUSE_LEFT_UP:
+					if(event.MouseInput.X>=hudmapa->dimensionHUD1.X && event.MouseInput.X<=hudmapa->dimensionHUD2.X && event.MouseInput.Y >=hudmapa->dimensionHUD1.Y && event.MouseInput.Y<=hudmapa->dimensionHUD2.Y){
+									cout<<"Has clicado en el minimapa en la posición X:"<<event.MouseInput.X<<", Y"<<event.MouseInput.Y<<endl;
+								}
+								else{
+									if (mapa != NULL && hudmapa != NULL)
+									{
+										hudmapa->paintInformation(mapa->OnEventMapa(event));
+									}
+								}
+				case EMIE_RMOUSE_PRESSED_DOWN:
 				case EMIE_MOUSE_MOVED: mapa->OnEventMapa(event);
 										break;
 				default:;
