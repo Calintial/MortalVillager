@@ -75,6 +75,7 @@ public:
 	//Manejo de objetos
 	vector<IDibujable*>* getIa_units();
 	vector<IDibujable*>* getUser_units();
+	vector<IDibujable*>* getBuildings();
 	int getIASelected();
 	vector<int>* getUserSelected();
 	Pathfinding* getPathfinding();
@@ -96,6 +97,8 @@ public:
 
 	void setSombraCoords(position2di pos);
 	position2di getSombraCoords();
+	bool puede_colocar(position2di pos);
+	bool collide(position2di,int,int,position2di,int,int);
 
 
 private:

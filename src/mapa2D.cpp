@@ -460,7 +460,9 @@ vector<IDibujable*>* mapa2D::getIa_units(){
 vector<IDibujable*>* mapa2D::getUser_units(){
 	return user_units;
 }
-
+vector<IDibujable*>* mapa2D::getBuildings(){
+	return buildings;
+}
 void mapa2D::DrawBuildings()
 {
 	position2di DrawPosition;
@@ -478,9 +480,9 @@ void mapa2D::DrawBuildingShadow()
 {
 	
 	position2di aux_tile = getTileCoordinates(shadowPosition.X,shadowPosition.Y);
-	cout<<"Dibujar sombra en en:"<<aux_tile.X << "," << aux_tile.Y <<endl;
+	//cout<<"Dibujar sombra en en:"<<aux_tile.X << "," << aux_tile.Y <<endl;
 	
-	position2di aux = getIsoFromTile(aux_tile.X,aux_tile.Y);
+	position2di aux;
 	ITexture* shadow_texture = NULL;
 
 	switch(tipo_edificio)
@@ -492,8 +494,28 @@ void mapa2D::DrawBuildingShadow()
 		case 4: shadow_texture = driver->getTexture("../media/Texturas/building/spear_build_shadow.png"); break;
 	}
 
+	ITexture* shadow_texture2;
+	position2di colocar = aux_tile + GetCameraScroll(); colocar.X = colocar.X - 1;
+	if((aux_tile.X != -1 && aux_tile.Y != -1) && puede_colocar(colocar))
+		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+	else
+		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow_incorrect.png");
+
+	for(int i = aux_tile.X; i< aux_tile.X + 4; i++)
+	{
+		for(int j = aux_tile.Y; j< aux_tile.Y + 4; j++)
+		{
+			aux = getIsoFromTile(i,j);
+			PintarTile(shadow_texture2, aux.X, aux.Y);
+		}
+	}	
+	
+
+	aux = getIsoFromTile(aux_tile.X - 1,aux_tile.Y);
 	if(shadow_texture != NULL)
-		PintarTile(shadow_texture, aux.X, aux.Y);	
+		PintarTile(shadow_texture, aux.X, aux.Y);
+
+
 	
 }
 
@@ -787,3 +809,60 @@ int mapa2D::getTipoEdificio()
 	return tipo_edificio;
 }
 
+bool mapa2D::puede_colocar(position2di pos)
+{
+	for(int x = pos.X; x < pos.X + 4; x++)
+	{
+		for(int y = pos.Y; y < pos.Y + 4; y++)
+		{
+
+			//cout<<x<<","<<y<<":"<<getTile(y,x)->getTipo()<<endl;
+			if(getTile(y,x)->getTipo() == 1)
+			{
+				return false;
+			}
+			
+
+			for(int i=0; i<ia_units->size(); i++)
+			{
+				if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
+				{
+					cout<<x<<","<<y<<":"<<"Hay una unidad IA"<<endl;
+					return false;
+				}
+			}
+
+			for(int i=0; i<user_units->size(); i++)
+			{
+				if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
+				{
+					cout<<x<<","<<y<<":"<<"Hay una unidad Usuario"<<endl;
+					return false;
+				}
+			}
+		}
+	}
+
+	for(int i=0; i<buildings->size(); i++)
+	{
+		cout<<buildings->at(i)->getPosition().X<<","<<buildings->at(i)->getPosition().Y<<":"<<"Edificio"<<endl;
+		cout<<pos.X<<","<<pos.Y<<":"<<"Sombra"<<endl;
+		if(collide(buildings->at(i)->getPosition(),4,4,pos,4,4))
+		{
+			cout<<pos.X<<","<<pos.Y<<":"<<"Hay un edificio"<<endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool mapa2D::collide(position2di obj1, int w_obj1, int h_obj1, position2di obj2, int w_obj2, int h_obj2)
+{
+    if ( (obj1.X < obj2.X + w_obj2) && (obj2.X < obj1.X + w_obj1) && (obj1.Y < obj2.Y + h_obj2))
+    {
+        return obj2.Y < obj1.Y + h_obj1;
+    }
+     
+    return false;
+}

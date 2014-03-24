@@ -22,9 +22,12 @@ void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibuja
 		hudmapa= new hud(pantallaDevice,mapa);
 	}
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
-	pantallaDevice->setEventReceiver(this); 
+	pantallaDevice->setEventReceiver(this);
 	mapa->Pintar();
 	hudmapa->paint();
+
+	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
+	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
 	pantallaDevice->getVideoDriver()->endScene();
 	if(eliminar){
 		delete this;
@@ -39,21 +42,33 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 		{
 			if(event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
 			{
-				mapa->setSombra(false);
 				position2di pos_colocar = mapa->getSombraCoords();
-				pos_colocar = mapa->getTileCoordinates(pos_colocar.X,pos_colocar.Y);
+				pos_colocar = mapa->getTileCoordinates(pos_colocar.X,pos_colocar.Y) + mapa->GetCameraScroll();
+				pos_colocar.X = pos_colocar.X -1;
 				cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
 
-				switch(mapa->getTipoEdificio())
+				if(mapa->puede_colocar(pos_colocar))
 				{
-					case 0: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-					case 1: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-					case 2: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-					case 3: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-					case 4: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+					mapa->setSombra(false);
+					
+					cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
+
+					switch(mapa->getTipoEdificio())
+					{
+						case 0: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 1: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 2: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 3: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 4: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+					}
+					
+					cout<<"colocar"<<endl;					
 				}
-				
-				cout<<"colocar"<<endl;
+				else
+				{
+					cout<<"no se puede colocar"<<endl;	
+				}
+
 			}
 			else if(event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN)
 			{
@@ -128,3 +143,4 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 	}
 	return false;
 }
+

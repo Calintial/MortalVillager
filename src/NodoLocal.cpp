@@ -20,7 +20,7 @@ Region* NodoLocal::getRegion() const{
 	return regionActual;
 }
 
-std::vector<Nodo*> NodoLocal::getHijos(){
+std::vector<Nodo*> NodoLocal::getHijos(position2di destino){
 	std::vector<Nodo*> hijos;
 	position2di nueva_pos;
 
@@ -29,7 +29,7 @@ std::vector<Nodo*> NodoLocal::getHijos(){
 	auto tile = mapa->getTile(nueva_pos);
 	if (regionActual->isInside(nueva_pos) && tile && tile->isTransitable())
 	{
-		NodoLocal* nuevo(new NodoLocal(nueva_pos,g+1,0,this,regionActual,mapa));
+		NodoLocal* nuevo(new NodoLocal(nueva_pos,g+1,distancia(destino),this,regionActual,mapa));
 		hijos.push_back(nuevo);
 	}
 
@@ -38,7 +38,7 @@ std::vector<Nodo*> NodoLocal::getHijos(){
 	tile = mapa->getTile(nueva_pos);
 	if (regionActual->isInside(nueva_pos) && tile && tile->isTransitable())
 	{
-		NodoLocal* nuevo(new NodoLocal(nueva_pos,g+1,0,this,regionActual,mapa));
+		NodoLocal* nuevo(new NodoLocal(nueva_pos,g+1,distancia(destino),this,regionActual,mapa));
 		hijos.push_back(nuevo);
 	}
 
@@ -47,7 +47,7 @@ std::vector<Nodo*> NodoLocal::getHijos(){
 	tile = mapa->getTile(nueva_pos);
 	if (regionActual->isInside(nueva_pos) && tile && tile->isTransitable())
 	{
-		NodoLocal* nuevo(new NodoLocal(nueva_pos,g+1,0,this,regionActual,mapa));
+		NodoLocal* nuevo(new NodoLocal(nueva_pos,g+1,distancia(destino),this,regionActual,mapa));
 		hijos.push_back(nuevo);
 	}
 
@@ -56,7 +56,7 @@ std::vector<Nodo*> NodoLocal::getHijos(){
 	tile = mapa->getTile(nueva_pos);
 	if (regionActual->isInside(nueva_pos) && tile && tile->isTransitable())
 	{
-		NodoLocal* nuevo(new NodoLocal(nueva_pos,g+1,0,this,regionActual,mapa));
+		NodoLocal* nuevo(new NodoLocal(nueva_pos,g+1,distancia(destino),this,regionActual,mapa));
 		hijos.push_back(nuevo);
 	}
 	

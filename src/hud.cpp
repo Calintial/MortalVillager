@@ -118,6 +118,13 @@ void hud::pintarMiniMapa(){
 		}
 	}
 
+	idub=_mapa2D->getBuildings();
+	for(unsigned int i=0;i<idub->size();i++){
+		xhud=idub->at(i)->getPosition().X;
+		yhud=idub->at(i)->getPosition().Y;
+		driver->draw2DRectangle(video::SColor(255,0,0,0),core::rect<s32>(x+xhud,y+yhud,x+xhud+8 ,y+yhud+8),0);
+	}
+
 	driver->draw2DRectangleOutline(core::rect<s32>(x+dimPantalla.X,y+dimPantalla.Y,x+dimPantalla.X+26,y+dimPantalla.Y+20),video::SColor(255,0,0,0));
 }
 void hud::paint(){

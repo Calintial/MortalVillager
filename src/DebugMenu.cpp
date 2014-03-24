@@ -79,9 +79,13 @@ void DebugMenu::Draw()
 			font->draw(L"Velocidad del juego",
             core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
+			DrawVisions();
+
+			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,driver->getScreenSize().Width,driver->getScreenSize().Height));
+			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,driver->getScreenSize().Width,driver->getScreenSize().Height));
+
 			DrawParameters();
 			DrawMEF();
-			DrawVisions();
 
 			env->drawAll();
 		}
@@ -274,9 +278,15 @@ void DebugMenu::DrawVisions()
 	int n_ia = vUnits->size();	
 	for(int i=0; i<n_ia; i++)
 	{
-		position2di pos = vUnits->at(i)->getPosition();
+		position2di pos = vUnits->at(i)->getPosition() - mapa->GetCameraScroll();
 		int v_range = ((Unidades*)vUnits->at(i))->getVisionRange();
 		int a_range = ((Unidades*)vUnits->at(i))->getAttackRange();
+
+		position2di limits;
+		limits.X = WIDTH;
+		limits.Y = HEIGHT;
+		limits = limits - mapa->GetCameraScroll();
+
 		/*Pintar vision de la unidad*/
 		if(drawVision)
 		{
@@ -284,7 +294,7 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
 				{
-					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
+					if((x>= 0 && x < limits.X) && (y>= 0 && y < limits.Y))
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);
@@ -302,7 +312,7 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
 				{
-					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
+					if((x>= 0 && x < limits.X) && (y>= 0 && y < limits.Y))
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
 						DrawPosition = mapa2D::getIsoFromTile(x,y);

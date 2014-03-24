@@ -18,7 +18,7 @@ public:
 	void init(position2di _pos,vertex_t _desc,Graph* _grafo);
 	//void update(int _g,int _h,Nodo* _padre);
 	vertex_t getVertexDescriptor();
-	std::vector<Nodo*> getHijos();
+	std::vector<Nodo*> getHijos(position2di);
 	Camino* getCaminoDesdePadre();
 
 private:

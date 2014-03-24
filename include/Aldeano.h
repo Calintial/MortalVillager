@@ -29,9 +29,13 @@ public:
 	
 
 private:
+	int sprite_Width;
+	int sprite_Height;
+	int current_sprite;
 	int life;
 	int vision_range;
 	int attack_range;
+	ITexture *TTexture;
 };
 
 #endif

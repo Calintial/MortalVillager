@@ -60,3 +60,8 @@ void Unidades::updateUnit()
 		}
 	}
 }
+
+int Unidades::getState()
+{
+	return state;
+}
