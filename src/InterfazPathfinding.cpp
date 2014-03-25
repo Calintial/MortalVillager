@@ -15,7 +15,7 @@ InterfazPathfinding::InterfazPathfinding(IrrlichtDevice * IrrDevice,shared_ptr<m
 	drawEnlaces = false;
 	drawCaminosInternos = false;
 	drawCaminoFinal = false;
-	estado = ESTADO_PINTAR;
+	estado = ESTADO_CAMINO;
 	origen = destino = position2di(-1,-1);
 
 	enlaces_textura = driver->getTexture("../media/Texturas/debug_pathfinding/enlaces.png");
@@ -38,6 +38,8 @@ void InterfazPathfinding::init(){
         L"Procesar", L"Iniciar análisis del mapa, generación de regiones y cálculo de caminos internos");
 	env->addButton(rect<s32>(dimensionPantallaX + 220,dimensionPantallaY+35,dimensionPantallaX + 430,dimensionPantallaY+60), 0, BUTTON_CLEAR,
         L"Vaciar", L"");
+	env->addButton(rect<s32>(dimensionPantallaX + 220,25,dimensionPantallaX + 430,50), 0, BUTTON_MODIFY,
+        L"Modificar Mapa", L"");
 	env->addButton(rect<s32>(dimensionPantallaX + 220,75,dimensionPantallaX + 430,100), 0, BUTTON_SAVE,
         L"Guardar", L"");
 }
@@ -203,6 +205,10 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 			}
 			case BUTTON_SAVE:{
 				mapa->GuardarMapa();
+				break;
+			}
+			case BUTTON_MODIFY:{
+				estado = ESTADO_PINTAR;
 				break;
 			}
 		}					

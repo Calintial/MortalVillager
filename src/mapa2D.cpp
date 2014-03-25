@@ -62,6 +62,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	sombra_edificio = false;
 	
 	user_selvector = new vector<int>();
+	pathFinding->preprocesar();
 }
 
 
