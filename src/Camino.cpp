@@ -1,5 +1,4 @@
 #include "Camino.h"
-
 Camino::Camino(position2di _inicio){
 	//posiciones.push_back(_inicio);
 	peso = 0;
@@ -25,7 +24,7 @@ void Camino::addNodo(position2di nodo){
 	/*if (posiciones.size() == 1){
 		peso = 0;
 	}else{*/
-		peso++;
+	peso++;
 	//}
 }
 
@@ -52,6 +51,10 @@ position2di Camino::getFinal() const{
 }
 
 void Camino::addCamino(const Camino& nuevoCamino){
+	if (nuevoCamino.getInicio() != getFinal())
+	{
+		addNodo(nuevoCamino.getInicio());
+	}
 	for(position2di casilla: nuevoCamino.getCamino()){
 		addNodo(casilla);
 	}
@@ -69,10 +72,15 @@ Camino* Camino::invertir(){
 	Camino* nuevoCamino= new Camino(getFinal());
 	std::vector<position2di> posicionesViejas = getCamino();
 	posicionesViejas.pop_back();
-	for (int i = 0; i < posicionesViejas.size(); ++i)
+	int tam = posicionesViejas.size();
+	for (int i = 0; i < tam; ++i)
 	{
 		nuevoCamino->addNodo(posicionesViejas[posicionesViejas.size()-1]);
 		posicionesViejas.pop_back();
+	}
+	if (getInicio() != getFinal())
+	{
+		nuevoCamino->addNodo(getInicio());
 	}
 	return nuevoCamino;
 }

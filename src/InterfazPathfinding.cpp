@@ -126,57 +126,54 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 	{
 		if (event.MouseInput.X < dimensionPantallaX && event.MouseInput.Y < dimensionPantallaY)
 		{
-			if (estado == ESTADO_PINTAR)
+			switch(event.MouseInput.Event)
 			{
-				switch(event.MouseInput.Event)
-				{
-					case EMIE_LMOUSE_PRESSED_DOWN:
+				case EMIE_LMOUSE_PRESSED_DOWN:
+					{
+						// Esto está copiapegado de mapa2D, cuidado por si cambia
+						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y) + mapa->GetCameraScroll();
+						/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
+						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
+						if(pos_grid.X >= 0 && pos_grid.Y >= 0)
 						{
-							// Esto está copiapegado de mapa2D, cuidado por si cambia
-							position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y) + mapa->GetCameraScroll();
-							/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
-							pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
-							if(pos_grid.X >= 0 && pos_grid.Y >= 0)
+							cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+							if (estado == ESTADO_PINTAR)
 							{
-								cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
-								if (estado == ESTADO_PINTAR)
-								{
-									Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
-									muro->aplicarTextura(device->getVideoDriver());
-									mapa->setTile(pos_grid.X,pos_grid.Y,muro);
-								}else{
-									origen = pos_grid;
-								}							
-							}
-
-							
+								Muro* muro = new Muro(1,pos_grid.X,pos_grid.Y);
+								muro->aplicarTextura(device->getVideoDriver());
+								mapa->setTile(pos_grid.X,pos_grid.Y,muro);
+							}else{
+								mapa->OnEventMapa(event);
+								origen = pos_grid;
+							}							
 						}
-						break;
-					case EMIE_RMOUSE_PRESSED_DOWN:
+
+						
+					}
+					break;
+				case EMIE_RMOUSE_PRESSED_DOWN:
+					{
+						// Esto está copiapegado de mapa2D, cuidado por si cambia
+						position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y) + mapa->GetCameraScroll();
+						/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
+						pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
+						if(pos_grid.X >= 0 && pos_grid.Y >= 0)
 						{
-							// Esto está copiapegado de mapa2D, cuidado por si cambia
-							position2di pos_grid = mapa2D::getTileCoordinates(event.MouseInput.X,event.MouseInput.Y) + mapa->GetCameraScroll();
-							/*pos_grid.X = (event.MouseInput.X) / TILE_WIDTH;
-							pos_grid.Y = (event.MouseInput.Y) / TILE_HEIGHT;*/
-							if(pos_grid.X >= 0 && pos_grid.Y >= 0)
+							cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
+							if (estado == ESTADO_PINTAR)
 							{
-								cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
-								if (estado == ESTADO_PINTAR)
-								{
-									Suelo* suelo = new Suelo(0,pos_grid.X,pos_grid.Y);
-									suelo->aplicarTextura(device->getVideoDriver());
-									mapa->setTile(pos_grid.X,pos_grid.Y,suelo);
-								}else{
-									destino = pos_grid;
-								}							
-							}
-
-							
+								Suelo* suelo = new Suelo(0,pos_grid.X,pos_grid.Y);
+								suelo->aplicarTextura(device->getVideoDriver());
+								mapa->setTile(pos_grid.X,pos_grid.Y,suelo);
+							}else{
+								mapa->OnEventMapa(event);
+								destino = pos_grid;
+							}							
 						}
-						break;
-				}
-			}else{
-				mapa->OnEventMapa(event);
+
+						
+					}
+					break;
 			}
 		}
 	}else if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
