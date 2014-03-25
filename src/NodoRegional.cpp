@@ -50,9 +50,11 @@ Camino* NodoRegional::getCaminoDesdePadre(){
 	{
 		auto edge = boost::edge(((NodoRegional*)padre)->getVertexDescriptor(),descriptor,*grafo);
 		Camino* camino = &(*grafo)[edge.first];
-		if (camino->getFinal() == getPosicion())
+		if (camino->getFinal() != getPosicion())
 		{
 			return camino->invertir();
+		}else{
+			return camino;
 		}
 	}else{
 		return NULL;
