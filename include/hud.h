@@ -32,6 +32,7 @@ public:
 	void paint();
 	void paintInformation(vector<Unidades*>*);
 	void dibujaEnHUD(int ,Unidades* );
+	void dibujarRecursos();
 	virtual bool OnEvent(const SEvent& event);
 	int P1X,P1Y,P2X,P2Y;
 	position2di dimensionHUD1;

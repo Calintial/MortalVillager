@@ -8,6 +8,9 @@ vector<battleIA*> gameEngine::Add_IAUnits;
 vector<Unidades*> gameEngine::Add_UserUnits;
 vector<edificio*> gameEngine::Add_Buildings;
 
+int gameEngine::recursos_jugador = 1000;
+int gameEngine::recursos_ia = 1000;
+
 gameEngine::gameEngine()
 {
 	/*battleIA* IAunit = new battleIA();

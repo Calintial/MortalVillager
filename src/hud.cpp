@@ -158,6 +158,7 @@ void hud::paint(){
 				video::SColor(255,255,255,255));
 
 			pintarMiniMapa();
+			dibujarRecursos();
 
 			if(ensenyarInformacion==true){
 				vector<battleIA*>* idub= (vector<battleIA*>*)_mapa2D->getIa_units();
@@ -186,6 +187,16 @@ void hud::paint(){
 		}
 	}
 
+}
+
+void hud::dibujarRecursos()
+{
+	/*Dibujar recursos*/
+	core::stringw Recursos = "";
+	Recursos += gameEngine::recursos_jugador;
+	font->draw(Recursos,
+		core::rect<s32>(475,426,475,426),
+		video::SColor(255,255,255,255));
 }
 
 void hud::dibujaEnHUD(int numper,Unidades* posuni)

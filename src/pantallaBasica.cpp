@@ -49,7 +49,6 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 
 				if(mapa->puede_colocar(pos_colocar))
 				{
-					pos_colocar.X = pos_colocar.X -1;
 					mapa->setSombra(false);
 					
 					cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
@@ -57,10 +56,26 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 					switch(mapa->getTipoEdificio())
 					{
 						case 0: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-						case 1: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-						case 2: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-						case 3: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
-						case 4: (gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4)->aplicarTextura(pantallaDevice->getVideoDriver())); break;
+						case 1: if(gameEngine::recursos_jugador >= 400)
+								{
+									(gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1)->aplicarTextura(pantallaDevice->getVideoDriver()));
+									gameEngine::recursos_jugador = gameEngine::recursos_jugador - 400;
+								} break;
+						case 2: if(gameEngine::recursos_jugador >= 600)
+								{
+									(gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2)->aplicarTextura(pantallaDevice->getVideoDriver()));
+									gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
+								} break;
+						case 3: if(gameEngine::recursos_jugador >= 600)
+								{
+									(gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3)->aplicarTextura(pantallaDevice->getVideoDriver()));
+									gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
+								} break;
+						case 4: if(gameEngine::recursos_jugador >= 600)
+								{
+									(gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4)->aplicarTextura(pantallaDevice->getVideoDriver()));
+									gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
+								} break;
 					}
 					hudmapa->selectButton(-1);
 					cout<<"colocar"<<endl;					

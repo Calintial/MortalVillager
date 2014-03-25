@@ -61,6 +61,9 @@ public:
 	static Current stado;
 	void addNewUnits();
 
+	static int recursos_jugador;
+	static int recursos_ia;
+
 
 private:
 

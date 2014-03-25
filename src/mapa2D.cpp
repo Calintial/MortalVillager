@@ -515,9 +515,9 @@ void mapa2D::DrawBuildingShadow()
 	else
 		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow_incorrect.png");
 
-	for(int i = aux_tile.X; i< aux_tile.X + 4; i++)
+	for(int i = aux_tile.X; i< aux_tile.X + 5; i++)
 	{
-		for(int j = aux_tile.Y; j< aux_tile.Y + 4; j++)
+		for(int j = aux_tile.Y; j< aux_tile.Y + 5; j++)
 		{
 			aux = getIsoFromTile(i,j);
 			PintarTile(shadow_texture2, aux.X, aux.Y);
@@ -525,7 +525,7 @@ void mapa2D::DrawBuildingShadow()
 	}	
 	
 
-	aux = getIsoFromTile(aux_tile.X - 1,aux_tile.Y);
+	aux = getIsoFromTile(aux_tile.X,aux_tile.Y);
 	if(shadow_texture != NULL)
 		PintarTile(shadow_texture, aux.X, aux.Y);
 
@@ -829,9 +829,9 @@ int mapa2D::getTipoEdificio()
 bool mapa2D::puede_colocar(position2di pos)
 {
 
-	for(int x = pos.X; x < pos.X + 4; x++)
+	for(int x = pos.X; x < pos.X + 5; x++)
 	{
-		for(int y = pos.Y; y < pos.Y + 4; y++)
+		for(int y = pos.Y; y < pos.Y + 5; y++)
 		{
 			if(getTile(y,x)->getTipo() == 1)
 			{
@@ -862,7 +862,7 @@ bool mapa2D::puede_colocar(position2di pos)
 	{
 		/*cout<<buildings->at(i)->getPosition().X<<","<<buildings->at(i)->getPosition().Y<<":"<<"Edificio"<<endl;
 		cout<<pos.X<<","<<pos.Y<<":"<<"Sombra"<<endl;*/
-		if(collide(buildings->at(i)->getPosition(),4,4,pos,4,4))
+		if(collide(buildings->at(i)->getPosition(),5,5,pos,5,5))
 		{
 			//cout<<pos.X<<","<<pos.Y<<":"<<"Hay un edificio"<<endl;
 			return false;
