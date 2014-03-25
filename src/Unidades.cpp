@@ -50,7 +50,7 @@ void Unidades::Move(int x, int y)
 }
 
 void Unidades::Move(Camino* _camino){
-	if (_camino != NULL && _camino->getPeso() >= 0)
+	if (_camino != NULL && _camino->getPeso() > 0)
 	{
 		state = MOVE;
 		position2di pos = _camino->darPaso();
@@ -65,7 +65,7 @@ void Unidades::updateUnit()
 	if(state == MOVE)
 	{
 		Move(camino);
-		if (camino == NULL || camino->getPeso() < 0)
+		if (camino == NULL || camino->getPeso() <= 0)
 		{
 			if (camino)
 			{

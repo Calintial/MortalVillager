@@ -7,7 +7,7 @@ Camino::Camino(position2di _inicio){
 }
 
 Camino::Camino():inicio(position2di(-1,-1)){
-	peso = -1;
+	peso = 0;
 }
 
 Camino::Camino(const Camino &c){
@@ -22,11 +22,11 @@ Camino::~Camino(){
 
 void Camino::addNodo(position2di nodo){
 	posiciones.push_back(nodo);
-	if (posiciones.size() == 1){
+	/*if (posiciones.size() == 1){
 		peso = 0;
-	}else{
+	}else{*/
 		peso++;
-	}
+	//}
 }
 
 int Camino::getPeso() const{
@@ -42,7 +42,13 @@ position2di Camino::getInicio() const{
 	return inicio;
 }
 position2di Camino::getFinal() const{
-	return posiciones[posiciones.size()-1];		
+	if (peso > 0)
+	{
+		return posiciones[posiciones.size()-1];		
+	}else{
+		return inicio;
+	}
+	
 }
 
 void Camino::addCamino(const Camino& nuevoCamino){
