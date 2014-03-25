@@ -8,7 +8,7 @@ OBJECTS=battleIA.o graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMen
 OBJECTS_CLASES=Arquero.o Lancero.o Aldeano.o Espadachin.o ArqueroIA.o LanceroIA.o AldeanoIA.o EspadachinIA.o
 OBJECTS_EDIFICIOS=CentroCiudad.o Lanceria.o Arqueria.o Cuartel.o Granja.o
 OBJECTS_MAIN=pantalla.o pantallaPathfinding.o InterfazPathfinding.o pantallaIABatalla.o DebugMenu.o $(OBJECTS) $(OBJECTS_CLASES) $(OBJECTS_EDIFICIOS)
-
+OBJECTS_APRENDIZAJE= CGenAlg.o CMinesweeper.o CNeuralNet.o CParams.o utils.o
 
 .PHONY: all clean
 
@@ -35,6 +35,10 @@ bin/main: src/main.cpp $(OBJECTS_MAIN)
 # bin/ia_batalla: src/main.cpp $(OBJECTS_IA_BATALLA)
 # 	mkdir -p bin
 # 	$(CC) -o bin/ia_batalla $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
+
+bin/aprendizaje: src/mainAprendizaje.cpp $(OBJECTS_APRENDIZAJE)
+	mkdir -p bin
+	$(CC) -o bin/aprendizaje $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
 # To obtain object files
 Nodo.o: src/Nodo.cpp include/Nodo.h include/boost/graph/labeled_graph.hpp
