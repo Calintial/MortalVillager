@@ -205,6 +205,9 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 						for(int i=0; i<user_selvector->size(); i++)
 						{
 							//FALTARIAN CASOS DE FIN DE MUNDO
+							//Lo suyo para que no falle seria, buscar una posicion mas cercana que fuera (Cutre o algoritmo de hoja) 
+								//lugar transitable --> Mirar en el vector del mapa (edificios deberia estar en mapa)
+								//no hay otro personaje --> Dar vuelta a todo el vector de unidades user
 							/*while(!ControlColisionNT(pos_grid.X+CameraScroll.X+j,pos_grid.Y+CameraScroll.Y+k))
 							{
 								if(l==0){
@@ -217,7 +220,7 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 									k++;
 								
 									l++;
-								}
+								}-0.0
 								else if(l==2){
 									j++;
 									l=0;
