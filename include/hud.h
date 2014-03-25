@@ -30,12 +30,14 @@ public:
 	hud(IrrlichtDevice * IrrDevice, shared_ptr<mapa2D>);
 	~hud();
 	void paint();
-	void paintInformation(Unidades *);
+	void paintInformation(vector<Unidades*>*);
+	void dibujaEnHUD(int ,Unidades* );
 	virtual bool OnEvent(const SEvent& event);
 	int P1X,P1Y,P2X,P2Y;
 	position2di dimensionHUD1;
 	position2di dimensionHUD2;
 	void pintarMiniMapa();
+	void selectButton(int);
 private:
 	IrrlichtDevice * MenuDevice;
 	video::IVideoDriver* driver;
@@ -44,10 +46,13 @@ private:
 	IGUISkin* skin;
 	IGUIFont* font;
 	video::ITexture* images;
-	Unidades * personaje;
+	vector<Unidades*>* personajes;
 	bool ensenyarInformacion;
 	std::string mapa;
 	shared_ptr<mapa2D> _mapa2D;
+	ITexture *hud_sprite;
+	ITexture *hud_buttons;
+	int button_selected;
 };
 
 #endif

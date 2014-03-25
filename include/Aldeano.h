@@ -21,6 +21,8 @@ public:
 	virtual int getLife();
 	virtual int getVisionRange();
 	virtual int getAttackRange();
+	virtual int getAttackValue();
+	virtual int getType();
 
 	//Metodos de dibujado
 	virtual void Pintar(IVideoDriver* driver,int,int);
@@ -29,9 +31,14 @@ public:
 	
 
 private:
+	int sprite_Width;
+	int sprite_Height;
+	int current_sprite;
+	int attack_value;
 	int life;
 	int vision_range;
 	int attack_range;
+	ITexture *TTexture;
 };
 
 #endif

@@ -21,7 +21,9 @@ public:
 	virtual int getLife();
 	virtual int getVisionRange();
 	virtual int getAttackRange();
-
+	virtual int getAttackValue();
+	virtual int getType();
+	
 	//Metodos de dibujado
 	virtual void Pintar(IVideoDriver* driver,int,int);
 	virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
@@ -30,6 +32,7 @@ public:
 
 private:
 	int life;
+	int attack_value;
 	int vision_range;
 	int attack_range;
 };

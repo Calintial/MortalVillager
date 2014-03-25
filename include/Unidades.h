@@ -25,11 +25,16 @@ public:
 	void Move(int,int);
 	void Move(Camino*);
 	void updateUnit();
+	int getState();
+	bool getSelect(){return select;};
+	void SetSelect(bool sel){select=sel;};
 
 	//Getters virtuales
 	virtual int getLife() = 0;
 	virtual int getVisionRange() = 0;
 	virtual int getAttackRange() = 0;
+	virtual int getAttackValue() = 0;
+	virtual int getType() = 0;
 
 	//Pintado
 	virtual void TexturaSeleccionada(IVideoDriver* driver,bool) = 0;
@@ -38,6 +43,7 @@ private:
 	position2di last_clicked;
 	Camino* camino;
 	int state;
+	bool select;
 
 };
 

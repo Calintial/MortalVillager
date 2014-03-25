@@ -70,13 +70,15 @@ public:
 	position2di getDrawPosition(position2di pos);
 	
 	//Eventos
-	Unidades* OnEventMapa(const SEvent& event);
+	vector<Unidades*>* OnEventMapa(const SEvent& event);
 	
 	//Manejo de objetos
 	vector<IDibujable*>* getIa_units();
 	vector<IDibujable*>* getUser_units();
+	
+	vector<IDibujable*>* getBuildings();
 	int getIASelected();
-	int getUserSelected();
+	vector<int>* getUserSelected();
 	Pathfinding* getPathfinding();
 
 	dimension2di ViewSize;
@@ -97,7 +99,7 @@ public:
 	void setSombraCoords(position2di pos);
 	position2di getSombraCoords();
 	bool puede_colocar(position2di pos);
-	bool collide(position2di,position2di);
+	bool collide(position2di,int,int,position2di,int,int);
 
 
 private:
@@ -134,7 +136,7 @@ private:
 	bool drawVision;
 	bool drawAttackVision;
 	int ia_selected;
-	int user_selected;
+	int numuser_selected;
 
 	bool sombra_edificio;
 	int tipo_edificio;
@@ -146,7 +148,12 @@ private:
 	void DrawBuildings();
 	void DrawBuildingShadow();
 	int IASelected(position2di);
+	vector<int>* IASelected();
 	int UserSelected(position2di);
+	vector<int>* UserSelected();
+	
+	vector<int>* ia_selvector;
+	vector<int>* user_selvector;
 
 };
 

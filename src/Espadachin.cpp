@@ -5,6 +5,7 @@ Espadachin::Espadachin()
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
+	attack_value = 1;
 }
 
 Espadachin::Espadachin(int x, int y) : Unidades(x,y)
@@ -12,6 +13,7 @@ Espadachin::Espadachin(int x, int y) : Unidades(x,y)
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
+	attack_value = 1;
 }
 
 Espadachin::~Espadachin()
@@ -19,6 +21,7 @@ Espadachin::~Espadachin()
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;
+	attack_value = 0;
 }
 
 void Espadachin::Attack(position2di pos)
@@ -62,6 +65,16 @@ int Espadachin::getVisionRange()
 int Espadachin::getAttackRange()
 {
 	return attack_range;
+}
+
+int Espadachin::getAttackValue()
+{
+	return attack_value;
+}
+
+int Espadachin::getType()
+{
+	return 2;
 }
 
 void Espadachin::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)

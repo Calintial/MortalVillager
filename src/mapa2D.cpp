@@ -48,7 +48,6 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	drawAttackVision = false;
 
 	ia_selected = -1;
-	user_selected = -1;
 	pathFinding=new Pathfinding(shared_ptr<mapa2D>(this));
 	// Esto es bastante sucio, pero bueno...
 	for(IDibujable* unidad: *IAunits){
@@ -61,6 +60,8 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 		unidad->setPathfinding(pathFinding);
 	}
 	sombra_edificio = false;
+	
+	user_selvector = new vector<int>();
 }
 
 
@@ -100,13 +101,11 @@ bool mapa2D::free()
     return true;
 }
 
-Unidades* mapa2D::OnEventMapa(const SEvent& event)
+vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		position2di pos_grid = getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
-		int pos_vector = -1;
-
 
 		switch(event.MouseInput.Event)
 		{
@@ -115,55 +114,89 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 				Sel_Pulsado = true;
 				Sel_Inicio = MapaDevice->getCursorControl()->getPosition();
 				Sel_Fin = MapaDevice->getCursorControl()->getPosition();
-				
-				pos_vector = IASelected(pos_grid+CameraScroll);
-				if(pos_vector != -1)
-				{
-					if(ia_selected != -1)
-					{
-						((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
-						ia_selected = -1;
-					}
-					ia_selected = pos_vector;
-					((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,true);
-
-					return (Unidades*)ia_units->at(ia_selected);
-				}
-				else
-				{
-					pos_vector = UserSelected(pos_grid);
-					if(pos_vector != -1)
-					{
-						if(user_selected != -1)
-						{
-							((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
-							user_selected = -1;
-						}
-						
-						user_selected = pos_vector;
-						cout<<"usuario seleccionado: "<<user_selected<<endl;
-						((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,true);
-						return (Unidades*)user_units->at(user_selected);
-					}
-					else
-					{
-						if(user_selected != -1)
-						{
-							((Unidades*)user_units->at(user_selected))->TexturaSeleccionada(driver,false);
-							user_selected = -1;
-						}
-						if(ia_selected != -1)
-						{
-							((battleIA*)ia_units->at(ia_selected))->TexturaSeleccionada(driver,false);
-							ia_selected = -1;
-						}
-					}
-				}
-				break;
+				break;	
 			
 			case EMIE_LMOUSE_LEFT_UP:
 				cout<<"Boton izquierdo, soltado en:"<< MapaDevice->getCursorControl()->getPosition().X/TILE_WIDTH << "," << MapaDevice->getCursorControl()->getPosition().Y/TILE_HEIGHT <<endl;
 				Sel_Pulsado=false;
+				
+				user_selvector = new vector<int>();
+				user_selvector = UserSelected();
+				
+				//deseleccionar a todos
+				for(int i=0; i<user_units->size(); i++)
+				{
+					cout << "Deselecciono users" << endl;
+					((Unidades*)user_units->at(i))->TexturaSeleccionada(driver,false);
+					((Unidades*)user_units->at(i))->SetSelect(false);
+				}
+				
+				if(user_selvector->size() >= 1)
+				{	
+					vector<Unidades*>* usuarios_Seleccionados = new vector<Unidades*>();
+					usuarios_Seleccionados->clear();
+					
+					cout << "CANTIDAD DE SELECCIONADOS:" << user_selvector->size() << endl;
+					for(int i=0; i<user_selvector->size(); i++)
+					{
+						((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,true);
+						((Unidades*)user_units->at(user_selvector->at(i)))->SetSelect(true);
+						usuarios_Seleccionados->push_back((Unidades*)user_units->at(user_selvector->at(i)));
+					}
+										
+					return usuarios_Seleccionados;
+				}
+				else
+				{
+					cout << "IA search" << endl;
+					ia_selvector = new vector<int>();
+					ia_selvector = IASelected();
+					
+					for(int i=0; i<ia_units->size(); i++)
+					{
+						cout << "Deselecciono ia" << endl;
+						((Unidades*)ia_units->at(i))->TexturaSeleccionada(driver,false);
+						((Unidades*)ia_units->at(i))->SetSelect(false);
+					}
+					
+					if(ia_selvector->size() >= 1)
+					{
+						vector<Unidades*>* ia_Seleccionados = new vector<Unidades*>();
+						ia_Seleccionados->clear();
+					
+						cout << "CANTIDAD DE IA SELECCIONADOS:" << ia_selvector->size() << endl;
+						
+						for(int i=0; i<ia_selvector->size(); i++)
+						{
+							((battleIA*)ia_units->at(ia_selvector->at(i)))->TexturaSeleccionada(driver,true);
+							((battleIA*)ia_units->at(ia_selvector->at(i)))->SetSelect(true);
+							ia_Seleccionados->push_back((Unidades*)ia_units->at(ia_selvector->at(i)));
+						}
+										
+						return ia_Seleccionados;
+					}
+					else
+					{
+						if(user_selvector->size() > 1)
+						{
+							for(int i=0; i<user_selvector->size(); i++)
+							{
+								((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								((Unidades*)user_units->at(ia_selvector->at(i)))->SetSelect(false);
+							}
+						}
+						if(ia_selvector->size() > 1)
+						{
+							for(int i=0; i<ia_selvector->size(); i++)
+							{
+								((battleIA*)ia_units->at(ia_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								((battleIA*)ia_units->at(ia_selvector->at(i)))->SetSelect(false);
+							}
+						}
+					}
+				}
+				
+				
 				break;
 				
 			case EMIE_MOUSE_MOVED:
@@ -174,14 +207,16 @@ Unidades* mapa2D::OnEventMapa(const SEvent& event)
 				}
 				break;
 			
-			case EMIE_RMOUSE_PRESSED_DOWN: 
-					if(user_selected != -1)
+			case EMIE_RMOUSE_PRESSED_DOWN:
+					//MIRAR COMO HACER MOVER TODOS
+					if(user_selvector->size() >= 1)
 					{
-						/*pos_grid.X = event.MouseInput.X/TILE_WIDTH;
-						pos_grid.Y = event.MouseInput.Y/TILE_HEIGHT;*/
-						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl; 
-		   				Unidades* unidad = ((Unidades*)user_units->at(user_selected));
-		   				unidad->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl;
+						for(int i=0; i<user_selvector->size(); i++)
+						{
+							Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
+		   					unidad->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+						}
 					}
 					break;
 			default:;
@@ -448,6 +483,11 @@ vector<IDibujable*>* mapa2D::getUser_units(){
 	return user_units;
 }
 
+
+
+vector<IDibujable*>* mapa2D::getBuildings(){
+	return buildings;
+}
 void mapa2D::DrawBuildings()
 {
 	position2di DrawPosition;
@@ -479,7 +519,13 @@ void mapa2D::DrawBuildingShadow()
 		case 4: shadow_texture = driver->getTexture("../media/Texturas/building/spear_build_shadow.png"); break;
 	}
 
-	ITexture* shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+	ITexture* shadow_texture2;
+	//position2di colocar = aux_tile + GetCameraScroll(); colocar.X = colocar.X - 1;
+	if((aux_tile.X != -1 && aux_tile.Y != -1) && puede_colocar(aux_tile + GetCameraScroll()))
+		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+	else
+		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow_incorrect.png");
+
 	for(int i = aux_tile.X; i< aux_tile.X + 4; i++)
 	{
 		for(int j = aux_tile.Y; j< aux_tile.Y + 4; j++)
@@ -557,6 +603,154 @@ int mapa2D::IASelected(position2di coord)
 	return -1;
 }
 
+vector<int>* mapa2D::IASelected()
+{
+	int n_ia = ia_units->size();
+
+	vector<int>* Sel_IA = new vector<int>();
+
+	position2di IsoSel_Inicio = getTileCoordinates(Sel_Inicio.X,Sel_Inicio.Y)+CameraScroll;
+	position2di IsoSel_Fin = getTileCoordinates(Sel_Fin.X,Sel_Fin.Y)+CameraScroll;
+
+	cout << "INICIOISO: " << IsoSel_Inicio.X << "," << IsoSel_Inicio.Y << endl;
+	cout << "FINISO: " << IsoSel_Fin.X << "," << IsoSel_Fin.Y << endl;
+
+	for(int i=0; i<n_ia; i++)
+	{
+		if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y < IsoSel_Fin.Y)
+		{
+			cout << "pos ia1" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;			
+			
+			if( ia_units->at(i)->getPosition().X >= IsoSel_Inicio.X &&
+				ia_units->at(i)->getPosition().Y >= IsoSel_Inicio.Y &&
+				ia_units->at(i)->getPosition().X <= IsoSel_Fin.X &&
+				ia_units->at(i)->getPosition().Y <= IsoSel_Fin.Y)
+			{
+				Sel_IA->push_back(i);
+				cout << "1)Pos IA encontrada:" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X > IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos ia2" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			if( ia_units->at(i)->getPosition().X <= IsoSel_Inicio.X &&
+				ia_units->at(i)->getPosition().Y <= IsoSel_Inicio.Y &&
+				ia_units->at(i)->getPosition().X >= IsoSel_Fin.X &&
+				ia_units->at(i)->getPosition().Y >= IsoSel_Fin.Y)
+			{
+				Sel_IA->push_back(i);
+				cout << "2)Pos IA encontrada:" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos ia3" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			if( ia_units->at(i)->getPosition().X >= IsoSel_Inicio.X &&
+				ia_units->at(i)->getPosition().X <= IsoSel_Fin.X &&
+				ia_units->at(i)->getPosition().Y <= IsoSel_Inicio.Y &&
+				ia_units->at(i)->getPosition().Y >= IsoSel_Fin.Y)
+			{
+				Sel_IA->push_back(i);
+				cout << "3)Pos IA encontrada:" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos ia4" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			if( ia_units->at(i)->getPosition().X <= IsoSel_Inicio.X &&
+				ia_units->at(i)->getPosition().X >= IsoSel_Fin.X &&
+				ia_units->at(i)->getPosition().Y >= IsoSel_Inicio.Y &&
+				ia_units->at(i)->getPosition().Y <= IsoSel_Fin.Y)
+			{
+				Sel_IA->push_back(i);
+				cout << "4)Pos IA encontrada:" << ia_units->at(i)->getPosition().X << "," << ia_units->at(i)->getPosition().Y << endl;
+			}
+		}
+	}
+	
+	return Sel_IA;
+}
+
+
+vector<int>* mapa2D::UserSelected()
+{
+	int n_units = user_units->size();
+
+	vector<int>* Sel_User = new vector<int>();
+
+	position2di IsoSel_Inicio = getTileCoordinates(Sel_Inicio.X,Sel_Inicio.Y)+CameraScroll;
+	position2di IsoSel_Fin = getTileCoordinates(Sel_Fin.X,Sel_Fin.Y)+CameraScroll;
+
+	cout << "INICIOISO: " << IsoSel_Inicio.X << "," << IsoSel_Inicio.Y << endl;
+	cout << "FINISO: " << IsoSel_Fin.X << "," << IsoSel_Fin.Y << endl;
+
+	for(int i=0; i<n_units; i++)
+	{
+		if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y < IsoSel_Fin.Y)
+		{
+			cout << "pos user1 " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
+				
+			if( user_units->at(i)->getPosition().X >= IsoSel_Inicio.X &&
+				user_units->at(i)->getPosition().Y >= IsoSel_Inicio.Y &&
+				user_units->at(i)->getPosition().X <= IsoSel_Fin.X &&
+				user_units->at(i)->getPosition().Y <= IsoSel_Fin.Y)
+			{
+				Sel_User->push_back(i);
+				cout << "1)Pos USER encontrada:" << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X > IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos user2 " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
+			
+			cout << user_units->at(i)->getPosition().X << "<=" << IsoSel_Inicio.X << endl;
+			cout << user_units->at(i)->getPosition().Y << "<=" << IsoSel_Inicio.Y << endl;
+			cout << user_units->at(i)->getPosition().X << ">=" << IsoSel_Fin.X << endl;
+			cout << user_units->at(i)->getPosition().Y << ">=" << IsoSel_Fin.Y << endl;
+			
+			if( user_units->at(i)->getPosition().X <= IsoSel_Inicio.X &&
+				user_units->at(i)->getPosition().Y <= IsoSel_Inicio.Y &&
+				user_units->at(i)->getPosition().X >= IsoSel_Fin.X &&
+				user_units->at(i)->getPosition().Y >= IsoSel_Fin.Y)
+			{
+				Sel_User->push_back(i);
+				cout << "2)Pos USER encontrada:" << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
+			}
+			else
+			{
+				cout << "NOP2" << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos user3 " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
+			if( user_units->at(i)->getPosition().X >= IsoSel_Inicio.X &&
+				user_units->at(i)->getPosition().X <= IsoSel_Fin.X &&
+				user_units->at(i)->getPosition().Y <= IsoSel_Inicio.Y &&
+				user_units->at(i)->getPosition().Y >= IsoSel_Fin.Y)
+			{
+				Sel_User->push_back(i);
+				cout << "3)Pos USER encontrada:" << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
+			}
+		}
+		else if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
+		{
+			cout << "pos user4 " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
+			if( user_units->at(i)->getPosition().X <= IsoSel_Inicio.X &&
+				user_units->at(i)->getPosition().X >= IsoSel_Fin.X &&
+				user_units->at(i)->getPosition().Y >= IsoSel_Inicio.Y &&
+				user_units->at(i)->getPosition().Y <= IsoSel_Fin.Y)
+			{
+				Sel_User->push_back(i);
+				cout << "4)Pos USER encontrada:" << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
+			}
+		}
+	}
+	
+	return Sel_User;
+}
+
+
 int mapa2D::UserSelected(position2di coord)
 {
 	int n_units = user_units->size();
@@ -573,12 +767,15 @@ int mapa2D::UserSelected(position2di coord)
 
 int mapa2D::getIASelected()
 {
-	return ia_selected;
+	if(ia_selvector != NULL)
+		if(ia_selvector->size() >= 1)
+			return ia_selvector->at(0);
+	return -1;
 }
 
-int mapa2D::getUserSelected()
+vector<int>* mapa2D::getUserSelected()
 {
-	return user_selected;
+	return user_selvector;
 }
 Pathfinding* mapa2D::getPathfinding(){
 	return pathFinding;
@@ -594,6 +791,7 @@ position2di mapa2D::twoDToIso(int x, int y)
 	return pos;
 }
 
+//Le doy una coordenada y me dice en que tile esta
 position2di mapa2D::getTileCoordinates(int x, int y)
 {
 	position2di pos;
@@ -641,22 +839,22 @@ int mapa2D::getTipoEdificio()
 
 bool mapa2D::puede_colocar(position2di pos)
 {
+
 	for(int x = pos.X; x < pos.X + 4; x++)
 	{
 		for(int y = pos.Y; y < pos.Y + 4; y++)
 		{
-			cout<<x<<","<<y<<":"<<getTile(y,x)->getTipo()<<endl;
 			if(getTile(y,x)->getTipo() == 1)
 			{
 				return false;
 			}
-
+			
 
 			for(int i=0; i<ia_units->size(); i++)
 			{
 				if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
 				{
-					cout<<x<<","<<y<<":"<<"Hay una unidad IA"<<endl;
+
 					return false;
 				}
 			}
@@ -665,38 +863,32 @@ bool mapa2D::puede_colocar(position2di pos)
 			{
 				if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
 				{
-					cout<<x<<","<<y<<":"<<"Hay una unidad Usuario"<<endl;
 					return false;
 				}
 			}
+		}
+	}
 
-			for(int i=0; i<buildings->size(); i++)
-			{
-				position2di shadow; shadow.X = x; shadow.Y = y;
-				if(collide(buildings->at(i)->getPosition(),shadow))
-				{
-					cout<<x<<","<<y<<":"<<"Hay un edificio"<<endl;
-					return false;
-				}
-			}
-	
+	for(int i=0; i<buildings->size(); i++)
+	{
+		/*cout<<buildings->at(i)->getPosition().X<<","<<buildings->at(i)->getPosition().Y<<":"<<"Edificio"<<endl;
+		cout<<pos.X<<","<<pos.Y<<":"<<"Sombra"<<endl;*/
+		if(collide(buildings->at(i)->getPosition(),4,4,pos,4,4))
+		{
+			//cout<<pos.X<<","<<pos.Y<<":"<<"Hay un edificio"<<endl;
+			return false;
 		}
 	}
 
 	return true;
 }
 
-bool mapa2D::collide(position2di build, position2di shadow)
+bool mapa2D::collide(position2di obj1, int w_obj1, int h_obj1, position2di obj2, int w_obj2, int h_obj2)
 {
-	int left = build.X;
-	int right = build.Y + 4;
-	int top = build.Y + 4;
-	int bottom = build.Y;
-
-	int r_left = shadow.X;
-	int r_right = shadow.X + 4;
-	int r_top = shadow.Y + 4;
-	int r_bottom =  shadow.Y;
-
-	return right >= r_left && left <= r_right && top >= r_bottom && bottom <= r_top;
+    if ( (obj1.X < obj2.X + w_obj2) && (obj2.X < obj1.X + w_obj1) && (obj1.Y < obj2.Y + h_obj2))
+    {
+        return obj2.Y < obj1.Y + h_obj1;
+    }
+     
+    return false;
 }

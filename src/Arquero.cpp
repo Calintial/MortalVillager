@@ -5,6 +5,7 @@ Arquero::Arquero()
 	life = 100;
 	vision_range = 5;
 	attack_range = 2;
+	attack_value = 1;
 }
 
 Arquero::Arquero(int x, int y) : Unidades(x,y)
@@ -12,6 +13,7 @@ Arquero::Arquero(int x, int y) : Unidades(x,y)
 	life = 100;
 	vision_range = 5;
 	attack_range = 2;
+	attack_value = 1;
 }
 
 Arquero::~Arquero()
@@ -19,6 +21,7 @@ Arquero::~Arquero()
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;
+	attack_value = 0;
 }
 
 void Arquero::Attack(position2di pos)
@@ -62,6 +65,16 @@ int Arquero::getVisionRange()
 int Arquero::getAttackRange()
 {
 	return attack_range;
+}
+
+int Arquero::getAttackValue()
+{
+	return attack_value;
+}
+
+int Arquero::getType()
+{
+	return 1;
 }
 
 void Arquero::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
