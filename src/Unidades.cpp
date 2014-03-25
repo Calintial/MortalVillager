@@ -31,7 +31,7 @@ Unidades::~Unidades()
 void Unidades::Move(int x, int y)
 {
 	position2di position = getPosition();
-	state = MOVE;
+	state = MOVE;	
 	/*Moverse a una posicion establecida*/
 	if(x<400 && y<400)
 	{

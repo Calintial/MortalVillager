@@ -200,10 +200,29 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					//MIRAR COMO HACER MOVER TODOS
 					if(user_selvector->size() >= 1)
 					{
+						int j = 0,k=0,l=0;
 						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl;
 						for(int i=0; i<user_selvector->size(); i++)
 						{
-							((Unidades*)user_units->at(user_selvector->at(i)))->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+							((Unidades*)user_units->at(user_selvector->at(i)))->Move(pos_grid.X+CameraScroll.X+j,pos_grid.Y+CameraScroll.Y+k);
+							if(l==0)
+							{
+								j++;
+								
+								l++;
+							}
+							else if(l==1)
+							{
+								j--;
+								k++;
+								
+								l++;
+							}
+							else if(l==2)
+							{
+								j++;
+								l=0;
+							}
 						}
 					}
 					break;
