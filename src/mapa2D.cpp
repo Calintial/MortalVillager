@@ -120,6 +120,12 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					((Unidades*)user_units->at(i))->TexturaSeleccionada(driver,false);
 					((Unidades*)user_units->at(i))->SetSelect(false);
 				}
+				for(int i=0; i<ia_units->size(); i++)
+				{
+					cout << "Deselecciono ia" << endl;
+					((Unidades*)ia_units->at(i))->TexturaSeleccionada(driver,false);
+					((Unidades*)ia_units->at(i))->SetSelect(false);
+				}
 				
 				if(user_selvector->size() >= 1)
 				{	
@@ -141,13 +147,6 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					cout << "IA search" << endl;
 					ia_selvector = new vector<int>();
 					ia_selvector = IASelected();
-					
-					for(int i=0; i<ia_units->size(); i++)
-					{
-						cout << "Deselecciono ia" << endl;
-						((Unidades*)ia_units->at(i))->TexturaSeleccionada(driver,false);
-						((Unidades*)ia_units->at(i))->SetSelect(false);
-					}
 					
 					if(ia_selvector->size() >= 1)
 					{
