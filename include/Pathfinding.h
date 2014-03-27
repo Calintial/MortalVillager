@@ -39,7 +39,9 @@ private:
 
 	void analyzeRegions();
 	void analyzeRegions(Region*);
-	
+	void analyzeRegionsReverse(Region*);
+	void analyzeRegionsFully(Region*);
+	void crearEnlace(position2di,position2di,Region*,Region*);
 
 	void findInnerPaths();
 	void findInnerPaths(Region*);
