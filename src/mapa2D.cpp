@@ -893,3 +893,36 @@ bool mapa2D::collide(position2di obj1, int w_obj1, int h_obj1, position2di obj2,
      
     return false;
 }
+
+void mapa2D::colocarEdificio(position2di pos_colocar){
+	IDibujable* edificio = NULL;
+	switch(getTipoEdificio())
+	{
+		case 0: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0);
+			break;
+		case 1: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1);
+			break;
+		case 2: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2);
+			break;
+		case 3: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3);
+			break;
+		case 4: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4);
+			break;
+	}
+	if(edificio){
+		edificio->aplicarTextura(driver);
+		// vinculamos el edificio a todo el suelo que ocupa
+		ITexture* tex = edificio->getTextura();
+		int i,j;
+		for (i = 0; i < tex->getSize().Width/TILE_WIDTH; ++i)
+		{
+			for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j){
+
+				getTile(pos_colocar.Y + j,pos_colocar.X + i)->setVinculado(edificio);
+			}
+		}
+		position2di down_right(pos_colocar.X + i,pos_colocar.Y + j);
+		pathFinding->actualizarRegiones(pos_colocar,down_right);
+
+	}
+}

@@ -28,6 +28,7 @@ public:
 
 	void preprocesar();
 	void clear();
+	void actualizarRegiones(position2di up_left,position2di down_right);
 	Camino* calcularCamino(position2di,position2di);
 	std::vector<std::vector<Region*>> getRegiones(){return regiones;}
 	std::vector<position2di> getEnlaces();
@@ -35,8 +36,14 @@ public:
 
 private:
 	void createRegions();
+
 	void analyzeRegions();
+	void analyzeRegions(Region*);
+	
+
 	void findInnerPaths();
+	void findInnerPaths(Region*);
+
 	Camino* Aestrella(Nodo*,position2di);
 	Camino* ALocal(position2di,position2di,Region*);
 	Camino* ARegiones(position2di,position2di,Region*,Region*,std::vector<Camino>,std::vector<Camino>);

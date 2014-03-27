@@ -60,3 +60,8 @@ Camino* NodoRegional::getCaminoDesdePadre(){
 		return NULL;
 	}
 }
+
+void NodoRegional::clear(){
+	boost::clear_vertex_by_label(toString(),*grafo);
+	boost::remove_vertex(toString(),*grafo);
+}

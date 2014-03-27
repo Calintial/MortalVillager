@@ -100,6 +100,7 @@ public:
 	position2di getSombraCoords();
 	bool puede_colocar(position2di pos);
 	bool collide(position2di,int,int,position2di,int,int);
+	void colocarEdificio(position2di);
 
 
 private:

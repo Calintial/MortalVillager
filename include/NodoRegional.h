@@ -20,6 +20,7 @@ public:
 	vertex_t getVertexDescriptor();
 	std::vector<Nodo*> getHijos(position2di);
 	Camino* getCaminoDesdePadre();
+	void clear();
 
 private:
     vertex_t descriptor;

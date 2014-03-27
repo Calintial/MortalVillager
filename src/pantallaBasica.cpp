@@ -53,32 +53,7 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 					mapa->setSombra(false);
 					
 					cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
-					IDibujable* edificio = NULL;
-					switch(mapa->getTipoEdificio())
-					{
-						case 0: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0);
-							break;
-						case 1: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1);
-							break;
-						case 2: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2);
-							break;
-						case 3: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3);
-							break;
-						case 4: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4);
-							break;
-					}
-					if(edificio){
-						
-						edificio->aplicarTextura(pantallaDevice->getVideoDriver());
-						// vinculamos el edificio a todo el suelo que ocupa
-						ITexture* tex = edificio->getTextura();
-						for (int i = 0; i < tex->getSize().Width/TILE_WIDTH; ++i)
-						{
-							for (int j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j){
-								mapa->getTile(pos_colocar.Y + j,pos_colocar.X + i)->setVinculado(edificio);
-							}
-						}
-					}
+					mapa->colocarEdificio(pos_colocar);
 					
 					hudmapa->selectButton(-1);
 					cout<<"colocar"<<endl;					
