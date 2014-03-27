@@ -21,7 +21,7 @@ void Suelo::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 }
 
 bool Suelo::isTransitable(){
-	return true;
+	return true && (vinculado == NULL || vinculado->isTransitable());
 }
 
 void Suelo::aplicarTextura(IVideoDriver* driver)

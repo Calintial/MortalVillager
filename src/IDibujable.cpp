@@ -1,6 +1,7 @@
 #include "IDibujable.h"
 IDibujable::IDibujable(){
 	pathfinding = NULL;
+	vinculado = NULL;
 }
 IDibujable::~IDibujable() {
 	delete textura;
