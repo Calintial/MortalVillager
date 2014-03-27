@@ -21,10 +21,14 @@ class IDibujable{
 		int getTipo();
 		void setTipo(int t);
 		virtual bool isTransitable();
+		void setVinculado(IDibujable*);
+		IDibujable* getVinculado();
 				
 	private:
 		ITexture* textura;
 		int tipo;
 		position2di position;
+	protected:
+		IDibujable* vinculado;
 };
 #endif
