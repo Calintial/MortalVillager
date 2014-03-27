@@ -3,16 +3,34 @@
 //-----------------------------------constructor-------------------------
 //
 //-----------------------------------------------------------------------
-CUnidadesAprendizaje::CUnidadesAprendizaje():
+CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]):
 							 m_life(1),
                              m_dFitness(0),
-                             m_move(0)
+                             m_move(0),
+                             m_ataque(0)
+
 			 
 {
-	//create a random start position
-	m_vPosition = SVector2D((RandFloat() * CParams::WindowWidth), 
-					                (RandFloat() * CParams::WindowHeight));
-  
+	setTipo(3);
+	
+	bool unidadNoPuesta=true;
+	do{
+		int RandFloatX=RandFloat() * MAPSIZE ;
+		int RandFloatY=RandFloat() * MAPSIZE ;
+		if(Matriz[RandFloatX][RandFloatY]!=NULL){
+			if(Matriz[RandFloatX][RandFloatY]->getTipo()!=3){
+				unidadNoPuesta=true;
+				m_vPosition = SVector2D(RandFloatX, RandFloatX);  				
+			}
+		}
+		else{
+			m_vPosition = SVector2D(RandFloatX, RandFloatX); 
+			unidadNoPuesta=true;
+		}
+		
+	}
+	while(unidadNoPuesta);
+	
 }
 
 //-------------------------------------------Reset()--------------------
@@ -31,7 +49,8 @@ void CUnidadesAprendizaje::Reset()
 
 	m_life = 1;
 	m_move = 0;
-
+	m_ataque = 0;
+	m_vObjetosCerca.clear();
 	return;
 }
 
@@ -49,9 +68,9 @@ void CUnidadesAprendizaje::Reset()
 //	and acceleration and apply to current velocity vector.
 //
 //-----------------------------------------------------------------------
-bool CUnidadesAprendizaje::Update(vector<SVector2D> &mines)
+bool CUnidadesAprendizaje::Update(vector<ObjetosCerca> m_vObjetosCerca)
 {
-	
+/*	
 	//this will store all the inputs for the NN
 	vector<double> inputs;	
 
@@ -106,9 +125,9 @@ bool CUnidadesAprendizaje::Update(vector<SVector2D> &mines)
 	if (m_vPosition.x < 0) m_vPosition.x = CParams::WindowWidth;
 	if (m_vPosition.y > CParams::WindowHeight) m_vPosition.y = 0;
 	if (m_vPosition.y < 0) m_vPosition.y = CParams::WindowHeight;
-
+*/
 	return true;
+
 }
 
-
-		
+	

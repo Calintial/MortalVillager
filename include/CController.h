@@ -14,18 +14,18 @@
 #include <sstream>
 #include <string>
 #include <fstream>
-#include "CMinesweeper.h"
+#include "CUnidadesAprendizaje.h"
 #include "CGenAlg.h"
 #include "utils.h"
-#include "C2DMatrix.h"
 #include "SVector2D.h"
 #include "CParams.h"
-
+#include "IDibujable.h"
+#include "muro.h"
 using namespace std;
 
 
 
-class CController
+class CController 
 {
 
 private:
@@ -34,7 +34,7 @@ private:
 	vector<SGenome>	     m_vecThePopulation;
 
 	//and the minesweepers
-  vector<CMinesweeper> m_NumUnidades;
+  vector<CUnidadesAprendizaje*> m_vecUnidades;
 
 
 	//pointer to the GA
@@ -58,15 +58,15 @@ private:
 
 	//generation counter
 	int					m_iGenerations;
-
-
+	//0 transitable y 1 no transitable
+	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
 
 public:
 
 	CController();
 
 	~CController();
-	
+	CUnidadesAprendizaje* getUnidadPosicion(SVector2D pos);
 	bool		Update();
 
 

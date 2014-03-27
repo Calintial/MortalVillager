@@ -18,7 +18,7 @@ double CParams::dBias               = 0;
 double CParams::dMaxTurnRate        = 0;
 double CParams::dMaxSpeed           = 0;
 int CParams::iSweeperScale          = 0;
-int CParams::iNumSweepers           = 0;
+int CParams::iNumUnidades           = 0;
 int CParams::iNumMines              = 0;
 int CParams::iNumTicks              = 0;
 double CParams::dMineScale          = 0;
@@ -66,7 +66,7 @@ bool CParams::LoadInParameters(char* szFileName)
   grab >> ParamDescription;
   grab >> iNumMines;
   grab >> ParamDescription;
-  grab >> iNumSweepers;
+  grab >> iNumUnidades;
   grab >> ParamDescription;
   grab >> iNumTicks;
   grab >> ParamDescription;

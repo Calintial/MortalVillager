@@ -11,15 +11,28 @@ CController::CController(): m_NumUnidades(CParams::iNumUnidades),
 										                     m_iTicks(0),
 										                     m_iGenerations(0)
 {
-	//let's create the mine sweepers
+	for (int i=0;i<MAPSIZE;i++){
+		for(int j=0;j<MAPSIZE;j++){
+			//0 transitable 1 no transitable
+			Matriz[i][j]=NULL;
+		}
+	}
+	for(int i=0;i<30;i++){
+		int RandIntX=RandInt(1,MAPSIZE-1);
+		int RandIntY=RandInt(1,MAPSIZE-1);
+		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntX,RandIntY);
+	}
+	//creamos las unidades 
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		m_vecUnidades.push_back(CUnidadesAprendizaje());
+		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz);
+		Matriz[unidad->Position().x][unidad->Position().x]=unidad;
+		m_vecUnidades.push_back(new CUnidadesAprendizaje(Matriz));
 	}
 
 	//get the total number of weights used in the sweepers
 	//NN so we can initialise the GA
-	m_NumWeightsInNN = m_vecUnidades[0].GetNumberOfWeights();
+	m_NumWeightsInNN = m_vecUnidades[0]->GetNumberOfWeights();
 
 	//initialize the Genetic Algorithm class
 	m_pGA = new CGenAlg(m_NumUnidades,
@@ -32,10 +45,10 @@ CController::CController(): m_NumUnidades(CParams::iNumUnidades),
 
 	for (int i=0; i<m_NumUnidades; i++)
 	
-		m_vecUnidades[i].PutWeights(m_vecThePopulation[i].vecWeights);
+		m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
 
 	//initialize mines in random positions within the application window
-
+	
 
 }
 
@@ -72,25 +85,24 @@ bool CController::Update()
 		for (int i=0; i<m_NumUnidades; ++i)
 		{
 			//update the NN and position
-			if (!m_vecUnidades[i].Update())
+			if (!m_vecUnidades[i]->Update(m_vecUnidades[i]->getVectorObjetos()))
 			{
 				//error in processing the neural net
 				cout<<"Wrong amount of NN inputs!"<<endl;
 				return false;
 			}
 				
-			//see if it's found a mine
-      //int GrabHit = m_vecUnidades[i].CheckForMine(m_vecMines,
-                                                  CParams::dMineScale);
-	//TODO: amirar si esta para atacar y ver si le ha quitado vida
-			if (GrabHit >= 0)
-      {
-        //we have discovered a mine so increase fitness
-        m_vecUnidades[i].IncrementFitness();
-      }
+				
+			if(m_vecUnidades[i]->m_ataque==1){
+		        //we have discovered a mine so increase fitness
+		        m_vecUnidades[i]->IncrementFitness();
+			}
+
+
+      
 
 			//update the chromos fitness score
-			m_vecThePopulation[i].dFitness = m_vecUnidades[i].Fitness();
+			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
 
 		}
 	}
@@ -117,11 +129,17 @@ bool CController::Update()
     //and reset their positions etc
     for (int i=0; i<m_NumUnidades; ++i)
 		{
-			m_vecUnidades[i].PutWeights(m_vecThePopulation[i].vecWeights);
+			m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
 		
-			m_vecUnidades[i].Reset();
+			m_vecUnidades[i]->Reset();
 		}
 	}
 
 	return true;
 }
+//Devuelve la unidad que hay en esa posición 
+CUnidadesAprendizaje* CController::getUnidadPosicion(SVector2D pos){
+	
+	return (CUnidadesAprendizaje*) Matriz[pos.x][pos.y];
+
+};	

@@ -12,17 +12,23 @@
 //------------------------------------------------------------------------
 #include <vector>
 #include <math.h>
-
 #include "CNeuralNet.h"
 #include "utils.h"
-#include "C2DMatrix.h"
 #include "SVector2D.h"
 #include "CParams.h"
+#include "IDibujable.h"
 
 using namespace std;
 
+struct ObjetosCerca{
+	//0:Aldeano, 1:Arquero,2:Espadachin,3:Lancero,4:Obstaculo
+	int tipo;
 
-class CUnidadesAprendizaje.h
+	double vida;
+
+	SVector2D posicion;
+};
+class CUnidadesAprendizaje :  public IDibujable
 {
 
 private:
@@ -41,17 +47,20 @@ private:
 
 	int 			m_move;
 
+	int 			m_ataque;
+	vector<ObjetosCerca> m_vObjetosCerca;
+
 public:
 
 
-	CUnidadesAprendizaje();
+	CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]);
 	
 	//updates the ANN with information from the sweepers enviroment
-	bool			Update(vector<SVector2D> &mines);
+	bool			Update(vector<ObjetosCerca> m_vObjetosCerca);
 
 
 	void			Reset();
-  
+  	vector<ObjetosCerca> getVectorObjetos(){return m_vObjetosCerca;};
 
 	//-------------------accessor functions
 	SVector2D	Position()const{return m_vPosition;}
@@ -63,6 +72,10 @@ public:
   void      PutWeights(vector<double> &w){m_ItsBrain.PutWeights(w);}
 
   int       GetNumberOfWeights()const{return m_ItsBrain.GetNumberOfWeights();}
+  void Pintar(IVideoDriver*,int,int){}
+  void aplicarTextura(IVideoDriver* driver){}
+  bool isTransitable(){}
+
 };
 
 

@@ -1,5 +1,6 @@
 #ifndef CPARAMS_H
 #define CPARAMS_H
+#define MAPSIZE 200
 //------------------------------------------------------------------------
 //
 //	Name: CParams.h
@@ -57,7 +58,7 @@ public:
 
 
   //--------------------------------------controller parameters
-  static int    iNumSweepers;
+  static int    iNumUnidades;
 
   static int    iNumMines;
 
@@ -81,7 +82,7 @@ public:
   //ctor
   CParams()
   {
-    if(!LoadInParameters("params.ini"))
+    if(!LoadInParameters("../params.ini"))
     {
       //cout<<"Cannot find ini file!"<<endl;
     }
