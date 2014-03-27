@@ -24,6 +24,8 @@ class IDibujable{
 		void setTipo(int t);
 		virtual bool isTransitable();
 		void setPathfinding(Pathfinding*);
+		void setVinculado(IDibujable*);
+		IDibujable* getVinculado();
 				
 	private:
 		ITexture* textura;
@@ -31,5 +33,6 @@ class IDibujable{
 		position2di position;
 	protected:
 		Pathfinding* pathfinding;
+		IDibujable* vinculado;
 };
 #endif
