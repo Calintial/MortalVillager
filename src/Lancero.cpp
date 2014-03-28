@@ -6,6 +6,7 @@ Lancero::Lancero()
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
+	attack_value = 1;
 }
 
 Lancero::Lancero(int x, int y) : Unidades(x,y)
@@ -14,6 +15,7 @@ Lancero::Lancero(int x, int y) : Unidades(x,y)
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
+	attack_value = 1;
 }
 
 Lancero::~Lancero()
@@ -22,6 +24,7 @@ Lancero::~Lancero()
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;
+	attack_value = 0;
 }
 
 void Lancero::Attack(position2di pos)
@@ -65,6 +68,16 @@ int Lancero::getVisionRange()
 int Lancero::getAttackRange()
 {
 	return attack_range;
+}
+
+int Lancero::getAttackValue()
+{
+	return attack_value;
+}
+
+int Lancero::getType()
+{
+	return 3;
 }
 
 void Lancero::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)

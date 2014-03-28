@@ -6,6 +6,7 @@ AldeanoIA::AldeanoIA()
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
+	attack_value = 1;
 }
 
 AldeanoIA::AldeanoIA(int x, int y) : battleIA(x,y)
@@ -14,6 +15,7 @@ AldeanoIA::AldeanoIA(int x, int y) : battleIA(x,y)
 	life = 100;
 	vision_range = 3;
 	attack_range = 1;
+	attack_value = 1;
 }
 
 AldeanoIA::~AldeanoIA()
@@ -22,6 +24,7 @@ AldeanoIA::~AldeanoIA()
 	life = 0;
 	vision_range = 0;
 	attack_range = 0;
+	attack_value = 0;
 }
 
 void AldeanoIA::Attack(position2di pos)
@@ -65,6 +68,16 @@ int AldeanoIA::getVisionRange()
 int AldeanoIA::getAttackRange()
 {
 	return attack_range;
+}
+
+int AldeanoIA::getAttackValue()
+{
+	return attack_value;
+}
+
+int AldeanoIA::getType()
+{
+	return 0;
 }
 
 void AldeanoIA::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)

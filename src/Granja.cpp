@@ -22,7 +22,7 @@ void Granja::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 
 void Granja::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/building/edificio.png"));
+	setTextura(driver->getTexture("../media/Texturas/building/farm.png"));
 }
 
 bool Granja::isTransitable()

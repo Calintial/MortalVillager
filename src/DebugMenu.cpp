@@ -58,6 +58,10 @@ void DebugMenu::initDebugMenu()
 	combo_unidades->addItem(L"Lancero");
 	combo_unidades->addItem(L"Arquero");
 
+	/*Botón para añadir edificios*/
+	env->addButton(rect<s32>(1050,dimensionPantallaY+65,1150,dimensionPantallaY+85), 0, BUTTON_ADD_BUILDING,
+        L"Añadir Edificio", L"Añadir un edificio");
+
 	/*Cargar texturas imagenes*/
 	state_search = driver->getTexture("../media/Imagenes/Debug/MEF/Search.png");
 	state_approach = driver->getTexture("../media/Imagenes/Debug/MEF/Approach.png");
@@ -75,9 +79,13 @@ void DebugMenu::Draw()
 			font->draw(L"Velocidad del juego",
             core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
+			DrawVisions();
+
+			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,driver->getScreenSize().Width,driver->getScreenSize().Height));
+			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,driver->getScreenSize().Width,driver->getScreenSize().Height));
+
 			DrawParameters();
 			DrawMEF();
-			DrawVisions();
 
 			env->drawAll();
 		}
@@ -270,9 +278,15 @@ void DebugMenu::DrawVisions()
 	int n_ia = vUnits->size();	
 	for(int i=0; i<n_ia; i++)
 	{
-		position2di pos = vUnits->at(i)->getPosition();
+		position2di pos = vUnits->at(i)->getPosition() - mapa->GetCameraScroll();
 		int v_range = ((Unidades*)vUnits->at(i))->getVisionRange();
 		int a_range = ((Unidades*)vUnits->at(i))->getAttackRange();
+
+		position2di limits;
+		limits.X = WIDTH;
+		limits.Y = HEIGHT;
+		limits = limits - mapa->GetCameraScroll();
+
 		/*Pintar vision de la unidad*/
 		if(drawVision)
 		{
@@ -280,10 +294,10 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - v_range; y <= pos.Y + v_range; y++)
 				{
-					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
+					if((x>= 0 && x < limits.X) && (y>= 0 && y < limits.Y))
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_distance.png");
-						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+						DrawPosition = mapa2D::getIsoFromTile(x,y);
 						mapa->PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);					
 					}
 
@@ -298,10 +312,10 @@ void DebugMenu::DrawVisions()
 			{
 				for(int y = pos.Y - a_range; y <= pos.Y + a_range; y++)
 				{
-					if(x < mapa->ViewSize.Width && y < mapa->ViewSize.Height)
+					if((x>= 0 && x < limits.X) && (y>= 0 && y < limits.Y))
 					{
 						ITexture* vision_texture = driver->getTexture("../media/Texturas/units/vision_attack.png");
-						DrawPosition = position2di(x*TILE_WIDTH,y*TILE_HEIGHT);
+						DrawPosition = mapa2D::getIsoFromTile(x,y);
 						mapa->PintarTile(vision_texture, DrawPosition.X, DrawPosition.Y);						
 					}
 
@@ -313,11 +327,8 @@ void DebugMenu::DrawVisions()
 
 bool DebugMenu::OnEvent(const SEvent& event)
 {
-	if (event.EventType == EET_MOUSE_INPUT_EVENT)
-	{
-		mapa->OnEventMapa(event);
-	}
-	else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
+
+	if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
 		switch(id)
@@ -345,18 +356,59 @@ bool DebugMenu::OnEvent(const SEvent& event)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
 
-		IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
-		IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
-
-		IGUIComboBox* combo_unidades = (IGUIComboBox*) env->getRootGUIElement()->getElementFromId(COMBO_UNIDADES);
-		int tipo_unidad = combo_unidades->getSelected();
-
-		switch(id)
+		if(id == BUTTON_ADD_IA || id == BUTTON_ADD_UNIT)
 		{
-			case BUTTON_ADD_IA: (gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
-								break;
-			case BUTTON_ADD_UNIT: (gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
-								  break;
+			IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
+			IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
+
+			IGUIComboBox* combo_unidades = (IGUIComboBox*) env->getRootGUIElement()->getElementFromId(COMBO_UNIDADES);
+			int tipo_unidad = combo_unidades->getSelected();
+
+			if(id == BUTTON_ADD_IA)
+			{
+				(gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
+			}
+			else
+			{
+				(gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
+			}
+		}
+		else if(id == BUTTON_ADD_BUILDING)
+		{
+			cout<<"sombra"<<endl;
+			mapa->setSombra(true);
+		}
+	}
+	else if (event.EventType == EET_MOUSE_INPUT_EVENT)
+	{
+		if(mapa->getSombra())
+		{
+			if(event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
+			{
+				mapa->setSombra(false);
+				position2di pos_colocar = mapa->getSombraCoords();
+				pos_colocar = mapa->getTileCoordinates(pos_colocar.X,pos_colocar.Y);
+				cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
+
+				(gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0)->aplicarTextura(driver));
+				cout<<"colocar"<<endl;
+			}
+			else if(event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN)
+			{
+				mapa->setSombra(false);
+				cout<<"no colocar"<<endl;
+			}
+			else
+			{
+				position2di mouse_coords;
+				mouse_coords.X = event.MouseInput.X;
+				mouse_coords.Y = event.MouseInput.Y;
+				mapa->setSombraCoords(mouse_coords);
+			}
+		}
+		else
+		{
+			mapa->OnEventMapa(event);			
 		}
 	}
 	return false;

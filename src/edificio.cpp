@@ -16,3 +16,7 @@ edificio::edificio(int t,int x,int y)
 edificio::~edificio()
 {
 }
+
+bool edificio::isTransitable(){
+	return false;
+}

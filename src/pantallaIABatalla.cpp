@@ -1,10 +1,10 @@
 #include "pantallaIABatalla.h"
 
 
-PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):Pantalla(IrrDevice,_grEngine,_mapa){
+PantallaIABatalla::PantallaIABatalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	debug = NULL;
-
-	pantallaDevice->setEventReceiver(this); 
+	pantallaDevice->setEventReceiver(this);
+	setTipo(tipo);
 }
 PantallaIABatalla::~PantallaIABatalla(){
 
@@ -39,6 +39,7 @@ void PantallaIABatalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDib
 bool PantallaIABatalla::OnEvent(const SEvent& event){
 	if(event.EventType == EET_KEY_INPUT_EVENT)
 	{
+		cout<<"ok"<<endl;
 		return Pantalla::OnEvent(event);
 	}else{
 		if(debug != NULL)

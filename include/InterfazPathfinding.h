@@ -24,7 +24,9 @@ enum{
 	CB_CAMINOS_INTERNOS = 2,
 	CB_CAMINO_FINAL = 3,
 	BUTTON_NEXT = 4,
-	BUTTON_CLEAR = 5
+	BUTTON_CLEAR = 5,
+	BUTTON_SAVE = 6,
+	BUTTON_MODIFY = 7
 };
 
 enum Estado{
@@ -45,6 +47,10 @@ private:
 
 	bool drawRegiones, drawEnlaces, drawCaminosInternos, drawCaminoFinal;
 	Estado estado;
+
+	ITexture *enlaces_textura;
+	ITexture *caminos_internos_textura;
+	ITexture *caminos_textura;
 public:
 	InterfazPathfinding(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D>);
 	~InterfazPathfinding();
@@ -55,6 +61,8 @@ public:
 	void DrawCaminoFinal();
 	void init();
 	bool OnEvent(const SEvent& event);
+	void DrawIsometricRectangle(position2di ini, position2di fin,video::SColor color);
+	void DrawIsometricRectangleFilled(position2di ini, position2di fin,ITexture * textura);
 	position2di origen,destino;
 };
 

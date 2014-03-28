@@ -23,8 +23,10 @@ graphicEngine::graphicEngine()
     (gameEngine::addIAUnit(0,0,0))->aplicarTextura(IrrDevice->getVideoDriver());
     (gameEngine::addIAUnit(10,10,0))->aplicarTextura(IrrDevice->getVideoDriver());
     (gameEngine::addUserUnit(24,12,0))->aplicarTextura(IrrDevice->getVideoDriver());
-    (gameEngine::addBuildings(15,15,0))->aplicarTextura(IrrDevice->getVideoDriver());
-    (gameEngine::addBuildings(15,16,1))->aplicarTextura(IrrDevice->getVideoDriver());
+    (gameEngine::addUserUnit(30,15,0))->aplicarTextura(IrrDevice->getVideoDriver());
+    (gameEngine::addUserUnit(40,20,0))->aplicarTextura(IrrDevice->getVideoDriver());
+    (gameEngine::addUserUnit(34,17,0))->aplicarTextura(IrrDevice->getVideoDriver());
+    (gameEngine::addBuildings(16,3,0))->aplicarTextura(IrrDevice->getVideoDriver());
 
     //menu = new mainMenu(IrrDevice);
     //mapa = new mapa2D(IrrDevice);
@@ -63,7 +65,7 @@ void graphicEngine::DrawPausa()
 void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units, vector<IDibujable*>* buildings)
 {
 	if(pantalla == NULL){
-		pantalla= new PantallaBasica(IrrDevice,this, NULL);
+		pantalla= new PantallaBasica(IrrDevice,this, NULL,0);
 	}
 	pantalla->pintarPantalla(ia_units,user_units,buildings);
 	pause = NULL;
