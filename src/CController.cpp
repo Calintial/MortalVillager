@@ -17,22 +17,28 @@ CController::CController(): m_NumUnidades(CParams::iNumUnidades),
 			Matriz[i][j]=NULL;
 		}
 	}
+
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
 		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntX,RandIntY);
 	}
+
 	//creamos las unidades 
+	cout<<m_NumUnidades<<endl;
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
+		cout<<i<<endl;
 		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz);
 		Matriz[unidad->Position().x][unidad->Position().x]=unidad;
 		m_vecUnidades.push_back(new CUnidadesAprendizaje(Matriz));
 	}
+
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
 		m_vecUnidades[i]->calcular8Objetos(Matriz);
 	}
+
 	//get the total number of weights used in the sweepers
 	//NN so we can initialise the GA
 	m_NumWeightsInNN = m_vecUnidades[0]->GetNumberOfWeights();
@@ -76,8 +82,9 @@ CController::~CController()
 //
 //	The comments should explain what is going on adequately.
 //-------------------------------------------------------------------------
-bool CController::Update()
+bool CController::Update(IrrlichtDevice* device)
 {
+	cout<<"Update"<<endl;
 	//run the sweepers through CParams::iNumTicks amount of cycles. During
   //this loop each sweepers NN is constantly updated with the appropriate
   //information from its surroundings. The output from the NN is obtained
@@ -138,6 +145,8 @@ bool CController::Update()
 		}
 	}
 
+	Pintar(device);
+
 	return true;
 }
 //Devuelve la unidad que hay en esa posición 
@@ -146,3 +155,40 @@ CUnidadesAprendizaje* CController::getUnidadPosicion(SVector2D pos){
 	return (CUnidadesAprendizaje*) Matriz[pos.x][pos.y];
 
 };	
+
+void CController::Pintar(IrrlichtDevice* device)
+{
+	cout<<"pintar"<<endl;
+	video::IVideoDriver* driver = device->getVideoDriver();
+	if (device->run())
+    {        
+        if(driver)
+        {
+			/*position2di GridPosition, DrawPosition;
+			
+						
+		    for(int i = 0; i < MAPSIZE; i++)
+		    {
+				for(int j = 0; j < MAPSIZE; j++)
+				{
+					// Obtenermos coordenadas actuales cuadricula
+		            DrawPosition = position2di(i*TILE_W, j * TILE_H);
+					//DrawPosition = getIsoFromTile(i - CameraScroll.X, j - CameraScroll.Y);
+					// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
+					// Validar coordenada
+						IDibujable *Tile = Matriz[i][j];
+						//Pinta
+						if(Tile->getTextura())
+							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
+				}
+			}*/
+
+			device->getGUIEnvironment()->drawAll();
+			    	
+        }
+    }
+    else
+    {
+    	gameEngine::stado.finish();
+    }
+}

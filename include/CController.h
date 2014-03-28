@@ -21,9 +21,11 @@
 #include "CParams.h"
 #include "IDibujable.h"
 #include "muro.h"
+#include "gameEngine.h"
 using namespace std;
 
-
+const int TILE_W	= 32;
+const int TILE_H = 32;
 
 class CController 
 {
@@ -67,9 +69,9 @@ public:
 
 	~CController();
 	CUnidadesAprendizaje* getUnidadPosicion(SVector2D pos);
-	bool		Update();
+	bool		Update(IrrlichtDevice* device);
 
-
+	void Pintar(IrrlichtDevice* device);
 };
 
 

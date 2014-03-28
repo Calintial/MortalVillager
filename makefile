@@ -7,8 +7,8 @@ LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 OBJECTS=battleIA.o graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMenu.o Unidades.o suelo.o mapa2D.o IDibujable.o hud.o pausa.o state.o muro.o stateIA.o Region.o Camino.o Pathfinding.o Nodo.o NodoLocal.o NodoRegional.o pantallaBasica.o
 OBJECTS_CLASES=Arquero.o Lancero.o Aldeano.o Espadachin.o ArqueroIA.o LanceroIA.o AldeanoIA.o EspadachinIA.o
 OBJECTS_EDIFICIOS=CentroCiudad.o Lanceria.o Arqueria.o Cuartel.o Granja.o
-OBJECTS_MAIN=pantalla.o pantallaPathfinding.o InterfazPathfinding.o pantallaIABatalla.o DebugMenu.o $(OBJECTS) $(OBJECTS_CLASES) $(OBJECTS_EDIFICIOS)
-OBJECTS_APRENDIZAJE= CController.o CGenAlg.o CUnidadesAprendizaje.o CNeuralNet.o CParams.o utils.o ObjetosCercanos.o $(OBJECTS_MAIN)
+OBJECTS_MAIN=pantalla.o pantallaPathfinding.o InterfazPathfinding.o pantallaIABatalla.o pantallaAprendizaje.o DebugMenu.o $(OBJECTS) $(OBJECTS_CLASES) $(OBJECTS_EDIFICIOS) $(OBJECTS_APRENDIZAJE)
+OBJECTS_APRENDIZAJE= CController.o CGenAlg.o CUnidadesAprendizaje.o CNeuralNet.o CParams.o utils.o ObjetosCercanos.o
 
 .PHONY: all clean
 

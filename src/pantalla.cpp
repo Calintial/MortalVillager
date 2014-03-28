@@ -12,6 +12,7 @@
 #include "pantallaBasica.h"
 #include "pantallaPathfinding.h"
 #include "pantallaIABatalla.h"
+#include "pantallaAprendizaje.h"
 #include "gameEngine.h"
 
 Pantalla::Pantalla(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa):grEngine(_grEngine),mapa(_mapa){
@@ -55,6 +56,13 @@ bool Pantalla::OnEvent(const SEvent& event){
     		cout<<"F4 presionado -> pantallaIABatalla"<<endl;
     		setTipo(2);
     		grEngine->setPantalla(new PantallaIABatalla(pantallaDevice,grEngine,mapa,2));
+    		return true;
+    	}
+    	else if (event.KeyInput.Key == irr::KEY_F5 && event.KeyInput.PressedDown)
+    	{
+    		cout<<"F5 presionado -> pantallaAprendizaje"<<endl;
+    		setTipo(3);
+    		grEngine->setPantalla(new PantallaAprendizaje(pantallaDevice,grEngine,mapa,3));
     		return true;
     	}
     	
