@@ -49,9 +49,20 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
 	ia_selected = -1;
 	pathFinding=new Pathfinding(shared_ptr<mapa2D>(this));
+	// Esto es bastante sucio, pero bueno...
+	for(IDibujable* unidad: *IAunits){
+		unidad->setPathfinding(pathFinding);
+	}
+	for(IDibujable* unidad: *Userunits){
+		unidad->setPathfinding(pathFinding);
+	}
+	for(IDibujable* unidad: *b){
+		unidad->setPathfinding(pathFinding);
+	}
 	sombra_edificio = false;
 	
 	user_selvector = new vector<int>();
+	pathFinding->preprocesar();
 }
 
 
@@ -203,7 +214,8 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl;
 						for(int i=0; i<user_selvector->size(); i++)
 						{
-							((Unidades*)user_units->at(user_selvector->at(i)))->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+							Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
+		   					unidad->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
 						}
 					}
 					break;
@@ -485,7 +497,7 @@ void mapa2D::DrawBuildings()
 	{
 		DrawPosition = getDrawPosition(buildings->at(i)->getPosition());
 		DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
-		buildings->at(i)->Pintar(driver,DrawPosition.X, DrawPosition.Y);
+		buildings->at(i)->Pintar(driver,DrawPosition.X  - 25, DrawPosition.Y);
 	}
 }
 
@@ -514,9 +526,9 @@ void mapa2D::DrawBuildingShadow()
 	else
 		shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow_incorrect.png");
 
-	for(int i = aux_tile.X; i< aux_tile.X + 5; i++)
+	for(int i = aux_tile.X ; i< aux_tile.X + 5; i++)
 	{
-		for(int j = aux_tile.Y; j< aux_tile.Y + 5; j++)
+		for(int j = aux_tile.Y ; j< aux_tile.Y + 5; j++)
 		{
 			aux = getIsoFromTile(i,j);
 			PintarTile(shadow_texture2, aux.X, aux.Y);
@@ -526,7 +538,7 @@ void mapa2D::DrawBuildingShadow()
 
 	aux = getIsoFromTile(aux_tile.X,aux_tile.Y);
 	if(shadow_texture != NULL)
-		PintarTile(shadow_texture, aux.X, aux.Y);
+		PintarTile(shadow_texture, aux.X - 25 , aux.Y);
 
 
 	
@@ -879,4 +891,50 @@ bool mapa2D::collide(position2di obj1, int w_obj1, int h_obj1, position2di obj2,
     }
      
     return false;
+}
+
+void mapa2D::colocarEdificio(position2di pos_colocar){
+	IDibujable* edificio = NULL;
+
+	switch(getTipoEdificio())
+	{
+		case 0: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0); break;
+		case 1: if(gameEngine::recursos_jugador >= 400)
+				{
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1);
+					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 400;
+				} break;
+		case 2: if(gameEngine::recursos_jugador >= 600)
+				{
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2);
+					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
+				} break;
+		case 3: if(gameEngine::recursos_jugador >= 600)
+				{
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3);
+					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
+				} break;
+		case 4: if(gameEngine::recursos_jugador >= 600)
+				{
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4);
+					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
+				} break;
+	}
+
+	if(edificio){
+		edificio->aplicarTextura(driver);
+		// vinculamos el edificio a todo el suelo que ocupa
+		ITexture* tex = edificio->getTextura();
+		int i,j;
+		for (i = 0; i < tex->getSize().Width/TILE_WIDTH; ++i)
+		{
+			for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j){
+
+				getTile(pos_colocar.Y + j,pos_colocar.X + i)->setVinculado(edificio);
+			}
+		}
+		position2di down_right(pos_colocar.X + i,pos_colocar.Y + j);
+		pathFinding->actualizarRegiones(pos_colocar,down_right);
+
+	}
 }

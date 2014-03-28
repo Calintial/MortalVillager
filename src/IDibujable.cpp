@@ -1,6 +1,11 @@
 #include "IDibujable.h"
+IDibujable::IDibujable(){
+	pathfinding = NULL;
+	vinculado = NULL;
+}
 IDibujable::~IDibujable() {
 	delete textura;
+	delete vinculado;
 }
 ITexture* IDibujable::getTextura() const {
 	return textura;
@@ -28,4 +33,13 @@ void IDibujable::setTipo(int t){
 }
 bool IDibujable::isTransitable(){
 	return true;
+}
+void IDibujable::setPathfinding(Pathfinding* _pathfinding){
+	pathfinding = _pathfinding;
+}
+void IDibujable::setVinculado(IDibujable* _vinculado){
+	vinculado = _vinculado;
+}
+IDibujable* IDibujable::getVinculado(){
+	return vinculado;
 }

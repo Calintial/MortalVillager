@@ -21,8 +21,11 @@ public:
 	position2di getInicio() const;
 	position2di getFinal() const;
 	void addCamino(const Camino&);
+	position2di darPaso();
+	Camino* invertir();
 
 private:
+	position2di inicio;
 	std::vector<position2di> posiciones;
 	int peso;
 };

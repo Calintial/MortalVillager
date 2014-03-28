@@ -1,4 +1,5 @@
 #include "Region.h"
+#include "NodoRegional.h"
 
 Region::Region(){
 
@@ -9,12 +10,7 @@ Region::Region(int _inicioX, int _inicioY, int _finalX, int _finalY):inicio(_ini
 }
 
 Region::~Region(){
-	/*int tam = enlaces.size();
-	for (int i = 0; i < tam; ++i)
-	{
-		delete enlaces[i];
-	}
-	enlaces.clear();*/
+	clear();
 }
 /*
 void Region::add(Enlace* link){
@@ -28,10 +24,10 @@ void Region::remove(Enlace* link){
 	}
 }*/
 
-bool Region::isInside(int x, int y){
+bool Region::isInside(int x, int y) const{
 	return ((x >= inicio.X && x <= final.X) && (y >= inicio.Y && y <= final.Y));
 }
-bool Region::isInside(position2di pos){
+bool Region::isInside(position2di pos) const{
 	return (isInside(pos.X,pos.Y));
 }
 /*
@@ -44,10 +40,24 @@ std::vector<Region*> Region::getConnectedRegions(){
 	return regiones;
 }*/
 
-position2di Region::getInicio(){
+position2di Region::getInicio() const{
 	return inicio;
 }
 
-position2di Region::getFinal(){
+position2di Region::getFinal() const{
 	return final;
+}
+
+void Region::clear(){
+	for(NodoRegional* nodo: nodos){
+		nodo->clear();
+	}
+	nodos.clear();
+}
+
+bool Region::operator==(const Region & reg) const{
+	return inicio == reg.getInicio();
+}
+bool Region::operator!=(const Region & reg) const{
+	return !operator==(reg);
 }

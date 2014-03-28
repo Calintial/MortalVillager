@@ -17,11 +17,14 @@ public:
 	~Region();
 /*	void add(Enlace*);
 	void remove(Enlace*);*/
-	bool isInside(int x, int y);
-	bool isInside(position2di);
+	bool isInside(int x, int y) const;
+	bool isInside(position2di) const;
 //	std::vector<Region*> getConnectedRegions();
-	position2di getInicio();
-	position2di getFinal();
+	position2di getInicio() const;
+	position2di getFinal() const;
+	void clear();
+	bool operator==(const Region & ) const;
+	bool operator!=(const Region & ) const;
 
 
 //private:

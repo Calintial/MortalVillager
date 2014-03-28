@@ -2,6 +2,7 @@
 #define IDIBUJABLE_H
 
 #include <irrlicht.h>
+#include "Pathfinding.h"
 
 using namespace irr;
 using namespace video;
@@ -10,6 +11,7 @@ using namespace core;
 
 class IDibujable{
 	public:
+		IDibujable();
 		virtual ~IDibujable() =0;
 		ITexture* getTextura() const;
 		virtual void Pintar(IVideoDriver*,int,int) = 0;
@@ -21,10 +23,16 @@ class IDibujable{
 		int getTipo();
 		void setTipo(int t);
 		virtual bool isTransitable();
+		void setPathfinding(Pathfinding*);
+		void setVinculado(IDibujable*);
+		IDibujable* getVinculado();
 				
 	private:
 		ITexture* textura;
 		int tipo;
 		position2di position;
+	protected:
+		Pathfinding* pathfinding;
+		IDibujable* vinculado;
 };
 #endif
