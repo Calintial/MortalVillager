@@ -217,7 +217,6 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					//MIRAR COMO HACER MOVER TODOS
 					if(user_selvector->size() >= 1)
 					{
-						int j = 0,k=0,l=0;
 						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl;
 						for(int i=0; i<user_selvector->size(); i++)
 						{
@@ -225,14 +224,31 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 							//Lo suyo para que no falle seria, buscar una posicion mas cercana que fuera (Cutre o algoritmo de hoja) 
 								//lugar transitable --> Mirar en el vector del mapa (edificios deberia estar en mapa)
 								//no hay otro personaje --> Dar vuelta a todo el vector de unidades user
-								//position2di posnueva=posicionDisponible(position2di(pos_grid.X+CameraScroll.X+j,pos_grid.Y+CameraScroll.Y+k));
 								
-								//((Unidades*)user_units->at(user_selvector->at(i)))->Move(posnueva.X,posnueva.Y);
+								cout << "POSICION INICIAL " << pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y << endl;
 								
-								
-								Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
-		   						unidad->Move(pos_grid.X+CameraScroll.X+j,pos_grid.Y+CameraScroll.Y+k);
+								if(pos_grid.X+CameraScroll.X>0 && pos_grid.Y+CameraScroll.Y>0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
+								{
+									if(i==0 && puede_colocarUnidad(position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y)))
+									{
+										//((Unidades*)user_units->at(user_selvector->at(i)))->Move(posnueva.X,posnueva.Y);
+										Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
+										unidad->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+									}
+									else
+									{
+										position2di posnueva=posicionDisponible(position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y));
+										Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
+										unidad->Move(posnueva.X,posnueva.Y);
+										//((Unidades*)user_units->at(user_selvector->at(i)))->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);		
+									}
+								}
 						}
+						
+						reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
+						recol_gradosel=0;
+						recol_Rango=1;
+						recol_RangoAux=0;
 					}
 					break;
 			default:;
@@ -936,7 +952,7 @@ position2di mapa2D::posicionDisponible(position2di pos)
 	bool vacio = true;
 	position2di posbuena;
 	
-	while(recol_RangoAux>0 && vacio)
+	while(vacio)
 	{
 		if(recol_gradosel == 16*recol_Rango)
 		{
@@ -945,7 +961,7 @@ position2di mapa2D::posicionDisponible(position2di pos)
 			recol_RangoAux=recol_Rango-1;
 			reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
 		}
-		if(recol_gradosel%16 == 0)
+		else if(recol_gradosel%16 == 0)
 		{
 			reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
 			recol_RangoAux--;
@@ -955,12 +971,17 @@ position2di mapa2D::posicionDisponible(position2di pos)
 		posbuena.Y += recol_Grados[recol_gradosel+1];
 		
 		recol_gradosel += 2;
-		if(puede_colocarUnidad(posbuena))
+		if(posbuena.X>0 && posbuena.Y>0 && posbuena.X<WIDTH && posbuena.Y<HEIGHT)
 		{
-			vacio = false;
+			cout << "Posicion a PROBAR " << posbuena.X << "," << posbuena.Y << endl;
+			if(puede_colocarUnidad(posbuena))
+			{
+				vacio = false;
+			}
 		}
 	}
 	
+	cout << "NUEVA POSICION " << posbuena.X << "," << posbuena.Y << endl;
 	return posbuena;
 }
 
