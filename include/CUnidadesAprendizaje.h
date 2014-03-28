@@ -62,7 +62,7 @@ public:
 
 	//-------------------accessor functions
 	SVector2D	Position()const{return m_vPosition;}
-
+	void setPosition(SVector2D pos){m_vPosition=pos;}
 	void			IncrementFitness(){m_dFitness+=0.01;}
 
 	double		Fitness()const{return m_dFitness;}

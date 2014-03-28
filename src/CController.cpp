@@ -95,15 +95,25 @@ bool CController::Update()
 				return false;
 			}
 				
-				
-			if(m_vecUnidades[i]->getAtaque()==1){
-				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
-				if(Matriz[atacando.y][atacando.x]->getTipo()==3){
-					m_vecUnidades[i]->IncrementFitness();
-					outfile.open("Genetic.txt", ios::app);
+			outfile.open("Genetic.txt", ios::app);
 						if (outfile.is_open())
 						{
-							outfile << "La unidad :"<<i<<"tiene de Fitnes :"<<m_vecUnidades[i]->Fitness()<<endl;
+							outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
+							
+						}
+
+						outfile.close();
+			if(m_vecUnidades[i]->getAtaque()==1){
+				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
+
+				if(Matriz[atacando.y][atacando.x]!=NULL && Matriz[atacando.y][atacando.x]->getTipo()==3){
+					m_vecUnidades[i]->IncrementFitness();
+					
+      				outfile.open("Genetic.txt", ios::app);
+						if (outfile.is_open())
+						{
+							
+							outfile << "Y esta atacando a: ("<<atacando.x<<","<<atacando.y<<")"<<endl;
 						}
 
 						outfile.close();
@@ -111,9 +121,15 @@ bool CController::Update()
 		        
 			
 			}
+			else{
+				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=NULL;
+
+				m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
+				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=m_vecUnidades[i];
+			}
 
 
-      
+      				
 
 			//update the chromos fitness score
 			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();

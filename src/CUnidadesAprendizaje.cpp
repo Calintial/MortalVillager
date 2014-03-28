@@ -80,7 +80,29 @@ bool CUnidadesAprendizaje::Update()
 	if(output.size()<CParams::iNumOutputs){
 		return false;
 	}
-	setAtaque(output[0],output[1]);
+	double x,y;
+	x=output[0];
+	y=output[1];
+	if(0<x<=0,33){
+		x=m_vPosition.x-1;
+	}
+	else if(0,34<x<=0,66){
+		x=m_vPosition.x-1;
+	}
+	else{
+		x=m_vPosition.x+1;
+	}
+	if(0<y<=0,33){
+		y=m_vPosition.y-1;
+	}
+	else if(0,34<y<=0,66){
+		y=m_vPosition.y-1;
+	}
+	else{
+		y=m_vPosition.y+1;
+	}
+	setAtaque(x,y);
+
 	/*for(double op:output){
 		cout<<op<<",";
 	}
@@ -91,7 +113,12 @@ bool CUnidadesAprendizaje::Update()
 	}
 	else{
 		SVector2D mov=mayorMovimiento(output[3],output[4],output[5],output[6]);
-		setMovimiento(mov.x,mov.y);
+		if(mov.x>=0 && mov.x<MAPSIZE && mov.y>=0 && mov.y<MAPSIZE){
+			setMovimiento(mov.x,mov.y);
+			
+
+		}
+		
 		m_ataque=0;
 	}
 	return true;
