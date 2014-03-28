@@ -19,15 +19,15 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]):
 	do{
 		int RandFloatX=RandFloat() * MAPSIZE ;
 		int RandFloatY=RandFloat() * MAPSIZE ;
-		if(Matriz[RandFloatX][RandFloatY]!=NULL){
-			if(Matriz[RandFloatX][RandFloatY]->getTipo()!=3){
-				unidadNoPuesta=true;
-				m_vPosition = SVector2D(RandFloatX, RandFloatX);  				
+		if(Matriz[RandFloatY][RandFloatX]!=NULL){
+			if(Matriz[RandFloatY][RandFloatX]->getTipo()!=3){
+				unidadNoPuesta=false;
+				m_vPosition = SVector2D(RandFloatX, RandFloatY);  				
 			}
 		}
 		else{
-			m_vPosition = SVector2D(RandFloatX, RandFloatX); 
-			unidadNoPuesta=true;
+			m_vPosition = SVector2D(RandFloatX, RandFloatY); 
+			unidadNoPuesta=false;
 		}
 		
 	}
@@ -81,8 +81,11 @@ bool CUnidadesAprendizaje::Update()
 		return false;
 	}
 	setAtaque(output[0],output[1]);
-	m_ataque=output[2];
-	if(m_ataque>0.5){
+	/*for(double op:output){
+		cout<<op<<",";
+	}
+	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
+	if(output[2]>0.5){
 		m_ataque=1;
 		setMovimiento(0,0);
 	}
@@ -96,18 +99,18 @@ bool CUnidadesAprendizaje::Update()
 }
 void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 	int cant=0;
-	for(int i= m_vPosition.x-1;i<=m_vPosition.x+1 && cant<8;i++){
-		for(int j=m_vPosition.y-1;j<m_vPosition.y+1 && cant<8;j++){
+	for(int i= m_vPosition.y-1;i<=m_vPosition.y+1 && cant<8;i++){
+		for(int j=m_vPosition.x-1;j<m_vPosition.x+1 && cant<8;j++){
 
-			if(i>=0 && i<=MAPSIZE && j>=0 && j<=MAPSIZE){
+			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
 				
-				if(Matriz[j][i]!=NULL){
-					if(Matriz[j][i]->getTipo()==3){
-						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[j][i]->getTipo(),((CUnidadesAprendizaje*) Matriz[j][i])->getLife(),Matriz[j][i]->getPosicion().X,Matriz[j][i]->getPosicion().Y));
+				if(Matriz[i][j]!=NULL){
+					if(Matriz[i][j]->getTipo()==3){
+						m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
 
 					}
 					else{
-						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[j][i]->getTipo(),0,Matriz[j][i]->getPosicion().X,Matriz[j][i]->getPosicion().Y));
+						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[i][j]->getTipo(),0,Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
 					}
 					cant++;
 				}
@@ -116,15 +119,16 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 		}
 		
 	}
-	for(int i= m_vPosition.x-2;i<=m_vPosition.x+2 && cant<8;i++){
-		for(int j=m_vPosition.y-2;j<m_vPosition.y+2 && cant<8;j++){
-			if(i>=0 && i<=MAPSIZE && j>=0 && j<=MAPSIZE){
-					if(Matriz[j][i]->getTipo()==3){
-						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[j][i]->getTipo(),((CUnidadesAprendizaje*) Matriz[j][i])->getLife(),Matriz[j][i]->getPosicion().X,Matriz[j][i]->getPosicion().Y));
+	for(int i= m_vPosition.y-2;i<=m_vPosition.y+2 && cant<8;i++){
+		for(int j=m_vPosition.x-2;j<m_vPosition.x+2 && cant<8;j++){
+			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
+				if(Matriz[i][j]!=NULL){
+					if(Matriz[i][j]->getTipo()==3){
+						m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
 
 					}
 					else{
-						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[j][i]->getTipo(),0,Matriz[j][i]->getPosicion().X,Matriz[j][i]->getPosicion().Y));
+						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[i][j]->getTipo(),0,Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
 					}
 					cant++;
 
@@ -132,6 +136,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 		}
 		
 	}
+}
 }
 SVector2D CUnidadesAprendizaje::mayorMovimiento(int arriba, int abajo, int izquierda, int derecha){
 	int mejor=max(max(max(arriba,abajo),izquierda),derecha);

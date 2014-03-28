@@ -20,7 +20,7 @@ CController::CController(): m_NumUnidades(CParams::iNumUnidades),
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
-		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntX,RandIntY);
+		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntY,RandIntX);
 	}
 	//creamos las unidades 
 	for (int i=0; i<m_NumUnidades; ++i)
@@ -97,8 +97,19 @@ bool CController::Update()
 				
 				
 			if(m_vecUnidades[i]->getAtaque()==1){
-		        //we have discovered a mine so increase fitness
-		        m_vecUnidades[i]->IncrementFitness();
+				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
+				if(Matriz[atacando.y][atacando.x]->getTipo()==3){
+					m_vecUnidades[i]->IncrementFitness();
+					outfile.open("Genetic.txt", ios::app);
+						if (outfile.is_open())
+						{
+							outfile << "La unidad :"<<i<<"tiene de Fitnes :"<<m_vecUnidades[i]->Fitness()<<endl;
+						}
+
+						outfile.close();
+				}
+		        
+			
 			}
 
 
@@ -143,6 +154,6 @@ bool CController::Update()
 //Devuelve la unidad que hay en esa posición 
 CUnidadesAprendizaje* CController::getUnidadPosicion(SVector2D pos){
 	
-	return (CUnidadesAprendizaje*) Matriz[pos.x][pos.y];
+	return (CUnidadesAprendizaje*) Matriz[pos.y][pos.x];
 
 };	

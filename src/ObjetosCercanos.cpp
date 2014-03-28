@@ -28,17 +28,17 @@ vector<double> ObjetosCercanos::getInputs(int x,int y){
 					inputs.push_back(0);
 					inputs.push_back(1);
 					inputs.push_back(0);
-
+					break;
 			case 4:
 					inputs.push_back(0);
 					inputs.push_back(0);
 					inputs.push_back(0);
 					inputs.push_back(0);
 					inputs.push_back(1);
-
+					break;
 		}
-		inputs.push_back(posicion.x-x/2);
-		inputs.push_back(posicion.y-y/2);
+		inputs.push_back((posicion.x-x)/2);
+		inputs.push_back((posicion.y-y)/2);
 		inputs.push_back(vida/100);
 		//2->1
 		//1-<0.5

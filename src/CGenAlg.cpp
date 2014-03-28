@@ -51,7 +51,7 @@ void CGenAlg::Mutate(vector<double> &chromo)
 		if (RandFloat() < m_dMutationRate)
 		{
 			//add or subtract a small value to the weight
-			outfile.open("Genetic.txt", ios::app);
+			/*outfile.open("Genetic.txt", ios::app);
 			if (outfile.is_open())
 			{
 				outfile << "Chromosoma mutado: " << chromo[i];
@@ -62,7 +62,7 @@ void CGenAlg::Mutate(vector<double> &chromo)
 			{
 				outfile << " ahora:  " << chromo[i]<<endl;
 			}
-			outfile.close();
+			outfile.close();*/
 		}
 	}
 }
@@ -127,19 +127,19 @@ void CGenAlg::Crossover(const vector<double> &mum,
 		{
 			baby1 = mum;
 			baby2 = dad;
-			if (outfile.is_open())
+			/*if (outfile.is_open())
 			{
 				outfile<< "no Crossover"<<endl;
-			}
+			}*/
 			return;
 		}
 
 		//determine a crossover point
 		int cp = RandInt(0, m_iChromoLength - 1);
-		if (outfile.is_open())
+		/*if (outfile.is_open())
 			{
 		
-				outfile << "CP : "<<cp<<endl;
+			outfile << "CP : "<<cp<<endl;
 				outfile << "		MUM:" << endl;
 
 				for (double d : mum){
@@ -151,7 +151,7 @@ void CGenAlg::Crossover(const vector<double> &mum,
 					outfile << d << ",";
 				}
 				outfile << endl;
-			}
+			}*/
 		//create the offspring
 		for (int i=0; i<cp; ++i)
 		{
@@ -163,7 +163,7 @@ void CGenAlg::Crossover(const vector<double> &mum,
 		{
 			baby1.push_back(dad[i]);
 			baby2.push_back(mum[i]);
-		}
+		}/*
 		if (outfile.is_open())
 			{
 				outfile << "		BABY1:" << endl;
@@ -177,7 +177,7 @@ void CGenAlg::Crossover(const vector<double> &mum,
 				}
 				outfile << endl;
 			}
-	outfile.close();
+	outfile.close();*/
 	
 
 	return;

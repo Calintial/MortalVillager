@@ -21,6 +21,8 @@
 #include "CParams.h"
 #include "IDibujable.h"
 #include "muro.h"
+#include <fstream>
+#define MAPSIZE 20
 using namespace std;
 
 
@@ -62,7 +64,7 @@ private:
 	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
 
 public:
-
+	std::ofstream outfile;
 	CController();
 
 	~CController();

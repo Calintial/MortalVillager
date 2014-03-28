@@ -247,6 +247,13 @@ vector<double> CNeuralNet::changeObjectstoInputs(vector<ObjetosCercanos> obj, do
 		inObjetos=objeto.getInputs(x,y);
 		inputs.insert(inputs.end(),inObjetos.begin(),inObjetos.end());
 	}
+	if(obj.size()<8){
+		for(int i=0;i<(8-obj.size());i++){
+			for(int j=0;j<8;j++){
+				inputs.push_back(0);
+			}
+		}
+	}
 	inputs.push_back(life/100);
 	return inputs;
 }
