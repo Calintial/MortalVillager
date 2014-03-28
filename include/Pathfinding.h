@@ -12,6 +12,7 @@
 #include "Camino.h"
 #include "Region.h"
 
+class Unidades;
 class mapa2D;
 
 //Some typedefs for simplicity
@@ -30,6 +31,7 @@ public:
 	void clear();
 	void actualizarRegiones(position2di up_left,position2di down_right);
 	Camino* calcularCamino(position2di,position2di);
+	Camino* calcularCamino(Unidades*);
 	std::vector<std::vector<Region*>> getRegiones(){return regiones;}
 	std::vector<position2di> getEnlaces();
 	std::vector<Camino> getIntraCaminos();

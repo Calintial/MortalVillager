@@ -6,6 +6,7 @@
 #include <limits.h>
 #include "NodoLocal.h"
 #include "NodoRegional.h"
+#include "Unidades.h"
 
 struct find_caminoInicio_by_pos {
     find_caminoInicio_by_pos(position2di _pos) : pos(_pos) {}
@@ -476,12 +477,12 @@ void Pathfinding::findInnerPaths(Region* regionActual){
 					if (c != NULL)
 					{
 						boost::add_edge(nodo->getVertexDescriptor(),destino->getVertexDescriptor(),*c,grafo);
-						cout<<"Camino entre <"<<nodo->toString()<<"> y <"<<destino->toString()<<">"<<endl;
+						//cout<<"Camino entre <"<<nodo->toString()<<"> y <"<<destino->toString()<<">"<<endl;
 					}else{
-						cout<<"Camino no encontrado entre <"<<nodo->toString()<<"> y <"<<destino->toString()<<">"<<endl;
+						//cout<<"Camino no encontrado entre <"<<nodo->toString()<<"> y <"<<destino->toString()<<">"<<endl;
 					}
 				}else{
-					cout<<"Ya existe camino entre <"<<nodo->toString()<<"> y <"<<destino->toString()<<">"<<endl;
+					//cout<<"Ya existe camino entre <"<<nodo->toString()<<"> y <"<<destino->toString()<<">"<<endl;
 				}
 			}
 		}

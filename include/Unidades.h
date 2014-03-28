@@ -24,6 +24,7 @@ public:
 	//Metodos de movimiento y actualización de la unidad
 	void Move(int,int);
 	void Move(Camino*);
+	void Move(Unidades*);
 	void updateUnit();
 	int getState();
 	bool getSelect(){return select;};
@@ -42,8 +43,10 @@ public:
 private:
 	position2di last_clicked;
 	Camino* camino;
+	Unidades* objetivo;
 	int state;
 	bool select;
+
 
 };
 

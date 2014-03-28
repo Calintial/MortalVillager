@@ -231,7 +231,15 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 								
 								
 								Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
-		   						unidad->Move(pos_grid.X+CameraScroll.X+j,pos_grid.Y+CameraScroll.Y+k);
+								position2di position_destino(pos_grid.X+CameraScroll.X+j,pos_grid.Y+CameraScroll.Y+k);
+								int index = IASelected(position_destino);
+								if (index != -1)
+								{
+									unidad->Move((Unidades*)ia_units->at(index));
+								}else{
+									unidad->Move(position_destino.X,position_destino.Y);
+								}
+		   						
 						}
 					}
 					break;
