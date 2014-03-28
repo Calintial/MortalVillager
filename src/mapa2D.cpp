@@ -63,6 +63,12 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	
 	user_selvector = new vector<int>();
 	pathFinding->preprocesar();
+	
+	recol_gradosel=0;
+	recol_Rango=1;
+	recol_RangoAux=0;
+	recol_Grados = vector<int>(16);
+	reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
 }
 
 
@@ -211,11 +217,21 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					//MIRAR COMO HACER MOVER TODOS
 					if(user_selvector->size() >= 1)
 					{
+						int j = 0,k=0,l=0;
 						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl;
 						for(int i=0; i<user_selvector->size(); i++)
 						{
-							Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
-		   					unidad->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+							//FALTARIAN CASOS DE FIN DE MUNDO
+							//Lo suyo para que no falle seria, buscar una posicion mas cercana que fuera (Cutre o algoritmo de hoja) 
+								//lugar transitable --> Mirar en el vector del mapa (edificios deberia estar en mapa)
+								//no hay otro personaje --> Dar vuelta a todo el vector de unidades user
+								//position2di posnueva=posicionDisponible(position2di(pos_grid.X+CameraScroll.X+j,pos_grid.Y+CameraScroll.Y+k));
+								
+								//((Unidades*)user_units->at(user_selvector->at(i)))->Move(posnueva.X,posnueva.Y);
+								
+								
+								Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
+		   						unidad->Move(pos_grid.X+CameraScroll.X+j,pos_grid.Y+CameraScroll.Y+k);
 						}
 					}
 					break;
@@ -837,6 +853,39 @@ int mapa2D::getTipoEdificio()
 	return tipo_edificio;
 }
 
+bool mapa2D::puede_colocarUnidad(position2di pos)
+{
+	if(getTile(pos.Y,pos.X)->getTipo() == 1)
+	{
+		return false;
+	}
+			
+	for(int i=0; i<ia_units->size(); i++)
+	{
+		if(ia_units->at(i)->getPosition().X == pos.X && ia_units->at(i)->getPosition().Y == pos.Y)
+		{
+			return false;
+		}
+	}
+
+	for(int i=0; i<user_units->size(); i++)
+	{
+		if(user_units->at(i)->getPosition().X == pos.X && user_units->at(i)->getPosition().Y == pos.Y)
+		{
+			return false;
+		}
+	}
+	for(int i=0; i<buildings->size(); i++)
+	{
+		if(collide(buildings->at(i)->getPosition(),4,4,pos,4,4))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 bool mapa2D::puede_colocar(position2di pos)
 {
 
@@ -854,7 +903,6 @@ bool mapa2D::puede_colocar(position2di pos)
 			{
 				if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
 				{
-
 					return false;
 				}
 			}
@@ -882,6 +930,70 @@ bool mapa2D::puede_colocar(position2di pos)
 
 	return true;
 }
+
+position2di mapa2D::posicionDisponible(position2di pos)
+{
+	bool vacio = true;
+	position2di posbuena;
+	
+	while(recol_RangoAux>0 && vacio)
+	{
+		if(recol_gradosel == 16*recol_Rango)
+		{
+			recol_gradosel=0;
+			recol_Rango++;
+			recol_RangoAux=recol_Rango-1;
+			reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
+		}
+		if(recol_gradosel%16 == 0)
+		{
+			reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
+			recol_RangoAux--;
+		}
+		posbuena = pos;
+		posbuena.X += recol_Grados[recol_gradosel];
+		posbuena.Y += recol_Grados[recol_gradosel+1];
+		
+		recol_gradosel += 2;
+		if(puede_colocarUnidad(posbuena))
+		{
+			vacio = false;
+		}
+	}
+	
+	return posbuena;
+}
+
+
+
+void mapa2D::reasignarVectorRecolocacion(int q, int w)
+{
+	//
+	recol_Grados[0] = -q;
+	recol_Grados[1] = w;
+	//
+	recol_Grados[2] = q;
+	recol_Grados[3] = -w;
+	//
+	recol_Grados[4] = w-q;
+	recol_Grados[5] = w;
+	//
+	recol_Grados[6] = w;
+	recol_Grados[7] = q;
+	//
+	recol_Grados[8] = w;
+	recol_Grados[9] = -w+q;
+	//
+	recol_Grados[10] = -w+q;
+	recol_Grados[11] = -w;
+	//
+	recol_Grados[12] = -w;
+	recol_Grados[13] = q;
+	//
+	recol_Grados[14] = -w;
+	recol_Grados[15] = w-q;
+}
+
 
 bool mapa2D::collide(position2di obj1, int w_obj1, int h_obj1, position2di obj2, int w_obj2, int h_obj2)
 {

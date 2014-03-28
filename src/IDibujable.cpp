@@ -37,9 +37,11 @@ bool IDibujable::isTransitable(){
 void IDibujable::setPathfinding(Pathfinding* _pathfinding){
 	pathfinding = _pathfinding;
 }
+
 void IDibujable::setVinculado(IDibujable* _vinculado){
 	vinculado = _vinculado;
 }
 IDibujable* IDibujable::getVinculado(){
 	return vinculado;
 }
+
