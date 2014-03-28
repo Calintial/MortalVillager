@@ -140,6 +140,13 @@ private:
 
 	bool sombra_edificio;
 	int tipo_edificio;
+	
+	//Algoritmo de recolocacion
+	int recol_Rango,recol_gradosel,recol_RangoAux;
+	vector<int> recol_Grados;
+	void reasignarVectorRecolocacion(int, int );
+	position2di posicionDisponible(position2di );
+	bool puede_colocarUnidad(position2di );
 
 	//Objetos
 

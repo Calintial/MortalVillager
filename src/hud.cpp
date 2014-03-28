@@ -169,7 +169,6 @@ void hud::paint(){
 				{
 					if(idub->at(i)->getSelect())
 					{
-						cout << "PONER IA " << i << " EN HUD" << endl;
 						dibujaEnHUD(numper,idub->at(i));
 						numper++;
 					}
@@ -178,7 +177,6 @@ void hud::paint(){
 				{
 					if(udub->at(i)->getSelect())
 					{
-						cout << "PONER BICHO "<< i << " EN HUD" << endl;
 						dibujaEnHUD(numper,udub->at(i));
 						numper++;
 					}
