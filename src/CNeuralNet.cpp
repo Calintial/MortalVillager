@@ -240,4 +240,13 @@ double CNeuralNet::Sigmoid(double netinput, double response)
 	return ( 1 / ( 1 + exp(-netinput / response)));
 }
 
-
+vector<double> CNeuralNet::changeObjectstoInputs(vector<ObjetosCercanos> obj, double life, int x, int y){
+	vector<double> inputs;
+	vector<double> inObjetos;
+	for(ObjetosCercanos objeto:obj){
+		inObjetos=objeto.getInputs(x,y);
+		inputs.insert(inputs.end(),inObjetos.begin(),inObjetos.end());
+	}
+	inputs.push_back(life/100);
+	return inputs;
+}

@@ -6,8 +6,10 @@
 CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]):
 							 m_life(1),
                              m_dFitness(0),
-                             m_move(0),
-                             m_ataque(0)
+                             m_moveX(0),
+                             m_moveY(0),
+                             m_ataqueX(0),
+                             m_ataqueY(0)
 
 			 
 {
@@ -48,8 +50,10 @@ void CUnidadesAprendizaje::Reset()
 	m_dFitness = 0;
 
 	m_life = 1;
-	m_move = 0;
-	m_ataque = 0;
+	m_moveX = 0;
+	m_moveY = 0;
+	m_ataqueX = 0;
+	m_ataqueY = 0;
 	m_vObjetosCerca.clear();
 	return;
 }
@@ -68,66 +72,79 @@ void CUnidadesAprendizaje::Reset()
 //	and acceleration and apply to current velocity vector.
 //
 //-----------------------------------------------------------------------
-bool CUnidadesAprendizaje::Update(vector<ObjetosCerca> m_vObjetosCerca)
+bool CUnidadesAprendizaje::Update()
 {
-/*	
-	//this will store all the inputs for the NN
-	vector<double> inputs;	
+	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,m_life,m_vPosition.x,m_vPosition.y);
 
-	//get vector to closest mine
-	SVector2D vClosestMine = GetClosestMine(mines);
-  
-	//normalise it
-  Vec2DNormalize(vClosestMine);
-  
-  //add in vector to closest mine
-	inputs.push_back(vClosestMine.x);
-	inputs.push_back(vClosestMine.y);
-
-	//add in sweepers look at vector
-	inputs.push_back(m_vLookAt.x);
-	inputs.push_back(m_vLookAt.y);
-
-  
-	//update the brain and get feedback
 	vector<double> output = m_ItsBrain.Update(inputs);
-
-	//make sure there were no errors in calculating the 
-	//output
-	if (output.size() < CParams::iNumOutputs) 
-  {
-    return false;
-  }
-
-	//assign the outputs to the sweepers left & right tracks
-	m_lTrack = output[0];
-	m_rTrack = output[1];
-
-	//calculate steering forces
-	double RotForce = m_lTrack - m_rTrack;
-
-	//clamp rotation
-	Clamp(RotForce, -CParams::dMaxTurnRate, CParams::dMaxTurnRate);
-
-  m_dRotation += RotForce;
-	
-	m_dSpeed = (m_lTrack + m_rTrack);	
-
-	//update Look At 
-	m_vLookAt.x = -sin(m_dRotation);
-	m_vLookAt.y = cos(m_dRotation);
-
-	//update position
-  m_vPosition += (m_vLookAt * m_dSpeed);
-
-	//wrap around window limits
-	if (m_vPosition.x > CParams::WindowWidth) m_vPosition.x = 0;
-	if (m_vPosition.x < 0) m_vPosition.x = CParams::WindowWidth;
-	if (m_vPosition.y > CParams::WindowHeight) m_vPosition.y = 0;
-	if (m_vPosition.y < 0) m_vPosition.y = CParams::WindowHeight;
-*/
+	if(output.size()<CParams::iNumOutputs){
+		return false;
+	}
+	setAtaque(output[0],output[1]);
+	m_ataque=output[2];
+	if(m_ataque>0.5){
+		m_ataque=1;
+		setMovimiento(0,0);
+	}
+	else{
+		SVector2D mov=mayorMovimiento(output[3],output[4],output[5],output[6]);
+		setMovimiento(mov.x,mov.y);
+		m_ataque=0;
+	}
 	return true;
 
 }
+void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
+	int cant=0;
+	for(int i= m_vPosition.x-1;i<=m_vPosition.x+1 && cant<8;i++){
+		for(int j=m_vPosition.y-1;j<m_vPosition.y+1 && cant<8;j++){
 
-	
+			if(i>=0 && i<=MAPSIZE && j>=0 && j<=MAPSIZE){
+				
+				if(Matriz[j][i]!=NULL){
+					if(Matriz[j][i]->getTipo()==3){
+						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[j][i]->getTipo(),((CUnidadesAprendizaje*) Matriz[j][i])->getLife(),Matriz[j][i]->getPosicion().X,Matriz[j][i]->getPosicion().Y));
+
+					}
+					else{
+						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[j][i]->getTipo(),0,Matriz[j][i]->getPosicion().X,Matriz[j][i]->getPosicion().Y));
+					}
+					cant++;
+				}
+
+			}
+		}
+		
+	}
+	for(int i= m_vPosition.x-2;i<=m_vPosition.x+2 && cant<8;i++){
+		for(int j=m_vPosition.y-2;j<m_vPosition.y+2 && cant<8;j++){
+			if(i>=0 && i<=MAPSIZE && j>=0 && j<=MAPSIZE){
+					if(Matriz[j][i]->getTipo()==3){
+						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[j][i]->getTipo(),((CUnidadesAprendizaje*) Matriz[j][i])->getLife(),Matriz[j][i]->getPosicion().X,Matriz[j][i]->getPosicion().Y));
+
+					}
+					else{
+						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[j][i]->getTipo(),0,Matriz[j][i]->getPosicion().X,Matriz[j][i]->getPosicion().Y));
+					}
+					cant++;
+
+			}
+		}
+		
+	}
+}
+SVector2D CUnidadesAprendizaje::mayorMovimiento(int arriba, int abajo, int izquierda, int derecha){
+	int mejor=max(max(max(arriba,abajo),izquierda),derecha);
+	if(arriba==mejor){
+		return SVector2D(m_vPosition.x-1,m_vPosition.y);
+	}
+	else if(abajo==mejor){
+		return SVector2D(m_vPosition.x+1,m_vPosition.y);
+	}
+	else if(izquierda==mejor){
+		return  SVector2D(m_vPosition.x,m_vPosition.y-1);
+	}
+	else{
+		return  SVector2D(m_vPosition.x,m_vPosition.y+1);
+	}
+}

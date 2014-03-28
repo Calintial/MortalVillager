@@ -13,7 +13,7 @@
 #include <math.h>
 #include "utils.h"
 #include "CParams.h"
-
+#include "ObjetosCercanos.h"
 using namespace std;
 
 
@@ -92,6 +92,7 @@ public:
 
 	//sigmoid response curve
 	inline double	  Sigmoid(double activation, double response);
+	vector<double> changeObjectstoInputs(vector<ObjetosCercanos> obj, double life, int x, int y);
 
 };
 				

@@ -29,7 +29,10 @@ CController::CController(): m_NumUnidades(CParams::iNumUnidades),
 		Matriz[unidad->Position().x][unidad->Position().x]=unidad;
 		m_vecUnidades.push_back(new CUnidadesAprendizaje(Matriz));
 	}
-
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		m_vecUnidades[i]->calcular8Objetos(Matriz);
+	}
 	//get the total number of weights used in the sweepers
 	//NN so we can initialise the GA
 	m_NumWeightsInNN = m_vecUnidades[0]->GetNumberOfWeights();
@@ -85,7 +88,7 @@ bool CController::Update()
 		for (int i=0; i<m_NumUnidades; ++i)
 		{
 			//update the NN and position
-			if (!m_vecUnidades[i]->Update(m_vecUnidades[i]->getVectorObjetos()))
+			if (!m_vecUnidades[i]->Update())
 			{
 				//error in processing the neural net
 				cout<<"Wrong amount of NN inputs!"<<endl;
@@ -93,7 +96,7 @@ bool CController::Update()
 			}
 				
 				
-			if(m_vecUnidades[i]->m_ataque==1){
+			if(m_vecUnidades[i]->getAtaque()==1){
 		        //we have discovered a mine so increase fitness
 		        m_vecUnidades[i]->IncrementFitness();
 			}

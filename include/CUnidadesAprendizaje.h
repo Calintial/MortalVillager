@@ -17,17 +17,10 @@
 #include "SVector2D.h"
 #include "CParams.h"
 #include "IDibujable.h"
+#include "ObjetosCercanos.h"
 
 using namespace std;
 
-struct ObjetosCerca{
-	//0:Aldeano, 1:Arquero,2:Espadachin,3:Lancero,4:Obstaculo
-	int tipo;
-
-	double vida;
-
-	SVector2D posicion;
-};
 class CUnidadesAprendizaje :  public IDibujable
 {
 
@@ -44,23 +37,28 @@ private:
 
 	//the sweeper's fitness score 
 	double			m_dFitness;
-
-	int 			m_move;
-
 	int 			m_ataque;
-	vector<ObjetosCerca> m_vObjetosCerca;
+	int 			m_moveX;
+	int 			m_moveY;
+	int 			m_ataqueX;
+	int 			m_ataqueY;
+	vector<ObjetosCercanos> m_vObjetosCerca;
 
 public:
-
-
+	int getAtaque(){return m_ataque;}
+	SVector2D getAtaqueMovimiento(){return  SVector2D(m_ataqueX,m_ataqueY);}
+	SVector2D getMovimiento(){return  SVector2D(m_moveX,m_moveY);}
+	void setAtaque(int x, int y){m_ataqueX=x;m_ataqueY=y;}
+	void setMovimiento(int x, int y){m_moveX=x;m_moveY=y;}
+	double getLife(){return m_life;}
 	CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]);
 	
 	//updates the ANN with information from the sweepers enviroment
-	bool			Update(vector<ObjetosCerca> m_vObjetosCerca);
+	bool			Update();
 
 
 	void			Reset();
-  	vector<ObjetosCerca> getVectorObjetos(){return m_vObjetosCerca;};
+  	vector<ObjetosCercanos> getVectorObjetos(){return m_vObjetosCerca;};
 
 	//-------------------accessor functions
 	SVector2D	Position()const{return m_vPosition;}
@@ -75,7 +73,8 @@ public:
   void Pintar(IVideoDriver*,int,int){}
   void aplicarTextura(IVideoDriver* driver){}
   bool isTransitable(){}
-
+  void calcular8Objetos(IDibujable* [][MAPSIZE]);
+	SVector2D mayorMovimiento(int arriba, int abajo, int izquierda, int derecha);
 };
 
 
