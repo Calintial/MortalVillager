@@ -40,21 +40,38 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]):
 //	Resets the sweepers position, fitness and rotation
 //
 //----------------------------------------------------------------------
-void CUnidadesAprendizaje::Reset()
+void CUnidadesAprendizaje::Reset(IDibujable* Matriz[][MAPSIZE])
 {
-	//reset the sweepers positions
-	m_vPosition = SVector2D((RandFloat() * CParams::WindowWidth), 
-					                (RandFloat() * CParams::WindowHeight));
-	
+	Matriz[m_vPosition.y][m_vPosition.x]=NULL;
+	bool unidadNoPuesta=true;
+	do{
+
+		int RandFloatX=RandFloat() * MAPSIZE ;
+		int RandFloatY=RandFloat() * MAPSIZE ;
+		if(Matriz[RandFloatY][RandFloatX]!=NULL){
+			if(Matriz[RandFloatY][RandFloatX]->getTipo()!=3){
+				unidadNoPuesta=false;
+				m_vPosition = SVector2D(RandFloatX, RandFloatY);  				
+			}
+		}
+		else{
+			m_vPosition = SVector2D(RandFloatX, RandFloatY); 
+			unidadNoPuesta=false;
+		}
+		
+	}
+	while(unidadNoPuesta);
+	setTipo(3);
 	//and the fitness
 	m_dFitness = 0;
-
-	m_life = 1;
+	m_ataque = 0;
+	m_life = 100;
 	m_moveX = 0;
 	m_moveY = 0;
 	m_ataqueX = 0;
 	m_ataqueY = 0;
 	m_vObjetosCerca.clear();
+	calcular8Objetos(Matriz);
 	return;
 }
 
@@ -101,13 +118,8 @@ bool CUnidadesAprendizaje::Update()
 	else{
 		y=m_vPosition.y+1;
 	}
-	setAtaque(x,y);
-
-	/*for(double op:output){
-		cout<<op<<",";
-	}
-	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
-	if(output[2]>0.5){
+	if(x<MAPSIZE && x>0 && y<MAPSIZE && y>0 && output[2]>0.5){
+		setAtaque(x,y);
 		m_ataque=1;
 		setMovimiento(0,0);
 	}
@@ -118,9 +130,15 @@ bool CUnidadesAprendizaje::Update()
 			
 
 		}
-		
+		setAtaque(0,0);
 		m_ataque=0;
 	}
+
+	/*for(double op:output){
+		cout<<op<<",";
+	}
+	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
+
 	return true;
 
 }

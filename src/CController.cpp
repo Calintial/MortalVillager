@@ -102,7 +102,7 @@ bool CController::Update()
 							
 						}
 
-						outfile.close();
+			outfile.close();
 			if(m_vecUnidades[i]->getAtaque()==1){
 				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
 
@@ -122,6 +122,7 @@ bool CController::Update()
 			
 			}
 			else{
+
 				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=NULL;
 
 				m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
@@ -161,7 +162,8 @@ bool CController::Update()
 		{
 			m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
 		
-			m_vecUnidades[i]->Reset();
+			m_vecUnidades[i]->Reset(Matriz);
+			Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=m_vecUnidades[i];
 		}
 	}
 

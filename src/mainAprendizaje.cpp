@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 { 
 		srand (3);
   		g_pController = new CController();
-  		int cont=10000;
+  		int cont=1000;
   		for(int i=0;i<cont;i++){
   			g_pController->Update();
   		}
