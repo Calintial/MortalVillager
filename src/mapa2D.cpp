@@ -227,30 +227,22 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 								
 								cout << "POSICION INICIAL " << pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y << endl;
 								Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
-								position2di position_destino(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
-								if(pos_grid.X+CameraScroll.X>0 && pos_grid.Y+CameraScroll.Y>0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
+								position2di posnueva=position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+								if(pos_grid.X+CameraScroll.X>=0 && pos_grid.Y+CameraScroll.Y>=0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
 								{
-									int index = IASelected(position_destino);
+									int index = IASelected(posnueva);
 									if (index != -1)
 									{
 										// esto hace que se fusionen las unidades sobre la unidad objetivo >_<
 										unidad->Move((Unidades*)ia_units->at(index));
 									}else{
-										if(i==0 && puede_colocarUnidad(position_destino))
-										{
-											//((Unidades*)user_units->at(user_selvector->at(i)))->Move(posnueva.X,posnueva.Y);
-											unidad->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
-										}
-										else
-										{
-											position2di posnueva=posicionDisponible(position_destino);
-											unidad->Move(posnueva.X,posnueva.Y);
-											//((Unidades*)user_units->at(user_selvector->at(i)))->Move(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);		
-										}
+										unidad->Move(posnueva.X,posnueva.Y);
 									}
 								}
-						}
 						
+						
+
+						}
 						reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
 						recol_gradosel=0;
 						recol_Rango=1;
