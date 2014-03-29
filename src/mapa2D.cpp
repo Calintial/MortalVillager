@@ -877,14 +877,14 @@ int mapa2D::getTipoEdificio()
 
 bool mapa2D::puede_colocarUnidad(position2di pos)
 {
-	if(getTile(pos.Y,pos.X)->getTipo() == 1)
+	if(!getTile(pos.Y,pos.X)->isTransitable())
 	{
 		return false;
 	}
 			
 	for(int i=0; i<ia_units->size(); i++)
 	{
-		if(ia_units->at(i)->getPosition().X == pos.X && ia_units->at(i)->getPosition().Y == pos.Y)
+		if(ia_units->at(i)->getPosition() == pos)
 		{
 			return false;
 		}
@@ -892,18 +892,18 @@ bool mapa2D::puede_colocarUnidad(position2di pos)
 
 	for(int i=0; i<user_units->size(); i++)
 	{
-		if(user_units->at(i)->getPosition().X == pos.X && user_units->at(i)->getPosition().Y == pos.Y)
+		if(user_units->at(i)->getPosition() == pos)
 		{
 			return false;
 		}
 	}
-	for(int i=0; i<buildings->size(); i++)
-	{
-		if(collide(buildings->at(i)->getPosition(),4,4,pos,4,4))
-		{
-			return false;
-		}
-	}
+	// for(int i=0; i<buildings->size(); i++)
+	// {
+	// 	if(collide(buildings->at(i)->getPosition(),4,4,pos,4,4))
+	// 	{
+	// 		return false;
+	// 	}
+	// }
 
 	return true;
 }
@@ -957,6 +957,11 @@ position2di mapa2D::posicionDisponible(position2di pos)
 {
 	bool vacio = true;
 	position2di posbuena;
+
+	if(puede_colocarUnidad(pos)){
+		return pos;
+	}
+
 	
 	while(vacio)
 	{
@@ -977,7 +982,7 @@ position2di mapa2D::posicionDisponible(position2di pos)
 		posbuena.Y += recol_Grados[recol_gradosel+1];
 		
 		recol_gradosel += 2;
-		if(posbuena.X>0 && posbuena.Y>0 && posbuena.X<WIDTH && posbuena.Y<HEIGHT)
+		if(posbuena.X>=0 && posbuena.Y>=0 && posbuena.X<WIDTH && posbuena.Y<HEIGHT)
 		{
 			cout << "Posicion a PROBAR " << posbuena.X << "," << posbuena.Y << endl;
 			if(puede_colocarUnidad(posbuena))
@@ -995,6 +1000,7 @@ position2di mapa2D::posicionDisponible(position2di pos)
 
 void mapa2D::reasignarVectorRecolocacion(int q, int w)
 {
+	/// WTF!? Medina te mato ¬¬
 	//
 	recol_Grados[0] = -q;
 	recol_Grados[1] = w;

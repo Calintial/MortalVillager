@@ -90,11 +90,11 @@ void Unidades::updateUnit()
 			}else{
 				delete nuevoCamino;
 			}
-		}
-
-		if (camino->getPeso() < 2)
-		{
-			objetivo = NULL;
+		
+			if (camino->getPeso() < 2)
+			{
+				objetivo = NULL;
+			}
 		}
 
 		Move(camino);
