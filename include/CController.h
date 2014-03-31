@@ -22,6 +22,8 @@
 #include "IDibujable.h"
 #include "muro.h"
 #include "gameEngine.h"
+#include <fstream>
+#define MAPSIZE 20
 using namespace std;
 
 const int TILE_W	= 32;
@@ -63,15 +65,17 @@ private:
 	//0 transitable y 1 no transitable
 	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
 
-public:
+	IrrlichtDevice* device;
 
-	CController();
+public:
+	std::ofstream outfile;
+	CController(IrrlichtDevice* dev);
 
 	~CController();
 	CUnidadesAprendizaje* getUnidadPosicion(SVector2D pos);
-	bool		Update(IrrlichtDevice* device);
+	bool		Update();
 
-	void Pintar(IrrlichtDevice* device);
+	void Pintar();
 };
 
 

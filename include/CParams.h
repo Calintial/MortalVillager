@@ -1,6 +1,6 @@
 #ifndef CPARAMS_H
 #define CPARAMS_H
-#define MAPSIZE 200
+#define MAPSIZE 20
 //------------------------------------------------------------------------
 //
 //	Name: CParams.h

@@ -6,29 +6,35 @@
 //	initilaize the sweepers, their brains and the GA factory
 //
 //-----------------------------------------------------------------------
-CController::CController(): m_NumUnidades(CParams::iNumUnidades), 
+CController::CController(IrrlichtDevice* dev): m_NumUnidades(CParams::iNumUnidades), 
 										                     m_pGA(NULL),
 										                     m_iTicks(0),
 										                     m_iGenerations(0)
 {
+	device = dev;
+	video::IVideoDriver* driver = device->getVideoDriver();
+
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			Matriz[i][j]=NULL;
+			Matriz[i][j]= new Suelo(0,i,j);
+			((Suelo*) Matriz[i][j])->setIsometric(false);
+			Matriz[i][j]->aplicarTextura(driver);
+
 		}
 	}
 
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
-		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntX,RandIntY);
+		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntY,RandIntX);
+		((Muro*) Matriz[RandIntX][RandIntY])->setIsometric(false);
+		Matriz[RandIntX][RandIntY]->aplicarTextura(driver);
 	}
 
 	//creamos las unidades 
-	cout<<m_NumUnidades<<endl;
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		cout<<i<<endl;
 		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz);
 		Matriz[unidad->Position().x][unidad->Position().x]=unidad;
 		m_vecUnidades.push_back(new CUnidadesAprendizaje(Matriz));
@@ -82,9 +88,8 @@ CController::~CController()
 //
 //	The comments should explain what is going on adequately.
 //-------------------------------------------------------------------------
-bool CController::Update(IrrlichtDevice* device)
+bool CController::Update()
 {
-	cout<<"Update"<<endl;
 	//run the sweepers through CParams::iNumTicks amount of cycles. During
   //this loop each sweepers NN is constantly updated with the appropriate
   //information from its surroundings. The output from the NN is obtained
@@ -104,8 +109,19 @@ bool CController::Update(IrrlichtDevice* device)
 				
 				
 			if(m_vecUnidades[i]->getAtaque()==1){
-		        //we have discovered a mine so increase fitness
-		        m_vecUnidades[i]->IncrementFitness();
+				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
+				if(Matriz[atacando.y][atacando.x]->getTipo()==3){
+					m_vecUnidades[i]->IncrementFitness();
+					outfile.open("Genetic.txt", ios::app);
+						if (outfile.is_open())
+						{
+							outfile << "La unidad :"<<i<<"tiene de Fitnes :"<<m_vecUnidades[i]->Fitness()<<endl;
+						}
+
+						outfile.close();
+				}
+		        
+			
 			}
 
 
@@ -145,26 +161,25 @@ bool CController::Update(IrrlichtDevice* device)
 		}
 	}
 
-	Pintar(device);
+	Pintar();
 
 	return true;
 }
 //Devuelve la unidad que hay en esa posición 
 CUnidadesAprendizaje* CController::getUnidadPosicion(SVector2D pos){
 	
-	return (CUnidadesAprendizaje*) Matriz[pos.x][pos.y];
+	return (CUnidadesAprendizaje*) Matriz[pos.y][pos.x];
 
 };	
 
-void CController::Pintar(IrrlichtDevice* device)
+void CController::Pintar()
 {
-	cout<<"pintar"<<endl;
 	video::IVideoDriver* driver = device->getVideoDriver();
 	if (device->run())
     {        
         if(driver)
         {
-			/*position2di GridPosition, DrawPosition;
+			position2di GridPosition, DrawPosition;
 			
 						
 		    for(int i = 0; i < MAPSIZE; i++)
@@ -181,7 +196,7 @@ void CController::Pintar(IrrlichtDevice* device)
 						if(Tile->getTextura())
 							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
 				}
-			}*/
+			}
 
 			device->getGUIEnvironment()->drawAll();
 			    	

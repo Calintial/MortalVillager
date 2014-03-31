@@ -1,6 +1,6 @@
 #ifndef CMINESWEEPER_H
 #define CMINESWEEPER_H
-
+#define MAPSIZE 20
 //------------------------------------------------------------------------
 //
 //	Name: CMineSweeper.h
@@ -63,7 +63,7 @@ public:
 	//-------------------accessor functions
 	SVector2D	Position()const{return m_vPosition;}
 
-	void			IncrementFitness(){++m_dFitness;}
+	void			IncrementFitness(){m_dFitness+=0.01;}
 
 	double		Fitness()const{return m_dFitness;}
   
