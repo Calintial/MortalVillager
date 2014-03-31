@@ -7,10 +7,3 @@ EspadachinRedes::EspadachinRedes(int x,int y): CUnidadesAprendizaje(x,y){
 	attack_value = 1;
 	setTipo(3);
 }
-void EspadachinRedes::TexturaSeleccionada(IVideoDriver* driver,bool selected)
-{
-	if(selected)
-		setTextura(driver->getTexture("../media/Texturas/units/ia_unit_selected.png"));
-	else
-		setTextura(driver->getTexture("../media/Texturas/units/ia_swordman.png"));
-}

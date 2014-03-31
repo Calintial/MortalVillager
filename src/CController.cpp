@@ -34,8 +34,10 @@ CController::CController(IrrlichtDevice* dev): m_NumUnidades(CParams::iNumUnidad
 		m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
 
 	//initialize mines in random positions within the application window
-	
 
+	unidad_seleccionada = NULL;
+	
+	font = device->getGUIEnvironment()->getFont("../media/fonthaettenschweiler.bmp");
 }
 
 
@@ -193,6 +195,11 @@ void CController::Pintar()
 				}
 			}
 
+			if(unidad_seleccionada != NULL)
+			{
+				PintarInformacionUnidad();
+			}
+
 			device->getGUIEnvironment()->drawAll();
 			    	
         }
@@ -276,9 +283,39 @@ bool CController::OnEvent(const SEvent& event)
 
 		if(event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
 		{
-			cout<<pos_grid.X<<","<<pos_grid.Y<<endl;
+			if(unidad_seleccionada != NULL)
+			{
+				unidad_seleccionada->TexturaSeleccionada(device->getVideoDriver(),false);
+				unidad_seleccionada = NULL;
+			}
+
+			for(CUnidadesAprendizaje* unit : m_vecUnidades)
+			{
+				SVector2D posicion = unit->Position();
+				if(posicion.x == pos_grid.Y && posicion.y == pos_grid.X)
+				{
+					unit->TexturaSeleccionada(device->getVideoDriver(),true);
+					unidad_seleccionada = (Unidades*) unit;
+					break;
+				}
+			}
 		}
 	}
 	return false;
 
+}
+
+void CController::PintarInformacionUnidad()
+{
+	core::stringw Vida="Vida: ";
+	Vida+=unidad_seleccionada->getLife();
+	core::stringw Ataque="Ataque: ";
+	Ataque+= unidad_seleccionada->getAttackValue();
+
+	font->draw(Vida,
+		core::rect<s32>(650,100,650,100),
+		video::SColor(255,0,0,0));
+	font->draw(Ataque,
+		core::rect<s32>(750,100,750,100),
+		video::SColor(255,0,0,0));
 }

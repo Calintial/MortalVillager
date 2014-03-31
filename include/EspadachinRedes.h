@@ -10,7 +10,6 @@ class EspadachinRedes : public CUnidadesAprendizaje{
 		int getAttackRange(){return attack_range;};
 		int getAttackValue(){return attack_value;};
 		int getType(){getTipo();};
-		void TexturaSeleccionada(IVideoDriver* driver,bool);
 	private:
 
 		int attack_value;

@@ -69,6 +69,10 @@ private:
 	IrrlichtDevice* device;
 	video::IVideoDriver* driver;
 
+	Unidades* unidad_seleccionada;
+
+	IGUIFont* font;
+
 public:
 	std::ofstream outfile;
 	CController(IrrlichtDevice* dev);
@@ -81,6 +85,7 @@ public:
 	void generarMapa();
 	void modificarUnidad(CUnidadesAprendizaje* unidad);
 	bool OnEvent(const SEvent& event);
+	void PintarInformacionUnidad();
 
 };
 
