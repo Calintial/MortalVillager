@@ -44,6 +44,7 @@ private:
 	position2di last_clicked;
 	Camino* camino;
 	Unidades* objetivo;
+	int pesoComprobacion;
 	int state;
 	bool select;
 

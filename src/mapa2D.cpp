@@ -951,7 +951,8 @@ position2di mapa2D::posicionDisponible(position2di pos)
 	position2di posbuena;
 
 	if(puede_colocarUnidad(pos)){
-		return pos;
+		posbuena = pos;
+		vacio = false;
 	}
 
 	
