@@ -231,3 +231,19 @@ void CController::Pintar()
     	gameEngine::stado.finish();
     }
 }
+
+bool CController::OnEvent(const SEvent& event)
+{
+	if (event.EventType == EET_MOUSE_INPUT_EVENT)
+	{
+		position2di pos_grid;
+		pos_grid.X = event.MouseInput.X/TILE_W;
+		pos_grid.Y = event.MouseInput.Y/TILE_H;
+
+		if(event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
+		{
+			cout<<pos_grid.X<<","<<pos_grid.Y<<endl;
+		}
+	}
+	return false;
+}

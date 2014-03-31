@@ -76,6 +76,7 @@ public:
 	bool		Update();
 
 	void Pintar();
+	bool OnEvent(const SEvent& event);
 };
 
 
