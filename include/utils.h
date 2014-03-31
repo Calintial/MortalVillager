@@ -38,10 +38,10 @@ inline double RandomClamped()	   {return RandFloat() - RandFloat();}
 //-----------------------------------------------------------------------
 
 //converts an integer to a std::string
-string itos(int arg);
+std::string itos(int arg);
 
 //converts an float to a std::string
-string ftos (float arg);
+std::string ftos (float arg);
 
 //	clamps the first argument between the second two
 void Clamp(double &arg, double min, double max);

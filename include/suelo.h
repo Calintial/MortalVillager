@@ -23,6 +23,10 @@ public:
 	void aplicarTextura(IVideoDriver* driver) override;
 	//void setTextura(ITexture* tex){textura=tex;}
 	bool isTransitable() override;
+	void setIsometric(bool iso);
+
+private:
+	bool isometric;
 };
 
 #endif

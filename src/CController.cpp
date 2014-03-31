@@ -6,33 +6,46 @@
 //	initilaize the sweepers, their brains and the GA factory
 //
 //-----------------------------------------------------------------------
-CController::CController(): m_NumUnidades(CParams::iNumUnidades), 
+CController::CController(IrrlichtDevice* dev): m_NumUnidades(CParams::iNumUnidades), 
 										                     m_pGA(NULL),
 										                     m_iTicks(0),
 										                     m_iGenerations(0)
 {
+	device = dev;
+	video::IVideoDriver* driver = device->getVideoDriver();
+
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			Matriz[i][j]=NULL;
+			Matriz[i][j]= new Suelo(0,i,j);
+			((Suelo*) Matriz[i][j])->setIsometric(false);
+			Matriz[i][j]->aplicarTextura(driver);
+
 		}
 	}
+
 	/*for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
 		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntY,RandIntX);
+		((Muro*) Matriz[RandIntX][RandIntY])->setIsometric(false);
+		Matriz[RandIntX][RandIntY]->aplicarTextura(driver);
 	}*/
+
 	//creamos las unidades 
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz,i);
+		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz);
+		unidad->aplicarTextura(driver);
 		Matriz[unidad->Position().x][unidad->Position().x]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
+
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
 		m_vecUnidades[i]->calcular8Objetos(Matriz);
 	}
+
 	//get the total number of weights used in the sweepers
 	//NN so we can initialise the GA
 	m_NumWeightsInNN = m_vecUnidades[0]->GetNumberOfWeights();
@@ -169,6 +182,8 @@ bool CController::Update()
 		}
 	}
 
+	Pintar();
+
 	return true;
 }
 //Devuelve la unidad que hay en esa posición 
@@ -177,3 +192,39 @@ CUnidadesAprendizaje* CController::getUnidadPosicion(SVector2D pos){
 	return (CUnidadesAprendizaje*) Matriz[pos.y][pos.x];
 
 };	
+
+void CController::Pintar()
+{
+	video::IVideoDriver* driver = device->getVideoDriver();
+	if (device->run())
+    {        
+        if(driver)
+        {
+			position2di GridPosition, DrawPosition;
+			
+						
+		    for(int i = 0; i < MAPSIZE; i++)
+		    {
+				for(int j = 0; j < MAPSIZE; j++)
+				{
+					// Obtenermos coordenadas actuales cuadricula
+		            DrawPosition = position2di(i*TILE_W, j * TILE_H);
+					//DrawPosition = getIsoFromTile(i - CameraScroll.X, j - CameraScroll.Y);
+					// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
+					// Validar coordenada
+						IDibujable *Tile = Matriz[i][j];
+						//Pinta
+						if(Tile->getTextura())
+							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
+				}
+			}
+
+			device->getGUIEnvironment()->drawAll();
+			    	
+        }
+    }
+    else
+    {
+    	gameEngine::stado.finish();
+    }
+}

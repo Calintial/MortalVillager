@@ -72,8 +72,8 @@ public:
   void      PutWeights(vector<double> &w){m_ItsBrain.PutWeights(w);}
 
   int       GetNumberOfWeights()const{return m_ItsBrain.GetNumberOfWeights();}
-  void Pintar(IVideoDriver*,int,int){}
-  void aplicarTextura(IVideoDriver* driver){}
+  void Pintar(IVideoDriver*,int,int);
+  void aplicarTextura(IVideoDriver* driver);
   bool isTransitable(){}
   void calcular8Objetos(IDibujable* [][MAPSIZE]);
 	SVector2D mayorMovimiento(int arriba, int abajo, int izquierda, int derecha);

@@ -22,9 +22,13 @@ public:
 	//void setTextura(ITexture* tex){textura=tex;}
 	bool isTransitable() override;
 	void aplicarTextura(IVideoDriver* driver);
+	void setIsometric(bool iso);
+
 
 private:
 	ITexture *TTexture_Suelo;
+	bool isometric;
+
 };
 
 #endif

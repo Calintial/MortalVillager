@@ -21,11 +21,13 @@
 #include "CParams.h"
 #include "IDibujable.h"
 #include "muro.h"
+#include "gameEngine.h"
 #include <fstream>
 #define MAPSIZE 20
 using namespace std;
 
-
+const int TILE_W	= 32;
+const int TILE_H = 32;
 
 class CController 
 {
@@ -63,15 +65,17 @@ private:
 	//0 transitable y 1 no transitable
 	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
 
+	IrrlichtDevice* device;
+
 public:
 	std::ofstream outfile;
-	CController();
+	CController(IrrlichtDevice* dev);
 
 	~CController();
 	CUnidadesAprendizaje* getUnidadPosicion(SVector2D pos);
 	bool		Update();
 
-
+	void Pintar();
 };
 
 
