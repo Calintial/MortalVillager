@@ -5,7 +5,7 @@
 #include "CController.h"
 #include "resource.h"
 #include "CParams.h"
-
+#include <time.h>
 
 
 
@@ -29,9 +29,10 @@ using namespace std;
 
 int main(int argc, char** argv)
 { 
-		srand (3);
+		//srand (3);
+		srand (time(NULL));
   		g_pController = new CController();
-  		int cont=10000;
+  		int cont=100000;
   		for(int i=0;i<cont;i++){
   			g_pController->Update();
   		}

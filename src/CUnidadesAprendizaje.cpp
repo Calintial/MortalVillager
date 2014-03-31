@@ -40,21 +40,38 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]):
 //	Resets the sweepers position, fitness and rotation
 //
 //----------------------------------------------------------------------
-void CUnidadesAprendizaje::Reset()
+void CUnidadesAprendizaje::Reset(IDibujable* Matriz[][MAPSIZE])
 {
-	//reset the sweepers positions
-	m_vPosition = SVector2D((RandFloat() * CParams::WindowWidth), 
-					                (RandFloat() * CParams::WindowHeight));
-	
+	Matriz[m_vPosition.y][m_vPosition.x]=NULL;
+	bool unidadNoPuesta=true;
+	do{
+
+		int RandFloatX=RandFloat() * MAPSIZE ;
+		int RandFloatY=RandFloat() * MAPSIZE ;
+		if(Matriz[RandFloatY][RandFloatX]!=NULL){
+			if(Matriz[RandFloatY][RandFloatX]->getTipo()!=3){
+				unidadNoPuesta=false;
+				m_vPosition = SVector2D(RandFloatX, RandFloatY);  				
+			}
+		}
+		else{
+			m_vPosition = SVector2D(RandFloatX, RandFloatY); 
+			unidadNoPuesta=false;
+		}
+		
+	}
+	while(unidadNoPuesta);
+	setTipo(3);
 	//and the fitness
 	m_dFitness = 0;
-
-	m_life = 1;
+	m_ataque = 0;
+	m_life = 100;
 	m_moveX = 0;
 	m_moveY = 0;
 	m_ataqueX = 0;
 	m_ataqueY = 0;
 	m_vObjetosCerca.clear();
+	calcular8Objetos(Matriz);
 	return;
 }
 
@@ -72,7 +89,7 @@ void CUnidadesAprendizaje::Reset()
 //	and acceleration and apply to current velocity vector.
 //
 //-----------------------------------------------------------------------
-bool CUnidadesAprendizaje::Update()
+bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 {
 	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,m_life,m_vPosition.x,m_vPosition.y);
 
@@ -80,20 +97,59 @@ bool CUnidadesAprendizaje::Update()
 	if(output.size()<CParams::iNumOutputs){
 		return false;
 	}
-	setAtaque(output[0],output[1]);
-	/*for(double op:output){
-		cout<<op<<",";
+	double x,y;
+	int xint,yint;
+	x=output[0];
+	y=output[1];
+	if(0<x<=0,33){
+		xint=m_vPosition.x-1;
 	}
-	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
-	if(output[2]>0.5){
+	else if(0,34<x<=0,66){
+		xint=m_vPosition.x-1;
+	}
+	else{
+		xint=m_vPosition.x+1;
+	}
+	if(0<y<=0,33){
+		yint=m_vPosition.y-1;
+	}
+	else if(0,34<y<=0,66){
+		yint=m_vPosition.y-1;
+	}
+	else{
+		yint=m_vPosition.y+1;
+	}
+	if(xint<MAPSIZE && xint>0 && yint<MAPSIZE && yint>0 && output[2]>0.5 && Matriz[yint][xint]!=NULL && Matriz[yint][xint]->getTipo()==3){
+		setAtaque(xint,yint);
 		m_ataque=1;
 		setMovimiento(0,0);
 	}
 	else{
 		SVector2D mov=mayorMovimiento(output[3],output[4],output[5],output[6]);
-		setMovimiento(mov.x,mov.y);
+		if(mov.x>=0 && mov.x<MAPSIZE && mov.y>=0 && mov.y<MAPSIZE){
+			setMovimiento(mov.x,mov.y);
+			
+
+		}
+		setAtaque(0,0);
 		m_ataque=0;
 	}
+
+	/*for(double op:output){
+		cout<<op<<",";
+	}
+	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
+	/*ofstream outfile;
+	outfile.open("Genetic.txt", ios::app);
+		if (outfile.is_open())
+		{
+							
+			for(double op:output){
+				outfile<<op<<",";
+			}
+		}
+
+	outfile.close();*/
 	return true;
 
 }
