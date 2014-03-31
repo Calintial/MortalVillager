@@ -36,8 +36,9 @@ CController::CController(IrrlichtDevice* dev): m_NumUnidades(CParams::iNumUnidad
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
 		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz);
+		unidad->aplicarTextura(driver);
 		Matriz[unidad->Position().x][unidad->Position().x]=unidad;
-		m_vecUnidades.push_back(new CUnidadesAprendizaje(Matriz));
+		m_vecUnidades.push_back(unidad);
 	}
 
 	for (int i=0; i<m_NumUnidades; ++i)
