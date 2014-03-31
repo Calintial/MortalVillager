@@ -46,9 +46,9 @@ public:
 	static void setVolume(float);
 	static float getVolume();
 
-	vector<IDibujable*> getIAUnits(){ return IAUnits; }
-	vector<IDibujable*> getUserUnits(){ return UserUnits; }
-	vector<IDibujable*> getBuildings(){ return buildings; }
+	vector<IDibujable*>* getIAUnits(){ return &IAUnits; }
+	vector<IDibujable*>* getUserUnits(){ return &UserUnits; }
+	vector<IDibujable*>* getBuildings(){ return &buildings; }
 
 	static void setSpeed(int);
 	static int getSpeed();
