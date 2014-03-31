@@ -29,10 +29,10 @@ using namespace std;
 
 int main(int argc, char** argv)
 { 
-		//srand (3);
-		srand (time(NULL));
+		srand (3);
+		//srand (time(NULL));
   		g_pController = new CController();
-  		int cont=100000;
+  		int cont=10000;
   		for(int i=0;i<cont;i++){
   			g_pController->Update();
   		}

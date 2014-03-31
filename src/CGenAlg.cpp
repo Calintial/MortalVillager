@@ -45,26 +45,41 @@ void CGenAlg::Mutate(vector<double> &chromo)
 {
 	//traverse the chromosome and mutate each weight dependent
 	//on the mutation rate
+	#ifdef DEBUG
+	outfile.open("Genetic.txt", ios::app);
+			if (outfile.is_open()){
+				outfile << "Ha empezado aqui"<<endl;
+			}
+	#endif
 	for (int i=0; i<chromo.size(); ++i)
 	{
 		//do we perturb this weight?
-		if (RandFloat() < m_dMutationRate)
+		double ran=RandFloat();
+		if (ran < m_dMutationRate)
 		{
 			//add or subtract a small value to the weight
-			/*outfile.open("Genetic.txt", ios::app);
+			#ifdef DEBUG
 			if (outfile.is_open())
 			{
+				outfile<< "Ran es: "<<ran<<endl;
 				outfile << "Chromosoma mutado: " << chromo[i];
 			}
-			
+			#endif			
 			chromo[i] += (RandomClamped() * CParams::dMaxPerturbation);
+			#ifdef DEBUG
 			if (outfile.is_open())
 			{
 				outfile << " ahora:  " << chromo[i]<<endl;
 			}
-			outfile.close();*/
+			#endif
 		}
 	}
+
+	/*if (outfile.is_open()){
+				outfile << "Ha terminado"<<endl;
+				outfile.close();
+	}*/
+			
 }
 
 //----------------------------------GetChromoRoulette()------------------
@@ -118,8 +133,9 @@ void CGenAlg::Crossover(const vector<double> &mum,
                         vector<double>       &baby2)
 {
 	
+		#ifdef DEBUG
 	outfile.open("Genetic.txt", ios::app);
-
+	#endif
 	
 		//just return parents as offspring dependent on the rate
 		//or if parents are the same
@@ -127,16 +143,19 @@ void CGenAlg::Crossover(const vector<double> &mum,
 		{
 			baby1 = mum;
 			baby2 = dad;
-			/*if (outfile.is_open())
+			#ifdef DEBUG
+			if (outfile.is_open())
 			{
 				outfile<< "no Crossover"<<endl;
-			}*/
+			}
+			#endif
 			return;
 		}
 
 		//determine a crossover point
 		int cp = RandInt(0, m_iChromoLength - 1);
-		/*if (outfile.is_open())
+		#ifdef DEBUG
+		if (outfile.is_open())
 			{
 		
 			outfile << "CP : "<<cp<<endl;
@@ -151,7 +170,8 @@ void CGenAlg::Crossover(const vector<double> &mum,
 					outfile << d << ",";
 				}
 				outfile << endl;
-			}*/
+			}
+		#endif
 		//create the offspring
 		for (int i=0; i<cp; ++i)
 		{
@@ -163,7 +183,8 @@ void CGenAlg::Crossover(const vector<double> &mum,
 		{
 			baby1.push_back(dad[i]);
 			baby2.push_back(mum[i]);
-		}/*
+		}
+		#ifdef DEBUG
 		if (outfile.is_open())
 			{
 				outfile << "		BABY1:" << endl;
@@ -177,8 +198,8 @@ void CGenAlg::Crossover(const vector<double> &mum,
 				}
 				outfile << endl;
 			}
-	outfile.close();*/
-	
+	outfile.close();
+	#endif
 
 	return;
 }

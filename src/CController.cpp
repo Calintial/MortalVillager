@@ -17,17 +17,17 @@ CController::CController(): m_NumUnidades(CParams::iNumUnidades),
 			Matriz[i][j]=NULL;
 		}
 	}
-	for(int i=0;i<30;i++){
+	/*for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
 		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntY,RandIntX);
-	}
+	}*/
 	//creamos las unidades 
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz);
+		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz,i);
 		Matriz[unidad->Position().x][unidad->Position().x]=unidad;
-		m_vecUnidades.push_back(new CUnidadesAprendizaje(Matriz));
+		m_vecUnidades.push_back(unidad);
 	}
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
@@ -94,8 +94,8 @@ bool CController::Update()
 				cout<<"Wrong amount of NN inputs!"<<endl;
 				return false;
 			}
-				
-		/*	outfile.open("Genetic.txt", ios::app);
+			#ifdef DEBUG	
+			outfile.open("Genetic.txt", ios::app);
 						if (outfile.is_open())
 						{
 							outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
@@ -103,20 +103,22 @@ bool CController::Update()
 						}
 
 			outfile.close();
-			*/if(m_vecUnidades[i]->getAtaque()==1){
+			#endif
+			if(m_vecUnidades[i]->getAtaque()==1){
 				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
 
 				if(Matriz[atacando.y][atacando.x]!=NULL && Matriz[atacando.y][atacando.x]->getTipo()==3){
 					m_vecUnidades[i]->IncrementFitness();
-					
-      		/*		outfile.open("Genetic.txt", ios::app);
+					#ifdef DEBUG
+      				outfile.open("Genetic.txt", ios::app);
 						if (outfile.is_open())
 						{
 							
 							outfile << "Y esta atacando a: ("<<atacando.x<<","<<atacando.y<<")"<<endl;
 						}
 
-						outfile.close();*/
+						outfile.close();
+						#endif
 				}
 		        
 			

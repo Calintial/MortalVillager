@@ -3,7 +3,7 @@
 //-----------------------------------constructor-------------------------
 //
 //-----------------------------------------------------------------------
-CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]):
+CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE],int posicion):
 							 m_life(1),
                              m_dFitness(0),
                              m_moveX(0),
@@ -16,9 +16,18 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]):
 	setTipo(3);
 	
 	bool unidadNoPuesta=true;
-	do{
-		int RandFloatX=RandFloat() * MAPSIZE ;
-		int RandFloatY=RandFloat() * MAPSIZE ;
+	
+		int RandFloatX=0;
+		int RandFloatY=0;
+		if(posicion<20){
+		//int RandFloatX=RandFloat() * MAPSIZE ;
+			RandFloatX=posicion;
+		int RandFloatY=0;
+		}
+		else{
+			RandFloatX=posicion-19;
+			RandFloatY=1;
+		}
 		if(Matriz[RandFloatY][RandFloatX]!=NULL){
 			if(Matriz[RandFloatY][RandFloatX]->getTipo()!=3){
 				unidadNoPuesta=false;
@@ -30,8 +39,8 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]):
 			unidadNoPuesta=false;
 		}
 		
-	}
-	while(unidadNoPuesta);
+	
+
 	
 }
 
@@ -139,7 +148,8 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 		cout<<op<<",";
 	}
 	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
-	/*ofstream outfile;
+	ofstream outfile;
+	#ifdef DEBUG
 	outfile.open("Genetic.txt", ios::app);
 		if (outfile.is_open())
 		{
@@ -149,7 +159,8 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 			}
 		}
 
-	outfile.close();*/
+	outfile.close();
+#endif
 	return true;
 
 }

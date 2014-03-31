@@ -53,7 +53,7 @@ public:
 	void setAtaque(int x, int y){m_ataqueX=x;m_ataqueY=y;}
 	void setMovimiento(int x, int y){m_moveX=x;m_moveY=y;}
 	double getLife(){return m_life;}
-	CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]);
+	CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE],int i);
 	
 	//updates the ANN with information from the sweepers enviroment
 	bool			Update(IDibujable* Matriz[][MAPSIZE]);
