@@ -101,6 +101,7 @@ public:
 	bool puede_colocar(position2di pos);
 	bool collide(position2di,int,int,position2di,int,int);
 	void colocarEdificio(position2di);
+	position2di posicionDisponible(position2di );
 
 
 private:
@@ -146,7 +147,7 @@ private:
 	int recol_Rango,recol_gradosel,recol_RangoAux;
 	vector<int> recol_Grados;
 	void reasignarVectorRecolocacion(int, int );
-	position2di posicionDisponible(position2di );
+	
 	bool puede_colocarUnidad(position2di );
 
 	//Objetos

@@ -35,6 +35,7 @@ public:
 	std::vector<std::vector<Region*>> getRegiones(){return regiones;}
 	std::vector<position2di> getEnlaces();
 	std::vector<Camino> getIntraCaminos();
+	position2di posicionDisponible(position2di);
 
 private:
 	void createRegions();

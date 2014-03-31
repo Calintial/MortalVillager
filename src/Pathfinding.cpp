@@ -678,3 +678,7 @@ void Pathfinding::insertarOrdenado(std::vector<Nodo*>& lista, Nodo* nodo){
 		lista.push_back(nodo);
 	}
 }
+
+position2di Pathfinding::posicionDisponible(position2di position){
+	return mapa->posicionDisponible(position);
+}
