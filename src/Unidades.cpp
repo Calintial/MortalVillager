@@ -96,7 +96,12 @@ void Unidades::updateUnit()
 				objetivo = NULL;
 			}
 		}
-
+		position2di nuevaPos = pathfinding->posicionDisponible(camino->getFinal());
+		if (nuevaPos != camino->getFinal())
+		{
+			delete camino;
+			camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
+		}
 		Move(camino);
 		if (camino == NULL || camino->getPeso() <= 0)
 		{

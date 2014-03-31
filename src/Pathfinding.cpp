@@ -107,8 +107,13 @@ void Pathfinding::actualizarRegiones(position2di up_left,position2di down_right)
 }
 
 Camino* Pathfinding::calcularCamino(position2di posicionPersonaje,position2di posicionFinal){
-
+	if (posicionPersonaje == posicionFinal)
+	{
+		return NULL;
+	}
+	
 	posicionFinal = mapa->posicionDisponible(posicionFinal);
+	
 
 	std::vector<Camino> caminosInicio;
 	std::vector<Camino> caminosFinal;
@@ -680,4 +685,8 @@ void Pathfinding::insertarOrdenado(std::vector<Nodo*>& lista, Nodo* nodo){
 	{
 		lista.push_back(nodo);
 	}
+}
+
+position2di Pathfinding::posicionDisponible(position2di position){
+	return mapa->posicionDisponible(position);
 }
