@@ -78,8 +78,8 @@ bool CController::Update()
 				cout<<"Wrong amount of NN inputs!"<<endl;
 				return false;
 			}
-			/*#ifdef DEBUG	
-			outfile.open("Genetic.txt", ios::app);
+			
+			outfile.open("GeneticMovimientos.txt", ios::app);
 						if (outfile.is_open())
 						{
 							outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
@@ -87,14 +87,14 @@ bool CController::Update()
 						}
 
 			outfile.close();
-			#endif*/
+			
 			if(m_vecUnidades[i]->getAtaque()==1){
 				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
 
 				if(Matriz[atacando.y][atacando.x]!=NULL && Matriz[atacando.y][atacando.x]->getTipo()==3){
 					m_vecUnidades[i]->IncrementFitness();
-					/*#ifdef DEBUG
-      				outfile.open("Genetic.txt", ios::app);
+				
+      				outfile.open("GeneticMovimientos.txt", ios::app);
 						if (outfile.is_open())
 						{
 							
@@ -102,20 +102,21 @@ bool CController::Update()
 						}
 
 						outfile.close();
-						#endif*/
+				
 				}
 		        
 			
 			}
 			else{
 
-		
-				video::IVideoDriver* driver = device->getVideoDriver();
-				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]= new Suelo(0,m_vecUnidades[i]->Position().x,m_vecUnidades[i]->Position().y);
-				((Suelo*) Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x])->setIsometric(false);
-				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]->aplicarTextura(driver);
-				m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
-				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=m_vecUnidades[i];
+				if(m_vecUnidades[i]->getMover()==1){
+					video::IVideoDriver* driver = device->getVideoDriver();
+					Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]= new Suelo(0,m_vecUnidades[i]->Position().x,m_vecUnidades[i]->Position().y);
+					((Suelo*) Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x])->setIsometric(false);
+					Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]->aplicarTextura(driver);
+					m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
+					Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=m_vecUnidades[i];
+				}
 			}
 
 
@@ -256,11 +257,11 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 	y=0;
 
 	do{
-	x= RandInt(0,MAPSIZE-1);
-	y=RandInt(0,MAPSIZE-1);
+	x= RandInt(0,5);
+	y=RandInt(0,5);
 
 		if(Matriz[y][x]->getTipo()==0){
-			unidad->setPosition(SVector2D( x,y));
+			unidad->setPosition(SVector2D(x,y));
 			noEstar=false;
 		}
 	}while(noEstar);

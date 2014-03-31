@@ -9,7 +9,8 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
                              m_moveX(0),
                              m_moveY(0),
                              m_ataqueX(0),
-                             m_ataqueY(0)
+                             m_ataqueY(0),
+                             move(0)
 
 			 
 {
@@ -25,7 +26,7 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
 void CUnidadesAprendizaje::Reset()
 {
 	
-	
+	move=0;
 	m_dFitness = 0;
 	m_ataque = 0;
 	m_life = 100;
@@ -85,21 +86,21 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 	if(xint<MAPSIZE && xint>0 && yint<MAPSIZE && yint>0 && output[2]>0.5 && Matriz[yint][xint]!=NULL && Matriz[yint][xint]->getTipo()==3){
 		setAtaque(xint,yint);
 		m_ataque=1;
-		setMovimiento(0,0);
+		move=0;
+		//setMovimiento(0,0);
 	}
 	else if(output[7]>0.5){
-		SVector2D mov=mayorMovimiento(output[3],output[4],output[5],output[6]);
+		SVector2D mov=mayorMovimiento(output[3],output[4],output[5],output[6],Matriz);
 		if(mov.x>=0 && mov.x<MAPSIZE && mov.y>=0 && mov.y<MAPSIZE){
 			setMovimiento(mov.x,mov.y);
-			
+			move=1;
 
 		}
-		setAtaque(0,0);
+
 		m_ataque=0;
 	}
 	else{
-		setAtaque(0,0);
-		setMovimiento(0,0);
+		move=0;
 		m_ataque=0;
 	}
 
@@ -109,7 +110,7 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
 	/*ofstream outfile;
 	#ifdef DEBUG
-	outfile.open("Genetic.txt", ios::app);
+	outfile.open("GeneticMovimientos.txt", ios::app);
 		if (outfile.is_open())
 		{
 							
@@ -126,14 +127,17 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 	int cant=0;
 	for(int i= m_vPosition.y-1;i<=m_vPosition.y+1 && cant<8;i++){
-		for(int j=m_vPosition.x-1;j<m_vPosition.x+1 && cant<8;j++){
+		for(int j=m_vPosition.x-1;j<=m_vPosition.x+1 && cant<8;j++){
 
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
-				
-				if(Matriz[i][j]!=NULL){
+				if(i==m_vPosition.y && j==m_vPosition.x){
+					break;
+				}
+
+				if(Matriz[i][j]->getTipo()!=0){
 					if(Matriz[i][j]->getTipo()==3){
 						m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
-
+						
 					}
 					else{
 						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[i][j]->getTipo(),0,Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
@@ -146,12 +150,21 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 		
 	}
 	for(int i= m_vPosition.y-2;i<=m_vPosition.y+2 && cant<8;i++){
-		for(int j=m_vPosition.x-2;j<m_vPosition.x+2 && cant<8;j++){
+		if(m_vPosition.y-1 <= i && i<= m_vPosition.y+1){
+				break;
+			}
+		for(int j=m_vPosition.x-2;j<=m_vPosition.x+2 && cant<8;j++){
+			if(m_vPosition.x-1 <= j && j<= m_vPosition.x+1){
+				break;
+			}
+			if(i==m_vPosition.y && j==m_vPosition.x){
+					break;
+				}
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
-				if(Matriz[i][j]!=NULL){
+				if(Matriz[i][j]->getTipo()!=0){
 					if(Matriz[i][j]->getTipo()==3){
 						m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
-
+						
 					}
 					else{
 						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[i][j]->getTipo(),0,Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
@@ -164,21 +177,67 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 	}
 }
 }
-SVector2D CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha){
+SVector2D CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]){
+	
+	int x=0,y=0;
+	x=	m_vPosition.y;
+	y=m_vPosition.x-1;
+	if(!( x>=0 && x<MAPSIZE &&  y>=0 &&  y<MAPSIZE) || Matriz[y][x]->getTipo()!=0){
+		arriba=0;
+	}
+	x=	m_vPosition.y;
+	y=m_vPosition.x+1;
+	if( !( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
+		abajo=0;
+	}
+	x=	m_vPosition.y-1;
+	y=m_vPosition.x;
+	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
+		izquierda=0;
+	}
+	x=	m_vPosition.y+1;
+	y=m_vPosition.x;
+	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
+		derecha=0;
+	}
 	double mejor=max(max(max(arriba,abajo),izquierda),derecha);
+	ofstream outfile;
+	outfile.open("GeneticMovimientos.txt", ios::app);
+
+
 	
 	if(arriba==mejor){
+		if (outfile.is_open())
+		{
+			outfile<<"Arriba"<<endl;
+		}
 		return SVector2D(m_vPosition.x-1,m_vPosition.y);
 	}
 	else if(abajo==mejor){
+		if (outfile.is_open())
+		{
+			outfile<<"Abajo"<<endl;
+		}
 		return SVector2D(m_vPosition.x+1,m_vPosition.y);
 	}
 	else if(izquierda==mejor){
+		if (outfile.is_open())
+		{
+			outfile<<"Izquierda"<<endl;
+		}
 		return  SVector2D(m_vPosition.x,m_vPosition.y-1);
 	}
-	else{
+	else if(derecha==mejor){
+		if (outfile.is_open())
+		{
+			outfile<<"Derecha"<<endl;
+		}
 		return  SVector2D(m_vPosition.x,m_vPosition.y+1);
 	}
+	else{
+		return SVector2D(m_vPosition.x,m_vPosition.y);
+	}
+	outfile.close();
 }
 
 void CUnidadesAprendizaje::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)

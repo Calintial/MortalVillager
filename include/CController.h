@@ -24,7 +24,7 @@
 #include "muro.h"
 #include "gameEngine.h"
 #include <fstream>
-#define MAPSIZE 20
+#define MAPSIZE 19
 using namespace std;
 
 const int TILE_W	= 32;

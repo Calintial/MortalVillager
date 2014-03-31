@@ -1,6 +1,6 @@
 #ifndef CUNIDADESAPRENDIZAJE_H
 #define CUNIDADESAPRENDIZAJE_H
-#define MAPSIZE 20
+#define MAPSIZE 19
 
 //------------------------------------------------------------------------
 //
@@ -34,7 +34,7 @@ private:
 	//its position in the world
 	SVector2D		m_vPosition;
 	int 			m_life;
-
+	int 			move;
 	//the sweeper's fitness score 
 	double			m_dFitness;
 	int 			m_ataque;
@@ -46,7 +46,7 @@ private:
 
 
 public:
-	
+	int getMover(){return move;};
 	int getAtaque(){return m_ataque;}
 	SVector2D getAtaqueMovimiento(){return  SVector2D(m_ataqueX,m_ataqueY);}
 	SVector2D getMovimiento(){return  SVector2D(m_moveX,m_moveY);}
@@ -75,7 +75,7 @@ public:
   void Pintar(IVideoDriver*,int,int);
   void aplicarTextura(IVideoDriver* driver);
   void calcular8Objetos(IDibujable* [][MAPSIZE]);
-	SVector2D mayorMovimiento(double arriba, double abajo, double izquierda, double derecha);
+	SVector2D mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
 	
 
 
