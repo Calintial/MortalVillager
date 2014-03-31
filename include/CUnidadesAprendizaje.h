@@ -18,7 +18,7 @@
 #include "CParams.h"
 #include "IDibujable.h"
 #include "ObjetosCercanos.h"
-
+#include <fstream>
 using namespace std;
 
 class CUnidadesAprendizaje :  public IDibujable
@@ -44,7 +44,9 @@ private:
 	int 			m_ataqueY;
 	vector<ObjetosCercanos> m_vObjetosCerca;
 
+
 public:
+	
 	int getAtaque(){return m_ataque;}
 	SVector2D getAtaqueMovimiento(){return  SVector2D(m_ataqueX,m_ataqueY);}
 	SVector2D getMovimiento(){return  SVector2D(m_moveX,m_moveY);}
@@ -54,7 +56,7 @@ public:
 	CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE]);
 	
 	//updates the ANN with information from the sweepers enviroment
-	bool			Update();
+	bool			Update(IDibujable* Matriz[][MAPSIZE]);
 
 
 	void			Reset(IDibujable* Matriz[][MAPSIZE]);

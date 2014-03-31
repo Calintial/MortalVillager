@@ -89,7 +89,7 @@ void CUnidadesAprendizaje::Reset(IDibujable* Matriz[][MAPSIZE])
 //	and acceleration and apply to current velocity vector.
 //
 //-----------------------------------------------------------------------
-bool CUnidadesAprendizaje::Update()
+bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 {
 	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,m_life,m_vPosition.x,m_vPosition.y);
 
@@ -98,28 +98,29 @@ bool CUnidadesAprendizaje::Update()
 		return false;
 	}
 	double x,y;
+	int xint,yint;
 	x=output[0];
 	y=output[1];
 	if(0<x<=0,33){
-		x=m_vPosition.x-1;
+		xint=m_vPosition.x-1;
 	}
 	else if(0,34<x<=0,66){
-		x=m_vPosition.x-1;
+		xint=m_vPosition.x-1;
 	}
 	else{
-		x=m_vPosition.x+1;
+		xint=m_vPosition.x+1;
 	}
 	if(0<y<=0,33){
-		y=m_vPosition.y-1;
+		yint=m_vPosition.y-1;
 	}
 	else if(0,34<y<=0,66){
-		y=m_vPosition.y-1;
+		yint=m_vPosition.y-1;
 	}
 	else{
-		y=m_vPosition.y+1;
+		yint=m_vPosition.y+1;
 	}
-	if(x<MAPSIZE && x>0 && y<MAPSIZE && y>0 && output[2]>0.5){
-		setAtaque(x,y);
+	if(xint<MAPSIZE && xint>0 && yint<MAPSIZE && yint>0 && output[2]>0.5 && Matriz[yint][xint]!=NULL && Matriz[yint][xint]->getTipo()==3){
+		setAtaque(xint,yint);
 		m_ataque=1;
 		setMovimiento(0,0);
 	}
@@ -138,7 +139,17 @@ bool CUnidadesAprendizaje::Update()
 		cout<<op<<",";
 	}
 	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
+	/*ofstream outfile;
+	outfile.open("Genetic.txt", ios::app);
+		if (outfile.is_open())
+		{
+							
+			for(double op:output){
+				outfile<<op<<",";
+			}
+		}
 
+	outfile.close();*/
 	return true;
 
 }

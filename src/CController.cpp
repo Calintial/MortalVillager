@@ -88,14 +88,14 @@ bool CController::Update()
 		for (int i=0; i<m_NumUnidades; ++i)
 		{
 			//update the NN and position
-			if (!m_vecUnidades[i]->Update())
+			if (!m_vecUnidades[i]->Update(Matriz))
 			{
 				//error in processing the neural net
 				cout<<"Wrong amount of NN inputs!"<<endl;
 				return false;
 			}
 				
-			outfile.open("Genetic.txt", ios::app);
+		/*	outfile.open("Genetic.txt", ios::app);
 						if (outfile.is_open())
 						{
 							outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
@@ -103,20 +103,20 @@ bool CController::Update()
 						}
 
 			outfile.close();
-			if(m_vecUnidades[i]->getAtaque()==1){
+			*/if(m_vecUnidades[i]->getAtaque()==1){
 				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
 
 				if(Matriz[atacando.y][atacando.x]!=NULL && Matriz[atacando.y][atacando.x]->getTipo()==3){
 					m_vecUnidades[i]->IncrementFitness();
 					
-      				outfile.open("Genetic.txt", ios::app);
+      		/*		outfile.open("Genetic.txt", ios::app);
 						if (outfile.is_open())
 						{
 							
 							outfile << "Y esta atacando a: ("<<atacando.x<<","<<atacando.y<<")"<<endl;
 						}
 
-						outfile.close();
+						outfile.close();*/
 				}
 		        
 			
