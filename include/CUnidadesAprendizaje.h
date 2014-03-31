@@ -74,8 +74,12 @@ public:
   int       GetNumberOfWeights()const{return m_ItsBrain.GetNumberOfWeights();}
   void Pintar(IVideoDriver*,int,int);
   void aplicarTextura(IVideoDriver* driver);
+  virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
   void calcular8Objetos(IDibujable* [][MAPSIZE]);
+
 	SVector2D mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
+
+
 	
 
 

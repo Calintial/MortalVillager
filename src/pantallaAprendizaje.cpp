@@ -23,9 +23,9 @@ for(int i=0;i<cont;i++){
 
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	pantallaDevice->setEventReceiver(this);
-	aprendizaje->Update();
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(32*20,0,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,32*20,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
+	aprendizaje->Update();
 	pantallaDevice->getVideoDriver()->endScene();
 }
 	if(eliminar){

@@ -251,3 +251,11 @@ void CUnidadesAprendizaje::aplicarTextura(IVideoDriver* driver)
 {
 	setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
 }
+
+void CUnidadesAprendizaje::TexturaSeleccionada(IVideoDriver* driver,bool seleccionada)
+{
+	if(seleccionada)
+		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje_seleccionado.png"));
+	else
+		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
+}
