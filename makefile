@@ -20,8 +20,8 @@ all: main
 
 # ia_batalla: bin/ia_batalla
 # 	echo "COMPILADO IA_BATALLA"
-aprendizaje: bin/aprendizaje
-	echo "COMPILADO EL APRENDIZAJE"
+#aprendizaje: bin/aprendizaje
+#	echo "COMPILADO EL APRENDIZAJE"
 main: bin/main
 	echo "COMPILADO MAIN"
 
@@ -37,9 +37,9 @@ bin/main: src/main.cpp $(OBJECTS_MAIN)
 # 	mkdir -p bin
 # 	$(CC) -o bin/ia_batalla $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
-bin/aprendizaje: src/mainAprendizaje.cpp $(OBJECTS_APRENDIZAJE)
-	mkdir -p bin
-	$(CC) -o bin/aprendizaje $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
+#bin/aprendizaje: src/mainAprendizaje.cpp $(OBJECTS_APRENDIZAJE)
+#	mkdir -p bin
+#	$(CC) -o bin/aprendizaje $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
 # To obtain object files
 Nodo.o: src/Nodo.cpp include/Nodo.h include/boost/graph/labeled_graph.hpp

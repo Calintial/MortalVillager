@@ -24,20 +24,20 @@ CController::CController(IrrlichtDevice* dev): m_NumUnidades(CParams::iNumUnidad
 		}
 	}
 
-	/*for(int i=0;i<30;i++){
+	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
 		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntY,RandIntX);
 		((Muro*) Matriz[RandIntX][RandIntY])->setIsometric(false);
 		Matriz[RandIntX][RandIntY]->aplicarTextura(driver);
-	}*/
+	}
 
 	//creamos las unidades 
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz);
+		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz,i);
 		unidad->aplicarTextura(driver);
-		Matriz[unidad->Position().x][unidad->Position().x]=unidad;
+		Matriz[unidad->Position().y][unidad->Position().x]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
 
@@ -138,8 +138,11 @@ bool CController::Update()
 			}
 			else{
 
-				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=NULL;
-
+		
+				video::IVideoDriver* driver = device->getVideoDriver();
+				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]= new Suelo(0,m_vecUnidades[i]->Position().x,m_vecUnidades[i]->Position().y);
+				((Suelo*) Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x])->setIsometric(false);
+				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]->aplicarTextura(driver);
 				m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
 				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=m_vecUnidades[i];
 			}
