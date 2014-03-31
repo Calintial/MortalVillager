@@ -4,6 +4,7 @@ Unidades::Unidades()
 {
 	camino = NULL;
 	objetivo = NULL;
+	posicionObjetivo = position2di(0,0);
 	setPosition(1,1);
 	state = 0;
 	select = false;
@@ -16,6 +17,7 @@ Unidades::Unidades(int x, int y)
 {
 	camino = NULL;
 	objetivo = NULL;
+	posicionObjetivo = position2di(0,0);
 	setPosition(x,y);
 	state = 0;
 	select = false;
@@ -28,6 +30,7 @@ Unidades::~Unidades()
 {
 	delete camino;
 	setPosition(0,0);
+	posicionObjetivo = position2di(0,0);
 	last_clicked.X = 0;
 	last_clicked.Y = 0;
 	select = false;
@@ -94,7 +97,8 @@ void Unidades::Move(Unidades* _objetivo){
 	if(_objetivo != NULL){
 		state = MOVE;
 		objetivo = _objetivo;
-		Move(_objetivo->getPosition().X,_objetivo->getPosition().Y);
+		posicionObjetivo = objetivo->getPosition();
+		Move(posicionObjetivo.X,posicionObjetivo.Y);
 	}
 }
 
@@ -106,8 +110,9 @@ void Unidades::updateUnit()
 		if (objetivo && camino)
 		{
 			if (camino->getPeso() <= pesoComprobacion){
-				position2di nuevaPos = pathfinding->posicionDisponible(objetivo->getPosition());
-				if (nuevaPos != camino->getFinal())
+				position2di nuevaPos = objetivo->getPosition();
+				cout << "### NUEVAPOS OBJETIVO = <"<<nuevaPos.X<<","<<nuevaPos.Y<<">"<<endl;
+				if (nuevaPos != posicionObjetivo)
 				{
 					delete camino;
 					camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
@@ -147,6 +152,7 @@ void Unidades::updateUnit()
 			{
 				delete camino;
 				objetivo = NULL;
+				posicionObjetivo = position2di(0,0);
 				camino = NULL;
 			}			
 			state = NOTHING;
