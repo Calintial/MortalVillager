@@ -107,6 +107,11 @@ void Pathfinding::actualizarRegiones(position2di up_left,position2di down_right)
 }
 
 Camino* Pathfinding::calcularCamino(position2di posicionPersonaje,position2di posicionFinal){
+	if (posicionPersonaje == posicionFinal)
+	{
+		return NULL;
+	}
+
 	std::vector<Camino> caminosInicio;
 	std::vector<Camino> caminosFinal;
 	Region* regionInicio = getCorrespondingRegion(posicionPersonaje);
