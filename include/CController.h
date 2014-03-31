@@ -80,6 +80,8 @@ public:
 	void Pintar();
 	void generarMapa();
 	void modificarUnidad(CUnidadesAprendizaje* unidad);
+	bool OnEvent(const SEvent& event);
+
 };
 
 
