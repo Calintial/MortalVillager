@@ -1,6 +1,7 @@
-#ifndef CMINESWEEPER_H
-#define CMINESWEEPER_H
+#ifndef CUNIDADESAPRENDIZAJE_H
+#define CUNIDADESAPRENDIZAJE_H
 #define MAPSIZE 20
+
 //------------------------------------------------------------------------
 //
 //	Name: CMineSweeper.h
@@ -17,11 +18,12 @@
 #include "SVector2D.h"
 #include "CParams.h"
 #include "IDibujable.h"
+#include "Unidades.h"
 #include "ObjetosCercanos.h"
 #include <fstream>
 using namespace std;
 
-class CUnidadesAprendizaje :  public IDibujable
+class CUnidadesAprendizaje :  public Unidades
 {
 
 private:
@@ -31,9 +33,7 @@ private:
 
 	//its position in the world
 	SVector2D		m_vPosition;
-
-	//its rotation (surprise surprise)
-	double 			m_life;
+	int 			m_life;
 
 	//the sweeper's fitness score 
 	double			m_dFitness;
@@ -52,14 +52,14 @@ public:
 	SVector2D getMovimiento(){return  SVector2D(m_moveX,m_moveY);}
 	void setAtaque(int x, int y){m_ataqueX=x;m_ataqueY=y;}
 	void setMovimiento(int x, int y){m_moveX=x;m_moveY=y;}
-	double getLife(){return m_life;}
-	CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE],int i);
+	int getLife(){return m_life;}
+	CUnidadesAprendizaje(int x, int y);
 	
 	//updates the ANN with information from the sweepers enviroment
 	bool			Update(IDibujable* Matriz[][MAPSIZE]);
 
 
-	void			Reset(IDibujable* Matriz[][MAPSIZE]);
+	void			Reset();
   	vector<ObjetosCercanos> getVectorObjetos(){return m_vObjetosCerca;};
 
 	//-------------------accessor functions
@@ -74,9 +74,11 @@ public:
   int       GetNumberOfWeights()const{return m_ItsBrain.GetNumberOfWeights();}
   void Pintar(IVideoDriver*,int,int);
   void aplicarTextura(IVideoDriver* driver);
-  bool isTransitable(){}
   void calcular8Objetos(IDibujable* [][MAPSIZE]);
-	SVector2D mayorMovimiento(int arriba, int abajo, int izquierda, int derecha);
+	SVector2D mayorMovimiento(double arriba, double abajo, double izquierda, double derecha);
+	
+
+
 };
 
 

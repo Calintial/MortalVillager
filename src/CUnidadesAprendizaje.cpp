@@ -3,8 +3,8 @@
 //-----------------------------------constructor-------------------------
 //
 //-----------------------------------------------------------------------
-CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE],int posicion):
-							 m_life(1),
+CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
+							 m_life(100),
                              m_dFitness(0),
                              m_moveX(0),
                              m_moveY(0),
@@ -13,35 +13,8 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE],int pos
 
 			 
 {
-	setTipo(3);
-	
-	bool unidadNoPuesta=true;
-	
-		int RandFloatX=0;
-		int RandFloatY=0;
-		if(posicion<20){
-		//int RandFloatX=RandFloat() * MAPSIZE ;
-			RandFloatX=posicion;
-		int RandFloatY=0;
-		}
-		else{
-			RandFloatX=posicion-19;
-			RandFloatY=1;
-		}
-		if(Matriz[RandFloatY][RandFloatX]!=NULL){
-			if(Matriz[RandFloatY][RandFloatX]->getTipo()!=3){
-				unidadNoPuesta=false;
-				m_vPosition = SVector2D(RandFloatX, RandFloatY);  				
-			}
-		}
-		else{
-			m_vPosition = SVector2D(RandFloatX, RandFloatY); 
-			unidadNoPuesta=false;
-		}
-		
-	
-
-	
+			m_vPosition = SVector2D(x, y); 
+			
 }
 
 //-------------------------------------------Reset()--------------------
@@ -49,29 +22,10 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(IDibujable* Matriz[][MAPSIZE],int pos
 //	Resets the sweepers position, fitness and rotation
 //
 //----------------------------------------------------------------------
-void CUnidadesAprendizaje::Reset(IDibujable* Matriz[][MAPSIZE])
+void CUnidadesAprendizaje::Reset()
 {
-	Matriz[m_vPosition.y][m_vPosition.x]=NULL;
-	bool unidadNoPuesta=true;
-	do{
-
-		int RandFloatX=RandFloat() * MAPSIZE ;
-		int RandFloatY=RandFloat() * MAPSIZE ;
-		if(Matriz[RandFloatY][RandFloatX]!=NULL){
-			if(Matriz[RandFloatY][RandFloatX]->getTipo()!=3){
-				unidadNoPuesta=false;
-				m_vPosition = SVector2D(RandFloatX, RandFloatY);  				
-			}
-		}
-		else{
-			m_vPosition = SVector2D(RandFloatX, RandFloatY); 
-			unidadNoPuesta=false;
-		}
-		
-	}
-	while(unidadNoPuesta);
-	setTipo(3);
-	//and the fitness
+	
+	
 	m_dFitness = 0;
 	m_ataque = 0;
 	m_life = 100;
@@ -80,7 +34,7 @@ void CUnidadesAprendizaje::Reset(IDibujable* Matriz[][MAPSIZE])
 	m_ataqueX = 0;
 	m_ataqueY = 0;
 	m_vObjetosCerca.clear();
-	calcular8Objetos(Matriz);
+
 	return;
 }
 
@@ -103,26 +57,26 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,m_life,m_vPosition.x,m_vPosition.y);
 
 	vector<double> output = m_ItsBrain.Update(inputs);
-	if(output.size()<CParams::iNumOutputs){
+	if( output.size()<CParams::iNumOutputs){
 		return false;
 	}
 	double x,y;
 	int xint,yint;
 	x=output[0];
 	y=output[1];
-	if(0<x<=0,33){
+	if(0<x && x<=0.33){
 		xint=m_vPosition.x-1;
 	}
-	else if(0,34<x<=0,66){
+	else if(0.34<x && x<=0.66){
 		xint=m_vPosition.x-1;
 	}
 	else{
 		xint=m_vPosition.x+1;
 	}
-	if(0<y<=0,33){
+	if(0<y && y<=0.33){
 		yint=m_vPosition.y-1;
 	}
-	else if(0,34<y<=0,66){
+	else if(0.34<y && y<=0.66){
 		yint=m_vPosition.y-1;
 	}
 	else{
@@ -133,7 +87,7 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 		m_ataque=1;
 		setMovimiento(0,0);
 	}
-	else{
+	else if(output[7]>0.5){
 		SVector2D mov=mayorMovimiento(output[3],output[4],output[5],output[6]);
 		if(mov.x>=0 && mov.x<MAPSIZE && mov.y>=0 && mov.y<MAPSIZE){
 			setMovimiento(mov.x,mov.y);
@@ -143,12 +97,17 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 		setAtaque(0,0);
 		m_ataque=0;
 	}
+	else{
+		setAtaque(0,0);
+		setMovimiento(0,0);
+		m_ataque=0;
+	}
 
 	/*for(double op:output){
 		cout<<op<<",";
 	}
 	cout<<"M_ATAQUE: "<<m_ataque<<endl;*/
-	ofstream outfile;
+	/*ofstream outfile;
 	#ifdef DEBUG
 	outfile.open("Genetic.txt", ios::app);
 		if (outfile.is_open())
@@ -160,7 +119,7 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 		}
 
 	outfile.close();
-#endif
+#endif*/
 	return true;
 
 }
@@ -205,8 +164,9 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 	}
 }
 }
-SVector2D CUnidadesAprendizaje::mayorMovimiento(int arriba, int abajo, int izquierda, int derecha){
-	int mejor=max(max(max(arriba,abajo),izquierda),derecha);
+SVector2D CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha){
+	double mejor=max(max(max(arriba,abajo),izquierda),derecha);
+	
 	if(arriba==mejor){
 		return SVector2D(m_vPosition.x-1,m_vPosition.y);
 	}

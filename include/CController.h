@@ -15,6 +15,7 @@
 #include <string>
 #include <fstream>
 #include "CUnidadesAprendizaje.h"
+#include "EspadachinRedes.h"
 #include "CGenAlg.h"
 #include "utils.h"
 #include "SVector2D.h"
@@ -66,6 +67,7 @@ private:
 	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
 
 	IrrlichtDevice* device;
+	video::IVideoDriver* driver;
 
 public:
 	std::ofstream outfile;
@@ -76,6 +78,8 @@ public:
 	bool		Update();
 
 	void Pintar();
+	void generarMapa();
+	void modificarUnidad(CUnidadesAprendizaje* unidad);
 };
 
 

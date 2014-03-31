@@ -12,39 +12,9 @@ CController::CController(IrrlichtDevice* dev): m_NumUnidades(CParams::iNumUnidad
 										                     m_iGenerations(0)
 {
 	device = dev;
-	video::IVideoDriver* driver = device->getVideoDriver();
-
-	for (int i=0;i<MAPSIZE;i++){
-		for(int j=0;j<MAPSIZE;j++){
-			//0 transitable 1 no transitable
-			Matriz[i][j]= new Suelo(0,i,j);
-			((Suelo*) Matriz[i][j])->setIsometric(false);
-			Matriz[i][j]->aplicarTextura(driver);
-
-		}
-	}
-
-	for(int i=0;i<30;i++){
-		int RandIntX=RandInt(1,MAPSIZE-1);
-		int RandIntY=RandInt(1,MAPSIZE-1);
-		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntY,RandIntX);
-		((Muro*) Matriz[RandIntX][RandIntY])->setIsometric(false);
-		Matriz[RandIntX][RandIntY]->aplicarTextura(driver);
-	}
-
-	//creamos las unidades 
-	for (int i=0; i<m_NumUnidades; ++i)
-	{
-		CUnidadesAprendizaje* unidad=new CUnidadesAprendizaje(Matriz,i);
-		unidad->aplicarTextura(driver);
-		Matriz[unidad->Position().y][unidad->Position().x]=unidad;
-		m_vecUnidades.push_back(unidad);
-	}
-
-	for (int i=0; i<m_NumUnidades; ++i)
-	{
-		m_vecUnidades[i]->calcular8Objetos(Matriz);
-	}
+	driver = device->getVideoDriver();
+	generarMapa();
+	
 
 	//get the total number of weights used in the sweepers
 	//NN so we can initialise the GA
@@ -100,6 +70,7 @@ bool CController::Update()
 	{
 		for (int i=0; i<m_NumUnidades; ++i)
 		{
+			Pintar();
 			//update the NN and position
 			if (!m_vecUnidades[i]->Update(Matriz))
 			{
@@ -107,7 +78,7 @@ bool CController::Update()
 				cout<<"Wrong amount of NN inputs!"<<endl;
 				return false;
 			}
-			#ifdef DEBUG	
+			/*#ifdef DEBUG	
 			outfile.open("Genetic.txt", ios::app);
 						if (outfile.is_open())
 						{
@@ -116,13 +87,13 @@ bool CController::Update()
 						}
 
 			outfile.close();
-			#endif
+			#endif*/
 			if(m_vecUnidades[i]->getAtaque()==1){
 				SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
 
 				if(Matriz[atacando.y][atacando.x]!=NULL && Matriz[atacando.y][atacando.x]->getTipo()==3){
 					m_vecUnidades[i]->IncrementFitness();
-					#ifdef DEBUG
+					/*#ifdef DEBUG
       				outfile.open("Genetic.txt", ios::app);
 						if (outfile.is_open())
 						{
@@ -131,7 +102,7 @@ bool CController::Update()
 						}
 
 						outfile.close();
-						#endif
+						#endif*/
 				}
 		        
 			
@@ -179,13 +150,13 @@ bool CController::Update()
     for (int i=0; i<m_NumUnidades; ++i)
 		{
 			m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
-		
-			m_vecUnidades[i]->Reset(Matriz);
-			Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=m_vecUnidades[i];
+			modificarUnidad(m_vecUnidades[i]);
+			
 		}
+		Pintar();
 	}
 
-	Pintar();
+	
 
 	return true;
 }
@@ -230,4 +201,67 @@ void CController::Pintar()
     {
     	gameEngine::stado.finish();
     }
+}
+
+void CController::generarMapa(){
+int j=0;
+	for (int i=0;i<MAPSIZE;i++){
+		for(int j=0;j<MAPSIZE;j++){
+			//0 transitable 1 no transitable
+			Matriz[i][j]= new Suelo(0,i,j);
+			((Suelo*) Matriz[i][j])->setIsometric(false);
+			Matriz[i][j]->aplicarTextura(driver);
+
+		}
+	}
+
+	for(int i=0;i<30;i++){
+		int RandIntX=RandInt(1,MAPSIZE-1);
+		int RandIntY=RandInt(1,MAPSIZE-1);
+		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntY,RandIntX);
+		((Muro*) Matriz[RandIntX][RandIntY])->setIsometric(false);
+		Matriz[RandIntX][RandIntY]->aplicarTextura(driver);
+	}
+
+	//creamos las unidades 
+	
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		if(i%19==0){
+			j++;	
+		}
+		EspadachinRedes* unidad=new EspadachinRedes(i,j);
+		unidad->aplicarTextura(driver);
+		Matriz[j][i]=unidad;
+		m_vecUnidades.push_back(unidad);
+	}
+
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		m_vecUnidades[i]->calcular8Objetos(Matriz);
+	}
+
+}
+void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
+	int x=0,y=0;
+	x=unidad->Position().x;
+	y=unidad->Position().y;
+	Matriz[y][x]= new Suelo(0,x,x);
+	((Suelo*) Matriz[y][x])->setIsometric(false);
+	Matriz[y][x]->aplicarTextura(driver);
+	unidad->Reset();
+	bool noEstar=true;
+	x=0;
+	y=0;
+
+	do{
+	x= RandInt(0,MAPSIZE-1);
+	y=RandInt(0,MAPSIZE-1);
+
+		if(Matriz[y][x]->getTipo()==0){
+			unidad->setPosition(SVector2D( x,y));
+			noEstar=false;
+		}
+	}while(noEstar);
+	unidad->calcular8Objetos(Matriz);
 }

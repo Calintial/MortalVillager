@@ -45,12 +45,12 @@ void CGenAlg::Mutate(vector<double> &chromo)
 {
 	//traverse the chromosome and mutate each weight dependent
 	//on the mutation rate
-	#ifdef DEBUG
+/*#ifdef DEBUG
 	outfile.open("Genetic.txt", ios::app);
 			if (outfile.is_open()){
 				outfile << "Ha empezado aqui"<<endl;
 			}
-	#endif
+#endif*/
 	for (int i=0; i<chromo.size(); ++i)
 	{
 		//do we perturb this weight?
@@ -58,20 +58,20 @@ void CGenAlg::Mutate(vector<double> &chromo)
 		if (ran < m_dMutationRate)
 		{
 			//add or subtract a small value to the weight
-			#ifdef DEBUG
+/*#ifdef DEBUG
 			if (outfile.is_open())
 			{
 				outfile<< "Ran es: "<<ran<<endl;
 				outfile << "Chromosoma mutado: " << chromo[i];
 			}
-			#endif			
+#endif	*/	
 			chromo[i] += (RandomClamped() * CParams::dMaxPerturbation);
-			#ifdef DEBUG
+/*#ifdef DEBUG
 			if (outfile.is_open())
 			{
 				outfile << " ahora:  " << chromo[i]<<endl;
 			}
-			#endif
+#endif*/
 		}
 	}
 
@@ -133,9 +133,9 @@ void CGenAlg::Crossover(const vector<double> &mum,
                         vector<double>       &baby2)
 {
 	
-		#ifdef DEBUG
+/*#ifdef DEBUG
 	outfile.open("Genetic.txt", ios::app);
-	#endif
+#endif*/
 	
 		//just return parents as offspring dependent on the rate
 		//or if parents are the same
@@ -143,18 +143,18 @@ void CGenAlg::Crossover(const vector<double> &mum,
 		{
 			baby1 = mum;
 			baby2 = dad;
-			#ifdef DEBUG
+/*#ifdef DEBUG
 			if (outfile.is_open())
 			{
 				outfile<< "no Crossover"<<endl;
 			}
-			#endif
+#endif*/
 			return;
 		}
 
 		//determine a crossover point
 		int cp = RandInt(0, m_iChromoLength - 1);
-		#ifdef DEBUG
+/*#ifdef DEBUG
 		if (outfile.is_open())
 			{
 		
@@ -171,7 +171,7 @@ void CGenAlg::Crossover(const vector<double> &mum,
 				}
 				outfile << endl;
 			}
-		#endif
+#endif*/
 		//create the offspring
 		for (int i=0; i<cp; ++i)
 		{
@@ -184,7 +184,7 @@ void CGenAlg::Crossover(const vector<double> &mum,
 			baby1.push_back(dad[i]);
 			baby2.push_back(mum[i]);
 		}
-		#ifdef DEBUG
+/*#ifdef DEBUG
 		if (outfile.is_open())
 			{
 				outfile << "		BABY1:" << endl;
@@ -199,8 +199,8 @@ void CGenAlg::Crossover(const vector<double> &mum,
 				outfile << endl;
 			}
 	outfile.close();
-	#endif
-
+#endif
+*/
 	return;
 }
 
