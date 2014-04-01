@@ -9,7 +9,7 @@ class EspadachinRedes : public CUnidadesAprendizaje{
 		int getVisionRange(){return vision_range;};
 		int getAttackRange(){return attack_range;};
 		int getAttackValue(){return attack_value;};
-		int getType(){getTipo();};
+		int getType(){return getTipo();}; // esto... creo que no es asi >_<
 	private:
 
 		int attack_value;
