@@ -46,6 +46,7 @@ private:
 
 
 public:
+	std::ofstream outfile;
 	int getMover(){return move;};
 	int getAtaque(){return m_ataque;}
 	SVector2D getAtaqueMovimiento(){return  SVector2D(m_ataqueX,m_ataqueY);}

@@ -70,10 +70,27 @@ bool CController::Update()
   //updated appropriately,
 	if (m_iTicks++ < CParams::iNumTicks)
 	{
+		outfile.open("GeneticMovimientos.txt", ios::app);
+						if (outfile.is_open())
+						{
+							outfile<<"##########################################################CController::Update:76"<<" mUnidades "<<m_NumUnidades<<" Ticks "<<m_iTicks<<"#####################################################"<<endl;
+							
+						}
+
+			outfile.close();
+			
 		for (int i=0; i<m_NumUnidades; ++i)
 		{
 			Pintar();
 			//update the NN and position
+			outfile.open("GeneticMovimientos.txt", ios::app);
+						if (outfile.is_open())
+						{
+							outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
+							
+						}
+
+			outfile.close();
 			if (!m_vecUnidades[i]->Update(Matriz))
 			{
 				//error in processing the neural net

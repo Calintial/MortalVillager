@@ -213,10 +213,10 @@ void CGenAlg::Crossover(const vector<double> &mum,
 //-----------------------------------------------------------------------
 vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 {
-	outfile.open("Genetic.txt", ios::app);
+	outfile.open("GeneticMovimientos.txt", ios::app);
 	if (outfile.is_open())
 	{
-		outfile << "#######################################################  " << m_iGenerations << "   ######################################################"<<endl
+		outfile << "####################################################### CGenAlg::Epoch::219 " << m_iGenerations << "   ######################################################"<<endl
 			;
 	}
 
@@ -270,10 +270,10 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 
 	//finished so assign new pop back into m_vecPop
 	m_vecPop = vecNewPop;
-	outfile.open("Genetic.txt", ios::app);
+	outfile.open("GeneticMovimientos.txt", ios::app);
 	if (outfile.is_open())
 	{
-		outfile << "#############################################################################################################"<<endl;
+		outfile << "#########################################################################FinalCGenAlg::Epoch####################################"<<endl;
 	}
 
 	outfile.close();
