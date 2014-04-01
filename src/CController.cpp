@@ -185,7 +185,7 @@ void CController::Pintar()
 				for(int j = 0; j < MAPSIZE; j++)
 				{
 					// Obtenermos coordenadas actuales cuadricula
-		            DrawPosition = position2di(i*TILE_W, j * TILE_H);
+		            DrawPosition = position2di(j*TILE_H, i * TILE_W);
 					//DrawPosition = getIsoFromTile(i - CameraScroll.X, j - CameraScroll.Y);
 					// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
 					// Validar coordenada
@@ -227,9 +227,9 @@ int j=0;
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
-		Matriz[RandIntX][RandIntY]=new Muro(1,RandIntY,RandIntX);
-		((Muro*) Matriz[RandIntX][RandIntY])->setIsometric(false);
-		Matriz[RandIntX][RandIntY]->aplicarTextura(driver);
+		Matriz[RandIntY][RandIntX]=new Muro(1,RandIntX,RandIntY);
+		((Muro*) Matriz[RandIntY][RandIntX])->setIsometric(false);
+		Matriz[RandIntY][RandIntX]->aplicarTextura(driver);
 	}
 
 	//creamos las unidades 
@@ -241,7 +241,7 @@ int j=0;
 		}
 		EspadachinRedes* unidad=new EspadachinRedes(i,j);
 		unidad->aplicarTextura(driver);
-		Matriz[j][i]=unidad;
+		Matriz[i][j]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
 
@@ -255,7 +255,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 	int x=0,y=0;
 	x=unidad->Position().x;
 	y=unidad->Position().y;
-	Matriz[y][x]= new Suelo(0,x,x);
+	Matriz[y][x]= new Suelo(0,x,y);
 	((Suelo*) Matriz[y][x])->setIsometric(false);
 	Matriz[y][x]->aplicarTextura(driver);
 	unidad->Reset();
@@ -290,16 +290,16 @@ bool CController::OnEvent(const SEvent& event)
 				unidad_seleccionada = NULL;
 			}
 
-			for(CUnidadesAprendizaje* unit : m_vecUnidades)
+			IDibujable* tile =  Matriz[pos_grid.Y][pos_grid.X];
+			cerr<<"Has clicado en ["<<pos_grid.X<<","<<pos_grid.Y<<"]";
+			if (tile->getTipo() == 3)
 			{
-				SVector2D posicion = unit->Position();
-				if(posicion.x == pos_grid.Y && posicion.y == pos_grid.X)
-				{
-					unit->TexturaSeleccionada(device->getVideoDriver(),true);
-					unidad_seleccionada = (Unidades*) unit;
-					break;
-				}
+				CUnidadesAprendizaje* unit = (CUnidadesAprendizaje*) tile;
+				unit->TexturaSeleccionada(device->getVideoDriver(),true);
+				unidad_seleccionada = unit;
+				cerr<<" - Unidad seleccionada.pos = ["<<unit->Position().x<<","<<unit->Position().y<<"]";
 			}
+			cerr<<endl;
 		}
 	}
 	return false;
