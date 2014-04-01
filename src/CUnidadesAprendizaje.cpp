@@ -132,6 +132,7 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 
 }
 void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
+	m_vObjetosCerca.clear();
 	int cant=0;
 	for(int i= m_vPosition.y-1;i<=m_vPosition.y+1 && cant<8;i++){
 		for(int j=m_vPosition.x-1;j<=m_vPosition.x+1 && cant<8;j++){
@@ -147,7 +148,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 							if (outfile.is_open())
 							{
 												
-									outfile<<"He visto un enemigo ("<<i<<","<<j<<")"<<endl;
+									outfile<<"He visto un enemigo ("<<j<<","<<i<<")"<<endl;
 								
 							}
 
@@ -160,7 +161,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 							if (outfile.is_open())
 							{
 												
-									outfile<<"He visto un muro ("<<i<<","<<j<<")"<<endl;
+									outfile<<"He visto un muro ("<<j<<","<<i<<")"<<endl;
 								
 							}
 

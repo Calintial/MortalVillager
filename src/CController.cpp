@@ -63,6 +63,7 @@ CController::~CController()
 //-------------------------------------------------------------------------
 bool CController::Update()
 {
+	Pintar();
 	//run the sweepers through CParams::iNumTicks amount of cycles. During
   //this loop each sweepers NN is constantly updated with the appropriate
   //information from its surroundings. The output from the NN is obtained
@@ -81,12 +82,12 @@ bool CController::Update()
 			
 		for (int i=0; i<m_NumUnidades; ++i)
 		{
-			Pintar();
+			
 			//update the NN and position
 			outfile.open("GeneticMovimientos.txt", ios::app);
 						if (outfile.is_open())
 						{
-							outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
+							outfile << "CController::Update La unidad ANTES : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
 							
 						}
 
@@ -101,7 +102,7 @@ bool CController::Update()
 			outfile.open("GeneticMovimientos.txt", ios::app);
 						if (outfile.is_open())
 						{
-							outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
+							outfile << endl<<"CConstroller::Update La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
 							
 						}
 
@@ -141,9 +142,9 @@ bool CController::Update()
 
       				
 
-			//update the chromos fitness score
+			m_vecUnidades[i]->calcular8Objetos(Matriz);
 			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
-
+			Pintar();
 		}
 	}
 
@@ -256,7 +257,7 @@ int j=0;
 		if(i%19==0){
 			j++;	
 		}
-		EspadachinRedes* unidad=new EspadachinRedes(i,j);
+		EspadachinRedes* unidad=new EspadachinRedes(j,i);
 		unidad->aplicarTextura(driver);
 		Matriz[i][j]=unidad;
 		m_vecUnidades.push_back(unidad);
@@ -272,6 +273,13 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 	int x=0,y=0;
 	x=unidad->Position().x;
 	y=unidad->Position().y;
+	outfile.open("GeneticMovimientos.txt", ios::app);
+		if (outfile.is_open())
+		{
+			outfile << "CConstroller::modificarUnidad:279 La unidad va a ser modificada y estaba en ("<<x<<","<<y<<")"<<endl;;
+		}
+
+	outfile.close();
 	Matriz[y][x]= new Suelo(0,x,y);
 	((Suelo*) Matriz[y][x])->setIsometric(false);
 	Matriz[y][x]->aplicarTextura(driver);
@@ -285,6 +293,13 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 	y=RandInt(0,5);
 
 		if(Matriz[y][x]->getTipo()==0){
+				outfile.open("GeneticMovimientos.txt", ios::app);
+		if (outfile.is_open())
+		{
+			outfile << "CConstroller::modificarUnidad:279 La unidad va a ser modificada y ESTA en ("<<x<<","<<y<<")"<<endl;;
+		}
+
+	outfile.close();
 			unidad->setPosition(SVector2D(x,y));
 			noEstar=false;
 		}
