@@ -3,9 +3,13 @@
 PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	
 	pantallaDevice->setEventReceiver(this);
+	env = pantallaDevice->getGUIEnvironment();
 	setTipo(tipo);
 	srand (3);
 	aprendizaje = new CController(pantallaDevice);
+
+	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,0,dimensionPantallaX+160,25), 0, CB_PAUSE, 
+							   L"Pause");
 
 }
 
@@ -21,12 +25,22 @@ void PantallaAprendizaje::pintarPantalla(vector<IDibujable*>* ia_units,vector<ID
 /*		int cont=1;  	
 for(int i=0;i<cont;i++){
 */
-	cerr<<"hola"<<endl;
+	
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	pantallaDevice->setEventReceiver(this);
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(32*20,0,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,32*20,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
-	aprendizaje->Update();
+	if (!paused)
+	{
+	//	cerr<<"ejecutando"<<endl;
+		if(!aprendizaje->redNeuronal()){
+			aprendizaje->genetico();		
+		}
+	}else{
+	//	cerr<<"pausado"<<endl;
+	}
+	
+	aprendizaje->Pintar();
 	pantallaDevice->getVideoDriver()->endScene();
 //}
 	if(eliminar){
@@ -157,6 +171,15 @@ bool PantallaAprendizaje::OnEvent(const SEvent& event){
 	else if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		aprendizaje->OnEvent(event);
+	}else if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+		switch(id)
+		{
+			case CB_PAUSE: paused = ((IGUICheckBox*)event.GUIEvent.Caller)->isChecked();
+								  break;
+		}
+		
 	}
 
 	/*if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)

@@ -5,6 +5,10 @@
 #include "hud.h"
 #include "CController.h"
 
+enum{
+	CB_PAUSE = 0
+};
+
 /*class mapa2D;
 class hud;*/
 class PantallaAprendizaje : public Pantalla
@@ -15,8 +19,10 @@ public:
 		void pintarPantalla(vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*);
 		virtual bool OnEvent(const SEvent& event);
 private:
+	gui::IGUIEnvironment* env;
 	CController* aprendizaje;
 	CParams   g_Params;
+	bool paused;
 
 };
 #endif 

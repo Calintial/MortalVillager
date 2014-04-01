@@ -79,7 +79,10 @@ public:
 
 	~CController();
 	CUnidadesAprendizaje* getUnidadPosicion(SVector2D pos);
-	bool		Update();
+	//bool		Update();
+	bool		tickRedNeuronal();
+	bool		redNeuronal();
+	bool		genetico();
 
 	void Pintar();
 	void generarMapa();
