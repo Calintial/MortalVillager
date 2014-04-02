@@ -337,24 +337,28 @@ bool CController::OnEvent(const SEvent& event)
 		pos_grid.X = event.MouseInput.X/TILE_W;
 		pos_grid.Y = event.MouseInput.Y/TILE_H;
 
-		if(event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
+		if (pos_grid.X < MAPSIZE && pos_grid.Y < MAPSIZE && pos_grid.X >= 0 && pos_grid.Y >= 0)
 		{
-			if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
+			if(event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
 			{
-				unidad_seleccionada->TexturaSeleccionada(device->getVideoDriver(),false);
-			}
-			unidad_seleccionada = NULL;
+				if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
+				{
+					unidad_seleccionada->TexturaSeleccionada(device->getVideoDriver(),false);
+					unidad_seleccionada = NULL;
+				}
+				
 
-			IDibujable* tile =  Matriz[pos_grid.Y][pos_grid.X];
-			cerr<<"Has clicado en ["<<pos_grid.X<<","<<pos_grid.Y<<"]";
-			if (tile->getTipo() == 3)
-			{
-				CUnidadesAprendizaje* unit = (CUnidadesAprendizaje*) tile;
-				unit->TexturaSeleccionada(device->getVideoDriver(),true);
-				unidad_seleccionada = unit;
-				cerr<<" - Unidad seleccionada.pos = ["<<unit->Position().x<<","<<unit->Position().y<<"]";
+				IDibujable* tile =  Matriz[pos_grid.Y][pos_grid.X];
+				cerr<<"Has clicado en ["<<pos_grid.X<<","<<pos_grid.Y<<"]";
+				if (tile->getTipo() == 3)
+				{
+					CUnidadesAprendizaje* unit = (CUnidadesAprendizaje*) tile;
+					unit->TexturaSeleccionada(device->getVideoDriver(),true);
+					unidad_seleccionada = unit;
+					cerr<<" - Unidad seleccionada.pos = ["<<unit->Position().x<<","<<unit->Position().y<<"]";
+				}
+				cerr<<endl;
 			}
-			cerr<<endl;
 		}
 	}
 	return false;
@@ -363,6 +367,7 @@ bool CController::OnEvent(const SEvent& event)
 
 void CController::PintarInformacionUnidad()
 {
+	vector<ObjetosCercanos> objCercanos = ((CUnidadesAprendizaje*) unidad_seleccionada)->getVectorObjetos();
 	core::stringw Vida="Vida: ";
 	Vida+=unidad_seleccionada->getLife();
 	core::stringw Ataque="Ataque: ";
@@ -374,4 +379,18 @@ void CController::PintarInformacionUnidad()
 	font->draw(Ataque,
 		core::rect<s32>(750,100,750,100),
 		video::SColor(255,0,0,0));
+
+	for(ObjetosCercanos objeto: objCercanos){
+		position2di drawPos = position2di(objeto.posicion.x*TILE_W, objeto.posicion.y * TILE_H);
+		//Pinta
+		if (objeto.tipo == 1) // muro
+		{
+			driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(drawPos,drawPos + position2di(TILE_W,TILE_H)));
+		}else if (objeto.tipo == 3) // unidad?
+		{
+			driver->draw2DRectangle(video::SColor(255,0,255,255),core::rect<s32>(drawPos,drawPos + position2di(TILE_W,TILE_H)));
+		}else{// lo que sea...
+			driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(drawPos,drawPos + position2di(TILE_W,TILE_H)));
+		}
+	}
 }

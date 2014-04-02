@@ -1,6 +1,6 @@
 #ifndef CUNIDADESAPRENDIZAJE_H
 #define CUNIDADESAPRENDIZAJE_H
-#define MAPSIZE 19
+#define MAPSIZE 20
 
 //------------------------------------------------------------------------
 //
