@@ -227,7 +227,7 @@ void CController::Pintar()
 				}
 			}
 
-			if(unidad_seleccionada != NULL)
+			if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
 			{
 				PintarInformacionUnidad();
 			}
@@ -329,7 +329,7 @@ bool CController::OnEvent(const SEvent& event)
 
 		if(event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
 		{
-			if(unidad_seleccionada != NULL)
+			if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
 			{
 				unidad_seleccionada->TexturaSeleccionada(device->getVideoDriver(),false);
 				unidad_seleccionada = NULL;
