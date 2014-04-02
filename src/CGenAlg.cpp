@@ -350,6 +350,14 @@ void CGenAlg::CalculateBestWorstAvTot()
 				outfile << "Average Fitness: "<<m_dAverageFitness<<endl;
 			}
 			outfile.close();
+	outfile.open("Red.txt", ios::out);
+			if (outfile.is_open())
+			{
+				for(double dob:m_vecPop[m_iFittestGenome].vecWeights){
+					outfile<<dob<<endl;
+				}
+			}
+			outfile.close();
 }
 
 //-------------------------Reset()------------------------------
