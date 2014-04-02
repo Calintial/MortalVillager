@@ -20,6 +20,7 @@ class IDibujable{
 		void setPosition(int x, int y);
 		void setPosition(position2di p);
 		void setTextura(ITexture* tex);
+		position2di getPosicion(){return position;};
 		int getTipo();
 		void setTipo(int t);
 		virtual bool isTransitable();

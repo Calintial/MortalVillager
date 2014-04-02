@@ -8,6 +8,7 @@ Suelo::Suelo(int i, int j)
 	p.X = j;
 	p.Y = i;
 	setPosition(p);
+	isometric = true;
 }
 
 Suelo::~Suelo()
@@ -26,5 +27,13 @@ bool Suelo::isTransitable(){
 
 void Suelo::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/suelo/grass2.png"));
+	if(isometric)
+		setTextura(driver->getTexture("../media/Texturas/suelo/grass2.png"));
+	else
+		setTextura(driver->getTexture("../media/Texturas/suelo/grass.png"));
+}
+
+void Suelo::setIsometric(bool iso)
+{
+	isometric = iso;
 }
