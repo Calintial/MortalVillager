@@ -123,7 +123,13 @@ bool CController::tickRedNeuronal(){
 				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]= new Suelo(0,m_vecUnidades[i]->getPosicion().X,m_vecUnidades[i]->getPosicion().Y);
 				((Suelo*) Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X])->setIsometric(false);
 				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]->aplicarTextura(driver);
-				m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
+				position2di moverse=m_vecUnidades[i]->getMovimiento();
+				if(Matriz[moverse.Y][moverse.X]->getTipo()==0){
+					
+					cout<<"Estoy en ("<<m_vecUnidades[i]->getPosition().X<<","<<m_vecUnidades[i]->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
+					m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
+				}
+				
 				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]=m_vecUnidades[i];
 			}
 		}
