@@ -6,7 +6,8 @@
 #include "CController.h"
 
 enum{
-	CB_PAUSE = 0
+	CB_PAUSE = 0,
+	BUTTON_CONTINUAR = 1
 };
 
 /*class mapa2D;
@@ -23,6 +24,7 @@ private:
 	CController* aprendizaje;
 	CParams   g_Params;
 	bool paused;
+	bool continuar;
 
 };
 #endif 

@@ -8,8 +8,13 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	srand (3);
 	aprendizaje = new CController(pantallaDevice);
 
+	paused = false;
+	continuar = false;
+
 	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,0,dimensionPantallaX+160,25), 0, CB_PAUSE, 
 							   L"Pause");
+	env->addButton(rect<s32>(dimensionPantallaX + 220,0,dimensionPantallaX + 430,25), 0, BUTTON_CONTINUAR,
+        L"Continuar", L"");
 
 }
 
@@ -30,12 +35,13 @@ for(int i=0;i<cont;i++){
 	pantallaDevice->setEventReceiver(this);
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(32*20,0,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,32*20,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
-	if (!paused)
+	if (!paused || continuar)
 	{
 	//	cerr<<"ejecutando"<<endl;
 		if(!aprendizaje->redNeuronal()){
 			aprendizaje->genetico();		
 		}
+		continuar = false;
 	}else{
 	//	cerr<<"pausado"<<endl;
 	}
@@ -180,6 +186,13 @@ bool PantallaAprendizaje::OnEvent(const SEvent& event){
 								  break;
 		}
 		
+	}else if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED){
+		s32 id = event.GUIEvent.Caller->getID();
+		switch(id)
+		{
+			case BUTTON_CONTINUAR: continuar = true;
+								  break;
+		}
 	}
 
 	/*if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
