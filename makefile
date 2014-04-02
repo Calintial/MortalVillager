@@ -28,20 +28,15 @@ bin/main: src/main.cpp $(OBJECTS_MAIN)
 	mkdir -p bin
 	$(CC) -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
-# bin/pathfinding: src/main.cpp $(OBJECTS_PATHFINDING)
-# 	mkdir -p bin
-# 	$(CC) -o bin/pathfinding $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
+# http://stackoverflow.com/questions/8025766/makefile-auto-dependency-generation
+%.o: src/%.cpp
+	@g++ -MD -c -o $@ $< $(OPTS) $(INCLUDES) $(LINKS)
+	@cp $*.d $*.P; \
+	 sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	 -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
+	 rm -f $*.d
 
-# bin/ia_batalla: src/main.cpp $(OBJECTS_IA_BATALLA)
-# 	mkdir -p bin
-# 	$(CC) -o bin/ia_batalla $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
-
-# To obtain object files
-Nodo.o: src/Nodo.cpp include/Nodo.h include/boost/graph/labeled_graph.hpp
-	$(CC) -c $< $(OPTS) $(INCLUDES) -o $@
-
-%.o: src/%.cpp include/%.h 
-	$(CC) -c $< $(OPTS) $(INCLUDES) -o $@
+-include *.P
 
 clean:
 	rm -f *.o
