@@ -17,7 +17,7 @@ public:
 	intelEngine();
 	intelEngine(vector<IDibujable*>*,vector<IDibujable*>*);
 	~intelEngine();
-	void updateBattleIA();
+	void updateBattleIA(std::shared_ptr<mapa2D> mapa);
 	/*intelEngine(const intelEngine&) {};
 	intelEngine& operator=(const intelEngine&) {};*/
 

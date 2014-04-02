@@ -1,9 +1,9 @@
 #include "suelo.h"
 
 
-Suelo::Suelo(int t, int i, int j)
+Suelo::Suelo(int i, int j)
 {
-	setTipo(t);
+	setTipo(0);
 	position2di p;
 	p.X = j;
 	p.Y = i;

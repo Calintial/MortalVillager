@@ -35,9 +35,9 @@ bool CurrentIA::inicial()
 	return current->inicial();
 }
 
-int CurrentIA::doSomething(battleIA* bIA, position2di enemy_pos)
+int CurrentIA::doSomething(battleIA* bIA, IDibujable* &casilla)
 {
-	int st = current->doSomething(bIA, enemy_pos);
+	int st = current->doSomething(bIA, casilla);
 	return st;
 }
 
@@ -48,9 +48,10 @@ BUSCANDO::BUSCANDO()
 	cout << "BUSCANDO-ctor " << endl;
 }
 
-int BUSCANDO::doSomething(battleIA* bIA, position2di enemy_pos)
+int BUSCANDO::doSomething(battleIA* bIA, IDibujable* &casilla)
 {
-	if(!(enemy_pos.X == -1 && enemy_pos.Y == -1))
+	Unidades* enemy = (Unidades*)casilla->getVinculado();
+	if(!(enemy->getPosition().X == -1 && enemy->getPosition().Y == -1))
 	{
 		bIA->stadoIA->acercarse();
 	}
@@ -70,22 +71,23 @@ ACERCARSE::ACERCARSE()
 	cout << "ACERCARSE-ctor " << endl;
 }
 
-int ACERCARSE::doSomething(battleIA* bIA, position2di enemy_pos)
+int ACERCARSE::doSomething(battleIA* bIA, IDibujable* &casilla)
 {
-	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
+	Unidades* enemy = (Unidades*)casilla->getVinculado();
+	if(enemy->getPosition().X == -1 && enemy->getPosition().Y == -1)
 	{
 		bIA->stadoIA->buscando();
 	}
 	else
 	{
 		/*Comprobar si el enemigo está dentro de rango*/
-		if(bIA->enemy_in_attack_range(bIA->enemy_pos))
+		if(bIA->enemy_in_attack_range(enemy->getPosition()))
 		{
 			bIA->stadoIA->atacar();
 		}
 		else
 		{
-			bIA->Move(bIA->enemy_pos.X,bIA->enemy_pos.Y);
+			bIA->Move(enemy);
 		}
 	}
 	
@@ -112,15 +114,21 @@ ATACAR::ATACAR()
 	cout << "ATACAR-ctor " << endl;
 }
 
-int ATACAR::doSomething(battleIA* bIA, position2di enemy_pos)
+int ATACAR::doSomething(battleIA* bIA, IDibujable* &casilla)
 {
-	if(!(enemy_pos.X == -1 && enemy_pos.Y == -1))
+	Unidades* enemy = (Unidades*)casilla->getVinculado();
+	if(!(enemy->getPosition().X == -1 && enemy->getPosition().Y == -1))
 	{
-		if(bIA->enemy_in_attack_range(bIA->enemy_pos) && bIA->getLife() > 25)
+		if(bIA->enemy_in_attack_range(enemy->getPosition()) && bIA->getLife() > 25)
 		{
-			bIA->Attack(bIA->enemy_pos);
+			 int danyo = bIA->Attack(enemy);
+			 //devolver el daño para quitarle la vida al enemigo o quitarselo con un mapa desde aqui
+			 //enemy->PierdoVida(danyo);
+			 cout << "QUITO " << danyo << " DAÑO" << endl;
+			 enemy->PierdoVida(danyo);
+			 casilla->setVinculado(enemy);
 		}
-		else if(!bIA->enemy_in_attack_range(bIA->enemy_pos))
+		else if(!bIA->enemy_in_attack_range(enemy->getPosition()))
 		{
 			bIA->stadoIA->acercarse();
 		}		
@@ -131,6 +139,8 @@ int ATACAR::doSomething(battleIA* bIA, position2di enemy_pos)
 	}
 	bIA->stadoIA->buscando();
 	
+	
+	cout << "ATTACK" << endl;
 	return ATTACK;
 }
 
@@ -161,10 +171,11 @@ HUIR::HUIR()
 	cout << "HUIR-ctor " << endl;
 }
 
-int HUIR::doSomething(battleIA* bIA, position2di enemy_pos)
+int HUIR::doSomething(battleIA* bIA, IDibujable* &casilla)
 {
+	Unidades* enemy = (Unidades*)casilla->getVinculado();
 	cout << "HUIR" << endl;
-	if(enemy_pos.X == -1 && enemy_pos.Y == -1)
+	if(enemy->getPosition().X == -1 && enemy->getPosition().Y == -1)
 	{
 		bIA->stadoIA->recuperarse();
 	}
@@ -190,9 +201,10 @@ RECUPERARSE::RECUPERARSE()
 	cout << "RECUPERARSE-ctor " << endl;
 }
 
-int RECUPERARSE::doSomething(battleIA* bIA, position2di enemy_pos)
+int RECUPERARSE::doSomething(battleIA* bIA, IDibujable* &casilla)
 {
-	if(enemy_pos.X != -1 && enemy_pos.Y != -1)
+	Unidades* enemy = (Unidades*)casilla->getVinculado();
+	if(enemy->getPosition().X != -1 && enemy->getPosition().Y != -1)
 	{
 		bIA->stadoIA->huir();
 	}

@@ -1,7 +1,7 @@
 #include "Arqueria.h"
 
 
-Arqueria::Arqueria() : edificio(3)
+Arqueria::Arqueria() : edificio(2)
 {
 }
 

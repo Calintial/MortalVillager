@@ -3,16 +3,16 @@
 ArqueroIA::ArqueroIA()
 {
 	cout << "ConstruirArqueroIA" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 5;
 	attack_range = 2;
 	attack_value = 1;
 }
 
-ArqueroIA::ArqueroIA(int x, int y) : battleIA(x,y)
+ArqueroIA::ArqueroIA(int x, int y)
 {
 	cout << "ConstruirArqueroIA" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 5;
 	attack_range = 2;
 	attack_value = 1;
@@ -21,16 +21,10 @@ ArqueroIA::ArqueroIA(int x, int y) : battleIA(x,y)
 ArqueroIA::~ArqueroIA()
 {
 	cout << "DestroirArqueroIA" << endl;
-	life = 0;
+	setLife(0);
 	vision_range = 0;
 	attack_range = 0;
-	attack_value = 0;
-}
-
-void ArqueroIA::Attack(position2di pos)
-{
-	if(enemy_in_attack_range(pos))
-		life--;
+	attack_value = 1;
 }
 
 bool ArqueroIA::enemy_in_attack_range(position2di pos)
@@ -52,12 +46,7 @@ bool ArqueroIA::enemy_in_attack_range(position2di pos)
 
 void ArqueroIA::Recovery()
 {
-	life++;
-}
-
-int ArqueroIA::getLife()
-{
-	return life;
+	setLife(getLife()+1);
 }
 
 int ArqueroIA::getVisionRange()

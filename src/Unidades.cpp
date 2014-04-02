@@ -9,6 +9,7 @@ Unidades::Unidades()
 	select = false;
 	last_clicked.X = 1;
 	last_clicked.Y = 1;
+	setTipo(3);
 }
 
 Unidades::Unidades(int x, int y)
@@ -20,6 +21,7 @@ Unidades::Unidades(int x, int y)
 	select = false;
 	last_clicked.X = x;
 	last_clicked.Y = y;
+	setTipo(3);
 }
 
 Unidades::~Unidades()
@@ -35,25 +37,6 @@ Unidades::~Unidades()
 
 void Unidades::Move(int x, int y)
 {
-	// position2di position = getPosition();
-	// state = MOVE;
-	// /*Moverse a una posicion establecida*/
-	// if(x<400 && y<400)
-	// {
-	// 	if(x > position.X)
-	// 		position.X++;
-	// 	else if(x < position.X)
-	// 		position.X--;
-
-	// 	if(y > position.Y)
-	// 		position.Y++;
-	// 	else if(y < position.Y)
-	// 		position.Y--;
-			
-	// 	setPosition(position);
-	// 	last_clicked.X = x;
-	// 	last_clicked.Y = y;		
-	// }
 	Move(pathfinding->calcularCamino(getPosition(),position2di(x,y)));
 }
 
@@ -122,4 +105,74 @@ void Unidades::updateUnit()
 int Unidades::getState()
 {
 	return state;
+}
+
+int Unidades::Attack(Unidades* enemigo)
+{
+	int ataque = TrianguloArmas(enemigo);
+	
+	return ataque+getAttackValue();
+}
+
+void Unidades::PierdoVida(int danyo)
+{
+	if(life-danyo<0)
+	{
+		life = 0;
+		//DEBERIA DE MORIR
+	}
+	else
+	{	
+		life = life-danyo;
+	}
+}
+
+//Saca tu factor de ataque
+int Unidades::TrianguloArmas(Unidades* enemigo)
+{
+	switch(this->getType())
+	{
+		case 0:
+			//Aldeano
+			if(enemigo->getType()==0)
+				return 2;
+			if(enemigo->getType()==1 || enemigo->getType()==2 || enemigo->getType()==3)
+				return 1;
+			break;
+		case 1:
+			//Arquero
+			if(enemigo->getType()==0)
+				return 4;
+			if(enemigo->getType()==1)
+				return 2;
+			if(enemigo->getType()==2)
+				return 3;
+			if(enemigo->getType()==3)
+				return 1;
+			break;
+		case 2:
+			//Espadachin
+			if(enemigo->getType()==0)
+				return 4;
+			if(enemigo->getType()==1)
+				return 1;
+			if(enemigo->getType()==2)
+				return 2;
+			if(enemigo->getType()==3)
+				return 3;
+			break;
+		case 3:
+			//Lancero
+			if(enemigo->getType()==0)
+				return 4;
+			if(enemigo->getType()==1)
+				return 3;
+			if(enemigo->getType()==2)
+				return 1;
+			if(enemigo->getType()==3)
+				return 2;
+			break;
+		default:;
+	};
+	return 0;
 }

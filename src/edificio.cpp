@@ -2,13 +2,15 @@
 
 edificio::edificio(int t)
 {
-	setTipo(t);
+	setTipo(2);
+	setClase(t);
 	setPosition(0,0);
 }
 
 edificio::edificio(int t,int x,int y)
 {
-	setTipo(t);
+	setTipo(2);
+	setClase(t);
 	setPosition(x,y);
 }
 

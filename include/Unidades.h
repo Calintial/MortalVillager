@@ -22,6 +22,10 @@ public:
 	~Unidades();
 	//void updateIA();
 	//Metodos de movimiento y actualización de la unidad
+	int Attack(Unidades*);
+	void PierdoVida(int);
+	int TrianguloArmas(Unidades*);
+	
 	void Move(int,int);
 	void Move(Camino*);
 	void Move(Unidades*);
@@ -29,9 +33,10 @@ public:
 	int getState();
 	bool getSelect(){return select;};
 	void SetSelect(bool sel){select=sel;};
-
+	int getLife(){return life;};
+	void setLife(int l){life=l;};
+	
 	//Getters virtuales
-	virtual int getLife() = 0;
 	virtual int getVisionRange() = 0;
 	virtual int getAttackRange() = 0;
 	virtual int getAttackValue() = 0;
@@ -46,8 +51,7 @@ private:
 	Unidades* objetivo;
 	int state;
 	bool select;
-
-
+	int life;
 };
 
 #endif

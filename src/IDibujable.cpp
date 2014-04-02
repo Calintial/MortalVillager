@@ -16,11 +16,14 @@ void Pintar(IVideoDriver* ){
 position2di IDibujable::getPosition(){
 	return position;
 }
+
 void IDibujable::setPosition(int x, int y){
 	position.X = x; position.Y = y;
+	
 }
 void IDibujable::setPosition(position2di p){
 	position.X = p.X; position.Y = p.Y;
+	
 }
 void IDibujable::setTextura(ITexture* tex){
 	textura=tex;

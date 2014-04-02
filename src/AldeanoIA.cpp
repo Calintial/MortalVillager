@@ -3,7 +3,7 @@
 AldeanoIA::AldeanoIA()
 {
 	cout << "ConstruirAldeanoIA" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	attack_value = 1;
@@ -12,7 +12,7 @@ AldeanoIA::AldeanoIA()
 AldeanoIA::AldeanoIA(int x, int y) : battleIA(x,y)
 {
 	cout << "ConstruirAldeanoIA" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	attack_value = 1;
@@ -21,16 +21,10 @@ AldeanoIA::AldeanoIA(int x, int y) : battleIA(x,y)
 AldeanoIA::~AldeanoIA()
 {
 	cout << "DestruirAldeanoIA" << endl;
-	life = 0;
+	setLife(0);
 	vision_range = 0;
 	attack_range = 0;
 	attack_value = 0;
-}
-
-void AldeanoIA::Attack(position2di pos)
-{
-	if(enemy_in_attack_range(pos))
-		life--;
 }
 
 bool AldeanoIA::enemy_in_attack_range(position2di pos)
@@ -52,12 +46,7 @@ bool AldeanoIA::enemy_in_attack_range(position2di pos)
 
 void AldeanoIA::Recovery()
 {
-	life++;
-}
-
-int AldeanoIA::getLife()
-{
-	return life;
+	setLife(getLife()+1);
 }
 
 int AldeanoIA::getVisionRange()

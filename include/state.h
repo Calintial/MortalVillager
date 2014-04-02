@@ -27,7 +27,7 @@ class Current
 		void finish();
 		bool inicial();
 		bool sfinal();
-		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
+		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa);
 };
 
 class State
@@ -53,7 +53,7 @@ class State
 
 		virtual bool sfinal() = 0;
 
-		virtual void doSomething(gameEngine* ge,graphicEngine* graphics, intelEngine* ia)
+		virtual void doSomething(gameEngine* ge,graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 		{
 		}
 };
@@ -70,7 +70,7 @@ class MAINS: public State
 		void finish(Current *c);
 		bool inicial(){return true;}
 		bool sfinal(){return false;}
-		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
+		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa);
 };
 
 class INGAME: public State
@@ -85,7 +85,7 @@ class INGAME: public State
 		bool inicial(){return false;}
 		bool sfinal(){return false;}
 		void finish(Current *c);
-		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
+		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa);
 };
 
 class PAUSE: public State
@@ -100,7 +100,7 @@ class PAUSE: public State
 		void finish(Current *c);
 		bool inicial(){return false;}
 		bool sfinal(){return false;}
-		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia);
+		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa);
 };
 
 class FINISH: public State

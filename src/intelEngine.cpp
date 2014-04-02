@@ -13,17 +13,18 @@ intelEngine::intelEngine(vector<IDibujable*>* units,vector<IDibujable*>* Useruni
 
 intelEngine::~intelEngine()
 {
-	/*int n_iaUnits = gameEngine::getNumberIAUnits();
-	for(int i=0; i<n_iaUnits; i++)
-	{*/
-		delete ia_units;
-	/*}*/
+		//delete ia_units;
 }
 
-void intelEngine::updateBattleIA()
+void intelEngine::updateBattleIA(std::shared_ptr<mapa2D> mapa)
 {
 	for(unsigned int i=0; i<ia_units->size(); i++)
 	{
-		((battleIA*)ia_units->at(i))->updateIA(user_units);
+		//Lo devinculamos de su posicion anterior
+		mapa->getTile(ia_units->at(i)->getPosition().X,ia_units->at(i)->getPosition().Y)->setVinculado(NULL);
+		((battleIA*)ia_units->at(i))->updateIA(mapa);
+		//Lo vinculamos a su posible nueva posicion
+		mapa->getTile(ia_units->at(i)->getPosition().X,ia_units->at(i)->getPosition().Y)->setVinculado(ia_units->at(i));
+		
 	}
 }

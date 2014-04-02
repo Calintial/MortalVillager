@@ -3,7 +3,7 @@
 EspadachinIA::EspadachinIA()
 {
 	cout << "ConstruirEspadachinIA" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	attack_value = 1;
@@ -12,7 +12,7 @@ EspadachinIA::EspadachinIA()
 EspadachinIA::EspadachinIA(int x, int y) : battleIA(x,y)
 {
 	cout << "ConstruirEspadachinIA" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	attack_value = 1;
@@ -21,17 +21,12 @@ EspadachinIA::EspadachinIA(int x, int y) : battleIA(x,y)
 EspadachinIA::~EspadachinIA()
 {
 	cout << "DestruirEspadachinIA" << endl;
-	life = 0;
+	setLife(0);
 	vision_range = 0;
 	attack_range = 0;
 	attack_value = 0;
 }
 
-void EspadachinIA::Attack(position2di pos)
-{
-	if(enemy_in_attack_range(pos))
-		life--;
-}
 
 bool EspadachinIA::enemy_in_attack_range(position2di pos)
 {
@@ -52,12 +47,7 @@ bool EspadachinIA::enemy_in_attack_range(position2di pos)
 
 void EspadachinIA::Recovery()
 {
-	life++;
-}
-
-int EspadachinIA::getLife()
-{
-	return life;
+	setLife(getLife()+1);
 }
 
 int EspadachinIA::getVisionRange()

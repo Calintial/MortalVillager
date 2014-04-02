@@ -1,7 +1,7 @@
 #include "Lanceria.h"
 
 
-Lanceria::Lanceria() : edificio(3)
+Lanceria::Lanceria() : edificio(4)
 {
 }
 

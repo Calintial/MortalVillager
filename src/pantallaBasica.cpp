@@ -14,10 +14,6 @@ PantallaBasica::~PantallaBasica()
 
 void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings)
 {
-	if(mapa.get() == NULL){
-		cout<<"creando mapa"<<endl;
-		mapa = shared_ptr<mapa2D>(new mapa2D(pantallaDevice,ia_units,user_units,buildings,false));
-	}
 	if(hudmapa == NULL){
 		hudmapa= new hud(pantallaDevice,mapa);
 	}

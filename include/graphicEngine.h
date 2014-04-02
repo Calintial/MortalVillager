@@ -40,6 +40,8 @@ public:
 	DebugMenu* debug;
 
 	pausa* pause;
+	
+	std::shared_ptr<mapa2D> mapa;
 };
 
 #endif

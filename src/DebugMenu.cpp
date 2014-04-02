@@ -366,11 +366,11 @@ bool DebugMenu::OnEvent(const SEvent& event)
 
 			if(id == BUTTON_ADD_IA)
 			{
-				(gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
+				//(gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
 			}
 			else
 			{
-				(gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
+				//(gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
 			}
 		}
 		else if(id == BUTTON_ADD_BUILDING)

@@ -58,6 +58,7 @@ public:
 	IDibujable* getTile(int x, int y);
 	IDibujable* getTile(position2di);
 	void setTile(int x, int y, IDibujable* contenido);
+	void AnyadirObjeto(IDibujable*);
 
 	//VISTAS
 	void SetCameraScroll(const position2di &TPosition);
@@ -104,6 +105,9 @@ public:
 
 	position2di posicionDisponible(position2di );
 
+	
+	IDibujable* addIAUnit(int,int,int);
+	IDibujable* addUserUnit(int,int,int);
 
 private:
 	IrrlichtDevice * MapaDevice;

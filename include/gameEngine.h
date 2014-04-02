@@ -23,6 +23,7 @@
 #include "Lanceria.h"
 #include <iostream>
 #include <time.h>
+#include <memory>
 using namespace std;
 
 /*
@@ -66,7 +67,6 @@ public:
 
 
 private:
-
 	graphicEngine* graphics;
 	intelEngine* ia;
 	int gameState;

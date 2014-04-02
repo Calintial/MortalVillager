@@ -3,7 +3,7 @@
 Lancero::Lancero()
 {
 	cout << "ConstruirLancero" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	attack_value = 1;
@@ -12,7 +12,7 @@ Lancero::Lancero()
 Lancero::Lancero(int x, int y) : Unidades(x,y)
 {
 	cout << "ConstruirLancero" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	attack_value = 1;
@@ -21,16 +21,10 @@ Lancero::Lancero(int x, int y) : Unidades(x,y)
 Lancero::~Lancero()
 {
 	cout << "DestruirLancero" << endl;
-	life = 0;
+	setLife(0);
 	vision_range = 0;
 	attack_range = 0;
 	attack_value = 0;
-}
-
-void Lancero::Attack(position2di pos)
-{
-	if(enemy_in_attack_range(pos))
-		life--;
 }
 
 bool Lancero::enemy_in_attack_range(position2di pos)
@@ -52,12 +46,7 @@ bool Lancero::enemy_in_attack_range(position2di pos)
 
 void Lancero::Recovery()
 {
-	life++;
-}
-
-int Lancero::getLife()
-{
-	return life;
+	setLife(getLife()+1);
 }
 
 int Lancero::getVisionRange()

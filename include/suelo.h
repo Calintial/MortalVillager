@@ -14,7 +14,7 @@
 class Suelo : public IDibujable
 {
 public:
-	Suelo(int t, int i, int j);
+	Suelo(int i, int j);
 	~Suelo() override;
 	/*ITexture* getTextura() const {
 		return textura;

@@ -13,12 +13,10 @@ public:
 	~EspadachinIA();
 
 	//Metodos de acción
-	void Attack(position2di);
 	bool enemy_in_attack_range(position2di);
 	void Recovery();
 
 	//Getters
-	virtual int getLife();
 	virtual int getVisionRange();
 	virtual int getAttackRange();
 	virtual int getAttackValue();
@@ -31,7 +29,6 @@ public:
 	
 
 private:
-	int life;
 	int attack_value;
 	int vision_range;
 	int attack_range;

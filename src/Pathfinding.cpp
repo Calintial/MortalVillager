@@ -113,7 +113,6 @@ Camino* Pathfinding::calcularCamino(position2di posicionPersonaje,position2di po
 	}
 	
 	posicionFinal = mapa->posicionDisponible(posicionFinal);
-	
 
 	std::vector<Camino> caminosInicio;
 	std::vector<Camino> caminosFinal;

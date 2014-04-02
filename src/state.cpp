@@ -35,9 +35,9 @@ bool Current::sfinal()
 	return current->sfinal();
 }
 
-void Current::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia)
+void Current::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 {
-	current->doSomething(ge, graphics,ia);
+	current->doSomething(ge, graphics,ia,mapa);
 }
 
 //---MAINS--/
@@ -46,7 +46,7 @@ MAINS::MAINS()
 	cout << "MAINS-ctor " << endl;
 }
 
-void MAINS::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia)
+void MAINS::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 {
 	graphics->DrawMainMenu();
 	//cout << "MOSTRAR MENU";
@@ -72,12 +72,11 @@ INGAME::INGAME()
 	cout << "INGAME-ctor " << endl;
 }
 
-void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia)
+void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 {
 	ge->addNewUnits();
 	ge->updatePlayer();
-	ia->updateBattleIA();
-	
+	ia->updateBattleIA(mapa);
 	vector<IDibujable*>* StIAUnits = ge->getIAUnits();
 	vector<IDibujable*>* StUserUnits = ge->getUserUnits();
 	vector<IDibujable*>* StBuildingsUnits = ge->getBuildings();
@@ -110,7 +109,7 @@ PAUSE::PAUSE()
 	cout << "PAUSE-ctor " << endl;
 }
 
-void PAUSE::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia)
+void PAUSE::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 {
 	graphics->DrawPausa();
 	//cout << "MOSTRAR PANTALLA DE PAUSA" << endl;

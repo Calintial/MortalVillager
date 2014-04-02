@@ -3,7 +3,7 @@
 Arquero::Arquero()
 {
 	cout << "ConstruirArquero" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 5;
 	attack_range = 2;
 	attack_value = 1;
@@ -12,7 +12,7 @@ Arquero::Arquero()
 Arquero::Arquero(int x, int y) : Unidades(x,y)
 {
 	cout << "ConstruirArquero" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 5;
 	attack_range = 2;
 	attack_value = 1;
@@ -21,16 +21,10 @@ Arquero::Arquero(int x, int y) : Unidades(x,y)
 Arquero::~Arquero()
 {
 	cout << "DestroirArquero" << endl;
-	life = 0;
+	setLife(0);
 	vision_range = 0;
 	attack_range = 0;
 	attack_value = 0;
-}
-
-void Arquero::Attack(position2di pos)
-{
-	if(enemy_in_attack_range(pos))
-		life--;
 }
 
 bool Arquero::enemy_in_attack_range(position2di pos)
@@ -52,12 +46,7 @@ bool Arquero::enemy_in_attack_range(position2di pos)
 
 void Arquero::Recovery()
 {
-	life++;
-}
-
-int Arquero::getLife()
-{
-	return life;
+	setLife(getLife()+1);
 }
 
 int Arquero::getVisionRange()

@@ -1,7 +1,7 @@
 #include "CentroCiudad.h"
 
 
-CentroCiudad::CentroCiudad() : edificio(3)
+CentroCiudad::CentroCiudad() : edificio(0)
 {
 }
 

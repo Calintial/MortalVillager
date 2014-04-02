@@ -3,7 +3,7 @@
 Aldeano::Aldeano()
 {
 	cout << "ConstruirAldeano" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	current_sprite = 0;
@@ -15,7 +15,7 @@ Aldeano::Aldeano()
 Aldeano::Aldeano(int x, int y) : Unidades(x,y)
 {
 	cout << "ConstruirAldeano" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	current_sprite = 0;
@@ -27,18 +27,12 @@ Aldeano::Aldeano(int x, int y) : Unidades(x,y)
 Aldeano::~Aldeano()
 {
 	cout << "DestruirAldeano" << endl;
-	life = 0;
+	setLife(0);
 	vision_range = 0;
 	attack_range = 0;
 	current_sprite = 0;
 	TTexture = NULL;
 	attack_value = 0;
-}
-
-void Aldeano::Attack(position2di pos)
-{
-	if(enemy_in_attack_range(pos))
-		life--;
 }
 
 bool Aldeano::enemy_in_attack_range(position2di pos)
@@ -60,12 +54,7 @@ bool Aldeano::enemy_in_attack_range(position2di pos)
 
 void Aldeano::Recovery()
 {
-	life++;
-}
-
-int Aldeano::getLife()
-{
-	return life;
+	setLife(getLife()+1);
 }
 
 int Aldeano::getVisionRange()

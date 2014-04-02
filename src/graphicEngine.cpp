@@ -20,12 +20,14 @@ graphicEngine::graphicEngine()
 	
 	pause = NULL;
 
-    (gameEngine::addIAUnit(0,0,0))->aplicarTextura(IrrDevice->getVideoDriver());
+
+	//TODO ESTO SE TIENE QUE PINTAR CUANDO SE PINTE TO
+    /*(gameEngine::addIAUnit(0,0,0))->aplicarTextura(IrrDevice->getVideoDriver());
     (gameEngine::addIAUnit(10,10,0))->aplicarTextura(IrrDevice->getVideoDriver());
     (gameEngine::addUserUnit(24,12,0))->aplicarTextura(IrrDevice->getVideoDriver());
     (gameEngine::addUserUnit(30,15,0))->aplicarTextura(IrrDevice->getVideoDriver());
     (gameEngine::addUserUnit(40,20,0))->aplicarTextura(IrrDevice->getVideoDriver());
-    (gameEngine::addUserUnit(34,17,0))->aplicarTextura(IrrDevice->getVideoDriver());
+    (gameEngine::addUserUnit(34,17,0))->aplicarTextura(IrrDevice->getVideoDriver());*/
     (gameEngine::addBuildings(16,3,0))->aplicarTextura(IrrDevice->getVideoDriver());
 
     //menu = new mainMenu(IrrDevice);
@@ -62,10 +64,14 @@ void graphicEngine::DrawPausa()
     pause->run();
 }
 
-void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units, vector<IDibujable*>* buildings)
+void graphicEngine::DrawMap(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings)
 {
+	if(mapa.get() == NULL){
+		cout<<"creando mapa"<<endl;
+		mapa = shared_ptr<mapa2D>(new mapa2D(IrrDevice,ia_units,user_units,buildings,false));
+	}
 	if(pantalla == NULL){
-		pantalla= new PantallaBasica(IrrDevice,this, NULL,0);
+		pantalla= new PantallaBasica(IrrDevice,this, mapa,0);
 	}
 	pantalla->pintarPantalla(ia_units,user_units,buildings);
 	pause = NULL;

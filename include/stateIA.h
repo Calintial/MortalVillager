@@ -32,7 +32,7 @@ class CurrentIA
 		void huir();
 		void recuperarse();
 		bool inicial();
-		int doSomething(battleIA* bIA, position2di enemy_pos);
+		int doSomething(battleIA* bIA, IDibujable* &enemy);
 };
 
 class StateIA
@@ -60,7 +60,7 @@ class StateIA
 		}
 		virtual bool inicial() = 0;
 
-		virtual int doSomething(battleIA* bIA, position2di enemy_pos) = 0;
+		virtual int doSomething(battleIA* bIA, IDibujable* &enemy) = 0;
 };
 
 class BUSCANDO: public StateIA
@@ -73,7 +73,7 @@ class BUSCANDO: public StateIA
 		};
 		void acercarse(CurrentIA *c);
 		bool inicial(){return true;}
-		int doSomething(battleIA* bIA, position2di enemy_pos);
+		int doSomething(battleIA* bIA, IDibujable* &enemy);
 };
 
 class ACERCARSE: public StateIA
@@ -87,7 +87,7 @@ class ACERCARSE: public StateIA
 		void buscando(CurrentIA *c);
 		void atacar(CurrentIA *c);
 		bool inicial(){return false;}
-		int doSomething(battleIA* bIA, position2di enemy_pos);
+		int doSomething(battleIA* bIA, IDibujable* &enemy);
 };
 
 class ATACAR: public StateIA
@@ -102,7 +102,7 @@ class ATACAR: public StateIA
 		void acercarse(CurrentIA *c);
 		void huir(CurrentIA *c);
 		bool inicial(){return false;}
-		int doSomething(battleIA* bIA, position2di enemy_pos);
+		int doSomething(battleIA* bIA, IDibujable* &enemy);
 };
 
 class HUIR: public StateIA
@@ -115,7 +115,7 @@ class HUIR: public StateIA
 		};
 		void recuperarse(CurrentIA *c);
 		bool inicial(){return false;}
-		int doSomething(battleIA* bIA, position2di enemy_pos);
+		int doSomething(battleIA* bIA, IDibujable* &enemy);
 };
 
 
@@ -130,7 +130,7 @@ class RECUPERARSE: public StateIA
 		void buscando(CurrentIA *c);
 		void huir(CurrentIA *c);
 		bool inicial(){return false;}
-		int doSomething(battleIA* bIA, position2di enemy_pos);
+		int doSomething(battleIA* bIA, IDibujable* &enemy);
 };
 
 

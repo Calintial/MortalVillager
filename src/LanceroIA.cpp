@@ -3,7 +3,7 @@
 LanceroIA::LanceroIA()
 {
 	cout << "ConstruirLanceroIA" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	attack_value = 1;
@@ -12,7 +12,7 @@ LanceroIA::LanceroIA()
 LanceroIA::LanceroIA(int x, int y) : battleIA(x,y)
 {
 	cout << "ConstruirLanceroIA" << endl;
-	life = 100;
+	setLife(100);
 	vision_range = 3;
 	attack_range = 1;
 	attack_value = 1;
@@ -21,16 +21,10 @@ LanceroIA::LanceroIA(int x, int y) : battleIA(x,y)
 LanceroIA::~LanceroIA()
 {
 	cout << "DestruirLanceroIA" << endl;
-	life = 0;
+	setLife(0);
 	vision_range = 0;
 	attack_range = 0;
 	attack_value = 0;
-}
-
-void LanceroIA::Attack(position2di pos)
-{
-	if(enemy_in_attack_range(pos))
-		life--;
 }
 
 bool LanceroIA::enemy_in_attack_range(position2di pos)
@@ -52,12 +46,7 @@ bool LanceroIA::enemy_in_attack_range(position2di pos)
 
 void LanceroIA::Recovery()
 {
-	life++;
-}
-
-int LanceroIA::getLife()
-{
-	return life;
+	setLife(getLife()+1);
 }
 
 int LanceroIA::getVisionRange()

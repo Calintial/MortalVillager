@@ -17,6 +17,12 @@ public:
 	virtual void aplicarTextura(IVideoDriver* driver) = 0;
 	virtual bool isTransitable() = 0;
 	
+	void setClase(int t){clase = t;};
+	int getClase(){return clase;};
+		
+private:
+	int clase;
+	
 };
 
 #endif

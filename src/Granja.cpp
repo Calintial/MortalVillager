@@ -1,7 +1,7 @@
 #include "Granja.h"
 
 
-Granja::Granja() : edificio(3)
+Granja::Granja() : edificio(1)
 {
 }
 

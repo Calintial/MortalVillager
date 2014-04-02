@@ -1,6 +1,6 @@
 #include "muro.h"
-Muro::Muro(int tipo, int posicionX, int posicionY){
-	setTipo(tipo);
+Muro::Muro(int posicionX, int posicionY){
+	setTipo(1);
 	position2di p(posicionX,posicionY);
 	setPosition(p);
 }

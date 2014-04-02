@@ -13,7 +13,7 @@
 class Muro : public IDibujable
 {
 public:
-	Muro(int tipo, int posicionX,int posicionY);
+	Muro(int posicionX,int posicionY);
 	~Muro() override;
 	/*ITexture* getTextura() const {
 		return textura;

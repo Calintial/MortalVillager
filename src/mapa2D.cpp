@@ -81,8 +81,6 @@ mapa2D::~mapa2D()
 
 void mapa2D::Init()
 {
-	//vTiles = NULL;
-	//auto size = driver->getScreenSize();
 	ViewSize.Width = 26;//size.Width/TILE_WIDTH;
     ViewSize.Height = 20;//size.Height/TILE_HEIGHT;
     CameraScroll.X = 0;
@@ -100,9 +98,6 @@ bool mapa2D::free()
 				delete vTiles[i][j];
 			}			
 		}
-
-		//delete[] vTiles;
-
 	}
     
     return true;
@@ -226,8 +221,10 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 								//no hay otro personaje --> Dar vuelta a todo el vector de unidades user
 								
 								cout << "POSICION INICIAL " << pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y << endl;
+
 								Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
 								position2di posnueva=position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+								
 								if(pos_grid.X+CameraScroll.X>=0 && pos_grid.Y+CameraScroll.Y>=0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
 								{
 									int index = IASelected(posnueva);
@@ -239,14 +236,11 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 										unidad->Move(posnueva.X,posnueva.Y);
 									}
 								}
-						
-						
-
 						}
-						reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
 						recol_gradosel=0;
 						recol_Rango=1;
 						recol_RangoAux=0;
+						reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
 					}
 					break;
 			default:;
@@ -264,7 +258,7 @@ void mapa2D::AllocateMap(bool suelo)
 		{
 			for(int j=0; j < HEIGHT; j++) 
 			{
-				vTiles[i][j] = new Suelo(0,i,j);
+				vTiles[i][j] = new Suelo(i,j);
 				vTiles[i][j]->aplicarTextura(driver);
 			}		
 		}
@@ -289,18 +283,33 @@ void mapa2D::AllocateMap(bool suelo)
 			{
 				if(mapatext[k]=='0')
 				{
-					vTiles[i][j] = new Suelo(0,i,j);
+					vTiles[i][j] = new Suelo(i,j);
 				}
 				else
 				{
-					vTiles[i][j] = new Muro(1,i,j);
+					vTiles[i][j] = new Muro(i,j);
 				}
 				vTiles[i][j]->aplicarTextura(driver);
 				k++;
 			}
 		}
+		
+		//Añadimos 2 IAS por defecto
+		(gameEngine::addIAUnit(0,0,0))->aplicarTextura(driver);
+		(gameEngine::addIAUnit(10,10,0))->aplicarTextura(driver);
+		(gameEngine::addUserUnit(24,12,0))->aplicarTextura(driver);
+		(gameEngine::addUserUnit(30,15,0))->aplicarTextura(driver);
+		(gameEngine::addUserUnit(40,20,0))->aplicarTextura(driver);
+		(gameEngine::addUserUnit(34,17,0))->aplicarTextura(driver);
+		/*addIAUnit(0,0,0)->aplicarTextura(driver);
+		addIAUnit(10,10,0)->aplicarTextura(driver);
+		addUserUnit(24,12,0)->aplicarTextura(driver);
+		addUserUnit(30,15,0)->aplicarTextura(driver);
+		addUserUnit(40,20,0)->aplicarTextura(driver);
+		addUserUnit(34,17,0)->aplicarTextura(driver);*/
 	}
 }
+
 
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
 void mapa2D::GenerarMapa()
@@ -326,10 +335,10 @@ void mapa2D::GenerarMapa()
 				c=10;
 				if(vTiles[i][j]==NULL)
 				{
-					vTiles[i][j] =new Suelo(0,i,j);
+					vTiles[i][j] =new Suelo(i,j);
 					mapatext+="0";
 					if(rand()%c!=1)
-						vTiles[i+1][j] = new Suelo(0,i,j);
+						vTiles[i+1][j] = new Suelo(i,j);
 				}
 				else if(vTiles[i][j]->getTipo()==1)
 				{
@@ -347,10 +356,10 @@ void mapa2D::GenerarMapa()
 				c=3;
 				if(vTiles[i][j]==NULL)
 				{
-					vTiles[i][j] =new Suelo(1,i,j);
+					vTiles[i][j] =new Muro(i,j);
 					mapatext+="1";
 					if(rand()%c!=1)
-						vTiles[i+1][j] = new Suelo(1,i,j);
+						vTiles[i+1][j] = new Muro(i,j);
 				}
 				else if(vTiles[i][j]->getTipo()==0)
 				{
@@ -451,10 +460,17 @@ void mapa2D::Pintar()
 						//Pinta
 						if(Tile->getTextura())
 							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
+						//Pintando cosas vinculadas (de momento solo IAs)
+						if(Tile->getVinculado()!=NULL)
+						{
+							DrawPosition = getDrawPosition(Tile->getVinculado()->getPosition());
+							DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
+							Tile->getVinculado()->Pintar(driver,DrawPosition.X, DrawPosition.Y);
+						}
 				}
 			}
 
-			DrawIAUnits();
+			//DrawIAUnits();
 			DrawUserUnits();
 			DrawBuildings();
 			
@@ -811,8 +827,6 @@ Pathfinding* mapa2D::getPathfinding(){
 	return pathFinding;
 }
 
-
-
 position2di mapa2D::twoDToIso(int x, int y)
 {
 	position2di pos;
@@ -1074,4 +1088,12 @@ void mapa2D::colocarEdificio(position2di pos_colocar){
 		pathFinding->actualizarRegiones(pos_colocar,down_right);
 
 	}
+}
+
+
+void mapa2D::AnyadirObjeto(IDibujable* obj)
+{
+	cout << obj->getPosition().X << endl;
+	cout << obj->getPosition().Y << endl;
+	vTiles[obj->getPosition().X][obj->getPosition().Y]->setVinculado(obj);
 }

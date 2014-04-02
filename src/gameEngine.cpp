@@ -13,20 +13,11 @@ int gameEngine::recursos_ia = 1000;
 
 gameEngine::gameEngine()
 {
-	/*battleIA* IAunit = new battleIA();
-	battleIA* IAunit2 = new battleIA(10,10);
-	IAUnits.push_back(IAunit);
-	IAUnits.push_back(IAunit2);*/
-
-	/*Unidades* unit = new Unidades(24,12);
-	UserUnits.push_back(unit);*/
-
 	gameState = 0;
 
 	graphics = new graphicEngine();
-
+	
 	ia = new intelEngine(&IAUnits,&UserUnits);
-
 }
 
 gameEngine::~gameEngine()
@@ -40,29 +31,8 @@ void gameEngine::run()
 	//En cada estado se llamará a los motores necesarios(IA,Graficos,etc...)
 	while(!stado.sfinal())
 	{
-		stado.doSomething(this, graphics,ia);
+		stado.doSomething(this, graphics,ia,graphics->mapa);
 	}
-	/*while(gameState != FINISH)
-	{
-		switch(gameState)
-		{
-			
-			case MAIN: gameState = graphics->DrawMainMenu();
-					   break;
-
-			case INGAME: addNewUnits();
-					     updatePlayer();
-						 ia->updateBattleIA();
-
-						 gameState = graphics->DrawMap(&IAUnits,&UserUnits);
-						 this->sleep(100-game_speed);
-						 break;
-
-			case PAUSE: gameState = graphics->DrawPausa();
-						break;
-			default: break;
-		}		
-	}*/
 }
 
 void gameEngine::setVolume(float vol)
@@ -79,9 +49,10 @@ void gameEngine::updatePlayer()
 {
 	for(IDibujable* u : UserUnits)
 	{
+		graphics->mapa->getTile(u->getPosition().X,u->getPosition().Y)->setVinculado(NULL);
 		((Unidades*)u)->updateUnit();
+		graphics->mapa->getTile(u->getPosition().X,u->getPosition().Y)->setVinculado(u);
 	}
-
 }
 
 void gameEngine::sleep(unsigned int mseconds)
@@ -100,22 +71,6 @@ int gameEngine::getSpeed()
 	return game_speed;
 }
 
-IDibujable* gameEngine::addIAUnit(int x,int y,int tipo)
-{	
-	battleIA* new_unit;
-	switch(tipo)
-	{
-		case 0: new_unit = new AldeanoIA(x,y); break;
-		case 1: new_unit = new EspadachinIA(x,y); break;
-		case 2: new_unit = new LanceroIA(x,y); break;
-		case 3: new_unit = new ArqueroIA(x,y); break;
-		
-	}
-	
-	Add_IAUnits.push_back(new_unit);
-	return new_unit;
-}
-
 IDibujable* gameEngine::addUserUnit(int x,int y, int tipo)
 {
 	Unidades* new_unit;
@@ -127,10 +82,27 @@ IDibujable* gameEngine::addUserUnit(int x,int y, int tipo)
 		case 3: new_unit = new Arquero(x,y); break;
 		
 	}
-
+	
 	Add_UserUnits.push_back(new_unit);
 	return new_unit;
 }
+
+
+IDibujable* gameEngine::addIAUnit(int x,int y,int tipo)
+{	
+	battleIA* new_unit;
+	switch(tipo)
+	{
+		case 0: new_unit = new AldeanoIA(x,y); break;
+		case 1: new_unit = new EspadachinIA(x,y); break;
+		case 2: new_unit = new LanceroIA(x,y); break;
+		case 3: new_unit = new ArqueroIA(x,y); break;
+	}
+	
+	Add_IAUnits.push_back(new_unit);
+	return new_unit;
+}
+
 
 IDibujable* gameEngine::addBuildings(int x,int y, int tipo)
 {
@@ -151,20 +123,28 @@ IDibujable* gameEngine::addBuildings(int x,int y, int tipo)
 
 void gameEngine::addNewUnits()
 {
-	for(battleIA* ia : Add_IAUnits)
+	if(graphics->mapa.get() !=NULL)
 	{
-		IAUnits.push_back(ia);
+		for(battleIA* ia : Add_IAUnits)
+		{
+			ia->setPathfinding(graphics->mapa->getPathfinding());
+			graphics->mapa->AnyadirObjeto(ia);
+			IAUnits.push_back(ia);
+		}
+		Add_IAUnits.clear();
+		for(Unidades* unit : Add_UserUnits)
+		{
+			unit->setPathfinding(graphics->mapa->getPathfinding());
+			graphics->mapa->AnyadirObjeto(unit);
+			UserUnits.push_back(unit);
+		}
+		Add_UserUnits.clear();
+		for(edificio* build : Add_Buildings)
+		{
+			build->setPathfinding(graphics->mapa->getPathfinding());
+			buildings.push_back(build);
+		}
+		Add_Buildings.clear();
 	}
-	Add_IAUnits.clear();
-	for(Unidades* unit : Add_UserUnits)
-	{
-		UserUnits.push_back(unit);
-	}
-	Add_UserUnits.clear();
-	for(edificio* build : Add_Buildings)
-	{
-		buildings.push_back(build);
-	}
-	Add_Buildings.clear();
 }
 
