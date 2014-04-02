@@ -1,12 +1,12 @@
 #include "suelo.h"
 
 
-Suelo::Suelo(int i, int j)
+Suelo::Suelo(int x, int y)
 {
 	setTipo(0);
 	position2di p;
-	p.X = j;
-	p.Y = i;
+	p.X = x;
+	p.Y = y;
 	setPosition(p);
 	isometric = true;
 }

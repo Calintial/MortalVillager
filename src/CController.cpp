@@ -120,7 +120,7 @@ bool CController::tickRedNeuronal(){
 
 			if(m_vecUnidades[i]->getMover()==1){
 				video::IVideoDriver* driver = device->getVideoDriver();
-				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]= new Suelo(0,m_vecUnidades[i]->Position().x,m_vecUnidades[i]->Position().y);
+				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]= new Suelo(m_vecUnidades[i]->Position().x,m_vecUnidades[i]->Position().y);
 				((Suelo*) Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x])->setIsometric(false);
 				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]->aplicarTextura(driver);
 				m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
@@ -258,7 +258,7 @@ void CController::generarMapa(){
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			Matriz[i][j]= new Suelo(0,i,j);
+			Matriz[i][j]= new Suelo(i,j);
 			((Suelo*) Matriz[i][j])->setIsometric(false);
 			Matriz[i][j]->aplicarTextura(driver);
 
@@ -268,7 +268,7 @@ void CController::generarMapa(){
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
-		Matriz[RandIntY][RandIntX]=new Muro(1,RandIntX,RandIntY);
+		Matriz[RandIntY][RandIntX]=new Muro(RandIntX,RandIntY);
 		((Muro*) Matriz[RandIntY][RandIntX])->setIsometric(false);
 		Matriz[RandIntY][RandIntX]->aplicarTextura(driver);
 	}
@@ -303,7 +303,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 		}
 
 	outfile.close();
-	Matriz[y][x]= new Suelo(0,x,y);
+	Matriz[y][x]= new Suelo(x,y);
 	((Suelo*) Matriz[y][x])->setIsometric(false);
 	Matriz[y][x]->aplicarTextura(driver);
 	unidad->Reset();
