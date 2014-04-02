@@ -74,7 +74,7 @@ bool CController::tickRedNeuronal(){
 		outfile.open("GeneticMovimientos.txt", ios::app);
 		if (outfile.is_open())
 		{
-			outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
+			outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->getPosicion().X <<","<<m_vecUnidades[i]->getPosicion().Y<<")"<<endl;
 
 		}
 
@@ -91,23 +91,23 @@ bool CController::tickRedNeuronal(){
 		outfile.open("GeneticMovimientos.txt", ios::app);
 		if (outfile.is_open())
 		{
-			outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->Position().x <<","<<m_vecUnidades[i]->Position().y<<")"<<endl;
+			outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->getPosicion().X <<","<<m_vecUnidades[i]->getPosicion().Y<<")"<<endl;
 
 		}
 
 		outfile.close();
 
 		if(m_vecUnidades[i]->getAtaque()==1){
-			SVector2D atacando=m_vecUnidades[i]->getAtaqueMovimiento();
+			position2di atacando=m_vecUnidades[i]->getAtaqueMovimiento();
 
-			if(Matriz[atacando.y][atacando.x]!=NULL && Matriz[atacando.y][atacando.x]->getTipo()==3){
+			if(Matriz[atacando.Y][atacando.X]!=NULL && Matriz[atacando.Y][atacando.X]->getTipo()==3){
 				m_vecUnidades[i]->IncrementFitness();
 				
 				outfile.open("GeneticMovimientos.txt", ios::app);
 				if (outfile.is_open())
 				{
 
-					outfile << "Y esta atacando a: ("<<atacando.x<<","<<atacando.y<<")"<<endl;
+					outfile << "Y esta atacando a: ("<<atacando.X<<","<<atacando.Y<<")"<<endl;
 				}
 
 				outfile.close();
@@ -120,11 +120,17 @@ bool CController::tickRedNeuronal(){
 
 			if(m_vecUnidades[i]->getMover()==1){
 				video::IVideoDriver* driver = device->getVideoDriver();
-				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]= new Suelo(m_vecUnidades[i]->Position().x,m_vecUnidades[i]->Position().y);
-				((Suelo*) Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x])->setIsometric(false);
-				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]->aplicarTextura(driver);
-				m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
-				Matriz[m_vecUnidades[i]->Position().y][m_vecUnidades[i]->Position().x]=m_vecUnidades[i];
+				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]= new Suelo(m_vecUnidades[i]->getPosicion().X,m_vecUnidades[i]->getPosicion().Y);
+				((Suelo*) Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X])->setIsometric(false);
+				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]->aplicarTextura(driver);
+				position2di moverse=m_vecUnidades[i]->getMovimiento();
+				if(Matriz[moverse.Y][moverse.X]->getTipo()==0){
+					
+					cout<<"Estoy en ("<<m_vecUnidades[i]->getPosition().X<<","<<m_vecUnidades[i]->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
+					m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
+				}
+				
+				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]=m_vecUnidades[i];
 			}
 		}
 			//update the chromos fitness score
@@ -203,9 +209,9 @@ bool CController::genetico(){
 	return true;
 }*/
 //Devuelve la unidad que hay en esa posición 
-CUnidadesAprendizaje* CController::getUnidadPosicion(SVector2D pos){
+CUnidadesAprendizaje* CController::getUnidadPosicion(position2di pos){
 	
-	return (CUnidadesAprendizaje*) Matriz[pos.y][pos.x];
+	return (CUnidadesAprendizaje*) Matriz[pos.Y][pos.X];
 
 };	
 
@@ -294,8 +300,8 @@ void CController::generarMapa(){
 }
 void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 	int x=0,y=0;
-	x=unidad->Position().x;
-	y=unidad->Position().y;
+	x=unidad->getPosicion().X;
+	y=unidad->getPosicion().Y;
 	outfile.open("GeneticMovimientos.txt", ios::app);
 		if (outfile.is_open())
 		{
@@ -323,7 +329,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 		}
 
 	outfile.close();
-			unidad->setPosition(SVector2D(x,y));
+			unidad->setPosition(position2di(x,y));
 			noEstar=false;
 		}
 	}while(noEstar);
@@ -355,7 +361,7 @@ bool CController::OnEvent(const SEvent& event)
 					CUnidadesAprendizaje* unit = (CUnidadesAprendizaje*) tile;
 					unit->TexturaSeleccionada(device->getVideoDriver(),true);
 					unidad_seleccionada = unit;
-					cerr<<" - Unidad seleccionada.pos = ["<<unit->Position().x<<","<<unit->Position().y<<"]";
+					cerr<<" - Unidad seleccionada.pos = ["<<unit->getPosicion().X<<","<<unit->getPosicion().Y<<"]";
 				}
 				cerr<<endl;
 			}
@@ -381,7 +387,7 @@ void CController::PintarInformacionUnidad()
 		video::SColor(255,0,0,0));
 
 	for(ObjetosCercanos objeto: objCercanos){
-		position2di drawPos = position2di(objeto.posicion.x*TILE_W, objeto.posicion.y * TILE_H);
+		position2di drawPos = position2di(objeto.posicion.X*TILE_W, objeto.posicion.Y * TILE_H);
 		//Pinta
 		if (objeto.tipo == 1) // muro
 		{

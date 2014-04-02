@@ -78,7 +78,7 @@ public:
 	CController(IrrlichtDevice* dev);
 
 	~CController();
-	CUnidadesAprendizaje* getUnidadPosicion(SVector2D pos);
+	CUnidadesAprendizaje* getUnidadPosicion(position2di pos);
 	//bool		Update();
 	bool		tickRedNeuronal();
 	bool		redNeuronal();

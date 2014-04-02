@@ -1,11 +1,11 @@
 #include "pantallaAprendizaje.h"
-
+#include "time.h"
 PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	
 	pantallaDevice->setEventReceiver(this);
 	env = pantallaDevice->getGUIEnvironment();
 	setTipo(tipo);
-	srand (3);
+	srand (time(NULL));
 	aprendizaje = new CController(pantallaDevice);
 
 	paused = true;
