@@ -31,12 +31,10 @@ bin/main: src/main.cpp $(OBJECTS_MAIN)
 
 # http://stackoverflow.com/questions/8025766/makefile-auto-dependency-generation
 %.o: src/%.cpp
-	@g++ -MD -c -o $@ $< $(OPTS) $(INCLUDES) $(LINKS); \
-	mkdir -p bin/.deps
-	@cp $*.d bin/.deps/$*.P; \
-	 sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-	 -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> bin/.deps/$*.P; \
-	 rm -f $*.d
+	g++ -MD -c -o $@ $< $(OPTS) $(INCLUDES) $(LINKS) && mkdir -p bin/.deps && \
+	cp $*.d bin/.deps/$*.P && \
+	sed -e 's/#.*//' -e 's/^[^:]*: *//' \
+	-e 's/ *\\$$//' -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> bin/.deps/$*.P && rm -f $*.d
 
 -include bin/.deps/*.P
 
