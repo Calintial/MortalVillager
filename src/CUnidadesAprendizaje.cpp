@@ -150,7 +150,9 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 							}
 
 							outfile.close();
-						m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
+						//m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
+							ObjetosCercanos obj(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),j,i);
+							m_vObjetosCerca.push_back(obj);
 						
 					}
 					else{
@@ -163,7 +165,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 							}
 
 							outfile.close();
-						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[i][j]->getTipo(),0,Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
+						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[i][j]->getTipo(),0,j,i));
 					}
 					cant++;
 				}
@@ -173,16 +175,10 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 		
 	}
 	for(int i= getPosicion().Y-2;i<=getPosicion().Y+2 && cant<8;i++){
-		if(getPosicion().Y-1 <= i && i<= getPosicion().Y+1){
-				continue;
-			}
 		for(int j=getPosicion().X-2;j<=getPosicion().X+2 && cant<8;j++){
-			if(getPosicion().X-1 <= j && j<= getPosicion().X+1){
+			if(getPosicion().Y-1 <= i && i<= getPosicion().Y+1 && getPosicion().X-1 <= j && j<= getPosicion().X+1){
 				continue;
 			}
-			if(i==getPosicion().Y && j==getPosicion().X){
-					continue;
-				}
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
 				if(Matriz[i][j]->getTipo()!=0){
 					if(Matriz[i][j]->getTipo()==3){
