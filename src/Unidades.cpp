@@ -107,27 +107,34 @@ void Unidades::updateUnit()
 	//position2di position = getPosition();
 	if(state == MOVE)
 	{
-		if (objetivo && camino)
+		if (objetivo)
 		{
-			if (camino->getPeso() <= pesoComprobacion){
-				position2di nuevaPos = objetivo->getPosition();
-				cout << "### NUEVAPOS OBJETIVO = <"<<nuevaPos.X<<","<<nuevaPos.Y<<">"<<endl;
-				if (nuevaPos != posicionObjetivo)
-				{
-					delete camino;
-					camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
-					if (camino)
+			if (camino)
+			{
+				if (camino->getPeso() <= pesoComprobacion){
+					position2di nuevaPos = objetivo->getPosition();
+					if (nuevaPos != posicionObjetivo)
 					{
-						pesoComprobacion = camino->getPeso()/2;
+						cout << "### NUEVAPOS OBJETIVO = <"<<nuevaPos.X<<","<<nuevaPos.Y<<">"<<endl;
+						delete camino;
+						camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
+						if (camino)
+						{
+							pesoComprobacion = camino->getPeso()/2;
+						}
 					}
 				}
-			}
-
-			/*if (camino == NULL || camino->getPeso() < 1)
-			{
-				objetivo = NULL;
-			}*/
+			}else{
+				position2di nuevaPos = objetivo->getPosition();
+				cout << "### NUEVAPOS OBJETIVO = <"<<nuevaPos.X<<","<<nuevaPos.Y<<">"<<endl;
+				camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
+				if (camino)
+				{
+					pesoComprobacion = camino->getPeso()/2;
+				}
+			}	
 		}
+
 		if (camino)
 		{
 			if (camino->getPeso() <= pesoComprobacion)
@@ -146,7 +153,7 @@ void Unidades::updateUnit()
 			Move(camino);
 		}
 		
-		if (camino == NULL || camino->getPeso() <= 0)
+		if ((camino == NULL || camino->getPeso() <= 0) && !objetivo)
 		{
 			if (camino)
 			{
