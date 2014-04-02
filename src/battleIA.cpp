@@ -3,7 +3,9 @@
 
 battleIA::battleIA()
 {
-	state = 0;
+	stateIA = 0;
+	enemy_pos.X = -1;
+	enemy_pos.Y = -1;
 	stadoIA = new CurrentIA();
 	setTipo(4);
 }
@@ -11,7 +13,9 @@ battleIA::battleIA()
 battleIA::battleIA(int x, int y)
 {
 	setPosition(x,y);
-	state = 0;
+	stateIA = 0;
+	enemy_pos.X = -1;
+	enemy_pos.Y = -1;
 	stadoIA = new CurrentIA();
 	setTipo(4);
 }
@@ -24,14 +28,7 @@ void battleIA::updateIA(std::shared_ptr<mapa2D> mapa)
 {
 	IDibujable* casenemy = searchEnemy(mapa);
 	if(casenemy != NULL){
-		state=stadoIA->doSomething(this, casenemy);
-		
-		if(state==ATTACK)
-		{
-			//Por referencia cambia enemigo
-			//Arriba se le pasa la casilla, se cambia dentro el daño, ya deberia de estar
-			//mapa->getTile(enemy->getPosition().X,enemy->getPosition().Y)->setVinculado(enemy);
-		}
+		stateIA=stadoIA->doSomething(this, casenemy);
 	}
 }
 
@@ -66,6 +63,6 @@ IDibujable* battleIA::searchEnemy(std::shared_ptr<mapa2D> mapa)
 
 int battleIA::getState()
 {
-	return state;
+	return stateIA;
 }
 

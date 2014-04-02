@@ -19,8 +19,7 @@ public:
 	battleIA();
 	battleIA(int,int);
 	~battleIA();
-	void updateIA(std::shared_ptr<mapa2D> mapa);
-
+	virtual void updateIA(std::shared_ptr<mapa2D> mapa);
 	int getState();
 	CurrentIA* stadoIA;
 	IDibujable* searchEnemy(std::shared_ptr<mapa2D> mapa);
@@ -30,7 +29,8 @@ public:
 	virtual void Recovery() = 0;
 
 private:
-	int state;
+	int stateIA;
+
 };
 
 

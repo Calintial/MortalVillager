@@ -45,10 +45,12 @@ public:
 	//Pintado
 	virtual void TexturaSeleccionada(IVideoDriver* driver,bool) = 0;
 	
-private:
+protected:
 	position2di last_clicked;
 	Camino* camino;
 	Unidades* objetivo;
+	position2di posicionObjetivo;
+	int pesoComprobacion;
 	int state;
 	bool select;
 	int life;
