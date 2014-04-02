@@ -136,7 +136,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
 				if(i==getPosicion().Y && j==getPosicion().X){
-					break;
+					continue;
 				}
 
 				if(Matriz[i][j]->getTipo()!=0){
@@ -174,14 +174,14 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 	}
 	for(int i= getPosicion().Y-2;i<=getPosicion().Y+2 && cant<8;i++){
 		if(getPosicion().Y-1 <= i && i<= getPosicion().Y+1){
-				break;
+				continue;
 			}
 		for(int j=getPosicion().X-2;j<=getPosicion().X+2 && cant<8;j++){
 			if(getPosicion().X-1 <= j && j<= getPosicion().X+1){
-				break;
+				continue;
 			}
 			if(i==getPosicion().Y && j==getPosicion().X){
-					break;
+					continue;
 				}
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
 				if(Matriz[i][j]->getTipo()!=0){
