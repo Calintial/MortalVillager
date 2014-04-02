@@ -32,7 +32,6 @@ private:
   CNeuralNet		m_ItsBrain;
 
 	//its position in the world
-	int 			m_life;
 	int 			move;
 	//the sweeper's fitness score 
 	double			m_dFitness;
@@ -52,7 +51,6 @@ public:
 	position2di getMovimiento(){return  position2di(m_moveX,m_moveY);}
 	void setAtaque(int x, int y){m_ataqueX=x;m_ataqueY=y;}
 	void setMovimiento(int x, int y){m_moveX=x;m_moveY=y;}
-	int getLife(){return m_life;}
 	CUnidadesAprendizaje(int x, int y);
 	
 	//updates the ANN with information from the sweepers enviroment

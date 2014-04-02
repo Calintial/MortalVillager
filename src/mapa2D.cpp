@@ -402,7 +402,6 @@ void mapa2D::GuardarMapa(){
 		file<< mapatext;
 		file.close();
 	}
-
 }
 
 IDibujable* mapa2D::getTile(int y, int x){
