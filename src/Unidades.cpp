@@ -84,7 +84,7 @@ void Unidades::Move(Camino* _camino){
 	{
 		if (camino == NULL || camino->getPeso() <= 0)
 		{
-			pesoComprobacion = _camino->getPeso()/3;
+			pesoComprobacion = _camino->getPeso()/2;
 		}
 		state = MOVE;
 		position2di pos = _camino->darPaso();
@@ -118,7 +118,7 @@ void Unidades::updateUnit()
 					camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
 					if (camino)
 					{
-						pesoComprobacion = camino->getPeso()/3;
+						pesoComprobacion = camino->getPeso()/2;
 					}
 				}
 			}
@@ -139,7 +139,7 @@ void Unidades::updateUnit()
 					camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
 					if (camino)
 					{
-						pesoComprobacion = camino->getPeso()/3;
+						pesoComprobacion = camino->getPeso()/2;
 					}
 				}
 			}

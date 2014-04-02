@@ -20,6 +20,12 @@ void AldeanoDemo::updateIA(vector<IDibujable*>* vector){
 		if (!caminoDemo || !camino)
 		{
 			caminoDemo = pathfinding->calcularCamino(posInicial,posDestino);
+			position2di final = caminoDemo->getFinal();
+			for (int i = 0; i < 30; ++i)
+			{
+				caminoDemo->addNodo(final);
+			}
+			
 			camino = new Camino(*caminoDemo);
 		}
 
