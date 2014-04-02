@@ -68,76 +68,88 @@ bool CController::tickRedNeuronal(){
 	for (int i=0; i<m_NumUnidades; ++i)
 
 	{
-		m_vecUnidades[i]->calcular8Objetos(Matriz);
-		//Pintar();
-			//update the NN and position
-		outfile.open("GeneticMovimientos.txt", ios::app);
-		if (outfile.is_open())
+		if (m_vecUnidades[i]->getLife() > 0)
 		{
-			outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->getPosicion().X <<","<<m_vecUnidades[i]->getPosicion().Y<<")"<<endl;
+			m_vecUnidades[i]->calcular8Objetos(Matriz);
+			//Pintar();
+				//update the NN and position
+			outfile.open("GeneticMovimientos.txt", ios::app);
+			if (outfile.is_open())
+			{
+				outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->getPosicion().X <<","<<m_vecUnidades[i]->getPosicion().Y<<")"<<endl;
 
-		}
-
-		outfile.close();
-		if (!m_vecUnidades[i]->Update(Matriz))
-		{
-
-				//error in processing the neural net
-			cout<<"Wrong amount of NN inputs!"<<endl;
-			return false;
-		}
-
-
-		outfile.open("GeneticMovimientos.txt", ios::app);
-		if (outfile.is_open())
-		{
-			outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->getPosicion().X <<","<<m_vecUnidades[i]->getPosicion().Y<<")"<<endl;
-
-		}
-
-		outfile.close();
-
-		if(m_vecUnidades[i]->getAtaque()==1){
-			position2di atacando=m_vecUnidades[i]->getAtaqueMovimiento();
-
-			if(Matriz[atacando.Y][atacando.X]!=NULL && Matriz[atacando.Y][atacando.X]->getTipo()==3){
-
-				int dano = m_vecUnidades[i]->Attack((Unidades*)Matriz[atacando.Y][atacando.X]);
-				m_vecUnidades[i]->IncrementFitness(dano);
-				
-				outfile.open("GeneticMovimientos.txt", ios::app);
-				if (outfile.is_open())
-				{
-
-					outfile << "Y esta atacando a: ("<<atacando.X<<","<<atacando.Y<<")"<<endl;
-				}
-
-				outfile.close();
-				
 			}
 
+			outfile.close();
+			if (!m_vecUnidades[i]->Update(Matriz))
+			{
+
+					//error in processing the neural net
+				cout<<"Wrong amount of NN inputs!"<<endl;
+				return false;
+			}
+
+
+			outfile.open("GeneticMovimientos.txt", ios::app);
+			if (outfile.is_open())
+			{
+				outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->getPosicion().X <<","<<m_vecUnidades[i]->getPosicion().Y<<")"<<endl;
+
+			}
+
+			outfile.close();
+
+			if(m_vecUnidades[i]->getAtaque()==1){
+				position2di atacando=m_vecUnidades[i]->getAtaqueMovimiento();
+
+				if(Matriz[atacando.Y][atacando.X]!=NULL && Matriz[atacando.Y][atacando.X]->getTipo()==3){
+
+					int dano = m_vecUnidades[i]->Attack((Unidades*)Matriz[atacando.Y][atacando.X]);
+					m_vecUnidades[i]->IncrementFitness(dano);
+					
+					outfile.open("GeneticMovimientos.txt", ios::app);
+					if (outfile.is_open())
+					{
+
+						outfile << "Y esta atacando a: ("<<atacando.X<<","<<atacando.Y<<")"<<endl;
+					}
+
+					outfile.close();
+					
+				}
+
+				
+			}
+			else{
+
+				if(m_vecUnidades[i]->getMover()==1){
+					video::IVideoDriver* driver = device->getVideoDriver();
+					Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]= new Suelo(m_vecUnidades[i]->getPosicion().X,m_vecUnidades[i]->getPosicion().Y);
+					((Suelo*) Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X])->setIsometric(false);
+					Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]->aplicarTextura(driver);
+					position2di moverse=m_vecUnidades[i]->getMovimiento();
+					if(Matriz[moverse.Y][moverse.X]->getTipo()==0){
+						//cout<<"Estoy en ("<<m_vecUnidades[i]->getPosition().X<<","<<m_vecUnidades[i]->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
+						m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
+
+					}
+					
+					Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]=m_vecUnidades[i];
+				}
+			}
+				//update the chromos fitness score
+			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
+
+		}else{
+			position2di pos = m_vecUnidades[i]->getPosicion();
+			if (pos.X >=0)
+			{
+				Matriz[pos.Y][pos.X] = new Suelo(pos.X,pos.Y);
+				m_vecUnidades[i]->setPosition(-1,-1);
+			}
+			
 			
 		}
-		else{
-
-			if(m_vecUnidades[i]->getMover()==1){
-				video::IVideoDriver* driver = device->getVideoDriver();
-				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]= new Suelo(m_vecUnidades[i]->getPosicion().X,m_vecUnidades[i]->getPosicion().Y);
-				((Suelo*) Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X])->setIsometric(false);
-				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]->aplicarTextura(driver);
-				position2di moverse=m_vecUnidades[i]->getMovimiento();
-				if(Matriz[moverse.Y][moverse.X]->getTipo()==0){
-					//cout<<"Estoy en ("<<m_vecUnidades[i]->getPosition().X<<","<<m_vecUnidades[i]->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
-					m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
-
-				}
-				
-				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]=m_vecUnidades[i];
-			}
-		}
-			//update the chromos fitness score
-		m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
-
 
 	}
 
