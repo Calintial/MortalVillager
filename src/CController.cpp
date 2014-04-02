@@ -144,7 +144,10 @@ bool CController::tickRedNeuronal(){
 			position2di pos = m_vecUnidades[i]->getPosicion();
 			if (pos.X >=0)
 			{
+				cout<<"##### HE MUERTO! POS: <"<<pos.X<<","<<pos.Y<<">"<<endl;
 				Matriz[pos.Y][pos.X] = new Suelo(pos.X,pos.Y);
+				((Suelo*) Matriz[pos.Y][pos.X])->setIsometric(false);
+				Matriz[pos.Y][pos.X]->aplicarTextura(driver);
 				m_vecUnidades[i]->setPosition(-1,-1);
 			}
 			

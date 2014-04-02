@@ -4,8 +4,6 @@
 battleIA::battleIA()
 {
 	stateIA = 0;
-	enemy_pos.X = -1;
-	enemy_pos.Y = -1;
 	stadoIA = new CurrentIA();
 	setTipo(4);
 }
@@ -14,8 +12,6 @@ battleIA::battleIA(int x, int y)
 {
 	setPosition(x,y);
 	stateIA = 0;
-	enemy_pos.X = -1;
-	enemy_pos.Y = -1;
 	stadoIA = new CurrentIA();
 	setTipo(4);
 }
