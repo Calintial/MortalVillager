@@ -68,6 +68,7 @@ bool CController::tickRedNeuronal(){
 	for (int i=0; i<m_NumUnidades; ++i)
 
 	{
+		m_vecUnidades[i]->calcular8Objetos(Matriz);
 		//Pintar();
 			//update the NN and position
 		outfile.open("GeneticMovimientos.txt", ios::app);
@@ -131,6 +132,8 @@ bool CController::tickRedNeuronal(){
 
 
 	}
+
+
 }
 
 bool CController::redNeuronal(){
@@ -162,6 +165,11 @@ bool CController::genetico(){
 	{
 		m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
 		modificarUnidad(m_vecUnidades[i]);
+
+	}
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		m_vecUnidades[i]->calcular8Objetos(Matriz);
 
 	}
 }
@@ -304,8 +312,8 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 	y=0;
 
 	do{
-		x= RandInt(0,5);
-		y=RandInt(0,5);
+		x= RandInt(0,MAPSIZE-1);
+		y=RandInt(0,MAPSIZE-1);
 
 		if(Matriz[y][x]->getTipo()==0){
 				outfile.open("GeneticMovimientos.txt", ios::app);
@@ -319,7 +327,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 			noEstar=false;
 		}
 	}while(noEstar);
-	unidad->calcular8Objetos(Matriz);
+
 }
 bool CController::OnEvent(const SEvent& event)
 {
