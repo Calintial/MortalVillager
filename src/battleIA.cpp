@@ -2,7 +2,7 @@
 
 battleIA::battleIA()
 {
-	state = 0;
+	stateIA = 0;
 	enemy_pos.X = -1;
 	enemy_pos.Y = -1;
 	stadoIA = new CurrentIA();
@@ -11,7 +11,7 @@ battleIA::battleIA()
 battleIA::battleIA(int x, int y)
 {
 	setPosition(x,y);
-	state = 0;
+	stateIA = 0;
 	enemy_pos.X = -1;
 	enemy_pos.Y = -1;
 	stadoIA = new CurrentIA();
@@ -27,22 +27,22 @@ void battleIA::updateIA(vector<IDibujable*>* user)
 	//cout << user->getLife() << endl;
 	enemy_pos = searchEnemy(user);
 		
-	state=stadoIA->doSomething(this, enemy_pos);
-	/*switch(state)
+	stateIA=stadoIA->doSomething(this, enemy_pos);
+	/*switch(stateIA)
 	{
-		case SEARCHING: state = this->searching(user);
+		case SEARCHING: stateIA = this->searching(user);
 						break;
 
-		case APPROACH:  state = this->approach(user);
+		case APPROACH:  stateIA = this->approach(user);
 						break;
 
-		case ATTACK: 	state = this->attack(user);
+		case ATTACK: 	stateIA = this->attack(user);
 						break;
 
-		case FLEE: 		state = this->flee(user);
+		case FLEE: 		stateIA = this->flee(user);
 						break;
 
-		case RECOVERY:  state = this->recovery(user);
+		case RECOVERY:  stateIA = this->recovery(user);
 						break;
 	}*/
 }
@@ -176,6 +176,6 @@ position2di battleIA::searchEnemy(vector<IDibujable*>* vUnits)
 
 int battleIA::getState()
 {
-	return state;
+	return stateIA;
 }
 

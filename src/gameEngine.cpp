@@ -1,4 +1,5 @@
 #include "gameEngine.h"
+#include "AldeanoDemo.h"
 
 float gameEngine::volumen = 0.5;
 int gameEngine::game_speed = 100;
@@ -109,6 +110,8 @@ IDibujable* gameEngine::addIAUnit(int x,int y,int tipo)
 		case 1: new_unit = new EspadachinIA(x,y); break;
 		case 2: new_unit = new LanceroIA(x,y); break;
 		case 3: new_unit = new ArqueroIA(x,y); break;
+		case 4: new_unit = new AldeanoDemo(position2di(25,150),position2di(175,150)); break;
+
 		
 	}
 	

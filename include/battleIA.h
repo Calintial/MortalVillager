@@ -17,7 +17,7 @@ public:
 	battleIA();
 	battleIA(int,int);
 	~battleIA();
-	void updateIA(vector<IDibujable*>*);
+	virtual void updateIA(vector<IDibujable*>*);
 	/*virtual void Pintar(IVideoDriver*,int,int);
 	virtual void TexturaSeleccionada(IVideoDriver*,bool);
 	virtual void aplicarTextura(IVideoDriver* driver);*/
@@ -32,7 +32,7 @@ public:
 	virtual void Recovery() = 0;
 
 private:
-	int state;
+	int stateIA;
 
 	int searching(vector<IDibujable*>*);
 	int approach(vector<IDibujable*>*);
