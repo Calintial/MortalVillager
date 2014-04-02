@@ -127,7 +127,7 @@ bool CController::tickRedNeuronal(){
 				if(Matriz[moverse.Y][moverse.X]->getTipo()==0){
 					
 					cout<<"Estoy en ("<<m_vecUnidades[i]->getPosition().X<<","<<m_vecUnidades[i]->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
-					m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
+					m_vecUnidades[i]->setPosition(moverse);
 				}
 				
 				Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]=m_vecUnidades[i];
@@ -330,7 +330,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 
 	outfile.close();
 			unidad->setPosition(position2di(x,y));
-			//Matriz[y][x]=unidad;
+			Matriz[y][x]=unidad;
 			noEstar=false;
 		}
 	}while(noEstar);

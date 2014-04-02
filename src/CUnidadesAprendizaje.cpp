@@ -100,8 +100,11 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 			move=1;
 
 		}
-
-		m_ataque=0;
+		else{
+			move=0;
+			m_ataque=0;
+		}
+	
 	}
 	else{
 			outfile.open("GeneticMovimientos.txt", ios::app);
@@ -112,7 +115,7 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 			
 		}
 
-	outfile.close();
+		outfile.close();
 		move=0;
 		m_ataque=0;
 	}
