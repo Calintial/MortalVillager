@@ -8,7 +8,7 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	srand (time(NULL));
 	aprendizaje = new CController(pantallaDevice);
 
-	paused = false;
+	paused = true;
 	continuar = false;
 
 	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,0,dimensionPantallaX+160,25), 0, CB_PAUSE, 
@@ -35,6 +35,7 @@ for(int i=0;i<cont;i++){
 	pantallaDevice->setEventReceiver(this);
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(32*20,0,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,32*20,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
+	aprendizaje->Pintar();
 	if (!paused || continuar)
 	{
 	//	cerr<<"ejecutando"<<endl;
@@ -46,7 +47,7 @@ for(int i=0;i<cont;i++){
 	//	cerr<<"pausado"<<endl;
 	}
 	
-	aprendizaje->Pintar();
+	
 	pantallaDevice->getVideoDriver()->endScene();
 //}
 	if(eliminar){

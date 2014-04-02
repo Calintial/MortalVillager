@@ -277,7 +277,7 @@ void CController::generarMapa(){
 	
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		if(i%19==0){
+		if(i%20==0){
 			j++;	
 		}
 		EspadachinRedes* unidad=new EspadachinRedes(j,i);
