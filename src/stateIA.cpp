@@ -122,11 +122,6 @@ int ATACAR::doSomething(battleIA* bIA, IDibujable* &casilla)
 		if(bIA->enemy_in_attack_range(enemy->getPosition()) && bIA->getLife() > 25)
 		{
 			 int danyo = bIA->Attack(enemy);
-			 //devolver el daño para quitarle la vida al enemigo o quitarselo con un mapa desde aqui
-			 //enemy->PierdoVida(danyo);
-			 cout << "QUITO " << danyo << " DAÑO" << endl;
-			 enemy->PierdoVida(danyo);
-			 casilla->setVinculado(enemy);
 		}
 		else if(!bIA->enemy_in_attack_range(enemy->getPosition()))
 		{

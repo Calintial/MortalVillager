@@ -111,6 +111,7 @@ int Unidades::Attack(Unidades* enemigo)
 {
 	int ataque = TrianguloArmas(enemigo);
 	
+	enemigo->PierdoVida(ataque+getAttackValue());
 	return ataque+getAttackValue();
 }
 
