@@ -106,12 +106,12 @@ SGenome CGenAlg::GetChromoRoulette()
 		//this point
 		if (FitnessSoFar >= Slice)
 		{
-			outfile.open("Genetic.txt", ios::app);
+			/*outfile.open("Genetic.txt", ios::app);
 			if (outfile.is_open())
 			{
 				outfile << "Mejor fitness: " << m_vecPop[i].dFitness << endl;
 			}
-			outfile.close();
+			outfile.close();*/
 			TheChosenOne = m_vecPop[i];
 
       break;
@@ -221,6 +221,7 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 	}
 
 	outfile.close();
+
 	//assign the given population to the classes population
   m_vecPop = old_pop;
 
@@ -338,7 +339,17 @@ void CGenAlg::CalculateBestWorstAvTot()
 		
 	}//next chromo
 	
+
 	m_dAverageFitness = m_dTotalFitness / m_iPopSize;
+	outfile.open("Genetic.txt", ios::app);
+			if (outfile.is_open())
+			{
+				outfile << "##################################################CGenAlg::CalculateBestWorstAvTot############################################"<<endl;
+				outfile << "Mejor fitness: "<<m_dBestFitness<<endl;
+				outfile << "Peor fitness: "<<m_dWorstFitness<<endl;
+				outfile << "Average Fitness: "<<m_dAverageFitness<<endl;
+			}
+			outfile.close();
 }
 
 //-------------------------Reset()------------------------------
