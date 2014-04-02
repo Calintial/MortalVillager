@@ -330,6 +330,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 
 	outfile.close();
 			unidad->setPosition(position2di(x,y));
+			//Matriz[y][x]=unidad;
 			noEstar=false;
 		}
 	}while(noEstar);
