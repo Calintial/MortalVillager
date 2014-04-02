@@ -11,12 +11,8 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
                              m_ataqueX(0),
                              m_ataqueY(0),
                              move(0)
-
-			 
-{
-			
-			setPosition(x,y);		
-
+{			
+	setPosition(x,y);		
 }
 
 //-------------------------------------------Reset()--------------------

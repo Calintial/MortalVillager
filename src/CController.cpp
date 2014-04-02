@@ -102,7 +102,7 @@ bool CController::tickRedNeuronal(){
 
 			if(Matriz[atacando.Y][atacando.X]!=NULL && Matriz[atacando.Y][atacando.X]->getTipo()==3){
 
-				int dano = m_vecUnidades[i]->Attack((Unidades*)Matriz[atacando.y][atacando.x]);
+				int dano = m_vecUnidades[i]->Attack((Unidades*)Matriz[atacando.Y][atacando.X]);
 				m_vecUnidades[i]->IncrementFitness(dano);
 				
 				outfile.open("GeneticMovimientos.txt", ios::app);
@@ -380,6 +380,11 @@ void CController::PintarInformacionUnidad()
 	Vida+=unidad_seleccionada->getLife();
 	core::stringw Ataque="Ataque: ";
 	Ataque+= unidad_seleccionada->getAttackValue();
+	core::stringw Posicion="Posicion: ";
+	Posicion+= unidad_seleccionada->getPosition().X;
+	Posicion+= ",";
+	Posicion+= unidad_seleccionada->getPosition().Y;
+
 
 	font->draw(Vida,
 		core::rect<s32>(650,100,650,100),
@@ -387,6 +392,10 @@ void CController::PintarInformacionUnidad()
 	font->draw(Ataque,
 		core::rect<s32>(750,100,750,100),
 		video::SColor(255,0,0,0));
+	font->draw(Posicion,
+		core::rect<s32>(850,100,850,100),
+		video::SColor(255,0,0,0));
+
 
 	for(ObjetosCercanos objeto: objCercanos){
 		position2di drawPos = position2di(objeto.posicion.X*TILE_W, objeto.posicion.Y * TILE_H);
