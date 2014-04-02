@@ -101,7 +101,9 @@ bool CController::tickRedNeuronal(){
 			position2di atacando=m_vecUnidades[i]->getAtaqueMovimiento();
 
 			if(Matriz[atacando.Y][atacando.X]!=NULL && Matriz[atacando.Y][atacando.X]->getTipo()==3){
-				m_vecUnidades[i]->IncrementFitness();
+
+				int dano = m_vecUnidades[i]->Attack((Unidades*)Matriz[atacando.y][atacando.x]);
+				m_vecUnidades[i]->IncrementFitness(dano);
 				
 				outfile.open("GeneticMovimientos.txt", ios::app);
 				if (outfile.is_open())

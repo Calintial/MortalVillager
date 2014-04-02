@@ -63,8 +63,7 @@ public:
   	vector<ObjetosCercanos> getVectorObjetos(){return m_vObjetosCerca;};
 
 	//-------------------accessor functions
-
-	void			IncrementFitness(){m_dFitness+=0.1;}
+	void			IncrementFitness(int valor){m_dFitness+=valor;}
 
 	double		Fitness()const{return m_dFitness;}
   
