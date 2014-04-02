@@ -69,6 +69,7 @@ void Unidades::Move(int x, int y)
 			newPath = false;
 		}else{
 			delete camino;
+			objetivo = NULL;
 			newPath = true;
 		}
 	}
