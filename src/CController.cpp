@@ -230,6 +230,8 @@ void CController::Pintar()
 			if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
 			{
 				PintarInformacionUnidad();
+			}else{
+				unidad_seleccionada = NULL;
 			}
 
 			device->getGUIEnvironment()->drawAll();
@@ -332,8 +334,8 @@ bool CController::OnEvent(const SEvent& event)
 			if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
 			{
 				unidad_seleccionada->TexturaSeleccionada(device->getVideoDriver(),false);
-				unidad_seleccionada = NULL;
 			}
+			unidad_seleccionada = NULL;
 
 			IDibujable* tile =  Matriz[pos_grid.Y][pos_grid.X];
 			cerr<<"Has clicado en ["<<pos_grid.X<<","<<pos_grid.Y<<"]";
