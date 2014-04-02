@@ -4,7 +4,6 @@
 //
 //-----------------------------------------------------------------------
 CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
-							 m_life(100),
                              m_dFitness(0),
                              m_moveX(0),
                              m_moveY(0),
@@ -12,7 +11,8 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
                              m_ataqueY(0),
                              move(0)
 {			
-	setPosition(x,y);		
+	setPosition(x,y);
+	setLife(100);
 }
 
 //-------------------------------------------Reset()--------------------
@@ -26,7 +26,7 @@ void CUnidadesAprendizaje::Reset()
 	move=0;
 	m_dFitness = 0;
 	m_ataque = 0;
-	m_life = 100;
+	setLife(100);
 	m_moveX = 0;
 	m_moveY = 0;
 	m_ataqueX = 0;
@@ -53,7 +53,7 @@ void CUnidadesAprendizaje::Reset()
 bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 {
 
-	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,m_life,getPosicion().X,getPosicion().Y);
+	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,	getLife(),getPosicion().X,getPosicion().Y);
 
 	vector<double> output = m_ItsBrain.Update(inputs);
 	if( output.size()<CParams::iNumOutputs){
