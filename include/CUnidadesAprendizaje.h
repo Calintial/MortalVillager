@@ -32,7 +32,6 @@ private:
   CNeuralNet		m_ItsBrain;
 
 	//its position in the world
-	SVector2D		m_vPosition;
 	int 			m_life;
 	int 			move;
 	//the sweeper's fitness score 
@@ -49,8 +48,8 @@ public:
 	std::ofstream outfile;
 	int getMover(){return move;};
 	int getAtaque(){return m_ataque;}
-	SVector2D getAtaqueMovimiento(){return  SVector2D(m_ataqueX,m_ataqueY);}
-	SVector2D getMovimiento(){return  SVector2D(m_moveX,m_moveY);}
+	position2di getAtaqueMovimiento(){return  position2di(m_ataqueX,m_ataqueY);}
+	position2di getMovimiento(){return  position2di(m_moveX,m_moveY);}
 	void setAtaque(int x, int y){m_ataqueX=x;m_ataqueY=y;}
 	void setMovimiento(int x, int y){m_moveX=x;m_moveY=y;}
 	int getLife(){return m_life;}
@@ -64,8 +63,7 @@ public:
   	vector<ObjetosCercanos> getVectorObjetos(){return m_vObjetosCerca;};
 
 	//-------------------accessor functions
-	SVector2D	Position()const{return m_vPosition;}
-	void setPosition(SVector2D pos){m_vPosition=pos;}
+
 	void			IncrementFitness(){m_dFitness+=0.1;}
 
 	double		Fitness()const{return m_dFitness;}
@@ -78,7 +76,7 @@ public:
   virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
   void calcular8Objetos(IDibujable* [][MAPSIZE]);
 
-	SVector2D mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
+	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
 
 
 	

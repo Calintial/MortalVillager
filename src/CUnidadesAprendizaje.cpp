@@ -14,8 +14,9 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
 
 			 
 {
-			m_vPosition = SVector2D(x, y); 
 			
+			setPosition(x,y);		
+
 }
 
 //-------------------------------------------Reset()--------------------
@@ -56,7 +57,7 @@ void CUnidadesAprendizaje::Reset()
 bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 {
 
-	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,m_life,m_vPosition.x,m_vPosition.y);
+	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,m_life,getPosicion().X,getPosicion().Y);
 
 	vector<double> output = m_ItsBrain.Update(inputs);
 	if( output.size()<CParams::iNumOutputs){
@@ -68,22 +69,22 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 	y=output[1];
 
 	if(0<x && x<=0.33){
-		xint=m_vPosition.x-1;
+		xint=getPosicion().X-1;
 	}
 	else if(0.34<x && x<=0.66){
-		xint=m_vPosition.x-1;
+		xint=getPosicion().X-1;
 	}
 	else{
-		xint=m_vPosition.x+1;
+		xint=getPosicion().X+1;
 	}
 	if(0<y && y<=0.33){
-		yint=m_vPosition.y-1;
+		yint=getPosicion().Y-1;
 	}
 	else if(0.34<y && y<=0.66){
-		yint=m_vPosition.y-1;
+		yint=getPosicion().Y-1;
 	}
 	else{
-		yint=m_vPosition.y+1;
+		yint=getPosicion().Y+1;
 	}
 
 	if(xint<MAPSIZE && xint>0 && yint<MAPSIZE && yint>0 && output[2]>0.5 && Matriz[yint][xint]!=NULL && Matriz[yint][xint]->getTipo()==3){
@@ -93,9 +94,9 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 		//setMovimiento(0,0);
 	}
 	else if(output[7]>0.5){
-		SVector2D mov=mayorMovimiento(output[3],output[4],output[5],output[6],Matriz);
-		if(mov.x>=0 && mov.x<MAPSIZE && mov.y>=0 && mov.y<MAPSIZE){
-			setMovimiento(mov.x,mov.y);
+		position2di mov=mayorMovimiento(output[3],output[4],output[5],output[6],Matriz);
+		if(mov.X>=0 && mov.X<MAPSIZE && mov.Y>=0 && mov.Y<MAPSIZE){
+			setMovimiento(mov.X,mov.Y);
 			move=1;
 
 		}
@@ -134,11 +135,11 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 	m_vObjetosCerca.clear();
 	int cant=0;
-	for(int i= m_vPosition.y-1;i<=m_vPosition.y+1 && cant<8;i++){
-		for(int j=m_vPosition.x-1;j<=m_vPosition.x+1 && cant<8;j++){
+	for(int i= getPosicion().Y-1;i<=getPosicion().Y+1 && cant<8;i++){
+		for(int j=getPosicion().X-1;j<=getPosicion().X+1 && cant<8;j++){
 
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
-				if(i==m_vPosition.y && j==m_vPosition.x){
+				if(i==getPosicion().Y && j==getPosicion().X){
 					break;
 				}
 
@@ -175,15 +176,15 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 		}
 		
 	}
-	for(int i= m_vPosition.y-2;i<=m_vPosition.y+2 && cant<8;i++){
-		if(m_vPosition.y-1 <= i && i<= m_vPosition.y+1){
+	for(int i= getPosicion().Y-2;i<=getPosicion().Y+2 && cant<8;i++){
+		if(getPosicion().Y-1 <= i && i<= getPosicion().Y+1){
 				break;
 			}
-		for(int j=m_vPosition.x-2;j<=m_vPosition.x+2 && cant<8;j++){
-			if(m_vPosition.x-1 <= j && j<= m_vPosition.x+1){
+		for(int j=getPosicion().X-2;j<=getPosicion().X+2 && cant<8;j++){
+			if(getPosicion().X-1 <= j && j<= getPosicion().X+1){
 				break;
 			}
-			if(i==m_vPosition.y && j==m_vPosition.x){
+			if(i==getPosicion().Y && j==getPosicion().X){
 					break;
 				}
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
@@ -221,26 +222,26 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 	}
 }
 }
-SVector2D CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]){
+position2di CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]){
 	
 	int x=0,y=0;
-	x=	m_vPosition.y;
-	y=m_vPosition.x-1;
+	x=	getPosicion().Y;
+	y=getPosicion().X-1;
 	if(!( x>=0 && x<MAPSIZE &&  y>=0 &&  y<MAPSIZE) || Matriz[y][x]->getTipo()!=0){
 		arriba=0;
 	}
-	x=	m_vPosition.y;
-	y=m_vPosition.x+1;
+	x=	getPosicion().Y;
+	y=getPosicion().X+1;
 	if( !( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
 		abajo=0;
 	}
-	x=	m_vPosition.y-1;
-	y=m_vPosition.x;
+	x=	getPosicion().Y-1;
+	y=getPosicion().X;
 	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
 		izquierda=0;
 	}
-	x=	m_vPosition.y+1;
-	y=m_vPosition.x;
+	x=	getPosicion().Y+1;
+	y=getPosicion().X;
 	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
 		derecha=0;
 	}
@@ -253,37 +254,37 @@ SVector2D CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, dou
 	if(arriba==mejor){
 		if (outfile.is_open())
 		{
-			outfile<<"Estoy en la posición("<<m_vPosition.x<<","<<m_vPosition.y<<") y me muevo arriba Arriba ("<<m_vPosition.x-1<<","<<m_vPosition.y<<")"<<endl;
+			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo arriba Arriba ("<<getPosicion().X-1<<","<<getPosicion().Y<<")"<<endl;
 		}
-		return SVector2D(m_vPosition.x-1,m_vPosition.y);
+		return position2di(getPosicion().X-1,getPosicion().Y);
 	}
 	else if(abajo==mejor){
 		if (outfile.is_open())
 		{
-			outfile<<"Estoy en la posición("<<m_vPosition.x<<","<<m_vPosition.y<<") y me muevo arriba Abajo ("<<m_vPosition.x+1<<","<<m_vPosition.y<<")"<<endl;
+			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo arriba Abajo ("<<getPosicion().X+1<<","<<getPosicion().Y<<")"<<endl;
 		}
-		return SVector2D(m_vPosition.x+1,m_vPosition.y);
+		return position2di(getPosicion().X+1,getPosicion().Y);
 	}
 	else if(izquierda==mejor){
 		if (outfile.is_open())
 		{
-			outfile<<"Estoy en la posición("<<m_vPosition.x<<","<<m_vPosition.y<<") y me muevo arriba Izquierda ("<<m_vPosition.x<<","<<m_vPosition.y-1<<")"<<endl;
+			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo arriba Izquierda ("<<getPosicion().X<<","<<getPosicion().Y-1<<")"<<endl;
 		}
-		return  SVector2D(m_vPosition.x,m_vPosition.y-1);
+		return  position2di(getPosicion().X,getPosicion().Y-1);
 	}
 	else if(derecha==mejor){
 		if (outfile.is_open())
 		{
-outfile<<"Estoy en la posición("<<m_vPosition.x<<","<<m_vPosition.y<<") y me muevo arriba derecha ("<<m_vPosition.x<<","<<m_vPosition.y+1<<")"<<endl;
+outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo arriba derecha ("<<getPosicion().X<<","<<getPosicion().Y+1<<")"<<endl;
 		}
-		return  SVector2D(m_vPosition.x,m_vPosition.y+1);
+		return  position2di(getPosicion().X,getPosicion().Y+1);
 	}
 	else{
 		if (outfile.is_open())
 		{
 			outfile<<"No se mueve"<<endl;
 		}
-		return SVector2D(m_vPosition.x,m_vPosition.y);
+		return position2di(getPosicion().X,getPosicion().Y);
 	}
 	outfile.close();
 }
