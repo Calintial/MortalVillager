@@ -121,7 +121,27 @@ vector<double> CNeuralNet::GetWeights() const
 void CNeuralNet::PutWeights(vector<double> &weights)
 {
 	int cWeight = 0;
-	
+	bool leer=false;
+	if(leer=true){
+		weights.clear();
+		string cadena;
+		vector<string> listastring;
+		ifstream myReadFile;
+		string buf;
+    	
+ 		myReadFile.open("Red.txt");
+ 		if (myReadFile.is_open()) {
+
+ 			while (!myReadFile.eof()) {
+ 				
+   				getline(myReadFile,cadena);
+    			stringstream ss(cadena); 
+    			ss>>buf;
+    			weights.push_back(atof(buf.c_str()));
+ 			}
+		}
+
+	}
 	//for each layer
 	for (int i=0; i<m_NumHiddenLayers + 1; ++i)
 	{
