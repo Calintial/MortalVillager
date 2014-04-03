@@ -120,16 +120,14 @@ vector<double> CNeuralNet::GetWeights() const
 //------------------------------------------------------------------------
 void CNeuralNet::PutWeights(vector<double> &weights)
 {
+	std::string cadena,buf;
+	vector<std::string> listastring;
+	ifstream myReadFile;
 	int cWeight = 0;
 	bool leer=false;
-	if(leer=true){
-		weights.clear();
-		string cadena;
-		vector<string> listastring;
-		ifstream myReadFile;
-		string buf;
-    	
- 		myReadFile.open("Red.txt");
+	if(leer==true){
+		weights.clear();    	
+ 		myReadFile.open("Red.txt",ios::in);
  		if (myReadFile.is_open()) {
 
  			while (!myReadFile.eof()) {
