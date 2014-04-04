@@ -1,14 +1,18 @@
+Ubuntu (12.04 or 13.10)
 Install :
-	Irrlitch:
-		sudo apt-get install libirrlicht-dev
-	Fmod:
+	Irrlicht (Version 1.8):
+		sudo apt-get install libirrlicht-dev # 13.10
+		
+	Fmod (Version 1.03.03) :
 		Download fmod (http://www.fmod.org)
 		cp [...]api/inc/* /usr/include/fmodex/
 		cp [...]api/lib/* /usr/lib/
 		64x:
 			Rename libfmod64.so -> libfmod.so
+
 	Boost:
-		sudo aptget install libboost1.53-dev(libbostX.X-dev)
+		sudo apt-get install libboost1.53-dev(libbostX.X-dev)
+
 Run:
 	./game.sh
 
