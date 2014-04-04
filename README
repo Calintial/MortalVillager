@@ -1,0 +1,14 @@
+Install :
+	Irrlitch:
+		sudo apt-get install libirrlicht-dev
+	Fmod:
+		Download fmod (http://www.fmod.org)
+		cp [...]api/inc/* /usr/include/fmodex/
+		cp [...]api/lib/* /usr/lib/
+		64x:
+			Rename libfmod64.so -> libfmod.so
+	Boost:
+		sudo aptget install libboost1.53-dev(libbostX.X-dev)
+Run:
+	./game.sh
+
