@@ -14,7 +14,7 @@ AldeanoDemo::~AldeanoDemo()
 	cout << "DestruirAldeanoDemo" << endl;
 }
 
-void AldeanoDemo::updateIA(vector<IDibujable*>* vector){
+void AldeanoDemo::updateIA(std::shared_ptr<mapa2D> mapa){
 
 	if(pathfinding){
 		if (!caminoDemo || !camino)
