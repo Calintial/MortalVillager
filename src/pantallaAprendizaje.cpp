@@ -8,7 +8,7 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	srand (time(NULL));
 	aprendizaje = new CController(pantallaDevice);
 
-	paused = true;
+	paused = false;
 	continuar = false;
 
 	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,0,dimensionPantallaX+160,25), 0, CB_PAUSE, 
