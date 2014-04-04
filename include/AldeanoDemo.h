@@ -10,7 +10,7 @@ public:
 	AldeanoDemo(position2di posInicial, position2di posDestino);
 	~AldeanoDemo();
 
-	void updateIA(vector<IDibujable*>*);
+	void updateIA(std::shared_ptr<mapa2D> mapa);
 
 private:
 	Camino* caminoDemo;
