@@ -30,7 +30,7 @@ gameEngine::~gameEngine()
 
 void gameEngine::run()
 {
- 	thread_resources = std::thread(&gameEngine::scheduler, this, 1000);
+ 	thread_resources = std::thread(&gameEngine::scheduler, this, 10000);
 	//Bucle principal del juego. Mientras el estado no cambia a FINISH el programa no termina.
 	//En cada estado se llamará a los motores necesarios(IA,Graficos,etc...)
 	while(!stado.sfinal())
