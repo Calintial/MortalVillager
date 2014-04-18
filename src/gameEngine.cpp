@@ -19,15 +19,18 @@ gameEngine::gameEngine()
 	graphics = new graphicEngine();
 	
 	ia = new intelEngine(&IAUnits,&UserUnits);
+
 }
 
 gameEngine::~gameEngine()
 {
 	delete graphics;
+	thread_resources.join();
 }
 
 void gameEngine::run()
 {
+ 	thread_resources = std::thread(&gameEngine::scheduler, this, 1000);
 	//Bucle principal del juego. Mientras el estado no cambia a FINISH el programa no termina.
 	//En cada estado se llamará a los motores necesarios(IA,Graficos,etc...)
 	while(!stado.sfinal())
@@ -150,3 +153,17 @@ void gameEngine::addNewUnits()
 	}
 }
 
+void gameEngine::scheduler (int variables) 
+{
+
+  while (!stado.sfinal()){
+  	if(stado.is_ingame())
+  	{
+		recursos_jugador+=10;
+		recursos_ia+=10;
+		cout<<recursos_jugador<<endl;
+	    sleep (variables);
+  	}
+
+  }
+}

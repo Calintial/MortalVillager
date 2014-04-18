@@ -35,6 +35,12 @@ bool Current::sfinal()
 	return current->sfinal();
 }
 
+
+bool Current::is_ingame()
+{
+	return current->is_ingame();
+}
+
 void Current::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 {
 	current->doSomething(ge, graphics,ia,mapa);

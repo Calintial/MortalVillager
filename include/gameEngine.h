@@ -24,13 +24,10 @@
 #include <iostream>
 #include <time.h>
 #include <memory>
+#include <thread>
 using namespace std;
 
-/*
-#define MAIN 0
-#define INGAME 1
-#define PAUSE 2
-#define FINISH 3*/
+
 
 class graphicEngine;
 class intelEngine;
@@ -62,6 +59,8 @@ public:
 	static Current stado;
 	void addNewUnits();
 
+	void scheduler (int); 
+
 	static int recursos_jugador;
 	static int recursos_ia;
 
@@ -81,6 +80,9 @@ private:
 	static vector<battleIA*> Add_IAUnits;
 	static vector<Unidades*> Add_UserUnits;
 	static vector<edificio*> Add_Buildings;
+
+	std::thread thread_resources;
+
 };
 
 
