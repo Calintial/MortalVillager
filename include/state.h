@@ -12,6 +12,8 @@ class gameEngine;
 class graphicEngine;
 class intelEngine;
 
+
+
 class Current
 {
 	class State *current;

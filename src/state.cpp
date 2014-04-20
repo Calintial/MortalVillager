@@ -89,6 +89,17 @@ void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* i
 	
 	graphics->DrawMap(StIAUnits,StUserUnits,StBuildingsUnits);
 	
+	ge->Siguiente_tick_juego += ge->SALTO_TICKS_RELOJ;
+	ge->tiempo_durmiendo = ge->Siguiente_tick_juego - ge->clockMS(clock());
+
+	cout<<ge->tiempo_durmiendo<<endl;
+	if(ge->tiempo_durmiendo >= 0)
+	{
+		cout<<ge->tiempo_durmiendo<<endl;
+		ge->sleep(ge->tiempo_durmiendo);
+	}
+
+
 	ge->sleep(100-gameEngine::getSpeed());
 	//cout << "MOSTRAR PANTALLA DE JUEGO" << endl;
 }

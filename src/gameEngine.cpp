@@ -167,3 +167,8 @@ void gameEngine::scheduler (int variables)
 
   }
 }
+
+long gameEngine::clockMS(clock_t ticks)
+{
+	return (ticks*1000)/CLOCKS_PER_SEC;
+}
