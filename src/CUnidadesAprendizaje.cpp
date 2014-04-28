@@ -53,13 +53,58 @@ void CUnidadesAprendizaje::Reset()
 bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 {
 
-	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,	getLife(),getPosicion().X,getPosicion().Y);
-
+	//vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,	getLife(),getPosicion().X,getPosicion().Y);
+double uno=RandInt(0,1);
+double dos=RandInt(0,1);
+vector<double> inputs;
+inputs.push_back(uno);
+inputs.push_back(dos);
 	vector<double> output = m_ItsBrain.Update(inputs);
+	outfile.open("GeneticMovimientos.txt", ios::app);
+		if (outfile.is_open())
+		{
+							
+				outfile<<"Uno: "<<uno<<" Dos: "<<dos<<" Y sale: "<<output[0]<<" Y fitness: "<<m_dFitness<<endl;
+			
+		}
+
+		outfile.close();
 	if( output.size()<CParams::iNumOutputs){
 		return false;
 	}
-	double x,y;
+	if(uno==dos && output[0]<0.5){
+		m_dFitness++;
+		outfile.open("GeneticMovimientos.txt", ios::app);
+		if (outfile.is_open())
+		{
+							
+				outfile<<"BIEN Y fitness: "<<m_dFitness<<endl;
+			
+		}
+
+		outfile.close();
+	}
+	else if(uno!=dos && output[0]>0.5){
+		m_dFitness++;
+		outfile.open("GeneticMovimientos.txt", ios::app);
+		if (outfile.is_open())
+		{
+		outfile<<"BIEN Y fitness: "<<m_dFitness<<endl;
+			}
+
+		outfile.close();
+	}
+	else{
+		outfile.open("GeneticMovimientos.txt", ios::app);
+		if (outfile.is_open())
+		{
+		outfile<<"MAL"<<endl;
+			}
+
+		outfile.close();
+	}
+
+	/*double x,y;
 	int xint,yint;
 	x=output[0];
 	y=output[1];
@@ -127,7 +172,7 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 		}
 
 	outfile.close();
-
+*/
 	return true;
 
 }
@@ -218,7 +263,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 }
 }
 position2di CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]){
-	
+	/*
 	int x=0,y=0;
 	x=	getPosicion().Y;
 	y=getPosicion().X-1;
@@ -281,7 +326,7 @@ outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y m
 		}
 		return position2di(getPosicion().X,getPosicion().Y);
 	}
-	outfile.close();
+	outfile.close();*/
 }
 
 void CUnidadesAprendizaje::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)

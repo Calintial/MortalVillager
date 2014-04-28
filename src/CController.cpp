@@ -68,6 +68,15 @@ bool CController::tickRedNeuronal(){
 	for (int i=0; i<m_NumUnidades; ++i)
 
 	{
+		if (!m_vecUnidades[i]->Update(Matriz))
+			{
+
+					//error in processing the neural net
+				cout<<"Wrong amount of NN inputs!"<<endl;
+				return false;
+			}
+			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
+	/*
 		if (m_vecUnidades[i]->getLife() > 0)
 		{
 			m_vecUnidades[i]->calcular8Objetos(Matriz);
@@ -153,7 +162,7 @@ bool CController::tickRedNeuronal(){
 			
 			
 		}
-
+*/
 	}
 
 
@@ -297,16 +306,19 @@ void CController::generarMapa(){
 	}
 
 	//creamos las unidades 
-	
+	j=1;
+	int k=1;
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
 		if(i%20==0){
-			j++;	
+			j++;
+			k=1;	
 		}
-		EspadachinRedes* unidad=new EspadachinRedes(j,i);
+		EspadachinRedes* unidad=new EspadachinRedes(j,k);
 		unidad->aplicarTextura(driver);
 		Matriz[i][j]=unidad;
 		m_vecUnidades.push_back(unidad);
+		k++;
 	}
 
 	for (int i=0; i<m_NumUnidades; ++i)
@@ -322,7 +334,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 	outfile.open("GeneticMovimientos.txt", ios::app);
 		if (outfile.is_open())
 		{
-			outfile << "CConstroller::modificarUnidad:279 La unidad va a ser modificada y estaba en ("<<x<<","<<y<<")"<<endl;;
+			//outfile << "CConstroller::modificarUnidad:279 La unidad va a ser modificada y estaba en ("<<x<<","<<y<<")"<<endl;;
 		}
 
 	outfile.close();
@@ -342,7 +354,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 				outfile.open("GeneticMovimientos.txt", ios::app);
 		if (outfile.is_open())
 		{
-			outfile << "CConstroller::modificarUnidad:279 La unidad va a ser modificada y ESTA en ("<<x<<","<<y<<")"<<endl;;
+			//outfile << "CConstroller::modificarUnidad:279 La unidad va a ser modificada y ESTA en ("<<x<<","<<y<<")"<<endl;;
 		}
 
 	outfile.close();
