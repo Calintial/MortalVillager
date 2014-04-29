@@ -221,7 +221,20 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 	}
 
 	outfile.close();
+	outfile.open("Pesos.txt", ios::app);
+	if (outfile.is_open())
+	{
+		outfile << "####################################################### CGen::Epoch::219 " << m_iGenerations << "   ######################################################"<<endl
+			;
+			for(int i=0;i<m_iPopSize;i++){
+				for (double d : old_pop[i].vecWeights){
+					outfile << d << ",";
+				}
+				outfile<<"Fitness: "<<old_pop[i].dFitness<<endl;
+			}
+	}
 
+	outfile.close();
 	//assign the given population to the classes population
   m_vecPop = old_pop;
 
@@ -323,6 +336,21 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 	if (outfile.is_open())
 	{
 		outfile << "#########################################################################FinalCGenAlg::Epoch####################################"<<endl;
+	}
+
+	outfile.close();
+		outfile.open("Pesos.txt", ios::app);
+	if (outfile.is_open())
+	{
+		outfile << "#######################################################  ######################################################"<<endl;
+			;
+			for(int i=0;i<m_iPopSize;i++){
+				for (double d : m_vecPop[i].vecWeights){
+					outfile << d << ",";
+				}
+				outfile<<endl;
+			}
+			outfile << "####################################################### FIN ######################################################"<<endl;
 	}
 
 	outfile.close();
