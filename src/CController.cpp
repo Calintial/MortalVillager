@@ -312,15 +312,16 @@ void CController::generarMapa(){
 	int k=1;
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		if(i%20==0){
+		k=i%20;
+		if(k==0){
 			j++;
-			k=1;	
+				
 		}
 		EspadachinRedes* unidad=new EspadachinRedes(j,k);
 		unidad->aplicarTextura(driver);
-		Matriz[i][j]=unidad;
+		Matriz[k][j]=unidad;
 		m_vecUnidades.push_back(unidad);
-		k++;
+		
 	}
 
 	for (int i=0; i<m_NumUnidades; ++i)
