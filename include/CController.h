@@ -23,7 +23,6 @@
 #include "IDibujable.h"
 #include "muro.h"
 #include "gameEngine.h"
-#include <fstream>
 #define MAPSIZE 20
 using namespace std;
 
@@ -42,10 +41,12 @@ private:
   vector<CUnidadesAprendizaje*> m_vecUnidades;
 
 
-	//pointer to the GA
+	
+  int					         m_NumUnidades;
+  //pointer to the GA
 	CGenAlg*		         m_pGA;
 
-	int					         m_NumUnidades;
+	
 
 	int					         m_NumWeightsInNN;
 

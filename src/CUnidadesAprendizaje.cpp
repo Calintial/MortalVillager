@@ -327,6 +327,7 @@ outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y m
 		return position2di(getPosicion().X,getPosicion().Y);
 	}
 	outfile.close();*/
+	return position2di(0,0);
 }
 
 void CUnidadesAprendizaje::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)

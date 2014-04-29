@@ -58,7 +58,8 @@ bool CController::tickRedNeuronal(){
 	outfile.open("GeneticMovimientos.txt", ios::app);
 	if (outfile.is_open())
 	{
-		outfile<<"##########################################################CController::Update:76"<<" mUnidades "<<m_NumUnidades<<" Ticks "<<m_iTicks<<"#####################################################"<<endl;
+		std::string s = std::string("##########################################################CController::Update:76")+" mUnidades "+std::to_string(m_NumUnidades)+" Ticks "+std::to_string(m_iTicks)+"#####################################################";
+		outfile<<s<<std::endl;
 
 
 	}
@@ -165,7 +166,7 @@ bool CController::tickRedNeuronal(){
 */
 	}
 
-
+return true;
 }
 
 bool CController::redNeuronal(){
@@ -204,6 +205,7 @@ bool CController::genetico(){
 		m_vecUnidades[i]->calcular8Objetos(Matriz);
 
 	}
+	return true;
 }
 
 //-------------------------------------Update-----------------------------
@@ -290,7 +292,7 @@ void CController::generarMapa(){
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			Matriz[i][j]= new Suelo(i,j);
+			Matriz[i][j]= new Suelo(j,i);
 			((Suelo*) Matriz[i][j])->setIsometric(false);
 			Matriz[i][j]->aplicarTextura(driver);
 

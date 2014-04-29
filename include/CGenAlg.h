@@ -57,35 +57,37 @@ private:
 
 	//size of population
 	int m_iPopSize;
-	
+	//probability that a chromosones bits will mutate.
+	//Try figures around 0.05 to 0.3 ish
+	double m_dMutationRate;
+	//probability of chromosones crossing over bits
+	//0.7 is pretty good
+	double m_dCrossoverRate;
 	//amount of weights per chromo
 	int m_iChromoLength;
 
 	//total fitness of population
 	double m_dTotalFitness;
+//generation counter
+	int	  m_cGeneration;
+	//keeps track of the best genome
+	int		m_iFittestGenome;
 
 	//best fitness this population
 	double m_dBestFitness;
 
+	//worst
+	double m_dWorstFitness;
 	//average fitness
 	double m_dAverageFitness;
 
-	//worst
-	double m_dWorstFitness;
 
-	//keeps track of the best genome
-	int		m_iFittestGenome;
+	
+	
 
-	//probability that a chromosones bits will mutate.
-	//Try figures around 0.05 to 0.3 ish
-	double m_dMutationRate;
+	
 
-	//probability of chromosones crossing over bits
-	//0.7 is pretty good
-	double m_dCrossoverRate;
-
-	//generation counter
-	int	  m_cGeneration;
+	
 
 
 	void    Crossover(const vector<double> &mum,
