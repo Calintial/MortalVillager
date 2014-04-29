@@ -106,12 +106,12 @@ SGenome CGenAlg::GetChromoRoulette()
 		//this point
 		if (FitnessSoFar >= Slice)
 		{
-			/*outfile.open("Genetic.txt", ios::app);
+			outfile.open("CGen.txt", ios::app);
 			if (outfile.is_open())
 			{
-				outfile << "Mejor fitness: " << m_vecPop[i].dFitness << endl;
+				outfile << "El fitness random de GetChromoRoulette: " << m_vecPop[i].dFitness << " Y esta en la posicion: "<<i<<endl;
 			}
-			outfile.close();*/
+			outfile.close();
 			TheChosenOne = m_vecPop[i];
 
       break;
@@ -213,10 +213,10 @@ void CGenAlg::Crossover(const vector<double> &mum,
 //-----------------------------------------------------------------------
 vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 {
-	outfile.open("GeneticMovimientos.txt", ios::app);
+	outfile.open("CGen.txt", ios::app);
 	if (outfile.is_open())
 	{
-		outfile << "####################################################### CGenAlg::Epoch::219 " << m_iGenerations << "   ######################################################"<<endl
+		outfile << "####################################################### CGen::Epoch::219 " << m_iGenerations << "   ######################################################"<<endl
 			;
 	}
 
@@ -240,7 +240,7 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 	//Now to add a little elitism we shall add in some copies of the
 	//fittest genomes. Make sure we add an EVEN number or the roulette
   //wheel sampling will crash
-	if (!(CParams::iNumCopiesElite * CParams::iNumElite % 2))
+	if ((CParams::iNumCopiesElite * CParams::iNumElite % 2)!=0)
 	{
 		GrabNBest(CParams::iNumElite, CParams::iNumCopiesElite, vecNewPop);
 	}
@@ -254,16 +254,64 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 		//grab two chromosones
 		SGenome mum = GetChromoRoulette();
 		SGenome dad = GetChromoRoulette();
+	outfile.open("CGen.txt", ios::app);
+	if (outfile.is_open())
+	{
+		
+				outfile << "		MUM" << endl;
+				for (double d : mum.vecWeights){
+					outfile << d << ",";
+				}
+				outfile << endl;
+				outfile << "		DAD:" << endl;
+				for (double d : dad.vecWeights){
+					outfile << d << ",";
+				}
+				outfile << endl;
+	}
 
+	outfile.close();
 		//create some offspring via crossover
 		vector<double>		baby1, baby2;
 
 		Crossover(mum.vecWeights, dad.vecWeights, baby1, baby2);
+		outfile.open("CGen.txt", ios::app);
+	if (outfile.is_open())
+	{
+		
+				outfile << "		BABY1" << endl;
+				for (double d : baby1){
+					outfile << d << ",";
+				}
+				outfile << endl;
+				outfile << "		BABY2:" << endl;
+				for (double d : baby2){
+					outfile << d << ",";
+				}
+				outfile << endl;
+	}
 
+	outfile.close();
 		//now we mutate
 		Mutate(baby1);
 		Mutate(baby2);
+	outfile.open("CGen.txt", ios::app);
+	if (outfile.is_open())
+	{
+		
+				outfile << "		BABY1" << endl;
+				for (double d : baby1){
+					outfile << d << ",";
+				}
+				outfile << endl;
+				outfile << "		BABY2:" << endl;
+				for (double d : baby2){
+					outfile << d << ",";
+				}
+				outfile << endl;
+	}
 
+	outfile.close();
 		//now copy into vecNewPop population
 		vecNewPop.push_back(SGenome(baby1, 0));
 		vecNewPop.push_back(SGenome(baby2, 0));
@@ -271,7 +319,7 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 
 	//finished so assign new pop back into m_vecPop
 	m_vecPop = vecNewPop;
-	outfile.open("GeneticMovimientos.txt", ios::app);
+	outfile.open("CGen.txt", ios::app);
 	if (outfile.is_open())
 	{
 		outfile << "#########################################################################FinalCGenAlg::Epoch####################################"<<endl;
@@ -300,6 +348,14 @@ void CGenAlg::GrabNBest(int	            NBest,
 			Pop.push_back(m_vecPop[(m_iPopSize - 1) - NBest]);
 	  }
 	}
+	outfile.open("CGen.txt", ios::app);
+	if (outfile.is_open())
+	{
+		outfile << "#########################################################################CGen::GrabNBest####################################"<<endl;
+		outfile << "El mejor es "<<m_iPopSize-1-NBest<< "y el fitnes es "<<Pop[0].dFitness<<endl;
+	}
+
+	outfile.close();
 }
 
 //-----------------------CalculateBestWorstAvTot-----------------------	
@@ -353,6 +409,17 @@ void CGenAlg::CalculateBestWorstAvTot()
 				outfile << "Mediana: "<<mediana<<endl;
 			}
 			outfile.close();
+
+	outfile.open("Excel.txt", ios::app);
+			if (outfile.is_open())
+			{
+				
+				outfile <<m_dBestFitness<<",";
+				outfile <<m_dWorstFitness<<",";
+				outfile<<m_dAverageFitness<<",";
+				outfile <<mediana<<endl;
+			}
+	outfile.close();
 	outfile.open("Red.txt", ios::out);
 			if (outfile.is_open())
 			{
