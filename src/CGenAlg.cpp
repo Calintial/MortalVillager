@@ -341,6 +341,8 @@ void CGenAlg::CalculateBestWorstAvTot()
 	
 
 	m_dAverageFitness = m_dTotalFitness / m_iPopSize;
+	std::sort(m_vecPop.begin(),m_vecPop.end());
+	double mediana= m_vecPop[m_iPopSize/2].dFitness;
 	outfile.open("Genetic.txt", ios::app);
 			if (outfile.is_open())
 			{
@@ -348,6 +350,7 @@ void CGenAlg::CalculateBestWorstAvTot()
 				outfile << "Mejor fitness: "<<m_dBestFitness<<endl;
 				outfile << "Peor fitness: "<<m_dWorstFitness<<endl;
 				outfile << "Average Fitness: "<<m_dAverageFitness<<endl;
+				outfile << "Mediana: "<<mediana<<endl;
 			}
 			outfile.close();
 	outfile.open("Red.txt", ios::out);

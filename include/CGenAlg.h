@@ -17,7 +17,6 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-
 #include "utils.h"
 #include "CParams.h"
 
