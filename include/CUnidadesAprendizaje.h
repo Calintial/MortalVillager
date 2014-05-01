@@ -77,7 +77,7 @@ public:
   void calcular8Objetos(IDibujable* [][MAPSIZE]);
 
 	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
-
+void Neural(int primer,int segun);
 
 	
 

@@ -69,14 +69,35 @@ bool CController::tickRedNeuronal(){
 	for (int i=0; i<m_NumUnidades; ++i)
 
 	{
+		outfile.open("GeneticMovimientos.txt", ios::app);
+			if (outfile.is_open())
+				{
+					std::string s = std::string("##########################################################CController::Update:76")+" mUnidades "+" Personaje "+std::to_string(i)+"#####################################################";
+					outfile<<s<<std::endl;
+
+
+				}
+
+				outfile.close();
 		if (!m_vecUnidades[i]->Update(Matriz))
 			{
-
+				outfile.open("GeneticMovimientos.txt", ios::app);
+			
 					//error in processing the neural net
 				cout<<"Wrong amount of NN inputs!"<<endl;
 				return false;
 			}
 			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
+			outfile.open("GeneticMovimientos.txt", ios::app);
+			if (outfile.is_open())
+				{
+					std::string s = std::string("###############################################################################################################");
+					outfile<<s<<std::endl;
+
+
+				}
+
+				outfile.close();
 	/*
 		if (m_vecUnidades[i]->getLife() > 0)
 		{
@@ -165,7 +186,7 @@ bool CController::tickRedNeuronal(){
 		}
 */
 	}
-
+m_iTicks++;
 return true;
 }
 
