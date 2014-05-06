@@ -155,6 +155,9 @@ bool CController::tickRedNeuronal(){
 		}
 
 	}
+	for (int i=0; i<m_NumUnidades; ++i){
+		m_vecUnidades[i]->setFitness(m_vecUnidades[i]->Fitness()*m_vecUnidades[i]->getLife()/100);
+	}
 return true;
 
 }
