@@ -296,11 +296,11 @@ void mapa2D::AllocateMap(bool suelo)
 		
 		//Añadimos 2 IAS por defecto
 		(gameEngine::addIAUnit(0,0,0))->aplicarTextura(driver);
-		(gameEngine::addIAUnit(10,10,0))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(24,12,0))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(30,15,0))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(40,20,0))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(34,17,0))->aplicarTextura(driver);
+		(gameEngine::addIAUnit(28,20,3))->aplicarTextura(driver);
+		(gameEngine::addUserUnit(24,12,3))->aplicarTextura(driver);
+		(gameEngine::addUserUnit(30,15,3))->aplicarTextura(driver);
+		(gameEngine::addUserUnit(40,20,3))->aplicarTextura(driver);
+		(gameEngine::addUserUnit(34,17,3))->aplicarTextura(driver);
 		/*addIAUnit(0,0,0)->aplicarTextura(driver);
 		addIAUnit(10,10,0)->aplicarTextura(driver);
 		addUserUnit(24,12,0)->aplicarTextura(driver);

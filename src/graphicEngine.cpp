@@ -31,7 +31,7 @@ graphicEngine::graphicEngine()
     (gameEngine::addBuildings(16,3,0))->aplicarTextura(IrrDevice->getVideoDriver());
 
     // aldeano demo, se pasa por el forro el x y el y que le pases
-    (gameEngine::addIAUnit(10,10,4))->aplicarTextura(IrrDevice->getVideoDriver());
+    (gameEngine::addIAUnit(20,20,4))->aplicarTextura(IrrDevice->getVideoDriver());
 
     //menu = new mainMenu(IrrDevice);
     //mapa = new mapa2D(IrrDevice);

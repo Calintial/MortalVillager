@@ -11,9 +11,11 @@ enum{
 	/*Estados de la IA*/
 	NOTHING = 0,
 	MOVE = 1,
-	ATTACKING = 2
+	ATTACKING = 2,
+	DEAD = 3
 };
 
+const int MAX_DELAY = 3;
 
 class Unidades : public IDibujable{
 public:
