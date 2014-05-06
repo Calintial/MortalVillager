@@ -460,16 +460,16 @@ void mapa2D::Pintar()
 						if(Tile->getTextura())
 							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
 						//Pintando cosas vinculadas (de momento solo IAs)
-						if(Tile->getVinculado()!=NULL)
+						/*if(Tile->getVinculado()!=NULL)
 						{
 							DrawPosition = getDrawPosition(Tile->getVinculado()->getPosition());
 							DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
 							Tile->getVinculado()->Pintar(driver,DrawPosition.X, DrawPosition.Y);
-						}
+						}*/
 				}
 			}
 
-			//DrawIAUnits();
+			DrawIAUnits();
 			DrawUserUnits();
 			DrawBuildings();
 			
