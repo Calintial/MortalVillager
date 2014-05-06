@@ -1,7 +1,7 @@
 CC=g++
 
 OPTS=-Wall -std=c++11 -O0 -g
-LINKS=-lplplotcxxd -lstdc++
+LINKS= -lstdc++
 
 OBJECTS= gnuplot_i.o
 
