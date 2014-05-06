@@ -64,7 +64,7 @@ public:
   	vector<ObjetosCercanos> getVectorObjetos(){return m_vObjetosCerca;};
 
 	//-------------------accessor functions
-	void			IncrementFitness(int valor){m_dFitness+=valor;}
+
 
 	double		Fitness()const{return m_dFitness;}
   
@@ -77,7 +77,7 @@ public:
   void calcular8Objetos(IDibujable* [][MAPSIZE]);
 
 	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
-
+ void IncrementFitness(CUnidadesAprendizaje *atacado,int danyo,double max_fitness);
 
 	
 

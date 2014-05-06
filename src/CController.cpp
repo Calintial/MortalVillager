@@ -105,7 +105,7 @@ bool CController::tickRedNeuronal(){
 				if(Matriz[atacando.Y][atacando.X]!=NULL && Matriz[atacando.Y][atacando.X]->getTipo()==3){
 
 					int dano = m_vecUnidades[i]->Attack((Unidades*)Matriz[atacando.Y][atacando.X]);
-					m_vecUnidades[i]->IncrementFitness(dano);
+					m_vecUnidades[i]->IncrementFitness((CUnidadesAprendizaje*) Matriz[atacando.Y][atacando.X],((Unidades*)m_vecUnidades[i])->TrianguloArmas((Unidades*) Matriz[atacando.Y][atacando.X]),m_pGA->BestFitness());
 					
 					outfile.open("GeneticMovimientos.txt", ios::app);
 					if (outfile.is_open())

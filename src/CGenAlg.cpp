@@ -18,7 +18,7 @@ CGenAlg::CGenAlg(int	  popsize,
 										                  m_dTotalFitness(0),
 										                  m_cGeneration(0),
 										                  m_iFittestGenome(0),
-										                  m_dBestFitness(0),
+										                  m_dBestFitness(1),
 										                  m_dWorstFitness(99999999),
 										                  m_dAverageFitness(0)
 {
