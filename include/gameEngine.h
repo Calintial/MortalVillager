@@ -24,18 +24,17 @@
 #include <iostream>
 #include <time.h>
 #include <memory>
+#include <thread>
 using namespace std;
 
-/*
-#define MAIN 0
-#define INGAME 1
-#define PAUSE 2
-#define FINISH 3*/
+
 
 class graphicEngine;
 class intelEngine;
 class battleIA;
 class Current;
+
+
 
 class gameEngine {
 
@@ -62,8 +61,16 @@ public:
 	static Current stado;
 	void addNewUnits();
 
+	void scheduler (int); 
+	long clockMS(clock_t clock);
+
 	static int recursos_jugador;
 	static int recursos_ia;
+
+	int FPS = 25;
+	int SALTO_TICKS_RELOJ = 3500 / FPS; 
+	long Siguiente_tick_juego = clockMS(clock());
+	int tiempo_durmiendo = 0;
 
 
 private:
@@ -81,6 +88,9 @@ private:
 	static vector<battleIA*> Add_IAUnits;
 	static vector<Unidades*> Add_UserUnits;
 	static vector<edificio*> Add_Buildings;
+
+	std::thread thread_resources;
+
 };
 
 

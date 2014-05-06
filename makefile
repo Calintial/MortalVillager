@@ -1,4 +1,4 @@
-CC=g++
+CC=ccache g++
 
 OPTS=-Wall -std=c++11 -O0 -g
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
