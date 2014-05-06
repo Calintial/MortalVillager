@@ -335,12 +335,13 @@ void CGenAlg::CalculateBestWorstAvTot()
 		}
 		
 		m_dTotalFitness	+= m_vecPop[i].dFitness;
-		
+	
 		
 	}//next chromo
 	
 
 	m_dAverageFitness = m_dTotalFitness / m_iPopSize;
+	double mediana= m_vecPop[m_iPopSize/2].dFitness;
 	outfile.open("Genetic.txt", ios::app);
 			if (outfile.is_open())
 			{
@@ -350,6 +351,17 @@ void CGenAlg::CalculateBestWorstAvTot()
 				outfile << "Average Fitness: "<<m_dAverageFitness<<endl;
 			}
 			outfile.close();
+
+ 	outfile.open("Excel.txt", ios::app);
+ 			if (outfile.is_open())
+ 			{
+ 				
+ 				outfile <<m_dBestFitness<<",";
+ 				outfile <<m_dWorstFitness<<",";
+ 				outfile<<m_dAverageFitness<<",";
+ 				outfile <<mediana<<endl;
+ 			}
+ 	outfile.close();
 	outfile.open("Red.txt", ios::out);
 			if (outfile.is_open())
 			{

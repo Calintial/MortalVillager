@@ -155,7 +155,7 @@ bool CController::tickRedNeuronal(){
 		}
 
 	}
-
+return true;
 
 }
 
@@ -195,6 +195,7 @@ bool CController::genetico(){
 		m_vecUnidades[i]->calcular8Objetos(Matriz);
 
 	}
+	return true;
 }
 
 //-------------------------------------Update-----------------------------
@@ -281,7 +282,7 @@ void CController::generarMapa(){
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			Matriz[i][j]= new Suelo(i,j);
+			Matriz[i][j]= new Suelo(j,i);
 			((Suelo*) Matriz[i][j])->setIsometric(false);
 			Matriz[i][j]->aplicarTextura(driver);
 
@@ -297,15 +298,17 @@ void CController::generarMapa(){
 	}
 
 	//creamos las unidades 
-	
+	j=1;
+ 	int k=1;
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		if(i%20==0){
-			j++;	
-		}
-		EspadachinRedes* unidad=new EspadachinRedes(j,i);
+		k=i%20;
+ 		if(k==0){
+ 			j++;
+ 		}
+		EspadachinRedes* unidad=new EspadachinRedes(j,k);
 		unidad->aplicarTextura(driver);
-		Matriz[i][j]=unidad;
+		Matriz[k][j]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
 

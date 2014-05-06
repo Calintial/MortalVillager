@@ -41,11 +41,14 @@ private:
 	//and the minesweepers
   vector<CUnidadesAprendizaje*> m_vecUnidades;
 
-
+	int					         m_NumUnidades;
 	//pointer to the GA
 	CGenAlg*		         m_pGA;
+	//cycles per generation
+	int					m_iTicks;
+		//generation counter
+	int					m_iGenerations;
 
-	int					         m_NumUnidades;
 
 	int					         m_NumWeightsInNN;
 
@@ -58,11 +61,9 @@ private:
 	//stores the best fitness per generation
 	vector<double>		   m_vecBestFitness;
 
-	//cycles per generation
-	int					m_iTicks;
 
-	//generation counter
-	int					m_iGenerations;
+
+
 	//0 transitable y 1 no transitable
 	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
 

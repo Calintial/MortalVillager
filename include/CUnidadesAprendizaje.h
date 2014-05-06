@@ -31,15 +31,18 @@ private:
   //the minesweeper's neural net
   CNeuralNet		m_ItsBrain;
 
-	//its position in the world
-	int 			move;
+
 	//the sweeper's fitness score 
 	double			m_dFitness;
-	int 			m_ataque;
 	int 			m_moveX;
 	int 			m_moveY;
 	int 			m_ataqueX;
 	int 			m_ataqueY;
+	//its position in the world
+	int 			move;
+	int 			m_ataque;
+
+
 	vector<ObjetosCercanos> m_vObjetosCerca;
 
 
