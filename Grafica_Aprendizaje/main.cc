@@ -60,7 +60,7 @@ void leerArchivo()
     iteraciones.clear();
     
     ifstream myReadFile;
-    myReadFile.open("Excel.txt");
+    myReadFile.open("../bin/Excel.txt");
     string output;
     vector <string> fields;
     int cont = 1;
