@@ -24,7 +24,6 @@
 #include "muro.h"
 #include "gameEngine.h"
 #include <fstream>
-#define MAPSIZE 20
 using namespace std;
 
 const int TILE_W	= 32;
@@ -73,6 +72,9 @@ private:
 	Unidades* unidad_seleccionada;
 
 	IGUIFont* font;
+	void mapa0();
+	void mapa1();
+	void guardarPesos();
 
 public:
 	std::ofstream outfile;
@@ -86,6 +88,7 @@ public:
 	bool		genetico();
 
 	void Pintar();
+	
 	void generarMapa();
 	void modificarUnidad(CUnidadesAprendizaje* unidad);
 	bool OnEvent(const SEvent& event);

@@ -187,32 +187,22 @@ bool CController::genetico(){
 
 		//insert the new (hopefully)improved brains back into the sweepers
     //and reset their positions etc
-    ofstream pesosActualesFile;
-	pesosActualesFile.open("RedAux.txt",ios::out);
+    
+/*
+	TODO: cambiar el orden de estas dos funciones, cambiar modificarUnidad por generarMapa, poner los valores despues de regenerar el mapa
+	Poner una funcion aparte que escriba lo de RedAux
+
+	o eso o modificarUnidad va a regenerar la unidad y la dummy, pero eso no escala, cuando tengamos muchos mapas va a haber que modificar muchas cosas para
+
+*/	
+	guardarPesos();
+	generarMapa();
 	for (int i=0; i<m_NumUnidades; ++i)
-	{
-		if (pesosActualesFile.is_open())
-		{
-			pesosActualesFile<<m_vecThePopulation[i].vecWeights[0];
-			for (int j = 1; j < m_vecThePopulation[i].vecWeights.size(); ++j)
-			{
-				pesosActualesFile<<","<<m_vecThePopulation[i].vecWeights[j];
-			}
-			pesosActualesFile<<endl;
-		}else{
-			cerr<<"NO SE HA PODIDO ABRIR EL ARCHIVO DE RED NEURONAL"<<endl;
-		}
-
+	{	
 		m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
-		modificarUnidad(m_vecUnidades[i]);
+	}
 
-	}
-	if (pesosActualesFile.is_open()){
-		pesosActualesFile.close();
-		rename ("RedAux.txt","Red.txt");
-	}else{
-		cerr<<"NO SE HA PODIDO ABRIR EL ARCHIVO DE RED NEURONAL"<<endl;
-	}
+	//}
 
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
@@ -220,6 +210,27 @@ bool CController::genetico(){
 
 	}
 	return true;
+}
+
+void CController::guardarPesos(){
+	ofstream pesosActualesFile;
+	pesosActualesFile.open("RedAux.txt",ios::out);
+	if (pesosActualesFile.is_open())
+	{
+		for (int i=0; i<m_NumUnidades; ++i)
+		{	
+			pesosActualesFile<<m_vecThePopulation[i].vecWeights[0];
+			for (int j = 1; j < m_vecThePopulation[i].vecWeights.size(); ++j)
+			{
+				pesosActualesFile<<","<<m_vecThePopulation[i].vecWeights[j];
+			}
+			pesosActualesFile<<endl;
+		}
+		pesosActualesFile.close();
+		rename ("RedAux.txt","Red.txt");
+	}else{
+		cerr<<"NO SE HA PODIDO ABRIR EL ARCHIVO DE RED NEURONAL"<<endl;
+	}
 }
 
 //-------------------------------------Update-----------------------------
@@ -300,8 +311,8 @@ void CController::Pintar()
 	}
 }
 
-
-void CController::generarMapa(){
+// mapa random
+void CController::mapa0(){
 	int j=0;
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
@@ -326,7 +337,7 @@ void CController::generarMapa(){
  	int k=1;
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		k=i%20;
+		k=i% MAPSIZE;
  		if(k==0){
  			j++;
  		}
@@ -335,6 +346,73 @@ void CController::generarMapa(){
 		Matriz[k][j]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
+}
+
+// mapa con cada unidad rodeada de muros y con una unidad dummy a la que atacar
+void CController::mapa1(){
+	m_vecUnidades.clear();
+	/*
+
+	for(int i=0;i<30;i++){
+		int RandIntX=RandInt(1,MAPSIZE-1);
+		int RandIntY=RandInt(1,MAPSIZE-1);
+		Matriz[RandIntY][RandIntX]=new Muro(RandIntX,RandIntY);
+		((Muro*) Matriz[RandIntY][RandIntX])->setIsometric(false);
+		Matriz[RandIntY][RandIntX]->aplicarTextura(driver);
+	}
+*/
+	for (int i=0;i<MAPSIZE;i++){
+		for(int j=0;j<MAPSIZE;j++){
+			//0 transitable 1 no transitable
+			Matriz[i][j]= new Suelo(j,i);
+			((Suelo*) Matriz[i][j])->setIsometric(false);
+			Matriz[i][j]->aplicarTextura(driver);
+
+		}
+	}
+	for (int i=0;i<MAPSIZE;i+=6){
+		for(int j=0;j<MAPSIZE;j+=6){
+			if (i + 6 < MAPSIZE && j+6 < MAPSIZE)
+			{	
+				for (int iteradorEsquina = 0; iteradorEsquina < 6; ++iteradorEsquina)
+				{
+					Matriz[i + iteradorEsquina][j]= new Muro(j,i + iteradorEsquina);
+					((Muro*) Matriz[i + iteradorEsquina][j])->setIsometric(false);
+					Matriz[i + iteradorEsquina][j]->aplicarTextura(driver);
+					Matriz[i][j + iteradorEsquina]= new Muro(j + iteradorEsquina,i);
+					((Muro*) Matriz[i][j + iteradorEsquina])->setIsometric(false);
+					Matriz[i][j + iteradorEsquina]->aplicarTextura(driver);
+				}
+				
+			}
+			
+
+		}
+	}
+	//creamos las unidades 
+	int posX = 0;
+	int posY = 0;
+	int size = MAPSIZE / 6;
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		posY = i / size * 6 + 2;
+		posX = i % size * 6 + 2;
+ 		
+		EspadachinRedes* unidadDummy=new EspadachinRedes(posX,posY);
+		unidadDummy->aplicarTextura(driver);
+		Matriz[posY][posX]=unidadDummy;
+		
+
+		EspadachinRedes* unidad=new EspadachinRedes(posX + 2,posY + 2);
+		unidad->aplicarTextura(driver);
+		Matriz[posY + 2][posX + 2]=unidad;
+		m_vecUnidades.push_back(unidad);
+	}
+}
+
+
+void CController::generarMapa(){
+	mapa1();
 
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
