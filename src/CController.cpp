@@ -187,12 +187,33 @@ bool CController::genetico(){
 
 		//insert the new (hopefully)improved brains back into the sweepers
     //and reset their positions etc
+    ofstream pesosActualesFile;
+	pesosActualesFile.open("RedAux.txt",ios::out);
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
+		if (pesosActualesFile.is_open())
+		{
+			pesosActualesFile<<m_vecThePopulation[i].vecWeights[0];
+			for (int j = 1; j < m_vecThePopulation[i].vecWeights.size(); ++j)
+			{
+				pesosActualesFile<<","<<m_vecThePopulation[i].vecWeights[j];
+			}
+			pesosActualesFile<<endl;
+		}else{
+			cerr<<"NO SE HA PODIDO ABRIR EL ARCHIVO DE RED NEURONAL"<<endl;
+		}
+
 		m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
 		modificarUnidad(m_vecUnidades[i]);
 
 	}
+	if (pesosActualesFile.is_open()){
+		pesosActualesFile.close();
+		rename ("RedAux.txt","Red.txt");
+	}else{
+		cerr<<"NO SE HA PODIDO ABRIR EL ARCHIVO DE RED NEURONAL"<<endl;
+	}
+
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
 		m_vecUnidades[i]->calcular8Objetos(Matriz);
