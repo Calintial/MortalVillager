@@ -4,3 +4,5 @@ bin/
 *.o
 *~
 *.P
+Grafica_Aprendizaje/gnuplot_i.d
+Grafica_Aprendizaje/main
