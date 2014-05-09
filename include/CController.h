@@ -24,6 +24,7 @@
 #include "muro.h"
 #include "gameEngine.h"
 #include <fstream>
+#include "MapaAprendizaje.h"
 using namespace std;
 
 const int TILE_W	= 32;
@@ -64,7 +65,7 @@ private:
 
 
 	//0 transitable y 1 no transitable
-	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
+	MapaAprendizaje* 				matriz;
 
 	IrrlichtDevice* device;
 	video::IVideoDriver* driver;
@@ -74,6 +75,7 @@ private:
 	IGUIFont* font;
 	void mapa0();
 	void mapa1();
+	void mapa2();
 	void guardarPesos();
 
 public:

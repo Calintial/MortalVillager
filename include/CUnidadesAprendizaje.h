@@ -21,6 +21,7 @@
 #include "Unidades.h"
 #include "ObjetosCercanos.h"
 #include <fstream>
+#include "MapaAprendizaje.h"
 using namespace std;
 
 class CUnidadesAprendizaje :  public Unidades
@@ -57,7 +58,7 @@ public:
 	CUnidadesAprendizaje(int x, int y);
 	
 	//updates the ANN with information from the sweepers enviroment
-	bool			Update(IDibujable* Matriz[][MAPSIZE]);
+	bool			Update(MapaAprendizaje*);
 
 
 	void			Reset();
@@ -74,9 +75,9 @@ public:
   void Pintar(IVideoDriver*,int,int);
   void aplicarTextura(IVideoDriver* driver);
   virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
-  void calcular8Objetos(IDibujable* [][MAPSIZE]);
+  void calcular8Objetos(MapaAprendizaje*);
 
-	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
+	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,MapaAprendizaje*);
  void IncrementFitness(CUnidadesAprendizaje *atacado,int danyo,double max_fitness);
 void setFitness(double fitness){m_dFitness=fitness;};
 

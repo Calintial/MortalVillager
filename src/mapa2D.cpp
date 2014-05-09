@@ -11,30 +11,44 @@ using namespace video;
 using namespace std;
 using namespace core;
 
-
-mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* b, bool suelo)
-{
-	ia_units = IAunits;
-	user_units = Userunits;
-	buildings = b;
-
-	MapaDevice = IrrDevice;
-
-    env = IrrDevice->getGUIEnvironment();
+mapa2D::mapa2D(IrrlichtDevice* dev){
+	ia_units = user_units = buildings = NULL;
+	MapaDevice = dev;
+	env = dev->getGUIEnvironment();
     env->clear();
 
     //Get the Scene Manager from the MapaDevice.
-    smgr = IrrDevice->getSceneManager();
+    smgr = dev->getSceneManager();
 
     //Get the Video Driver from the MapaDevice.
-    driver = IrrDevice->getVideoDriver();
+    driver = dev->getVideoDriver();
     
-	file = IrrDevice->getFileSystem();
+	file = dev->getFileSystem();
 	WorkingDirectory = file->getWorkingDirectory() + "/";
 	
 	skin = env->getSkin();
 
-	Init();   
+	Init();
+	Sel_Pulsado = false;
+
+	drawVision = false;
+	drawAttackVision = false;
+
+	ia_selected = -1;
+	sombra_edificio = false;
+	
+}
+
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* b, bool suelo)
+:mapa2D(IrrDevice)
+{
+
+
+	ia_units = IAunits;
+	user_units = Userunits;
+	buildings = b;
+
+	
     
     //GenerarMapa();
     
@@ -42,12 +56,7 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
     AllocateMap(suelo);
 
-	Sel_Pulsado = false;
-
-	drawVision = false;
-	drawAttackVision = false;
-
-	ia_selected = -1;
+	
 	pathFinding=new Pathfinding(shared_ptr<mapa2D>(this));
 	// Esto es bastante sucio, pero bueno...
 	for(IDibujable* unidad: *IAunits){
@@ -59,7 +68,6 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	for(IDibujable* unidad: *b){
 		unidad->setPathfinding(pathFinding);
 	}
-	sombra_edificio = false;
 	
 	user_selvector = new vector<int>();
 	pathFinding->preprocesar();

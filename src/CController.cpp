@@ -70,7 +70,7 @@ bool CController::tickRedNeuronal(){
 	{
 		if (m_vecUnidades[i]->getLife() > 0)
 		{
-			m_vecUnidades[i]->calcular8Objetos(Matriz);
+			m_vecUnidades[i]->calcular8Objetos(matriz);
 			//Pintar();
 				//update the NN and position
 			outfile.open("GeneticMovimientos.txt", ios::app);
@@ -81,7 +81,7 @@ bool CController::tickRedNeuronal(){
 			}
 
 			outfile.close();
-			if (!m_vecUnidades[i]->Update(Matriz))
+			if (!m_vecUnidades[i]->Update(matriz))
 			{
 
 					//error in processing the neural net
@@ -102,10 +102,10 @@ bool CController::tickRedNeuronal(){
 			if(m_vecUnidades[i]->getAtaque()==1){
 				position2di atacando=m_vecUnidades[i]->getAtaqueMovimiento();
 
-				if(Matriz[atacando.Y][atacando.X]!=NULL && Matriz[atacando.Y][atacando.X]->getTipo()==3){
+				if(matriz->getTile(atacando.Y,atacando.X)!=NULL && matriz->getTile(atacando.Y,atacando.X)->getTipo()==3){
 
-					int dano = m_vecUnidades[i]->Attack((Unidades*)Matriz[atacando.Y][atacando.X]);
-					m_vecUnidades[i]->IncrementFitness((CUnidadesAprendizaje*) Matriz[atacando.Y][atacando.X],((Unidades*)m_vecUnidades[i])->TrianguloArmas((Unidades*) Matriz[atacando.Y][atacando.X]),m_pGA->BestFitness());
+					int dano = m_vecUnidades[i]->Attack((Unidades*)matriz->getTile(atacando.Y,atacando.X));
+					m_vecUnidades[i]->IncrementFitness((CUnidadesAprendizaje*) matriz->getTile(atacando.Y,atacando.X),((Unidades*)m_vecUnidades[i])->TrianguloArmas((Unidades*) matriz->getTile(atacando.Y,atacando.X)),m_pGA->BestFitness());
 					
 					outfile.open("GeneticMovimientos.txt", ios::app);
 					if (outfile.is_open())
@@ -124,17 +124,17 @@ bool CController::tickRedNeuronal(){
 
 				if(m_vecUnidades[i]->getMover()==1){
 					video::IVideoDriver* driver = device->getVideoDriver();
-					Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]= new Suelo(m_vecUnidades[i]->getPosicion().X,m_vecUnidades[i]->getPosicion().Y);
-					((Suelo*) Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X])->setIsometric(false);
-					Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]->aplicarTextura(driver);
+					matriz->setTile(m_vecUnidades[i]->getPosicion(), new Suelo(m_vecUnidades[i]->getPosicion().X,m_vecUnidades[i]->getPosicion().Y));
+					((Suelo*) matriz->getTile(m_vecUnidades[i]->getPosicion().Y,m_vecUnidades[i]->getPosicion().X))->setIsometric(false);
+					matriz->getTile(m_vecUnidades[i]->getPosicion())->aplicarTextura(driver);
 					position2di moverse=m_vecUnidades[i]->getMovimiento();
-					if(Matriz[moverse.Y][moverse.X]->getTipo()==0){
+					if(matriz->getTile(moverse.Y,moverse.X)->getTipo()==0){
 						//cout<<"Estoy en ("<<m_vecUnidades[i]->getPosition().X<<","<<m_vecUnidades[i]->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
 						m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
 
 					}
 					
-					Matriz[m_vecUnidades[i]->getPosicion().Y][m_vecUnidades[i]->getPosicion().X]=m_vecUnidades[i];
+					matriz->setTile(m_vecUnidades[i]->getPosicion(),m_vecUnidades[i]);
 				}
 			}
 				//update the chromos fitness score
@@ -145,9 +145,9 @@ bool CController::tickRedNeuronal(){
 			if (pos.X >=0)
 			{
 				cout<<"##### HE MUERTO! POS: <"<<pos.X<<","<<pos.Y<<">"<<endl;
-				Matriz[pos.Y][pos.X] = new Suelo(pos.X,pos.Y);
-				((Suelo*) Matriz[pos.Y][pos.X])->setIsometric(false);
-				Matriz[pos.Y][pos.X]->aplicarTextura(driver);
+				matriz->setTile(pos.Y,pos.X, new Suelo(pos.X,pos.Y));
+				((Suelo*) matriz->getTile(pos.Y,pos.X))->setIsometric(false);
+				matriz->getTile(pos.Y,pos.X)->aplicarTextura(driver);
 				m_vecUnidades[i]->setPosition(-1,-1);
 			}
 			
@@ -206,7 +206,7 @@ bool CController::genetico(){
 
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		m_vecUnidades[i]->calcular8Objetos(Matriz);
+		m_vecUnidades[i]->calcular8Objetos(matriz);
 
 	}
 	return true;
@@ -264,51 +264,13 @@ void CController::guardarPesos(){
 //Devuelve la unidad que hay en esa posición 
 CUnidadesAprendizaje* CController::getUnidadPosicion(position2di pos){
 	
-	return (CUnidadesAprendizaje*) Matriz[pos.Y][pos.X];
+	return (CUnidadesAprendizaje*) matriz->getTile(pos.Y,pos.X);
 
 };	
 
-void CController::Pintar()
-{
-	video::IVideoDriver* driver = device->getVideoDriver();
-	if (device->run())
-	{        
-		if(driver)
-		{
-			position2di GridPosition, DrawPosition;
-			
 
-			for(int i = 0; i < MAPSIZE; i++)
-			{
-				for(int j = 0; j < MAPSIZE; j++)
-				{
-					// Obtenermos coordenadas actuales cuadricula
-					DrawPosition = position2di(j*TILE_H, i * TILE_W);
-					//DrawPosition = getIsoFromTile(i - CameraScroll.X, j - CameraScroll.Y);
-					// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
-					// Validar coordenada
-					IDibujable *Tile = Matriz[i][j];
-						//Pinta
-					if(Tile->getTextura())
-						Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
-				}
-			}
-
-			if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
-			{
-				PintarInformacionUnidad();
-			}else{
-				unidad_seleccionada = NULL;
-			}
-
-			device->getGUIEnvironment()->drawAll();
-
-		}
-	}
-	else
-	{
-		gameEngine::stado.finish();
-	}
+void CController::Pintar(){
+	matriz->Pintar();
 }
 
 // mapa random
@@ -317,9 +279,9 @@ void CController::mapa0(){
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			Matriz[i][j]= new Suelo(j,i);
-			((Suelo*) Matriz[i][j])->setIsometric(false);
-			Matriz[i][j]->aplicarTextura(driver);
+			matriz->setTile(i,j, new Suelo(j,i));
+			((Suelo*) matriz->getTile(i,j))->setIsometric(false);
+			matriz->getTile(i,j)->aplicarTextura(driver);
 
 		}
 	}
@@ -327,9 +289,9 @@ void CController::mapa0(){
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
-		Matriz[RandIntY][RandIntX]=new Muro(RandIntX,RandIntY);
-		((Muro*) Matriz[RandIntY][RandIntX])->setIsometric(false);
-		Matriz[RandIntY][RandIntX]->aplicarTextura(driver);
+		matriz->setTile(RandIntY,RandIntX,new Muro(RandIntX,RandIntY));
+		((Muro*) matriz->getTile(RandIntY,RandIntX))->setIsometric(false);
+		matriz->getTile(RandIntY,RandIntX)->aplicarTextura(driver);
 	}
 
 	//creamos las unidades 
@@ -343,7 +305,7 @@ void CController::mapa0(){
  		}
 		EspadachinRedes* unidad=new EspadachinRedes(j,k);
 		unidad->aplicarTextura(driver);
-		Matriz[k][j]=unidad;
+		matriz->setTile(k,j,unidad);
 		m_vecUnidades.push_back(unidad);
 	}
 }
@@ -356,17 +318,33 @@ void CController::mapa1(){
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
-		Matriz[RandIntY][RandIntX]=new Muro(RandIntX,RandIntY);
-		((Muro*) Matriz[RandIntY][RandIntX])->setIsometric(false);
-		Matriz[RandIntY][RandIntX]->aplicarTextura(driver);
+		matriz->setTile(RandIntY,RandIntX,new Muro(RandIntX,RandIntY));
+		((Muro*) matriz->getTile(RandIntY,RandIntX))->setIsometric(false);
+		matriz->getTile(RandIntY,RandIntX)->aplicarTextura(driver);
+	}
+*/
+	
+}
+
+// mapa con cada unidad rodeada de muros y con una unidad dummy a la que atacar
+void CController::mapa2(){
+	m_vecUnidades.clear();
+	/*
+
+	for(int i=0;i<30;i++){
+		int RandIntX=RandInt(1,MAPSIZE-1);
+		int RandIntY=RandInt(1,MAPSIZE-1);
+		matriz->setTile(RandIntY,RandIntX,new Muro(RandIntX,RandIntY));
+		((Muro*) matriz->getTile(RandIntY,RandIntX))->setIsometric(false);
+		matriz->getTile(RandIntY,RandIntX)->aplicarTextura(driver);
 	}
 */
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			Matriz[i][j]= new Suelo(j,i);
-			((Suelo*) Matriz[i][j])->setIsometric(false);
-			Matriz[i][j]->aplicarTextura(driver);
+			matriz->setTile(i,j,new Suelo(j,i));
+			((Suelo*) matriz->getTile(i,j))->setIsometric(false);
+			matriz->getTile(i,j)->aplicarTextura(driver);
 
 		}
 	}
@@ -376,12 +354,12 @@ void CController::mapa1(){
 			{	
 				for (int iteradorEsquina = 0; iteradorEsquina < 6; ++iteradorEsquina)
 				{
-					Matriz[i + iteradorEsquina][j]= new Muro(j,i + iteradorEsquina);
-					((Muro*) Matriz[i + iteradorEsquina][j])->setIsometric(false);
-					Matriz[i + iteradorEsquina][j]->aplicarTextura(driver);
-					Matriz[i][j + iteradorEsquina]= new Muro(j + iteradorEsquina,i);
-					((Muro*) Matriz[i][j + iteradorEsquina])->setIsometric(false);
-					Matriz[i][j + iteradorEsquina]->aplicarTextura(driver);
+					matriz->setTile(i + iteradorEsquina,j, new Muro(j,i + iteradorEsquina));
+					((Muro*) matriz->getTile(i + iteradorEsquina,j))->setIsometric(false);
+					matriz->getTile(i + iteradorEsquina,j)->aplicarTextura(driver);
+					matriz->setTile(i,j + iteradorEsquina, new Muro(j + iteradorEsquina,i));
+					((Muro*) matriz->getTile(i,j + iteradorEsquina))->setIsometric(false);
+					matriz->getTile(i,j + iteradorEsquina)->aplicarTextura(driver);
 				}
 				
 			}
@@ -400,23 +378,24 @@ void CController::mapa1(){
  		
 		EspadachinRedes* unidadDummy=new EspadachinRedes(posX,posY);
 		unidadDummy->aplicarTextura(driver);
-		Matriz[posY][posX]=unidadDummy;
+		matriz->setTile(posY,posX,unidadDummy);
 		
 
 		EspadachinRedes* unidad=new EspadachinRedes(posX + 2,posY + 2);
 		unidad->aplicarTextura(driver);
-		Matriz[posY + 2][posX + 2]=unidad;
+		matriz->setTile(posY + 2,posX + 2,unidad);
 		m_vecUnidades.push_back(unidad);
 	}
 }
 
 
 void CController::generarMapa(){
-	mapa1();
+	matriz = new MapaBasicoDummy(device);
+	//mapa2();
 
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
-		m_vecUnidades[i]->calcular8Objetos(Matriz);
+		m_vecUnidades[i]->calcular8Objetos(matriz);
 	}
 
 }
@@ -431,9 +410,9 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 		}
 
 	outfile.close();
-	Matriz[y][x]= new Suelo(x,y);
-	((Suelo*) Matriz[y][x])->setIsometric(false);
-	Matriz[y][x]->aplicarTextura(driver);
+	matriz->setTile(y,x, new Suelo(x,y));
+	((Suelo*) matriz->getTile(y,x))->setIsometric(false);
+	matriz->getTile(y,x)->aplicarTextura(driver);
 	unidad->Reset();
 	bool noEstar=true;
 	x=0;
@@ -443,7 +422,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 		x= RandInt(0,MAPSIZE-1);
 		y=RandInt(0,MAPSIZE-1);
 
-		if(Matriz[y][x]->getTipo()==0){
+		if(matriz->getTile(y,x)->getTipo()==0){
 				outfile.open("GeneticMovimientos.txt", ios::app);
 		if (outfile.is_open())
 		{
@@ -452,7 +431,7 @@ void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 
 	outfile.close();
 			unidad->setPosition(position2di(x,y));
-			Matriz[y][x]=unidad;
+			matriz->setTile(y,x,unidad);
 			noEstar=false;
 		}
 	}while(noEstar);
@@ -477,7 +456,7 @@ bool CController::OnEvent(const SEvent& event)
 				}
 				
 
-				IDibujable* tile =  Matriz[pos_grid.Y][pos_grid.X];
+				IDibujable* tile =  matriz->getTile(pos_grid.Y,pos_grid.X);
 				cerr<<"Has clicado en ["<<pos_grid.X<<","<<pos_grid.Y<<"]";
 				if (tile->getTipo() == 3)
 				{
