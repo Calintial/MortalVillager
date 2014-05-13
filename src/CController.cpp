@@ -390,11 +390,13 @@ void CController::mapa2(){
 
 
 void CController::generarMapa(){
-	matriz = new MapaBasicoDummy(device);
+	matriz = new MapaBasicoDummy(device,m_NumUnidades);
 	//mapa2();
 
-	for (int i=0; i<m_NumUnidades; ++i)
+	m_vecUnidades = matriz->getUnidadesAprendizaje();
+	for (int i = 0; i < m_NumUnidades; ++i)
 	{
+		//m_vecUnidades.push_back(aux[i]);
 		m_vecUnidades[i]->calcular8Objetos(matriz);
 	}
 

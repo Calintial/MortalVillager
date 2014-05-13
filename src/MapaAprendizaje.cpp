@@ -3,9 +3,10 @@
 
 // ================== MapaAprendizaje ===================== //
 
-MapaAprendizaje::MapaAprendizaje(IrrlichtDevice* dev):mapa2D(dev){
+MapaAprendizaje::MapaAprendizaje(IrrlichtDevice* dev, int num):mapa2D(dev),m_NumUnidades(num){
 	// cosas del constructor del mapa
 	unidad_seleccionada = NULL;
+	driver = MapaDevice->getVideoDriver();
 	//generarMapa();
 }
 
@@ -15,7 +16,7 @@ MapaAprendizaje::~MapaAprendizaje(){
 
 void MapaAprendizaje::Pintar()
 {
-	video::IVideoDriver* driver = MapaDevice->getVideoDriver();
+	
 	if (MapaDevice->run())
 	{        
 		if(driver)
@@ -100,13 +101,14 @@ void MapaAprendizaje::generarMapa(){
 		EspadachinRedes* unidad=new EspadachinRedes(j,k);
 		unidad->aplicarTextura(driver);
 		setTile(k,j,unidad);
-		m_vecUnidades.push_back(unidad);
+		ia_units.push_back(unidad);
 	}*/
 }
 // ================== ~MapaAprendizaje ===================== //
 // ================== MapaBasicoDummy ===================== //
 
-MapaBasicoDummy::MapaBasicoDummy(IrrlichtDevice* dev):MapaAprendizaje(dev){
+MapaBasicoDummy::MapaBasicoDummy(IrrlichtDevice* dev,int num):MapaAprendizaje(dev,num){
+	driver = dev->getVideoDriver();
 	generarMapa();
 }
 
@@ -144,8 +146,7 @@ void MapaBasicoDummy::generarMapa(){
 		}
 	}
 	//creamos las unidades 
-	//TODO: crear las unidades
-/*	int posX = 0;
+	int posX = 0;
 	int posY = 0;
 	int size = MAPSIZE / 6;
 	for (int i=0; i<m_NumUnidades; ++i)
@@ -162,7 +163,7 @@ void MapaBasicoDummy::generarMapa(){
 		unidad->aplicarTextura(driver);
 		vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
-	}*/
+	}
 }
 
 // ================== ~MapaBasicoDummy ===================== //
