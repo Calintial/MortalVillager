@@ -1,5 +1,20 @@
 #include "CController.h"
-
+std::string cogerCommit(){
+	FILE* pipe = popen("git rev-parse HEAD", "r");
+	 if (!pipe)
+	   return "ERROR";
+	 char buffer[128];
+	 std::string result = "";
+	 while(!feof(pipe)) {
+	   if(fgets(buffer, 128, pipe) != NULL){
+	     result += buffer;
+	     std::cout << buffer;
+	 	}
+	 }
+	 pclose(pipe);
+	 result.erase(std::remove(result.begin(),result.end(),'\n'),result.end());
+	 return result;
+}
 
 //---------------------------------------constructor---------------------
 //
@@ -14,7 +29,14 @@ m_iGenerations(0)
 	device = dev;
 	driver = device->getVideoDriver();
 	generarMapa();
-	
+	t=time(0);
+	struct tm * now=localtime(&t);
+	std::string tiempoo=std::string("")+std::to_string(now->tm_mon)+"_"+std::to_string(now->tm_mday)+"_"+std::to_string(now->tm_hour)+"_"+std::to_string(now->tm_min)+"_"+std::to_string(now->tm_sec);
+	versionGit=cogerCommit();
+	nombreCarpeta=std::string("../logs/")+tiempoo+versionGit;
+	std::string carpeta=std::string("mkdir \"")+nombreCarpeta+std::string("\"");
+
+	system(carpeta.c_str());
 
 	//get the total number of weights used in the sweepers
 	//NN so we can initialise the GA
@@ -39,7 +61,6 @@ m_iGenerations(0)
 	
 	font = device->getGUIEnvironment()->getFont("../media/fonthaettenschweiler.bmp");
 }
-
 
 //--------------------------------------destructor-------------------------------------
 //
@@ -188,7 +209,9 @@ bool CController::genetico(){
 		//insert the new (hopefully)improved brains back into the sweepers
     //and reset their positions etc
     ofstream pesosActualesFile;
-	pesosActualesFile.open("RedAux.txt",ios::out);
+    std::string redAux=nombreCarpeta+"/"+"RedAux_"+std::to_string(m_iGenerations)+".txt"	;
+    std::string red=nombreCarpeta+"/"+"Red_"+std::to_string(m_iGenerations)+".txt";
+	pesosActualesFile.open(redAux,ios::out);
 	for (int i=0; i<m_NumUnidades; ++i)
 	{
 		if (pesosActualesFile.is_open())
@@ -200,7 +223,7 @@ bool CController::genetico(){
 			}
 			pesosActualesFile<<endl;
 		}else{
-			cerr<<"NO SE HA PODIDO ABRIR EL ARCHIVO DE RED NEURONAL"<<endl;
+			cerr<<"NO SE HA PODIDO ABRIR EL ARCHIVO DE RED NEURONAL<"<<redAux<<">"<<endl;
 		}
 
 		m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
@@ -209,7 +232,7 @@ bool CController::genetico(){
 	}
 	if (pesosActualesFile.is_open()){
 		pesosActualesFile.close();
-		rename ("RedAux.txt","Red.txt");
+		rename (redAux.c_str(),red.c_str());
 	}else{
 		cerr<<"NO SE HA PODIDO ABRIR EL ARCHIVO DE RED NEURONAL"<<endl;
 	}

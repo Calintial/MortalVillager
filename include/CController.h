@@ -24,6 +24,7 @@
 #include "muro.h"
 #include "gameEngine.h"
 #include <fstream>
+#include <ctime>
 #define MAPSIZE 20
 using namespace std;
 
@@ -75,7 +76,10 @@ private:
 	IGUIFont* font;
 
 public:
+	time_t t;
+	std::string versionGit;
 	std::ofstream outfile;
+	std::string nombreCarpeta;
 	CController(IrrlichtDevice* dev);
 
 	~CController();
