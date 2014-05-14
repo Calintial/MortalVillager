@@ -15,12 +15,12 @@ CGenAlg::CGenAlg(int	  popsize,
                                       m_dMutationRate(MutRat),
 										                  m_dCrossoverRate(CrossRat),
 										                  m_iChromoLength(numweights),
-										                  m_dTotalFitness(0),
+										                  m_dTotalFitness(1),
 										                  m_cGeneration(0),
 										                  m_iFittestGenome(0),
 										                  m_dBestFitness(1),
 										                  m_dWorstFitness(99999999),
-										                  m_dAverageFitness(0)
+										                  m_dAverageFitness(1)
 {
 	carpeta=nombreCarpeta;
 	//initialise population with chromosomes consisting of random
@@ -97,7 +97,7 @@ SGenome CGenAlg::GetChromoRoulette()
 	SGenome TheChosenOne;
 	
 	//go through the chromosones adding up the fitness so far
-	double FitnessSoFar = 0;
+	double FitnessSoFar = 1;
 	
 	for (int i=0; i<m_iPopSize; ++i)
 	{
@@ -266,8 +266,8 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 		Mutate(baby2);
 
 		//now copy into vecNewPop population
-		vecNewPop.push_back(SGenome(baby1, 0));
-		vecNewPop.push_back(SGenome(baby2, 0));
+		vecNewPop.push_back(SGenome(baby1, 1));
+		vecNewPop.push_back(SGenome(baby2, 1));
 	}
 
 	//finished so assign new pop back into m_vecPop
@@ -311,9 +311,9 @@ void CGenAlg::GrabNBest(int	            NBest,
 void CGenAlg::CalculateBestWorstAvTot()
 {
 	std::string excel=carpeta+"/Excel.txt";
-	m_dTotalFitness = 0;
+	m_dTotalFitness = 1;
 	
-	double HighestSoFar = 0;
+	double HighestSoFar = 1;
 	double LowestSoFar  = 9999999;
 	
 	for (int i=0; i<m_iPopSize; ++i)
@@ -372,9 +372,9 @@ void CGenAlg::CalculateBestWorstAvTot()
 //--------------------------------------------------------------
 void CGenAlg::Reset()
 {
-	m_dTotalFitness		= 0;
-	m_dBestFitness		= 0;
+	m_dTotalFitness		= 1;
+	m_dBestFitness		= 1;
 	m_dWorstFitness		= 9999999;
-	m_dAverageFitness	= 0;
+	m_dAverageFitness	= 1;
 }
 
