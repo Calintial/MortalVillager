@@ -26,6 +26,7 @@
 #include <fstream>
 #include "MapaAprendizaje.h"
 #include <ctime>
+
 using namespace std;
 
 const int TILE_W	= 32;
@@ -84,6 +85,7 @@ public:
 	std::string versionGit;
 	std::ofstream outfile;
 	std::string nombreCarpeta;
+	std::string red;
 	CController(IrrlichtDevice* dev);
 
 	~CController();
@@ -100,7 +102,7 @@ public:
 	void modificarUnidad(CUnidadesAprendizaje* unidad);
 	bool OnEvent(const SEvent& event);
 	void PintarInformacionUnidad();
-
+void ponerWeightFichero();
 };
 
 

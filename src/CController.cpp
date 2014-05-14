@@ -237,7 +237,7 @@ bool CController::genetico(){
 void CController::guardarPesos(){
 	ofstream pesosActualesFile;
 	std::string redAux=nombreCarpeta+"/"+"RedAux_"+std::to_string(m_iGenerations)+".txt";
-    std::string red=nombreCarpeta+"/"+"Red_"+std::to_string(m_iGenerations)+".txt";
+    red=nombreCarpeta+"/"+"Red_"+std::to_string(m_iGenerations)+".txt";
 	pesosActualesFile.open(redAux,ios::out);
 	if (pesosActualesFile.is_open())
 	{
@@ -436,7 +436,45 @@ void CController::generarMapa(int tipoMapa){
 		//m_vecUnidades.push_back(aux[i]);
 		m_vecUnidades[i]->calcular8Objetos(matriz);
 	}
+	if(tipoMapa!=1){
+		vector<double> vecW=m_vecUnidades[0]->getCNeuralWeight();
+		cout<<vecW[0]<<endl;
+	}
 
+}
+void CController::ponerWeightFichero(){
+	vector<double> weights;
+	std::string cadena,buf;
+	vector<std::string> parser;
+	ifstream myReadFile;
+	int numFilas=0;
+	int numUnidades=0;
+	myReadFile.open(Red,ios::in);
+ 	if (myReadFile.is_open()) {
+
+ 		while (!myReadFile.eof()) {
+ 				
+   			getline(myReadFile,cadena);
+    		stringstream ss(cadena);
+
+    		ss>>buf;
+    		split(parser, buf, is_any_of(","));
+    		for(std::string & weight : parser){
+    			weights.push_back(atof(weight.c_str()));
+    		}
+    		numFilas++;
+    		if(numFilas==m_NumUnidades){
+    			numFilas=0;
+    			m_vecUnidades[numUnidades]->PutWeights(weights);
+    			weights.clear();
+    			numUnidades++;
+    		}
+	 		if(numUnidades==m_NumUnidades){
+	 			break;
+	 		}
+ 		}
+	}
+myReadFile.close();
 }
 void CController::modificarUnidad(CUnidadesAprendizaje* unidad){
 	int x=0,y=0;

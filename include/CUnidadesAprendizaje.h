@@ -80,7 +80,7 @@ public:
 	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,MapaAprendizaje*);
  void IncrementFitness(CUnidadesAprendizaje *atacado,int danyo,double max_fitness);
 void setFitness(double fitness){m_dFitness=fitness;};
-
+ vector<double> getCNeuralWeight(){return m_ItsBrain.GetWeights();};
 	
 
 
