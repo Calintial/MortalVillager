@@ -188,15 +188,9 @@ bool CController::genetico(){
 		//insert the new (hopefully)improved brains back into the sweepers
     //and reset their positions etc
     
-/*
-	TODO: cambiar el orden de estas dos funciones, cambiar modificarUnidad por generarMapa, poner los valores despues de regenerar el mapa
-	Poner una funcion aparte que escriba lo de RedAux
-
-	o eso o modificarUnidad va a regenerar la unidad y la dummy, pero eso no escala, cuando tengamos muchos mapas va a haber que modificar muchas cosas para
-
-*/	
 	guardarPesos();
-	generarMapa();
+	matriz->reset();
+	m_vecUnidades = matriz->getUnidadesAprendizaje();
 	for (int i=0; i<m_NumUnidades; ++i)
 	{	
 		m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);

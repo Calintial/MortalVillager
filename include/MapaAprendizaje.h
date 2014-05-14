@@ -34,8 +34,12 @@ public:
 	vector<CUnidadesAprendizaje*> getUnidadesAprendizaje() const {return m_vecUnidades;}
 
 	virtual void generarMapa() = 0;
+	virtual void reset() = 0;
 	
 protected:
+	void nuevoSuelo(int,int);
+	void nuevoMuro(int,int);
+
 	Unidades* unidad_seleccionada;
 	vector<CUnidadesAprendizaje*> m_vecUnidades;
 	int m_NumUnidades;
@@ -48,6 +52,9 @@ public:
 	~MapaBasicoDummy();
 
 	void generarMapa();
+	void reset();
+private:
+	void generarUnidades();
 };
 
 #endif

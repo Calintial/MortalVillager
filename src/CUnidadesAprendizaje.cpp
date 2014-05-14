@@ -9,7 +9,8 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
                              m_moveY(0),
                              m_ataqueX(0),
                              m_ataqueY(0),
-                             move(0)
+                             move(0),
+                             m_ataque(0)
 {			
 	setPosition(x,y);
 	setLife(100);

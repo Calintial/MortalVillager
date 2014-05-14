@@ -104,6 +104,19 @@ void MapaAprendizaje::generarMapa(){
 		ia_units.push_back(unidad);
 	}*/
 }
+
+void MapaAprendizaje::nuevoSuelo(int x, int y){
+	vTiles[y][x]= new Suelo(x,y);
+	((Suelo*) vTiles[y][x])->setIsometric(false);
+	vTiles[y][x]->aplicarTextura(driver);
+}
+void MapaAprendizaje::nuevoMuro(int x, int y){
+	vTiles[y][x]= new Muro(x,y);
+	((Muro*) vTiles[y][x])->setIsometric(false);
+	vTiles[y][x]->aplicarTextura(driver);
+}
+
+
 // ================== ~MapaAprendizaje ===================== //
 // ================== MapaBasicoDummy ===================== //
 
@@ -120,9 +133,8 @@ void MapaBasicoDummy::generarMapa(){
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			vTiles[i][j]= new Suelo(j,i);
-			((Suelo*) vTiles[i][j])->setIsometric(false);
-			vTiles[i][j]->aplicarTextura(driver);
+			nuevoSuelo(j,i);
+			
 
 		}
 	}
@@ -132,12 +144,8 @@ void MapaBasicoDummy::generarMapa(){
 			{	
 				for (int iteradorEsquina = 0; iteradorEsquina < 6; ++iteradorEsquina)
 				{
-					vTiles[i + iteradorEsquina][j]= new Muro(j,i + iteradorEsquina);
-					((Muro*) vTiles[i + iteradorEsquina][j])->setIsometric(false);
-					vTiles[i + iteradorEsquina][j]->aplicarTextura(driver);
-					vTiles[i][j + iteradorEsquina]= new Muro(j + iteradorEsquina,i);
-					((Muro*) vTiles[i][j + iteradorEsquina])->setIsometric(false);
-					vTiles[i][j + iteradorEsquina]->aplicarTextura(driver);
+					nuevoMuro(j, i + iteradorEsquina);
+					nuevoMuro(j + iteradorEsquina, i);
 				}
 				
 			}
@@ -145,6 +153,26 @@ void MapaBasicoDummy::generarMapa(){
 
 		}
 	}
+	generarUnidades();
+	
+}
+
+void MapaBasicoDummy::reset(){
+	for (int i = 0; i < m_NumUnidades; ++i)
+	{
+		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
+		position2di posicion = unidad->getPosition();
+
+
+		// aqui deberia borrar la unidad, pero peta >_<
+		nuevoSuelo(posicion.X,posicion.Y);
+
+	}
+	m_vecUnidades.clear();
+	generarUnidades();
+}
+
+void MapaBasicoDummy::generarUnidades(){
 	//creamos las unidades 
 	int posX = 0;
 	int posY = 0;
@@ -156,11 +184,15 @@ void MapaBasicoDummy::generarMapa(){
  		
 		EspadachinRedes* unidadDummy=new EspadachinRedes(posX,posY);
 		unidadDummy->aplicarTextura(driver);
+		IDibujable* aux = vTiles[posY][posX];
+		delete aux;
 		vTiles[posY][posX]=unidadDummy;
 		
 
 		EspadachinRedes* unidad=new EspadachinRedes(posX + 2,posY + 2);
 		unidad->aplicarTextura(driver);
+		aux = vTiles[posY + 2][posX + 2];
+		delete aux;
 		vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
