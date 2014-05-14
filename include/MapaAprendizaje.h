@@ -72,4 +72,15 @@ private:
 	vector<CUnidadesAprendizaje*> m_vecEnemigos;
 };
 
+class MapaCuadrado: public MapaAprendizaje
+{
+public:
+	MapaCuadrado(IrrlichtDevice* dev,int);
+	~MapaCuadrado();
+	void generarSuelos(int inicio,int fin);
+	void generarMapa();
+	void reset();
+private:
+	void generarUnidades();
+};
 #endif
