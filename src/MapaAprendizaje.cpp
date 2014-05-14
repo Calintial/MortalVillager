@@ -267,6 +267,7 @@ void MapaBasicoMuroYUnidad::reset(vector<SGenome> poblacion){
 	for (int i=0; i<m_NumUnidades; ++i)
 	{	
 		m_vecUnidades[i]->PutWeights(poblacion[i].vecWeights);
+		m_vecEnemigos[i]->PutWeights(poblacion[0].vecWeights);
 	}
 }
 
