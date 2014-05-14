@@ -145,9 +145,6 @@ bool CController::tickRedNeuronalUnidad(CUnidadesAprendizaje* unidad, const int 
 					matriz->setTile(unidad->getPosicion(),unidad);
 				}
 			}
-				//update the chromos fitness score
-			m_vecThePopulation[i].dFitness = unidad->Fitness();
-
 		}else{
 			position2di pos = unidad->getPosicion();
 			if (pos.X >=0)
@@ -183,6 +180,12 @@ bool CController::tickRedNeuronal(){
 	}
 	for (int i=0; i<m_NumUnidades; ++i){
 		m_vecUnidades[i]->setFitness(m_vecUnidades[i]->Fitness()*m_vecUnidades[i]->getLife()/100);
+		//update the chromos fitness score
+		m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
+	}
+	for (int i = m_NumUnidades; i < m_vecUnidades.size(); ++i)
+	{
+		tickRedNeuronalUnidad(m_vecUnidades[i],i);
 	}
 return true;
 

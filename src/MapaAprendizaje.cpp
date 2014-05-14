@@ -254,12 +254,15 @@ void MapaBasicoMuroYUnidad::reset(vector<SGenome> poblacion){
 		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
 		position2di posicion = unidad->getPosition();
 
-
+		CUnidadesAprendizaje* enemigo = m_vecEnemigos[i];
+		position2di posicionEnemigo = enemigo->getPosition();
 		// aqui deberia borrar la unidad, pero peta >_<
 		nuevoSuelo(posicion.X,posicion.Y);
+		nuevoSuelo(posicionEnemigo.X,posicionEnemigo.Y);
 
 	}
 	m_vecUnidades.clear();
+	m_vecEnemigos.clear();
 	generarUnidades();
 	for (int i=0; i<m_NumUnidades; ++i)
 	{	
@@ -282,6 +285,7 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
 		IDibujable* aux = vTiles[posY][posX];
 		delete aux;
 		vTiles[posY][posX]=unidadDummy;
+		m_vecEnemigos.push_back(unidadDummy);
 		
 
 		EspadachinRedes* unidad=new EspadachinRedes(posX + 2,posY + 2);
@@ -291,6 +295,8 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
 		vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
+	m_vecUnidades.reserve(m_vecUnidades.size()*2);
+	m_vecUnidades.insert(m_vecUnidades.end(), m_vecEnemigos.begin(), m_vecEnemigos.end());
 }
 
 
