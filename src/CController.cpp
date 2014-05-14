@@ -210,12 +210,9 @@ bool CController::genetico(){
     //and reset their positions etc
     
 	guardarPesos();
-	matriz->reset();
+	matriz->reset(m_vecThePopulation);
 	m_vecUnidades = matriz->getUnidadesAprendizaje();
-	for (int i=0; i<m_NumUnidades; ++i)
-	{	
-		m_vecUnidades[i]->PutWeights(m_vecThePopulation[i].vecWeights);
-	}
+	
 
 	//}
 
