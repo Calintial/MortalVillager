@@ -4,7 +4,7 @@ IDibujable::IDibujable(){
 	vinculado = NULL;
 }
 IDibujable::~IDibujable() {
-	delete textura;
+	//delete textura;
 	delete vinculado;
 }
 ITexture* IDibujable::getTextura() const {
