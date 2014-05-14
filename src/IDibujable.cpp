@@ -48,3 +48,7 @@ IDibujable* IDibujable::getVinculado(){
 	return vinculado;
 }
 
+/*void IDibujable::setSeleccionado(IVideoDriver* driver){
+	setTextura(driver->getTexture("../media/Texturas/suelo/dirt.png"));
+}*/
+
