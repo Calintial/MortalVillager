@@ -221,22 +221,13 @@ void MapaCuadrado::generarMapa(){
 			
 
 		}
-	}/*
-	for (int i=inicioRectanguloInterior;i<finRectanguloInterior;i+=3){
-		for(int j=inicioRectanguloInterior;j<finRectanguloInterior;j+=3){
-			if (i + 3 < finRectanguloInterior && j+3 < finRectanguloInterior)
-			{	
-				nuevoMuro(j, i);				
-			}
-			
-
-		}
-	}*/
-
-
-
-
-
+	}
+	int inicioCuadrado=MAPSIZE/4;
+	int finalCuadrado=(MAPSIZE/2)+inicioCuadrado-1;
+	generarSuelos(inicioCuadrado,finalCuadrado);
+	inicioCuadrado=MAPSIZE/8;
+	finalCuadrado=MAPSIZE-inicioCuadrado-1;
+	generarSuelos(inicioCuadrado,finalCuadrado);
 	generarUnidades();
 	
 }
@@ -255,10 +246,50 @@ void MapaCuadrado::reset(){
 	m_vecUnidades.clear();
 	generarUnidades();
 }
+void MapaCuadrado::generarSuelos(int inicio,int fin){
 
+
+
+
+	int i=inicio;
+	for(int j=inicio;j<=fin;j+=2){
+		if ( j <= fin )
+		{	
+			nuevoMuro(i, j);
+			nuevoMuro(j, i);
+		}
+			
+
+	}
+	i=fin;
+	for(int j=inicio;j<=fin;j+=2){
+		if (j <= fin)
+		{	
+			nuevoMuro(i, j);
+			nuevoMuro(j, i);
+		}
+			
+
+	}
+}
 void MapaCuadrado::generarUnidades(){
 	int numUnidadesLeft=0;
-	int finalMapaCuadradoUnidades=m_NumUnidades/2;
+	int finalMapaCuadradoUnidades=(m_NumUnidades/2)-1;
+	EspadachinRedes* unidad=new EspadachinRedes(0,0);
+	unidad->aplicarTextura(driver);
+	IDibujable* aux = vTiles[0][0];
+	delete aux;
+	vTiles[0][0]=unidad;
+	m_vecUnidades.push_back(unidad);
+	numUnidadesLeft++;
+	unidad=new EspadachinRedes(finalMapaCuadradoUnidades,finalMapaCuadradoUnidades);
+	unidad->aplicarTextura(driver);
+	aux = vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades];
+	delete aux;
+	vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades]=unidad;
+	m_vecUnidades.push_back(unidad);
+	numUnidadesLeft++;
+
 	int i=0;
 		for(int j=1;j<=finalMapaCuadradoUnidades;j+=2){
 			if ( j <= finalMapaCuadradoUnidades && numUnidadesLeft<m_NumUnidades)
@@ -270,6 +301,7 @@ void MapaCuadrado::generarUnidades(){
 				delete aux;
 				vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);
+				numUnidadesLeft++;
 				unidad=new EspadachinRedes(i,j);
 				unidad->aplicarTextura(driver);
 				aux = vTiles[j][i];
@@ -281,9 +313,9 @@ void MapaCuadrado::generarUnidades(){
 			
 
 		}
-	i=finalMapaCuadradoUnidades-1;
-			for(int j=1;j<finalMapaCuadradoUnidades;j+=2){
-			if (j < finalMapaCuadradoUnidades && numUnidadesLeft<m_NumUnidades)
+	i=finalMapaCuadradoUnidades;
+			for(int j=2;j<=finalMapaCuadradoUnidades;j+=2){
+			if (j <= finalMapaCuadradoUnidades && numUnidadesLeft<m_NumUnidades)
 			{	
 
 				EspadachinRedes* unidad=new EspadachinRedes(j,i);
@@ -292,6 +324,7 @@ void MapaCuadrado::generarUnidades(){
 				delete aux;
 				vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);
+				numUnidadesLeft++;
 				unidad=new EspadachinRedes(i,j);
 				unidad->aplicarTextura(driver);
 				aux = vTiles[j][i];
