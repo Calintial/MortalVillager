@@ -69,6 +69,10 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 	recol_RangoAux=0;
 	recol_Grados = vector<int>(16);
 	reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
+
+
+	IniciarUnidades();
+	IniciarEdificios();
 }
 
 
@@ -294,9 +298,7 @@ void mapa2D::AllocateMap(bool suelo)
 				k++;
 			}
 		}
-		
-		IniciarUnidades();
-		IniciarEdificios();
+
 	}
 }
 
@@ -315,11 +317,49 @@ void mapa2D::IniciarUnidades()
 
 void mapa2D::IniciarEdificios()
 {
-	//Edificios IA
 	
+	//Edificios IA
+	position2di pos_ia; pos_ia.X = 190; pos_ia.Y = 193;
+	IDibujable* cc_ia = gameEngine::addBuildings(pos_ia.X,pos_ia.Y,0,false);
+	cc_ia->aplicarTextura(driver);
+
+	ITexture* tex = cc_ia->getTextura();
+	int i,j;
+	for (i = 0; i < tex->getSize().Width/TILE_WIDTH; ++i)
+	{
+		for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j)
+		{
+			if(i==0 && j==0)
+				cc_ia->setPintable(true);
+			else
+				cc_ia->setPintable(false);
+			getTile(pos_ia.Y + j,pos_ia.X + i)->setVinculado(cc_ia);
+		}
+	}
+	position2di down_right_ia(pos_ia.X + i,pos_ia.Y + j);
+	pathFinding->actualizarRegiones(pos_ia,down_right_ia);
 
 	//Edificios usuario
-	(gameEngine::addBuildings(5,3,0,true))->aplicarTextura(driver);
+	position2di pos_usuario; pos_usuario.X = 5; pos_usuario.Y = 3;
+	IDibujable* cc_usuario = (gameEngine::addBuildings(pos_usuario.X,pos_usuario.Y,0,true));
+	cc_usuario->aplicarTextura(driver);
+
+	tex = cc_ia->getTextura();
+
+	for (i = 0; i < tex->getSize().Width/TILE_WIDTH; ++i)
+	{
+		for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j)
+		{
+			if(i==0 && j==0)
+				cc_usuario->setPintable(true);
+			else
+				cc_usuario->setPintable(false);
+			getTile(pos_usuario.Y + j,pos_usuario.X + i)->setVinculado(cc_usuario);
+		}
+	}
+	position2di down_right_usuario(pos_usuario.X + i,pos_usuario.Y + j);
+	pathFinding->actualizarRegiones(pos_usuario,down_right_usuario);
+
 }
 
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
