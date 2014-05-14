@@ -33,6 +33,7 @@ const int TILE_HEIGHT = 32;
 
 #define WIDTH 200
 #define HEIGHT 200
+#define MAPSIZE 200
 
 
 class mapa2D {
@@ -46,7 +47,7 @@ public:
 
 
 	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*,bool);
-	~mapa2D();
+	virtual ~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
 
@@ -110,24 +111,15 @@ public:
 	IDibujable* addUserUnit(int,int,int);
 
 private:
-	IrrlichtDevice * MapaDevice;
-	video::IVideoDriver* driver;
-	scene::ISceneManager* smgr;
-	IFileSystem *file;
-	gui::IGUIEnvironment* env;
-	IGUISkin* skin;
-	int gameState;
+	
 	stringc MapaText;
 	Pathfinding *pathFinding;
 	void Init();
 	void AllocateMap(bool suelo);
 
-	IDibujable* vTiles[WIDTH][HEIGHT];
-	vector<IDibujable*>* ia_units;
-	vector<IDibujable*>* user_units;
-	vector<IDibujable*>* buildings;
 	
-	position2di CameraScroll;
+	
+	
 
 
 	position2di shadowPosition;
@@ -169,6 +161,23 @@ private:
 	vector<int>* ia_selvector;
 	vector<int>* user_selvector;
 
+protected:
+	mapa2D(IrrlichtDevice* dev);
+
+	IrrlichtDevice * MapaDevice;
+	video::IVideoDriver* driver;
+	scene::ISceneManager* smgr;
+	IFileSystem *file;
+	gui::IGUIEnvironment* env;
+	IGUISkin* skin;
+	int gameState;
+
+	IDibujable* vTiles[WIDTH][HEIGHT];
+	vector<IDibujable*>* ia_units;
+	vector<IDibujable*>* user_units;
+	vector<IDibujable*>* buildings;
+
+	position2di CameraScroll;
 };
 
 #endif

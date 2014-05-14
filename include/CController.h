@@ -24,8 +24,8 @@
 #include "muro.h"
 #include "gameEngine.h"
 #include <fstream>
+#include "MapaAprendizaje.h"
 #include <ctime>
-#define MAPSIZE 20
 using namespace std;
 
 const int TILE_W	= 32;
@@ -66,7 +66,7 @@ private:
 
 
 	//0 transitable y 1 no transitable
-	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
+	MapaAprendizaje* 				matriz;
 
 	IrrlichtDevice* device;
 	video::IVideoDriver* driver;
@@ -74,6 +74,10 @@ private:
 	Unidades* unidad_seleccionada;
 
 	IGUIFont* font;
+	void mapa0();
+	void mapa1();
+	void mapa2();
+	void guardarPesos();
 
 public:
 	time_t t;
@@ -90,6 +94,7 @@ public:
 	bool		genetico();
 
 	void Pintar();
+	
 	void generarMapa();
 	void modificarUnidad(CUnidadesAprendizaje* unidad);
 	bool OnEvent(const SEvent& event);

@@ -9,7 +9,8 @@ CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
                              m_moveY(0),
                              m_ataqueX(0),
                              m_ataqueY(0),
-                             move(0)
+                             move(0),
+                             m_ataque(0)
 {			
 	setPosition(x,y);
 	setLife(100);
@@ -50,7 +51,7 @@ void CUnidadesAprendizaje::Reset()
 //	and acceleration and apply to current velocity vector.
 //
 //-----------------------------------------------------------------------
-bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
+bool CUnidadesAprendizaje::Update(MapaAprendizaje* matriz)
 {
 
 	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,	getLife(),getPosicion().X,getPosicion().Y);
@@ -83,14 +84,14 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 		yint=getPosicion().Y+1;
 	}
 
-	if(xint<MAPSIZE && xint>0 && yint<MAPSIZE && yint>0 && output[2]>0.5 && Matriz[yint][xint]!=NULL && Matriz[yint][xint]->getTipo()==3){
+	if(xint<MAPSIZE && xint>0 && yint<MAPSIZE && yint>0 && output[2]>0.5 && matriz->getTile(yint,xint)!=NULL && matriz->getTile(yint,xint)->getTipo()==3){
 		setAtaque(xint,yint);
 		m_ataque=1;
 		move=0;
 		//setMovimiento(0,0);
 	}
 	else if(output[7]>0.5){
-		position2di mov=mayorMovimiento(output[3],output[4],output[5],output[6],Matriz);
+		position2di mov=mayorMovimiento(output[3],output[4],output[5],output[6],matriz);
 		if(mov.X>=0 && mov.X<MAPSIZE && mov.Y>=0 && mov.Y<MAPSIZE){
 			setMovimiento(mov.X,mov.Y);
 			move=1;
@@ -131,7 +132,7 @@ bool CUnidadesAprendizaje::Update(IDibujable* Matriz[][MAPSIZE])
 	return true;
 
 }
-void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
+void CUnidadesAprendizaje::calcular8Objetos(MapaAprendizaje* matriz){
 	m_vObjetosCerca.clear();
 	int cant=0;
 	for(int i= getPosicion().Y-1;i<=getPosicion().Y+1 && cant<8;i++){
@@ -142,8 +143,8 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 					continue;
 				}
 
-				if(Matriz[i][j]->getTipo()!=0){
-					if(Matriz[i][j]->getTipo()==3){
+				if(matriz->getTile(i,j)->getTipo()!=0){
+					if(matriz->getTile(i,j)->getTipo()==3){
 						outfile.open("GeneticMovimientos.txt", ios::app);
 							if (outfile.is_open())
 							{
@@ -153,8 +154,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 							}
 
 							outfile.close();
-						//m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
-							ObjetosCercanos obj(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),j,i);
+							ObjetosCercanos obj(3,((CUnidadesAprendizaje*) matriz->getTile(i,j))->getLife(),j,i);
 							m_vObjetosCerca.push_back(obj);
 						
 					}
@@ -168,7 +168,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 							}
 
 							outfile.close();
-						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[i][j]->getTipo(),0,j,i));
+						m_vObjetosCerca.push_back(ObjetosCercanos(matriz->getTile(i,j)->getTipo(),0,j,i));
 					}
 					cant++;
 				}
@@ -183,8 +183,8 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 				continue;
 			}
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
-				if(Matriz[i][j]->getTipo()!=0){
-					if(Matriz[i][j]->getTipo()==3){
+				if(matriz->getTile(i,j)->getTipo()!=0){
+					if(matriz->getTile(i,j)->getTipo()==3){
 						outfile.open("GeneticMovimientos.txt", ios::app);
 							if (outfile.is_open())
 							{
@@ -194,7 +194,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 							}
 
 							outfile.close();
-						m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) Matriz[i][j])->getLife(),Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
+						m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) matriz->getTile(i,j))->getLife(),matriz->getTile(i,j)->getPosicion().X,matriz->getTile(i,j)->getPosicion().Y));
 						
 					}
 					else{
@@ -207,7 +207,7 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 							}
 
 							outfile.close();
-						m_vObjetosCerca.push_back(ObjetosCercanos(Matriz[i][j]->getTipo(),0,Matriz[i][j]->getPosicion().X,Matriz[i][j]->getPosicion().Y));
+						m_vObjetosCerca.push_back(ObjetosCercanos(matriz->getTile(i,j)->getTipo(),0,matriz->getTile(i,j)->getPosicion().X,matriz->getTile(i,j)->getPosicion().Y));
 					}
 					cant++;
 
@@ -217,27 +217,27 @@ void CUnidadesAprendizaje::calcular8Objetos(IDibujable* Matriz[][MAPSIZE]){
 	}
 }
 }
-position2di CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]){
+position2di CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,MapaAprendizaje* matriz){
 	
 	int x=0,y=0;
 	x=	getPosicion().Y;
 	y=getPosicion().X-1;
-	if(!( x>=0 && x<MAPSIZE &&  y>=0 &&  y<MAPSIZE) || Matriz[y][x]->getTipo()!=0){
+	if(!( x>=0 && x<MAPSIZE &&  y>=0 &&  y<MAPSIZE) || matriz->getTile(y,x)->getTipo()!=0){
 		arriba=0;
 	}
 	x=	getPosicion().Y;
 	y=getPosicion().X+1;
-	if( !( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
+	if( !( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0){
 		abajo=0;
 	}
 	x=	getPosicion().Y-1;
 	y=getPosicion().X;
-	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
+	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0){
 		izquierda=0;
 	}
 	x=	getPosicion().Y+1;
 	y=getPosicion().X;
-	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| Matriz[y][x]->getTipo()!=0){
+	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0){
 		derecha=0;
 	}
 	double mejor=max(max(max(arriba,abajo),izquierda),derecha);
