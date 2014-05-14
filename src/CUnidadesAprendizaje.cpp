@@ -145,7 +145,7 @@ void CUnidadesAprendizaje::calcular8Objetos(MapaAprendizaje* matriz){
 
 				if(matriz->getTile(i,j)->getTipo()!=0){
 					if(matriz->getTile(i,j)->getTipo()==3){
-						outfile.open("GeneticMovimientos.txt", ios::app);
+						/*outfile.open("GeneticMovimientos.txt", ios::app);
 							if (outfile.is_open())
 							{
 												
@@ -153,13 +153,13 @@ void CUnidadesAprendizaje::calcular8Objetos(MapaAprendizaje* matriz){
 								
 							}
 
-							outfile.close();
+							outfile.close();*/
 							ObjetosCercanos obj(3,((CUnidadesAprendizaje*) matriz->getTile(i,j))->getLife(),j,i);
 							m_vObjetosCerca.push_back(obj);
 						
 					}
 					else{
-						outfile.open("GeneticMovimientos.txt", ios::app);
+						/*outfile.open("GeneticMovimientos.txt", ios::app);
 							if (outfile.is_open())
 							{
 												
@@ -167,7 +167,7 @@ void CUnidadesAprendizaje::calcular8Objetos(MapaAprendizaje* matriz){
 								
 							}
 
-							outfile.close();
+							outfile.close();*/
 						m_vObjetosCerca.push_back(ObjetosCercanos(matriz->getTile(i,j)->getTipo(),0,j,i));
 					}
 					cant++;

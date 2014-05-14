@@ -56,5 +56,15 @@ public:
 private:
 	void generarUnidades();
 };
+class MapaCuadrado: public MapaAprendizaje
+{
+public:
+	MapaCuadrado(IrrlichtDevice* dev,int);
+	~MapaCuadrado();
 
+	void generarMapa();
+	void reset();
+private:
+	void generarUnidades();
+};
 #endif

@@ -199,3 +199,112 @@ void MapaBasicoDummy::generarUnidades(){
 }
 
 // ================== ~MapaBasicoDummy ===================== //
+// ================== MapaCuadrado ===================== //
+
+MapaCuadrado::MapaCuadrado(IrrlichtDevice* dev,int num):MapaAprendizaje(dev,num){
+	driver = dev->getVideoDriver();
+	generarMapa();
+}
+
+MapaCuadrado::~MapaCuadrado(){
+	
+}
+
+void MapaCuadrado::generarMapa(){
+	int dimensionCuadrado=m_NumUnidades;
+	int inicioRectanguloInterior=MAPSIZE/4;
+	int finRectanguloInterior=(MAPSIZE/2)+inicioRectanguloInterior;
+	for (int i=0;i<MAPSIZE;i++){
+		for(int j=0;j<MAPSIZE;j++){
+			//0 transitable 1 no transitable
+			nuevoSuelo(j,i);
+			
+
+		}
+	}/*
+	for (int i=inicioRectanguloInterior;i<finRectanguloInterior;i+=3){
+		for(int j=inicioRectanguloInterior;j<finRectanguloInterior;j+=3){
+			if (i + 3 < finRectanguloInterior && j+3 < finRectanguloInterior)
+			{	
+				nuevoMuro(j, i);				
+			}
+			
+
+		}
+	}*/
+
+
+
+
+
+	generarUnidades();
+	
+}
+
+void MapaCuadrado::reset(){
+	for (int i = 0; i < m_NumUnidades; ++i)
+	{
+		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
+		position2di posicion = unidad->getPosition();
+
+
+		// aqui deberia borrar la unidad, pero peta >_<
+		nuevoSuelo(posicion.X,posicion.Y);
+
+	}
+	m_vecUnidades.clear();
+	generarUnidades();
+}
+
+void MapaCuadrado::generarUnidades(){
+	int numUnidadesLeft=0;
+	int finalMapaCuadradoUnidades=m_NumUnidades/2;
+	int i=0;
+		for(int j=1;j<=finalMapaCuadradoUnidades;j+=2){
+			if ( j <= finalMapaCuadradoUnidades && numUnidadesLeft<m_NumUnidades)
+			{	
+
+				EspadachinRedes* unidad=new EspadachinRedes(j,i);
+				unidad->aplicarTextura(driver);
+				IDibujable* aux = vTiles[i][j];
+				delete aux;
+				vTiles[i][j]=unidad;
+				m_vecUnidades.push_back(unidad);
+				unidad=new EspadachinRedes(i,j);
+				unidad->aplicarTextura(driver);
+				aux = vTiles[j][i];
+				delete aux;
+				vTiles[j][i]=unidad;
+				m_vecUnidades.push_back(unidad);
+				numUnidadesLeft++;
+			}
+			
+
+		}
+	i=finalMapaCuadradoUnidades-1;
+			for(int j=1;j<finalMapaCuadradoUnidades;j+=2){
+			if (j < finalMapaCuadradoUnidades && numUnidadesLeft<m_NumUnidades)
+			{	
+
+				EspadachinRedes* unidad=new EspadachinRedes(j,i);
+				unidad->aplicarTextura(driver);
+				IDibujable* aux = vTiles[i][j];
+				delete aux;
+				vTiles[i][j]=unidad;
+				m_vecUnidades.push_back(unidad);
+				unidad=new EspadachinRedes(i,j);
+				unidad->aplicarTextura(driver);
+				aux = vTiles[j][i];
+				delete aux;
+				vTiles[j][i]=unidad;
+				m_vecUnidades.push_back(unidad);
+				numUnidadesLeft++;
+			}
+			
+
+		}
+		cout<<"num unidades: "<<m_vecUnidades.size()<<endl;
+	
+}
+
+// ================== ~MapaBasicoDummy ===================== //
