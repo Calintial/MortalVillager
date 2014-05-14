@@ -106,6 +106,16 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 									mapa->setTipoEdificio(4);
 									hudmapa->selectButton(4);
 								}
+								else if((event.MouseInput.X>=458 && event.MouseInput.X<=520 && event.MouseInput.Y >= 524 && event.MouseInput.Y<=579))
+								{
+									hudmapa->selectButton(5);
+									//Implementar código de creación de aldeanos
+									Aldeano* u = (Aldeano*) gameEngine::addUserUnit(27,25,0);
+									u->aplicarTextura(pantallaDevice->getVideoDriver());
+									u->setPathfinding(mapa->getPathfinding());
+									u->Move(28,25);
+									hudmapa->selectButton(-1);
+								}
 								else{
 									if (mapa != NULL && hudmapa != NULL)
 									{
