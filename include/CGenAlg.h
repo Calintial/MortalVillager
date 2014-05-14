@@ -33,7 +33,7 @@ struct SGenome
 
 	double          dFitness;
 
-	SGenome():dFitness(0){}
+	SGenome():dFitness(1){}
 
 	SGenome( vector <double> w, double f): vecWeights(w), dFitness(f){}
 

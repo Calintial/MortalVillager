@@ -204,6 +204,104 @@ void MapaBasicoDummy::generarUnidades(){
 }
 
 // ================== ~MapaBasicoDummy ===================== //
+// ================== MapaBasicoMuroYUnidad ===================== //
+	
+MapaBasicoMuroYUnidad::MapaBasicoMuroYUnidad(IrrlichtDevice* dev,int num):MapaAprendizaje(dev,num){
+	driver = dev->getVideoDriver();
+	generarMapa();
+}
+
+MapaBasicoMuroYUnidad::~MapaBasicoMuroYUnidad(){
+
+}
+
+void MapaBasicoMuroYUnidad::generarMapa(){
+	for (int i=0;i<MAPSIZE;i++){
+		for(int j=0;j<MAPSIZE;j++){
+			//0 transitable 1 no transitable
+			nuevoSuelo(j,i);
+			
+
+		}
+	}
+	for (int i=0;i<MAPSIZE;i+=6){
+		for(int j=0;j<MAPSIZE;j+=6){
+			if (i + 6 < MAPSIZE && j+6 < MAPSIZE)
+			{	
+				for (int iteradorEsquina = 0; iteradorEsquina < 6; ++iteradorEsquina)
+				{
+					nuevoMuro(j, i + iteradorEsquina);
+					nuevoMuro(j + iteradorEsquina, i);
+				}
+
+				nuevoMuro(j + 2,i + 3);
+				nuevoMuro(j + 3,i + 3);
+				nuevoMuro(j + 3,i + 2);
+				nuevoMuro(j + 3,i + 4);
+				nuevoMuro(j + 4,i + 3);
+				
+			}
+			
+
+		}
+	}
+	generarUnidades();
+}
+
+void MapaBasicoMuroYUnidad::reset(vector<SGenome> poblacion){
+	for (int i = 0; i < m_NumUnidades; ++i)
+	{
+		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
+		position2di posicion = unidad->getPosition();
+
+		CUnidadesAprendizaje* enemigo = m_vecEnemigos[i];
+		position2di posicionEnemigo = enemigo->getPosition();
+		// aqui deberia borrar la unidad, pero peta >_<
+		nuevoSuelo(posicion.X,posicion.Y);
+		nuevoSuelo(posicionEnemigo.X,posicionEnemigo.Y);
+
+	}
+	m_vecUnidades.clear();
+	m_vecEnemigos.clear();
+	generarUnidades();
+	for (int i=0; i<m_NumUnidades; ++i)
+	{	
+		m_vecUnidades[i]->PutWeights(poblacion[i].vecWeights);
+		m_vecEnemigos[i]->PutWeights(poblacion[0].vecWeights);
+	}
+}
+
+void MapaBasicoMuroYUnidad::generarUnidades(){
+	//creamos las unidades 
+	int posX = 0;
+	int posY = 0;
+	int size = MAPSIZE / 6;
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		posY = i / size * 6 + 2;
+		posX = i % size * 6 + 2;
+ 		
+		EspadachinRedes* unidadDummy=new EspadachinRedes(posX,posY);
+		unidadDummy->aplicarTextura(driver);
+		IDibujable* aux = vTiles[posY][posX];
+		delete aux;
+		vTiles[posY][posX]=unidadDummy;
+		m_vecEnemigos.push_back(unidadDummy);
+		
+
+		EspadachinRedes* unidad=new EspadachinRedes(posX + 2,posY + 2);
+		unidad->aplicarTextura(driver);
+		aux = vTiles[posY + 2][posX + 2];
+		delete aux;
+		vTiles[posY + 2][posX + 2]=unidad;
+		m_vecUnidades.push_back(unidad);
+	}
+	m_vecUnidades.reserve(m_vecUnidades.size()*2);
+	m_vecUnidades.insert(m_vecUnidades.end(), m_vecEnemigos.begin(), m_vecEnemigos.end());
+}
+
+
+// ================== ~MapaBasicoMuroYUnidad ===================== //
 // ================== MapaCuadrado ===================== //
 
 MapaCuadrado::MapaCuadrado(IrrlichtDevice* dev,int num):MapaAprendizaje(dev,num){
@@ -349,4 +447,4 @@ void MapaCuadrado::generarUnidades(){
 	
 }
 
-// ================== ~MapaBasicoDummy ===================== //
+// ================== ~MapaCuadrado ===================== //

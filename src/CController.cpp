@@ -75,34 +75,21 @@ CController::~CController()
 
 }
 
-bool CController::tickRedNeuronal(){
-	outfile.open("GeneticMovimientos.txt", ios::app);
-	if (outfile.is_open())
-	{
-		outfile<<"##########################################################CController::Update:76"<<" mUnidades "<<m_NumUnidades<<" Ticks "<<m_iTicks<<"#####################################################"<<endl;
-
-
-	}
-
-	outfile.close();
-
-	for (int i=0; i<m_NumUnidades; ++i)
-
-	{
-		if (m_vecUnidades[i]->getLife() > 0)
+bool CController::tickRedNeuronalUnidad(CUnidadesAprendizaje* unidad, const int i){
+	if (unidad->getLife() > 0)
 		{
-			m_vecUnidades[i]->calcular8Objetos(matriz);
+			unidad->calcular8Objetos(matriz);
 			//Pintar();
 				//update the NN and position
 			outfile.open("GeneticMovimientos.txt", ios::app);
 			if (outfile.is_open())
 			{
-				outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->getPosicion().X <<","<<m_vecUnidades[i]->getPosicion().Y<<")"<<endl;
+				outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<unidad->Fitness()<<" y esta en la posición: ("<<unidad->getPosicion().X <<","<<unidad->getPosicion().Y<<")"<<endl;
 
 			}
 
 			outfile.close();
-			if (!m_vecUnidades[i]->Update(matriz))
+			if (!unidad->Update(matriz))
 			{
 
 					//error in processing the neural net
@@ -114,19 +101,19 @@ bool CController::tickRedNeuronal(){
 			outfile.open("GeneticMovimientos.txt", ios::app);
 			if (outfile.is_open())
 			{
-				outfile << "La unidad : "<<i<<" tiene de Fitness :"<<m_vecUnidades[i]->Fitness()<<" y esta en la posición: ("<<m_vecUnidades[i]->getPosicion().X <<","<<m_vecUnidades[i]->getPosicion().Y<<")"<<endl;
+				outfile << "La unidad : "<<i<<" tiene de Fitness :"<<unidad->Fitness()<<" y esta en la posición: ("<<unidad->getPosicion().X <<","<<unidad->getPosicion().Y<<")"<<endl;
 
 			}
 
 			outfile.close();
 
-			if(m_vecUnidades[i]->getAtaque()==1){
-				position2di atacando=m_vecUnidades[i]->getAtaqueMovimiento();
+			if(unidad->getAtaque()==1){
+				position2di atacando=unidad->getAtaqueMovimiento();
 
 				if(matriz->getTile(atacando.Y,atacando.X)!=NULL && matriz->getTile(atacando.Y,atacando.X)->getTipo()==3){
 
-					int dano = m_vecUnidades[i]->Attack((Unidades*)matriz->getTile(atacando.Y,atacando.X));
-					m_vecUnidades[i]->IncrementFitness((CUnidadesAprendizaje*) matriz->getTile(atacando.Y,atacando.X),((Unidades*)m_vecUnidades[i])->TrianguloArmas((Unidades*) matriz->getTile(atacando.Y,atacando.X)),m_pGA->BestFitness());
+					int dano = unidad->Attack((Unidades*)matriz->getTile(atacando.Y,atacando.X));
+					unidad->IncrementFitness((CUnidadesAprendizaje*) matriz->getTile(atacando.Y,atacando.X),((Unidades*)unidad)->TrianguloArmas((Unidades*) matriz->getTile(atacando.Y,atacando.X)),m_pGA->BestFitness());
 					
 					outfile.open("GeneticMovimientos.txt", ios::app);
 					if (outfile.is_open())
@@ -143,41 +130,58 @@ bool CController::tickRedNeuronal(){
 			}
 			else{
 
-				if(m_vecUnidades[i]->getMover()==1){
+				if(unidad->getMover()==1){
 					video::IVideoDriver* driver = device->getVideoDriver();
-					matriz->setTile(m_vecUnidades[i]->getPosicion(), new Suelo(m_vecUnidades[i]->getPosicion().X,m_vecUnidades[i]->getPosicion().Y));
-					((Suelo*) matriz->getTile(m_vecUnidades[i]->getPosicion().Y,m_vecUnidades[i]->getPosicion().X))->setIsometric(false);
-					matriz->getTile(m_vecUnidades[i]->getPosicion())->aplicarTextura(driver);
-					position2di moverse=m_vecUnidades[i]->getMovimiento();
+					matriz->setTile(unidad->getPosicion(), new Suelo(unidad->getPosicion().X,unidad->getPosicion().Y));
+					((Suelo*) matriz->getTile(unidad->getPosicion().Y,unidad->getPosicion().X))->setIsometric(false);
+					matriz->getTile(unidad->getPosicion())->aplicarTextura(driver);
+					position2di moverse=unidad->getMovimiento();
 					if(matriz->getTile(moverse.Y,moverse.X)->getTipo()==0){
-						//cout<<"Estoy en ("<<m_vecUnidades[i]->getPosition().X<<","<<m_vecUnidades[i]->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
-						m_vecUnidades[i]->setPosition(m_vecUnidades[i]->getMovimiento());
+						//cout<<"Estoy en ("<<unidad->getPosition().X<<","<<unidad->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
+						unidad->setPosition(unidad->getMovimiento());
 
 					}
 					
-					matriz->setTile(m_vecUnidades[i]->getPosicion(),m_vecUnidades[i]);
+					matriz->setTile(unidad->getPosicion(),unidad);
 				}
 			}
-				//update the chromos fitness score
-			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
-
 		}else{
-			position2di pos = m_vecUnidades[i]->getPosicion();
+			position2di pos = unidad->getPosicion();
 			if (pos.X >=0)
 			{
 				cout<<"##### HE MUERTO! POS: <"<<pos.X<<","<<pos.Y<<">"<<endl;
 				matriz->setTile(pos.Y,pos.X, new Suelo(pos.X,pos.Y));
 				((Suelo*) matriz->getTile(pos.Y,pos.X))->setIsometric(false);
 				matriz->getTile(pos.Y,pos.X)->aplicarTextura(driver);
-				m_vecUnidades[i]->setPosition(-1,-1);
+				unidad->setPosition(-1,-1);
 			}
 			
 			
 		}
+		return true;
+}
+
+bool CController::tickRedNeuronal(){
+	outfile.open("GeneticMovimientos.txt", ios::app);
+	if (outfile.is_open())
+	{
+		outfile<<"##########################################################CController::Update:76"<<" mUnidades "<<m_NumUnidades<<" Ticks "<<m_iTicks<<"#####################################################"<<endl;
+
 
 	}
-	for (int i=0; i<m_NumUnidades; ++i){
-		m_vecUnidades[i]->setFitness(m_vecUnidades[i]->Fitness()*m_vecUnidades[i]->getLife()/100);
+
+	outfile.close();
+
+	for (int i=0; i<m_NumUnidades; ++i)
+
+	{
+		tickRedNeuronalUnidad(m_vecUnidades[i],i);
+
+	}
+	
+	for (int i = m_NumUnidades; i < m_vecUnidades.size(); ++i)
+	{
+		tickRedNeuronalUnidad(m_vecUnidades[i],i);
 	}
 return true;
 
@@ -188,6 +192,12 @@ bool CController::redNeuronal(){
 	if (ticks)
 	{
 		tickRedNeuronal();
+	}else{
+		for (int i=0; i<m_NumUnidades; ++i){
+			m_vecUnidades[i]->setFitness(m_vecUnidades[i]->Fitness()*m_vecUnidades[i]->getLife()/100);
+			//update the chromos fitness score
+			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
+		}
 	}
 	return ticks;
 }
@@ -280,7 +290,7 @@ CUnidadesAprendizaje* CController::getUnidadPosicion(position2di pos){
 	
 	return (CUnidadesAprendizaje*) matriz->getTile(pos.Y,pos.X);
 
-};	
+}
 
 
 void CController::Pintar(){
@@ -403,13 +413,22 @@ void CController::mapa2(){
 }
 
 
+
 void CController::generarMapa(int tipoMapa){
 	if(tipoMapa==1){
 		matriz = new MapaBasicoDummy(device,m_NumUnidades);
 	}
 	else if(tipoMapa==2){
-			matriz= new MapaCuadrado(device,m_NumUnidades);
+		matriz = new MapaBasicoMuroYUnidad(device,m_NumUnidades);
+			
 	}
+	else if(tipoMapa==3){
+		matriz= new MapaCuadrado(device,m_NumUnidades);
+	}
+	else{
+		cerr<<"NO HAY MAPA: "<<tipoMapa<<endl;
+	}
+
 
 	m_vecUnidades = matriz->getUnidadesAprendizaje();
 	for (int i = 0; i < m_NumUnidades; ++i)

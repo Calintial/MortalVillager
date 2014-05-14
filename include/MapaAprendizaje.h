@@ -30,7 +30,7 @@ public:
 	void setTile(position2di,IDibujable*);
 	void setTile(int y,int x,IDibujable*);
 	IDibujable* getTile(int y,int x){return vTiles[y][x];};
-	IDibujable* getTile(position2di pos){getTile(pos.Y,pos.X);};
+	IDibujable* getTile(position2di pos){return getTile(pos.Y,pos.X);};
 
 	vector<CUnidadesAprendizaje*> getUnidadesAprendizaje() const {return m_vecUnidades;}
 
@@ -57,6 +57,21 @@ public:
 private:
 	void generarUnidades();
 };
+
+class MapaBasicoMuroYUnidad : public MapaAprendizaje
+{
+public:
+	MapaBasicoMuroYUnidad(IrrlichtDevice* dev,int);
+	~MapaBasicoMuroYUnidad();
+
+	void generarMapa();
+	void reset(vector<SGenome>);
+private:
+	void generarUnidades();
+
+	vector<CUnidadesAprendizaje*> m_vecEnemigos;
+};
+
 class MapaCuadrado: public MapaAprendizaje
 {
 public:

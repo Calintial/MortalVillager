@@ -10,7 +10,7 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	cantidadVecesCadaMapa=2;
 	cantidadIndice=0;
 	tipoMapa=1;
-	cantidadMapas=2;
+	cantidadMapas=3;
 	paused = false;
 	continuar = false;
 

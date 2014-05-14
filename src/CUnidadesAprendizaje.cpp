@@ -4,7 +4,7 @@
 //
 //-----------------------------------------------------------------------
 CUnidadesAprendizaje::CUnidadesAprendizaje(int x,int y):
-                             m_dFitness(0),
+                             m_dFitness(1),
                              m_moveX(0),
                              m_moveY(0),
                              m_ataqueX(0),
@@ -25,7 +25,7 @@ void CUnidadesAprendizaje::Reset()
 {
 	
 	move=0;
-	m_dFitness = 0;
+	m_dFitness = 1;
 	m_ataque = 0;
 	setLife(100);
 	m_moveX = 0;
