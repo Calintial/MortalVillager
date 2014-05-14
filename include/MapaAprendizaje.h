@@ -16,6 +16,7 @@ using namespace core;
 using namespace scene;
 
 class CUnidadesAprendizaje;
+class SGenome;
 
 class MapaAprendizaje : public mapa2D
 {
@@ -34,7 +35,7 @@ public:
 	vector<CUnidadesAprendizaje*> getUnidadesAprendizaje() const {return m_vecUnidades;}
 
 	virtual void generarMapa() = 0;
-	virtual void reset() = 0;
+	virtual void reset(vector<SGenome>) = 0;
 	
 protected:
 	void nuevoSuelo(int,int);
@@ -52,7 +53,7 @@ public:
 	~MapaBasicoDummy();
 
 	void generarMapa();
-	void reset();
+	void reset(vector<SGenome>);
 private:
 	void generarUnidades();
 };
