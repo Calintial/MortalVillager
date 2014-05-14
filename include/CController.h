@@ -89,6 +89,7 @@ public:
 	~CController();
 	CUnidadesAprendizaje* getUnidadPosicion(position2di pos);
 	//bool		Update();
+	bool tickRedNeuronalUnidad(CUnidadesAprendizaje* unidad, int i);
 	bool		tickRedNeuronal();
 	bool		redNeuronal();
 	bool		genetico();
