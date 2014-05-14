@@ -305,14 +305,23 @@ void mapa2D::AllocateMap(bool suelo)
 void mapa2D::IniciarUnidades()
 {
 	//Unidades IA
-	/*(gameEngine::addIAUnit(0,0,0))->aplicarTextura(driver);
-	(gameEngine::addIAUnit(28,20,3))->aplicarTextura(driver);*/
+	for(int i=188; i < 191; i++)
+	{
+		for(int j=190; j < 193; j++)
+		{
+			(gameEngine::addIAUnit(i,j,0))->aplicarTextura(driver);
+		}
+	}
 
 	//Unidades usuario
-	/*(gameEngine::addUserUnit(24,12,3))->aplicarTextura(driver);
-	(gameEngine::addUserUnit(30,15,3))->aplicarTextura(driver);
-	(gameEngine::addUserUnit(40,20,3))->aplicarTextura(driver);
-	(gameEngine::addUserUnit(34,17,3))->aplicarTextura(driver);*/
+
+	for(int i=11; i < 14; i++)
+	{
+		for(int j=10; j < 13; j++)
+		{
+			(gameEngine::addUserUnit(i,j,0))->aplicarTextura(driver);
+		}
+	}
 }
 
 void mapa2D::IniciarEdificios()
