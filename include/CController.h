@@ -84,7 +84,7 @@ public:
 	std::string versionGit;
 	std::ofstream outfile;
 	std::string nombreCarpeta;
-	CController(IrrlichtDevice* dev);
+	CController(IrrlichtDevice* dev,int tipoMapa);
 
 	~CController();
 	CUnidadesAprendizaje* getUnidadPosicion(position2di pos);
@@ -95,7 +95,7 @@ public:
 
 	void Pintar();
 	
-	void generarMapa();
+	void generarMapa(int tipoMapa);
 	void modificarUnidad(CUnidadesAprendizaje* unidad);
 	bool OnEvent(const SEvent& event);
 	void PintarInformacionUnidad();

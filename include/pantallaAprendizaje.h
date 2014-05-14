@@ -25,6 +25,10 @@ private:
 	CParams   g_Params;
 	bool paused;
 	bool continuar;
+		int cantidadVecesCadaMapa;
+	int cantidadIndice;
+	int tipoMapa;
+	int cantidadMapas;
 
 };
 #endif 

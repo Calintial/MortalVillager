@@ -237,7 +237,7 @@ void MapaCuadrado::generarMapa(){
 	
 }
 
-void MapaCuadrado::reset(){
+void MapaCuadrado::reset(vector<SGenome> poblacion){
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
@@ -250,6 +250,10 @@ void MapaCuadrado::reset(){
 	}
 	m_vecUnidades.clear();
 	generarUnidades();
+	for (int i=0; i<m_NumUnidades; ++i)
+	{	
+		m_vecUnidades[i]->PutWeights(poblacion[i].vecWeights);
+	}
 }
 void MapaCuadrado::generarSuelos(int inicio,int fin){
 

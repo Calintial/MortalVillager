@@ -21,14 +21,14 @@ std::string cogerCommit(){
 //	initilaize the sweepers, their brains and the GA factory
 //
 //-----------------------------------------------------------------------
-CController::CController(IrrlichtDevice* dev): m_NumUnidades(CParams::iNumUnidades), 
+CController::CController(IrrlichtDevice* dev, int tipoMapa): m_NumUnidades(CParams::iNumUnidades), 
 m_pGA(NULL),
 m_iTicks(0),
 m_iGenerations(0)
 {
 	device = dev;
 	driver = device->getVideoDriver();
-	generarMapa();
+	generarMapa(tipoMapa);
 	t=time(0);
 	struct tm * now=localtime(&t);
 	std::string tiempoo=std::string("")+std::to_string(now->tm_mon+1)+"_"+std::to_string(now->tm_mday)+"_"+std::to_string(now->tm_hour)+"_"+std::to_string(now->tm_min)+"_"+std::to_string(now->tm_sec);
@@ -403,10 +403,14 @@ void CController::mapa2(){
 }
 
 
-void CController::generarMapa(){
-	//matriz = new MapaBasicoDummy(device,m_NumUnidades);
-	//mapa2();
-	matriz= new MapaCuadrado(device,m_NumUnidades);
+void CController::generarMapa(int tipoMapa){
+	if(tipoMapa==1){
+		matriz = new MapaBasicoDummy(device,m_NumUnidades);
+	}
+	else if(tipoMapa==2){
+			matriz= new MapaCuadrado(device,m_NumUnidades);
+	}
+
 	m_vecUnidades = matriz->getUnidadesAprendizaje();
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{

@@ -6,8 +6,11 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	env = pantallaDevice->getGUIEnvironment();
 	setTipo(tipo);
 	srand (time(NULL));
-	aprendizaje = new CController(pantallaDevice);
-
+	aprendizaje = new CController(pantallaDevice,1);
+	cantidadVecesCadaMapa=2;
+	cantidadIndice=0;
+	tipoMapa=1;
+	cantidadMapas=2;
 	paused = false;
 	continuar = false;
 
@@ -30,7 +33,7 @@ void PantallaAprendizaje::pintarPantalla(vector<IDibujable*>* ia_units,vector<ID
 /*		int cont=1;  	
 for(int i=0;i<cont;i++){
 */
-	
+
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	pantallaDevice->setEventReceiver(this);
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(32*20,0,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
@@ -40,8 +43,21 @@ for(int i=0;i<cont;i++){
 	{
 	//	cerr<<"ejecutando"<<endl;
 		if(!aprendizaje->redNeuronal()){
-			aprendizaje->genetico();		
+			aprendizaje->genetico();
+			cantidadIndice++;		
 		}
+		
+		if(cantidadIndice==cantidadVecesCadaMapa){
+			tipoMapa++;
+			if(tipoMapa>cantidadMapas){
+				paused=true;
+			}
+			else{
+				aprendizaje = new CController(pantallaDevice,tipoMapa);
+				cantidadIndice=0;
+			}
+		}
+
 		continuar = false;
 	}else{
 	//	cerr<<"pausado"<<endl;
