@@ -58,4 +58,18 @@ private:
 	void generarUnidades();
 };
 
+class MapaBasicoMuroYUnidad : public MapaAprendizaje
+{
+public:
+	MapaBasicoMuroYUnidad(IrrlichtDevice* dev,int);
+	~MapaBasicoMuroYUnidad();
+
+	void generarMapa();
+	void reset(vector<SGenome>);
+private:
+	void generarUnidades();
+
+	vector<CUnidadesAprendizaje*> m_vecEnemigos;
+};
+
 #endif

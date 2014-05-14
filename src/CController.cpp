@@ -404,7 +404,7 @@ void CController::mapa2(){
 
 
 void CController::generarMapa(){
-	matriz = new MapaBasicoDummy(device,m_NumUnidades);
+	matriz = new MapaBasicoMuroYUnidad(device,m_NumUnidades);
 	//mapa2();
 
 	m_vecUnidades = matriz->getUnidadesAprendizaje();
