@@ -79,7 +79,7 @@ public:
 	~MapaCuadrado();
 	void generarSuelos(int inicio,int fin);
 	void generarMapa();
-	void reset();
+	void reset(vector<SGenome>);
 private:
 	void generarUnidades();
 };
