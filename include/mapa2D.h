@@ -90,6 +90,7 @@ public:
 	static position2di twoDToIso(int x, int y);
 	static position2di getTileCoordinates(int x, int y);
 	static position2di getIsoFromTile(int x, int y);
+	position2di getScreenCoordinates(position2di pos);
 
 	void setSombra(bool s);
 	bool getSombra();
@@ -135,6 +136,7 @@ private:
 	bool Sel_Pulsado;
 	position2di Sel_Inicio;
 	position2di Sel_Fin;
+	bool ponertextura;
 
 	
 	//Texturas
