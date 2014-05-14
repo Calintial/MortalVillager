@@ -11,7 +11,7 @@
 CGenAlg::CGenAlg(int	  popsize,
                  double	MutRat,
                  double	CrossRat,
-                 int	  numweights) :	m_iPopSize(popsize),
+                 int	  numweights,std::string nombreCarpeta) :	m_iPopSize(popsize),
                                       m_dMutationRate(MutRat),
 										                  m_dCrossoverRate(CrossRat),
 										                  m_iChromoLength(numweights),
@@ -22,6 +22,7 @@ CGenAlg::CGenAlg(int	  popsize,
 										                  m_dWorstFitness(99999999),
 										                  m_dAverageFitness(0)
 {
+	carpeta=nombreCarpeta;
 	//initialise population with chromosomes consisting of random
 	//weights and all fitnesses set to zero
 	for (int i=0; i<m_iPopSize; ++i)
@@ -309,6 +310,7 @@ void CGenAlg::GrabNBest(int	            NBest,
 //---------------------------------------------------------------------
 void CGenAlg::CalculateBestWorstAvTot()
 {
+	std::string excel=carpeta+"/Excel.txt";
 	m_dTotalFitness = 0;
 	
 	double HighestSoFar = 0;
@@ -352,7 +354,7 @@ void CGenAlg::CalculateBestWorstAvTot()
 			}
 			outfile.close();
 
- 	outfile.open("Excel.txt", ios::app);
+ 	outfile.open(excel, ios::app);
  			if (outfile.is_open())
  			{
  				

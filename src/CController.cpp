@@ -31,9 +31,9 @@ m_iGenerations(0)
 	generarMapa();
 	t=time(0);
 	struct tm * now=localtime(&t);
-	std::string tiempoo=std::string("")+std::to_string(now->tm_mon)+"_"+std::to_string(now->tm_mday)+"_"+std::to_string(now->tm_hour)+"_"+std::to_string(now->tm_min)+"_"+std::to_string(now->tm_sec);
+	std::string tiempoo=std::string("")+std::to_string(now->tm_mon+1)+"_"+std::to_string(now->tm_mday)+"_"+std::to_string(now->tm_hour)+"_"+std::to_string(now->tm_min)+"_"+std::to_string(now->tm_sec);
 	versionGit=cogerCommit();
-	nombreCarpeta=std::string("../logs/")+tiempoo+versionGit;
+	nombreCarpeta=std::string("../logs/")+tiempoo+"_"+versionGit;
 	std::string carpeta=std::string("mkdir \"")+nombreCarpeta+std::string("\"");
 
 	system(carpeta.c_str());
@@ -46,7 +46,7 @@ m_iGenerations(0)
 	m_pGA = new CGenAlg(m_NumUnidades,
 		CParams::dMutationRate,
 		CParams::dCrossoverRate,
-		m_NumWeightsInNN);
+		m_NumWeightsInNN,nombreCarpeta);
 
 	//Get the weights from the GA and insert into the sweepers brains
 	m_vecThePopulation = m_pGA->GetChromos();

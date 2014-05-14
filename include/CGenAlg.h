@@ -113,11 +113,12 @@ private:
 
 
 public:
+	std::string carpeta;
 	std::ofstream outfile;
 	CGenAlg(int 		popsize,
 			    double	MutRat,
 			    double	CrossRat,
-			    int	  	numweights);
+			    int	  	numweights,std::string nombreCarpeta);
 
 	//this runs the GA for one generation.
 	vector<SGenome>	Epoch(vector<SGenome> &old_pop,int n_generation);
