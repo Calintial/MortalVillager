@@ -84,7 +84,7 @@ public:
 	std::string versionGit;
 	std::ofstream outfile;
 	std::string nombreCarpeta;
-	CController(IrrlichtDevice* dev,int tipoMapa);
+	CController(IrrlichtDevice* dev);
 
 	~CController();
 	CUnidadesAprendizaje* getUnidadPosicion(position2di pos);

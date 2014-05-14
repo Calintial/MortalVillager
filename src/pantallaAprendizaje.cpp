@@ -6,7 +6,7 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	env = pantallaDevice->getGUIEnvironment();
 	setTipo(tipo);
 	srand (time(NULL));
-	aprendizaje = new CController(pantallaDevice,1);
+	aprendizaje = new CController(pantallaDevice);
 	cantidadVecesCadaMapa=2;
 	cantidadIndice=0;
 	tipoMapa=1;
@@ -53,7 +53,7 @@ for(int i=0;i<cont;i++){
 				paused=true;
 			}
 			else{
-				aprendizaje = new CController(pantallaDevice,tipoMapa);
+				aprendizaje->generarMapa(tipoMapa);
 				cantidadIndice=0;
 			}
 		}
