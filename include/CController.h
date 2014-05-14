@@ -25,6 +25,7 @@
 #include "gameEngine.h"
 #include <fstream>
 #include "MapaAprendizaje.h"
+#include <ctime>
 using namespace std;
 
 const int TILE_W	= 32;
@@ -79,7 +80,10 @@ private:
 	void guardarPesos();
 
 public:
+	time_t t;
+	std::string versionGit;
 	std::ofstream outfile;
+	std::string nombreCarpeta;
 	CController(IrrlichtDevice* dev);
 
 	~CController();
