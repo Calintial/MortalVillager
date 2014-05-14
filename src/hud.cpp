@@ -152,6 +152,11 @@ void hud::paint(){
 				driver->draw2DImage(hud_buttons, position2di(396,524), rect<s32>(420, 0, 480, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 			else
 				driver->draw2DImage(hud_buttons, position2di(396,524), rect<s32>(360, 0, 420, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			
+			if(button_selected == 5)
+				driver->draw2DImage(hud_buttons, position2di(458,524), rect<s32>(540, 0, 600, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+			else
+				driver->draw2DImage(hud_buttons, position2di(458,524), rect<s32>(480, 0, 540, 55), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 
 			font->draw(L"Información del personaje:",
 				core::rect<s32>(25,425,25,425),
