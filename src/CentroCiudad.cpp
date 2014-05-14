@@ -5,7 +5,7 @@ CentroCiudad::CentroCiudad() : edificio(0)
 {
 }
 
-CentroCiudad::CentroCiudad(int x, int y) : edificio(3,x,y)
+CentroCiudad::CentroCiudad(int x, int y, bool usuario) : edificio(3,x,y,usuario)
 {
 }
 

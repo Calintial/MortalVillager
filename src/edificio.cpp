@@ -8,12 +8,13 @@ edificio::edificio(int t)
 	setPintable(true);
 }
 
-edificio::edificio(int t,int x,int y)
+edificio::edificio(int t,int x,int y,bool usuario)
 {
 	setTipo(2);
 	setClase(t);
 	setPosition(x,y);
 	setPintable(true);
+	de_usuario = usuario;
 }
 
 

@@ -55,7 +55,7 @@ public:
 
 	static IDibujable* addIAUnit(int,int,int);
 	static IDibujable* addUserUnit(int,int,int);
-	static IDibujable* addBuildings(int,int,int);
+	static IDibujable* addBuildings(int,int,int,bool);
 
 	void sleep(unsigned int);
 	static Current stado;

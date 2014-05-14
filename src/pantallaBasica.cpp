@@ -110,10 +110,15 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 								{
 									hudmapa->selectButton(5);
 									//Implementar código de creación de aldeanos
-									Aldeano* u = (Aldeano*) gameEngine::addUserUnit(27,25,0);
-									u->aplicarTextura(pantallaDevice->getVideoDriver());
-									u->setPathfinding(mapa->getPathfinding());
-									u->Move(28,25);
+									if(gameEngine::recursos_jugador >= 100)
+									{
+										Aldeano* u = (Aldeano*) gameEngine::addUserUnit(5,3,0);
+										u->aplicarTextura(pantallaDevice->getVideoDriver());
+										u->setPathfinding(mapa->getPathfinding());
+										u->Move(11,10);
+										gameEngine::recursos_jugador = gameEngine::recursos_jugador - 100;
+									}
+
 									hudmapa->selectButton(-1);
 								}
 								else{

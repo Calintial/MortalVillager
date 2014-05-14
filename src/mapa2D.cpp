@@ -295,16 +295,32 @@ void mapa2D::AllocateMap(bool suelo)
 			}
 		}
 		
-		//AQUI PONER COSAS DE INICIO
-		(gameEngine::addIAUnit(0,0,0))->aplicarTextura(driver);
-		(gameEngine::addIAUnit(28,20,3))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(24,12,3))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(30,15,3))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(40,20,3))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(34,17,3))->aplicarTextura(driver);
+		IniciarUnidades();
+		IniciarEdificios();
 	}
 }
 
+void mapa2D::IniciarUnidades()
+{
+	//Unidades IA
+	/*(gameEngine::addIAUnit(0,0,0))->aplicarTextura(driver);
+	(gameEngine::addIAUnit(28,20,3))->aplicarTextura(driver);*/
+
+	//Unidades usuario
+	/*(gameEngine::addUserUnit(24,12,3))->aplicarTextura(driver);
+	(gameEngine::addUserUnit(30,15,3))->aplicarTextura(driver);
+	(gameEngine::addUserUnit(40,20,3))->aplicarTextura(driver);
+	(gameEngine::addUserUnit(34,17,3))->aplicarTextura(driver);*/
+}
+
+void mapa2D::IniciarEdificios()
+{
+	//Edificios IA
+	
+
+	//Edificios usuario
+	(gameEngine::addBuildings(5,3,0,true))->aplicarTextura(driver);
+}
 
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
 void mapa2D::GenerarMapa()
@@ -556,6 +572,7 @@ vector<IDibujable*>* mapa2D::getUser_units(){
 vector<IDibujable*>* mapa2D::getBuildings(){
 	return buildings;
 }
+
 void mapa2D::DrawBuildings()
 {
 	position2di DrawPosition;
@@ -563,12 +580,12 @@ void mapa2D::DrawBuildings()
 	int n_build = buildings->size();	
 	for(int i=0; i<n_build; i++)
 	{
-		if(buildings->at(i)->isPintable())
-		{
+		/*if(buildings->at(i)->isPintable())
+		{*/
 			DrawPosition = getDrawPosition(buildings->at(i)->getPosition());
 			DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
 			buildings->at(i)->Pintar(driver,DrawPosition.X  - 25, DrawPosition.Y);
-		}
+		//}
 	}
 }
 
@@ -1080,25 +1097,25 @@ void mapa2D::colocarEdificio(position2di pos_colocar){
 
 	switch(getTipoEdificio())
 	{
-		case 0: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0); break;
+		case 0: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0,true); break;
 		case 1: if(gameEngine::recursos_jugador >= 400)
 				{
-					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1);
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1,true);
 					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 400;
 				} break;
 		case 2: if(gameEngine::recursos_jugador >= 600)
 				{
-					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2);
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2,true);
 					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
 				} break;
 		case 3: if(gameEngine::recursos_jugador >= 600)
 				{
-					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3);
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3,true);
 					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
 				} break;
 		case 4: if(gameEngine::recursos_jugador >= 600)
 				{
-					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4);
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4,true);
 					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
 				} break;
 	}

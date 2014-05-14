@@ -10,7 +10,7 @@
 class Arqueria  : public edificio{
 public:
 	Arqueria();
-	Arqueria(int, int);
+	Arqueria(int, int,bool);
 	~Arqueria();
 
 	virtual void Pintar(IVideoDriver*,int,int);

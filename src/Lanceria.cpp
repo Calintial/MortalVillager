@@ -5,7 +5,7 @@ Lanceria::Lanceria() : edificio(4)
 {
 }
 
-Lanceria::Lanceria(int x, int y) : edificio(3,x,y)
+Lanceria::Lanceria(int x, int y, bool usuario) : edificio(3,x,y,usuario)
 {
 }
 

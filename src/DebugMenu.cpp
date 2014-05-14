@@ -390,7 +390,7 @@ bool DebugMenu::OnEvent(const SEvent& event)
 				pos_colocar = mapa->getTileCoordinates(pos_colocar.X,pos_colocar.Y);
 				cout<<"Colocar edificio en:"<<pos_colocar.X << "," << pos_colocar.Y <<endl;
 
-				(gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0)->aplicarTextura(driver));
+				(gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0,true)->aplicarTextura(driver));
 				cout<<"colocar"<<endl;
 			}
 			else if(event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN)
