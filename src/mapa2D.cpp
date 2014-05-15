@@ -1042,27 +1042,36 @@ bool mapa2D::puede_colocar(position2di pos)
 	{
 		for(int y = pos.Y; y < pos.Y + 5; y++)
 		{
-			if(getTile(y,x)->getTipo() == 1)
+			IDibujable* tile = getTile(y,x);
+			if(tile != NULL)
+			{
+				if(getTile(y,x)->getTipo() == 1)
+				{
+					return false;
+				}
+				
+
+				for(int i=0; i<ia_units->size(); i++)
+				{
+					if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
+					{
+						return false;
+					}
+				}
+
+				for(int i=0; i<user_units->size(); i++)
+				{
+					if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
+					{
+						return false;
+					}
+				}
+			}
+			else
 			{
 				return false;
 			}
-			
 
-			for(int i=0; i<ia_units->size(); i++)
-			{
-				if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
-				{
-					return false;
-				}
-			}
-
-			for(int i=0; i<user_units->size(); i++)
-			{
-				if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
-				{
-					return false;
-				}
-			}
 		}
 	}
 
