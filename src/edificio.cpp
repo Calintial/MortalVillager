@@ -6,6 +6,7 @@ edificio::edificio(int t)
 	setClase(t);
 	setPosition(0,0);
 	setPintable(true);
+	de_usuario = true;
 }
 
 edificio::edificio(int t,int x,int y,bool usuario)

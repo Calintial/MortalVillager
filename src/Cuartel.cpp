@@ -1,7 +1,7 @@
 #include "Cuartel.h"
 
 
-Cuartel::Cuartel() : edificio(3)
+Cuartel::Cuartel() : edificio(2)
 {
 }
 
