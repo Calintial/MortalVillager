@@ -31,6 +31,7 @@ public:
 	void setTile(int y,int x,IDibujable*);
 	IDibujable* getTile(int y,int x){return vTiles[y][x];};
 	IDibujable* getTile(position2di pos){return getTile(pos.Y,pos.X);};
+	void setUnidadSeleccionada(Unidades* unit){unidad_seleccionada = unit;}
 
 	vector<CUnidadesAprendizaje*> getUnidadesAprendizaje() const {return m_vecUnidades;}
 
@@ -44,6 +45,8 @@ protected:
 	Unidades* unidad_seleccionada;
 	vector<CUnidadesAprendizaje*> m_vecUnidades;
 	int m_NumUnidades;
+private:
+	IGUIFont* font;
 };
 
 class MapaBasicoDummy : public MapaAprendizaje

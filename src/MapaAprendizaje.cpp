@@ -8,6 +8,7 @@ MapaAprendizaje::MapaAprendizaje(IrrlichtDevice* dev, int num):mapa2D(dev),m_Num
 	// cosas del constructor del mapa
 	unidad_seleccionada = NULL;
 	driver = MapaDevice->getVideoDriver();
+	font = dev->getGUIEnvironment()->getFont("../media/fonthaettenschweiler.bmp");
 	//generarMapa();
 }
 
@@ -59,7 +60,41 @@ void MapaAprendizaje::Pintar()
 }
 
 void MapaAprendizaje::PintarInformacionUnidad(){
-	// TODO -> hay que copiarlo de mapa2D.cpp
+	vector<ObjetosCercanos> objCercanos = ((CUnidadesAprendizaje*) unidad_seleccionada)->getVectorObjetos();
+	core::stringw Vida="Vida: ";
+	Vida+=unidad_seleccionada->getLife();
+	core::stringw Ataque="Ataque: ";
+	Ataque+= unidad_seleccionada->getAttackValue();
+	core::stringw Posicion="Posicion: ";
+	Posicion+= unidad_seleccionada->getPosition().X;
+	Posicion+= ",";
+	Posicion+= unidad_seleccionada->getPosition().Y;
+
+
+	font->draw(Vida,
+		core::rect<s32>(650,100,650,100),
+		video::SColor(255,0,0,0));
+	font->draw(Ataque,
+		core::rect<s32>(750,100,750,100),
+		video::SColor(255,0,0,0));
+	font->draw(Posicion,
+		core::rect<s32>(850,100,850,100),
+		video::SColor(255,0,0,0));
+
+
+	for(ObjetosCercanos objeto: objCercanos){
+		position2di drawPos = position2di(objeto.posicion.X*TILE_WIDTH, objeto.posicion.Y * TILE_HEIGHT);
+		//Pinta
+		if (objeto.tipo == 1) // muro
+		{
+			driver->draw2DRectangle(video::SColor(255,0,255,0),core::rect<s32>(drawPos,drawPos + position2di(TILE_WIDTH,TILE_HEIGHT)));
+		}else if (objeto.tipo == 3) // unidad?
+		{
+			driver->draw2DRectangle(video::SColor(255,0,255,255),core::rect<s32>(drawPos,drawPos + position2di(TILE_WIDTH,TILE_HEIGHT)));
+		}else{// lo que sea...
+			driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(drawPos,drawPos + position2di(TILE_WIDTH,TILE_HEIGHT)));
+		}
+	}
 }
 
 void MapaAprendizaje::setTile(position2di pos,IDibujable* elem){
