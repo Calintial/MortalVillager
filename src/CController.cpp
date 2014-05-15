@@ -449,7 +449,7 @@ void CController::ponerWeightFichero(){
 	ifstream myReadFile;
 	int numFilas=0;
 	int numUnidades=0;
-	myReadFile.open(Red,ios::in);
+	myReadFile.open(red,ios::in);
  	if (myReadFile.is_open()) {
 
  		while (!myReadFile.eof()) {
@@ -458,7 +458,7 @@ void CController::ponerWeightFichero(){
     		stringstream ss(cadena);
 
     		ss>>buf;
-    		split(parser, buf, is_any_of(","));
+    		boost::split(parser, buf, boost::is_any_of(","));
     		for(std::string & weight : parser){
     			weights.push_back(atof(weight.c_str()));
     		}

@@ -26,6 +26,7 @@
 #include <fstream>
 #include "MapaAprendizaje.h"
 #include <ctime>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 
