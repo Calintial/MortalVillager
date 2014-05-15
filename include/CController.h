@@ -27,7 +27,7 @@
 #include "MapaAprendizaje.h"
 #include <ctime>
 #include <boost/algorithm/string.hpp>
-
+#include <iomanip>
 using namespace std;
 
 const int TILE_W	= 32;
@@ -87,6 +87,7 @@ public:
 	std::ofstream outfile;
 	std::string nombreCarpeta;
 	std::string red;
+	vector<double > prueba;
 	CController(IrrlichtDevice* dev);
 
 	~CController();

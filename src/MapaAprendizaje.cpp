@@ -158,7 +158,7 @@ void MapaBasicoDummy::generarMapa(){
 	
 }
 
-void MapaBasicoDummy::reset(vector<SGenome> poblacion){
+void MapaBasicoDummy::reset(const vector<SGenome>& poblacion){
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
@@ -248,7 +248,7 @@ void MapaBasicoMuroYUnidad::generarMapa(){
 	generarUnidades();
 }
 
-void MapaBasicoMuroYUnidad::reset(vector<SGenome> poblacion){
+void MapaBasicoMuroYUnidad::reset(const vector<SGenome>& poblacion){
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
@@ -335,7 +335,7 @@ void MapaCuadrado::generarMapa(){
 	
 }
 
-void MapaCuadrado::reset(vector<SGenome> poblacion){
+void MapaCuadrado::reset(const vector<SGenome>&  poblacion){
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		CUnidadesAprendizaje* unidad = m_vecUnidades[i];

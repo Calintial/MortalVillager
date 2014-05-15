@@ -69,7 +69,7 @@ public:
 
 	double		Fitness()const{return m_dFitness;}
   
-  void      PutWeights(vector<double> &w){m_ItsBrain.PutWeights(w);}
+  void      PutWeights(const vector<double> &w){m_ItsBrain.PutWeights(w);}
 
   int       GetNumberOfWeights()const{return m_ItsBrain.GetNumberOfWeights();}
   void Pintar(IVideoDriver*,int,int);

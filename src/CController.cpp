@@ -218,12 +218,18 @@ bool CController::genetico(){
 
 		//insert the new (hopefully)improved brains back into the sweepers
     //and reset their positions etc
-    
-	guardarPesos();
+    vector<double> pesoPrincipio=m_vecThePopulation[0].vecWeights;
+    guardarPesos();
 	matriz->reset(m_vecThePopulation);
 	m_vecUnidades = matriz->getUnidadesAprendizaje();
-	
+	prueba=m_vecUnidades[0]->getCNeuralWeight();
 
+	for (int i = 0; i < pesoPrincipio.size(); ++i)
+	{
+		if(pesoPrincipio[i]!=prueba[i]){
+			cout<<"No son iguales"<<endl;
+		}
+	}
 	//}
 
 	for (int i=0; i<m_NumUnidades; ++i)
@@ -246,7 +252,7 @@ void CController::guardarPesos(){
 			pesosActualesFile<<m_vecThePopulation[i].vecWeights[0];
 			for (int j = 1; j < m_vecThePopulation[i].vecWeights.size(); ++j)
 			{
-				pesosActualesFile<<","<<m_vecThePopulation[i].vecWeights[j];
+				pesosActualesFile<<","<<m_vecThePopulation[i].vecWeights[j]<<std::setprecision(20);
 			}
 			pesosActualesFile<<endl;
 		}
@@ -437,8 +443,14 @@ void CController::generarMapa(int tipoMapa){
 		m_vecUnidades[i]->calcular8Objetos(matriz);
 	}
 	if(tipoMapa!=1){
+		ponerWeightFichero();
 		vector<double> vecW=m_vecUnidades[0]->getCNeuralWeight();
-		cout<<vecW[0]<<endl;
+		for (int i = 0; i < vecW.size(); ++i)
+		{
+			if(vecW[i]!=prueba[i]){
+				cout<<"ERROR DE CAMBIO DE MAPA CON LOS PESOS"<<endl;
+			}
+		}
 	}
 
 }
@@ -448,7 +460,7 @@ void CController::ponerWeightFichero(){
 	vector<std::string> parser;
 	ifstream myReadFile;
 	int numFilas=0;
-	int numUnidades=0;
+
 	myReadFile.open(red,ios::in);
  	if (myReadFile.is_open()) {
 
@@ -462,14 +474,9 @@ void CController::ponerWeightFichero(){
     		for(std::string & weight : parser){
     			weights.push_back(atof(weight.c_str()));
     		}
+    		m_vecUnidades[numFilas]->PutWeights(weights);
     		numFilas++;
-    		if(numFilas==m_NumUnidades){
-    			numFilas=0;
-    			m_vecUnidades[numUnidades]->PutWeights(weights);
-    			weights.clear();
-    			numUnidades++;
-    		}
-	 		if(numUnidades==m_NumUnidades){
+	 		if(numFilas==m_NumUnidades){
 	 			break;
 	 		}
  		}

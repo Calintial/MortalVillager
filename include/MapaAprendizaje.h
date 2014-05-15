@@ -35,7 +35,7 @@ public:
 	vector<CUnidadesAprendizaje*> getUnidadesAprendizaje() const {return m_vecUnidades;}
 
 	virtual void generarMapa() = 0;
-	virtual void reset(vector<SGenome>) = 0;
+	virtual void reset(const vector<SGenome> &) = 0;
 	
 protected:
 	void nuevoSuelo(int,int);
@@ -53,7 +53,7 @@ public:
 	~MapaBasicoDummy();
 
 	void generarMapa();
-	void reset(vector<SGenome>);
+	void reset(const vector<SGenome> &);
 private:
 	void generarUnidades();
 };
@@ -65,7 +65,7 @@ public:
 	~MapaBasicoMuroYUnidad();
 
 	void generarMapa();
-	void reset(vector<SGenome>);
+	void reset(const vector<SGenome> &);
 private:
 	void generarUnidades();
 
@@ -79,7 +79,7 @@ public:
 	~MapaCuadrado();
 	void generarSuelos(int inicio,int fin);
 	void generarMapa();
-	void reset(vector<SGenome>);
+		void reset(const vector<SGenome> &);
 private:
 	void generarUnidades();
 };
