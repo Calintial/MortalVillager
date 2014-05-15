@@ -114,10 +114,14 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 		position2di pos_grid = getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
 
 		int tipo = 0;
-		if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado() != NULL)
+		if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X) != NULL)
 		{
-			tipo = getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado()->getTipo();
+			if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado() != NULL)
+			{
+				tipo = getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado()->getTipo();
+			}
 		}
+
 
 		switch(event.MouseInput.Event)
 		{
