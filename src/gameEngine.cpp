@@ -12,6 +12,10 @@ vector<edificio*> gameEngine::Add_Buildings;
 int gameEngine::recursos_jugador = 1000;
 int gameEngine::recursos_ia = 1000;
 
+int gameEngine::granjas_usuario = 0;
+int gameEngine::granjas_ia = 0;
+
+
 gameEngine::gameEngine()
 {
 	gameState = 0;
@@ -20,12 +24,14 @@ gameEngine::gameEngine()
 	
 	ia = new intelEngine(&IAUnits,&UserUnits);
 
+
 }
 
 gameEngine::~gameEngine()
 {
 	delete graphics;
 	thread_resources.join();
+
 }
 
 void gameEngine::run()
@@ -109,16 +115,16 @@ IDibujable* gameEngine::addIAUnit(int x,int y,int tipo)
 }
 
 
-IDibujable* gameEngine::addBuildings(int x,int y, int tipo)
+IDibujable* gameEngine::addBuildings(int x,int y, int tipo, bool usuario)
 {
 	edificio* new_build;
 	switch(tipo)
 	{
-		case 0: new_build = new CentroCiudad(x,y); break;
-		case 1: new_build = new Granja(x,y); break;
-		case 2: new_build = new Cuartel(x,y); break;
-		case 3: new_build = new Arqueria(x,y); break;
-		case 4: new_build = new Lanceria(x,y); break;
+		case 0: new_build = new CentroCiudad(x,y,usuario); break;
+		case 1: new_build = new Granja(x,y,usuario); if(usuario) granjas_usuario++; else granjas_ia++; break;
+		case 2: new_build = new Cuartel(x,y,usuario); break;
+		case 3: new_build = new Arqueria(x,y,usuario); break;
+		case 4: new_build = new Lanceria(x,y,usuario); break;
 		
 	}
 
@@ -159,8 +165,8 @@ void gameEngine::scheduler (int variables)
   while (!stado.sfinal()){
   	if(stado.is_ingame())
   	{
-		recursos_jugador+=10;
-		recursos_ia+=10;
+		recursos_jugador+=10 * (granjas_usuario+1);
+		recursos_ia+=10  * (granjas_ia+1);
 		cout<<recursos_jugador<<endl;
 	    sleep (variables);
   	}

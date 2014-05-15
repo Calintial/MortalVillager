@@ -171,6 +171,9 @@ private:
 	vector<int>* ia_selvector;
 	vector<int>* user_selvector;
 
+	void IniciarUnidades();
+	void IniciarEdificios();
+
 };
 
 #endif

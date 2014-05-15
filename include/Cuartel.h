@@ -10,7 +10,7 @@
 class Cuartel  : public edificio{
 public:
 	Cuartel();
-	Cuartel(int, int);
+	Cuartel(int, int,bool);
 	~Cuartel();
 
 	virtual void Pintar(IVideoDriver*,int,int);

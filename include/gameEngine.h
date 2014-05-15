@@ -55,7 +55,7 @@ public:
 
 	static IDibujable* addIAUnit(int,int,int);
 	static IDibujable* addUserUnit(int,int,int);
-	static IDibujable* addBuildings(int,int,int);
+	static IDibujable* addBuildings(int,int,int,bool);
 
 	void sleep(unsigned int);
 	static Current stado;
@@ -66,6 +66,8 @@ public:
 
 	static int recursos_jugador;
 	static int recursos_ia;
+	static int granjas_usuario;
+	static int granjas_ia;
 
 	int FPS = 25;
 	int SALTO_TICKS_RELOJ = 3500 / FPS; 

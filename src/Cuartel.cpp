@@ -1,11 +1,11 @@
 #include "Cuartel.h"
 
 
-Cuartel::Cuartel() : edificio(3)
+Cuartel::Cuartel() : edificio(2)
 {
 }
 
-Cuartel::Cuartel(int x, int y) : edificio(3,x,y)
+Cuartel::Cuartel(int x, int y, bool usuario) : edificio(2,x,y,usuario)
 {
 }
 
