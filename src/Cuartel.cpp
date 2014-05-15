@@ -5,7 +5,7 @@ Cuartel::Cuartel() : edificio(3)
 {
 }
 
-Cuartel::Cuartel(int x, int y, bool usuario) : edificio(3,x,y,usuario)
+Cuartel::Cuartel(int x, int y, bool usuario) : edificio(2,x,y,usuario)
 {
 }
 

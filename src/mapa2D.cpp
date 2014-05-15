@@ -113,6 +113,12 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 	{
 		position2di pos_grid = getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
 
+		int tipo = 0;
+		if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado() != NULL)
+		{
+			tipo = getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado()->getTipo();
+		}
+
 		switch(event.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
@@ -215,7 +221,7 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 			
 			case EMIE_RMOUSE_PRESSED_DOWN:
 					//MIRAR COMO HACER MOVER TODOS
-					if(user_selvector->size() >= 1)
+					if(user_selvector->size() >= 1 && tipo != 2)
 					{
 						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl;
 						for(int i=0; i<user_selvector->size(); i++)
@@ -246,6 +252,25 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 						recol_Rango=1;
 						recol_RangoAux=0;
 						reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
+					}
+					else if(user_selvector->size() == 1 && tipo == 2)
+					{
+						Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(0)));
+						if(unidad->getType() == 0 && gameEngine::recursos_jugador >= 300)
+						{
+							cout<<"Transformacion!!"<<endl;
+							int clase = ((edificio*)getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado())->getClase();
+							user_units->erase(user_units->begin() + user_selvector->at(0));
+
+							switch(clase)
+							{
+								case 2: (gameEngine::addUserUnit(unidad->getPosicion().X,unidad->getPosicion().Y,1))->aplicarTextura(driver); gameEngine::recursos_jugador -= 300; break;
+								case 3: (gameEngine::addUserUnit(unidad->getPosicion().X,unidad->getPosicion().Y,3))->aplicarTextura(driver); gameEngine::recursos_jugador -= 300; break;
+								case 4: (gameEngine::addUserUnit(unidad->getPosicion().X,unidad->getPosicion().Y,2))->aplicarTextura(driver); gameEngine::recursos_jugador -= 300; break;
+								default:;
+							}					
+						}
+
 					}
 					break;
 			default:;
