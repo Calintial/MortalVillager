@@ -158,7 +158,7 @@ int Unidades::getState()
 
 int Unidades::Attack(Unidades* enemigo)
 {
-	cerr<<"Unidad: <"<<getPosition().X<<","<<getPosition().Y<<"> atacando a <"<<enemigo->getPosition().X<<","<<enemigo->getPosition().Y<<">"<<endl;
+//	cerr<<"Unidad: <"<<getPosition().X<<","<<getPosition().Y<<"> atacando a <"<<enemigo->getPosition().X<<","<<enemigo->getPosition().Y<<">"<<endl;
 	int ataque = TrianguloArmas(enemigo);
 	
 	enemigo->PierdoVida(ataque+getAttackValue());

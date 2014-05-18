@@ -7,11 +7,11 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	setTipo(tipo);
 	srand (time(NULL));
 	aprendizaje = new CController(pantallaDevice);
-	cantidadVecesCadaMapa=2;
+	cantidadVecesCadaMapa=20;
 	cantidadIndice=0;
 	tipoMapa=1;
-	cantidadMapas=3;
-	paused = false;
+	cantidadMapas=4;
+	paused = true;
 	continuar = false;
 
 	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,0,dimensionPantallaX+160,25), 0, CB_PAUSE, 
@@ -50,7 +50,7 @@ for(int i=0;i<cont;i++){
 		if(cantidadIndice==cantidadVecesCadaMapa){
 			tipoMapa++;
 			if(tipoMapa>cantidadMapas){
-				paused=true;
+				tipoMapa=1;
 			}
 			else{
 				aprendizaje->generarMapa(tipoMapa);

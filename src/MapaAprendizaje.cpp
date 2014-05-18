@@ -478,8 +478,97 @@ void MapaCuadrado::generarUnidades(){
 			
 
 		}
-		cout<<"num unidades: "<<m_vecUnidades.size()<<endl;
+		//cout<<"num unidades: "<<m_vecUnidades.size()<<endl;
 	
 }
 
 // ================== ~MapaCuadrado ===================== //
+// ================== ~MapaCuatroUnidades ===================== //
+
+
+MapaCuatroUnidades::MapaCuatroUnidades(IrrlichtDevice* dev,int num):MapaAprendizaje(dev,num){
+	driver = dev->getVideoDriver();
+	generarMapa();
+}
+
+MapaCuatroUnidades::~MapaCuatroUnidades(){
+
+}
+
+void MapaCuatroUnidades::generarMapa(){
+	int Tamanyo=12;
+	for (int i=0;i<MAPSIZE;i++){
+		for(int j=0;j<MAPSIZE;j++){
+			//0 transitable 1 no transitable
+			nuevoSuelo(j,i);
+			
+
+		}
+	}
+for (int i=0;i<MAPSIZE;i+=Tamanyo){
+		for(int j=0;j<MAPSIZE;j+=Tamanyo){
+			if (i + Tamanyo < MAPSIZE && j+Tamanyo < MAPSIZE)
+			{	
+				for (int iteradorEsquina = 0; iteradorEsquina < Tamanyo; ++iteradorEsquina)
+				{
+					nuevoMuro(j, i + iteradorEsquina);
+					nuevoMuro(j + iteradorEsquina, i);
+				}
+
+				nuevoMuro(j + 5,i + 6);
+				nuevoMuro(j + 6,i + 6);
+				nuevoMuro(j + 6,i + 5);
+				nuevoMuro(j + 6,i + 7);
+				nuevoMuro(j + 7,i + 6);
+				
+			}
+			
+
+		}
+	}
+	generarUnidades();
+}
+
+void MapaCuatroUnidades::reset(const vector<SGenome>& poblacion){
+	for (int i = 0; i < m_NumUnidades; ++i)
+	{
+		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
+		position2di posicion = unidad->getPosition();
+
+		nuevoSuelo(posicion.X,posicion.Y);
+
+
+	}
+	m_vecUnidades.clear();
+
+	generarUnidades();
+	for (int i=0; i<m_NumUnidades; ++i)
+	{	
+		m_vecUnidades[i]->PutWeights(poblacion[i].vecWeights);
+
+	}
+}
+
+void MapaCuatroUnidades::generarUnidades(){
+	//creamos las unidades 
+	int posX = 0;
+	int posY = 0;
+	int size = MAPSIZE / 6;
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		posY = i / size * 6 + 1;
+		posX = i % size * 6 + 1;
+ 		
+
+
+		EspadachinRedes* unidad=new EspadachinRedes(posX + 2,posY + 2);
+		unidad->aplicarTextura(driver);
+		IDibujable* aux = vTiles[posY + 2][posX + 2];
+		delete aux;
+		vTiles[posY + 2][posX + 2]=unidad;
+		m_vecUnidades.push_back(unidad);
+
+	}
+
+}
+// ================== ~MapaCuatroUnidades ===================== //

@@ -28,6 +28,7 @@ m_iGenerations(0)
 {
 	device = dev;
 	driver = device->getVideoDriver();
+	red="";
 	generarMapa(1);
 	t=time(0);
 	struct tm * now=localtime(&t);
@@ -149,7 +150,7 @@ bool CController::tickRedNeuronalUnidad(CUnidadesAprendizaje* unidad, const int 
 			position2di pos = unidad->getPosicion();
 			if (pos.X >=0)
 			{
-				cout<<"##### HE MUERTO! POS: <"<<pos.X<<","<<pos.Y<<">"<<endl;
+				//cout<<"##### HE MUERTO! POS: <"<<pos.X<<","<<pos.Y<<">"<<endl;
 				matriz->setTile(pos.Y,pos.X, new Suelo(pos.X,pos.Y));
 				((Suelo*) matriz->getTile(pos.Y,pos.X))->setIsometric(false);
 				matriz->getTile(pos.Y,pos.X)->aplicarTextura(driver);
@@ -429,6 +430,10 @@ void CController::generarMapa(int tipoMapa){
 			
 	}
 	else if(tipoMapa==3){
+		matriz= new MapaCuatroUnidades(device,m_NumUnidades);
+		
+	}
+	else if(tipoMapa==4){
 		matriz= new MapaCuadrado(device,m_NumUnidades);
 	}
 	else{
@@ -442,7 +447,7 @@ void CController::generarMapa(int tipoMapa){
 		//m_vecUnidades.push_back(aux[i]);
 		m_vecUnidades[i]->calcular8Objetos(matriz);
 	}
-	if(tipoMapa!=1){
+	if(red!=""){
 		ponerWeightFichero();
 		vector<double> vecW=m_vecUnidades[0]->getCNeuralWeight();
 		for (int i = 0; i < vecW.size(); ++i)

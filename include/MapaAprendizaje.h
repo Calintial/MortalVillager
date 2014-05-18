@@ -74,7 +74,17 @@ private:
 
 	vector<CUnidadesAprendizaje*> m_vecEnemigos;
 };
-
+class MapaCuatroUnidades: public MapaAprendizaje
+{
+public:
+	MapaCuatroUnidades(IrrlichtDevice* dev,int);
+	~MapaCuatroUnidades();
+	void generarSuelos(int inicio,int fin);
+	void generarMapa();
+		void reset(const vector<SGenome> &);
+private:
+	void generarUnidades();
+};
 class MapaCuadrado: public MapaAprendizaje
 {
 public:
