@@ -65,7 +65,7 @@ void hud::pintarMiniMapa(){
 	IDibujable *dib;
 	for(int i=0;i<WIDTH;i++){
 		for(int j=0;j<HEIGHT;j++){
-			dib= _mapa2D->getTile(i,j);
+			dib= _mapa2D->getTile(j,i);
 			if(dib->getTipo()==0){
 
 				driver->drawPixel(x+i,y+j,video::SColor(255,222,184,135));

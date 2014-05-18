@@ -114,10 +114,14 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 		position2di pos_grid = getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
 
 		int tipo = 0;
-		if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado() != NULL)
+		if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X) != NULL)
 		{
-			tipo = getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado()->getTipo();
+			if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado() != NULL)
+			{
+				tipo = getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado()->getTipo();
+			}
 		}
+
 
 		switch(event.MouseInput.Event)
 		{
@@ -1042,27 +1046,36 @@ bool mapa2D::puede_colocar(position2di pos)
 	{
 		for(int y = pos.Y; y < pos.Y + 5; y++)
 		{
-			if(getTile(y,x)->getTipo() == 1)
+			IDibujable* tile = getTile(y,x);
+			if(tile != NULL)
+			{
+				if(getTile(y,x)->getTipo() == 1)
+				{
+					return false;
+				}
+				
+
+				for(int i=0; i<ia_units->size(); i++)
+				{
+					if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
+					{
+						return false;
+					}
+				}
+
+				for(int i=0; i<user_units->size(); i++)
+				{
+					if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
+					{
+						return false;
+					}
+				}
+			}
+			else
 			{
 				return false;
 			}
-			
 
-			for(int i=0; i<ia_units->size(); i++)
-			{
-				if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
-				{
-					return false;
-				}
-			}
-
-			for(int i=0; i<user_units->size(); i++)
-			{
-				if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
-				{
-					return false;
-				}
-			}
 		}
 	}
 
