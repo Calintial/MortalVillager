@@ -35,7 +35,7 @@ void MapaAprendizaje::Pintar()
 					//DrawPosition = getIsoFromTile(i - CameraScroll.X, j - CameraScroll.Y);
 					// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
 					// Validar coordenada
-					IDibujable *Tile = vTiles[i][j];
+					shared_ptr<IDibujable> Tile = vTiles[i][j];
 						//Pinta
 					if(Tile->getTextura())
 						Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
@@ -60,7 +60,7 @@ void MapaAprendizaje::Pintar()
 }
 
 void MapaAprendizaje::PintarInformacionUnidad(){
-	vector<ObjetosCercanos> objCercanos = ((CUnidadesAprendizaje*) unidad_seleccionada)->getVectorObjetos();
+	vector<ObjetosCercanos> objCercanos =  std::dynamic_pointer_cast<CUnidadesAprendizaje>(unidad_seleccionada)->getVectorObjetos();
 	core::stringw Vida="Vida: ";
 	Vida+=unidad_seleccionada->getLife();
 	core::stringw Ataque="Ataque: ";
@@ -109,8 +109,8 @@ void MapaAprendizaje::generarMapa(){
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			setTile(i,j, new Suelo(j,i));
-			((Suelo*) getTile(i,j))->setIsometric(false);
+			setTile(i,j, shared_ptr<Suelo>(new Suelo(j,i)));
+			std::dynamic_pointer_cast<Suelo>(getTile(i,j))->setIsometric(false);
 			getTile(i,j)->aplicarTextura(driver);
 
 		}
@@ -119,8 +119,8 @@ void MapaAprendizaje::generarMapa(){
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
-		setTile(RandIntY,RandIntX,new Muro(RandIntX,RandIntY));
-		((Muro*) getTile(RandIntY,RandIntX))->setIsometric(false);
+		setTile(RandIntY,RandIntX,shared_ptr<Muro>(new Muro(RandIntX,RandIntY)));
+		std::dynamic_pointer_cast<Muro>(getTile(RandIntY,RandIntX))->setIsometric(false);
 		getTile(RandIntY,RandIntX)->aplicarTextura(driver);
 	}
 
@@ -142,13 +142,13 @@ void MapaAprendizaje::generarMapa(){
 }
 
 void MapaAprendizaje::nuevoSuelo(int x, int y){
-	vTiles[y][x]= new Suelo(x,y);
-	((Suelo*) vTiles[y][x])->setIsometric(false);
+	vTiles[y][x]=shared_ptr<Suelo>( new Suelo(x,y));
+	std::dynamic_pointer_cast<Suelo>( vTiles[y][x])->setIsometric(false);
 	vTiles[y][x]->aplicarTextura(driver);
 }
 void MapaAprendizaje::nuevoMuro(int x, int y){
-	vTiles[y][x]= new Muro(x,y);
-	((Muro*) vTiles[y][x])->setIsometric(false);
+	vTiles[y][x]= shared_ptr<Muro>(new Muro(x,y));
+	std::dynamic_pointer_cast<Muro>( vTiles[y][x])->setIsometric(false);
 	vTiles[y][x]->aplicarTextura(driver);
 }
 
@@ -196,7 +196,7 @@ void MapaBasicoDummy::generarMapa(){
 void MapaBasicoDummy::reset(const vector<SGenome>& poblacion){
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
-		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
+		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
 		position2di posicion = unidad->getPosition();
 
 
@@ -222,17 +222,15 @@ void MapaBasicoDummy::generarUnidades(){
 		posY = i / size * 6 + 2;
 		posX = i % size * 6 + 2;
  		
-		EspadachinRedes* unidadDummy=new EspadachinRedes(posX,posY);
+		shared_ptr<EspadachinRedes> unidadDummy=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX,posY));
 		unidadDummy->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
-		delete aux;
 		vTiles[posY][posX]=unidadDummy;
 		
 
-		EspadachinRedes* unidad=new EspadachinRedes(posX + 2,posY + 2);
+		shared_ptr<EspadachinRedes>  unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
 		aux = vTiles[posY + 2][posX + 2];
-		delete aux;
 		vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
@@ -286,10 +284,10 @@ void MapaBasicoMuroYUnidad::generarMapa(){
 void MapaBasicoMuroYUnidad::reset(const vector<SGenome>& poblacion){
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
-		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
+		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
 		position2di posicion = unidad->getPosition();
 
-		CUnidadesAprendizaje* enemigo = m_vecEnemigos[i];
+		shared_ptr<CUnidadesAprendizaje> enemigo = m_vecEnemigos[i];
 		position2di posicionEnemigo = enemigo->getPosition();
 		// aqui deberia borrar la unidad, pero peta >_<
 		nuevoSuelo(posicion.X,posicion.Y);
@@ -316,18 +314,16 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
 		posY = i / size * 6 + 2;
 		posX = i % size * 6 + 2;
  		
-		EspadachinRedes* unidadDummy=new EspadachinRedes(posX,posY);
+		shared_ptr<EspadachinRedes> unidadDummy=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX,posY));
 		unidadDummy->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
-		delete aux;
 		vTiles[posY][posX]=unidadDummy;
 		m_vecEnemigos.push_back(unidadDummy);
 		
 
-		EspadachinRedes* unidad=new EspadachinRedes(posX + 2,posY + 2);
+		shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
 		aux = vTiles[posY + 2][posX + 2];
-		delete aux;
 		vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
@@ -373,7 +369,7 @@ void MapaCuadrado::generarMapa(){
 void MapaCuadrado::reset(const vector<SGenome>&  poblacion){
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
-		CUnidadesAprendizaje* unidad = m_vecUnidades[i];
+		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
 		position2di posicion = unidad->getPosition();
 
 
@@ -417,17 +413,16 @@ void MapaCuadrado::generarSuelos(int inicio,int fin){
 void MapaCuadrado::generarUnidades(){
 	int numUnidadesLeft=0;
 	int finalMapaCuadradoUnidades=(m_NumUnidades/2)-1;
-	EspadachinRedes* unidad=new EspadachinRedes(0,0);
+	shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(0,0));
 	unidad->aplicarTextura(driver);
 	shared_ptr<IDibujable> aux = vTiles[0][0];
-	delete aux;
 	vTiles[0][0]=unidad;
 	m_vecUnidades.push_back(unidad);
 	numUnidadesLeft++;
-	unidad=new EspadachinRedes(finalMapaCuadradoUnidades,finalMapaCuadradoUnidades);
+
+	unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(finalMapaCuadradoUnidades,finalMapaCuadradoUnidades));
 	unidad->aplicarTextura(driver);
 	aux = vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades];
-	delete aux;
 	vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades]=unidad;
 	m_vecUnidades.push_back(unidad);
 	numUnidadesLeft++;
@@ -437,17 +432,15 @@ void MapaCuadrado::generarUnidades(){
 			if ( j <= finalMapaCuadradoUnidades && numUnidadesLeft<m_NumUnidades)
 			{	
 
-				EspadachinRedes* unidad=new EspadachinRedes(j,i);
+				shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(j,i));
 				unidad->aplicarTextura(driver);
 				shared_ptr<IDibujable> aux = vTiles[i][j];
-				delete aux;
 				vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
-				unidad=new EspadachinRedes(i,j);
+				unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(i,j));
 				unidad->aplicarTextura(driver);
 				aux = vTiles[j][i];
-				delete aux;
 				vTiles[j][i]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
@@ -460,17 +453,15 @@ void MapaCuadrado::generarUnidades(){
 			if (j <= finalMapaCuadradoUnidades && numUnidadesLeft<m_NumUnidades)
 			{	
 
-				EspadachinRedes* unidad=new EspadachinRedes(j,i);
+				shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(j,i));
 				unidad->aplicarTextura(driver);
 				shared_ptr<IDibujable> aux = vTiles[i][j];
-				delete aux;
 				vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
-				unidad=new EspadachinRedes(i,j);
+				unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(i,j));
 				unidad->aplicarTextura(driver);
 				aux = vTiles[j][i];
-				delete aux;
 				vTiles[j][i]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;

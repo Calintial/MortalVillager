@@ -161,8 +161,8 @@ void hud::paint(){
 			dibujarRecursos();
 
 			if(ensenyarInformacion==true){
-				vector<battleIA*>* idub= (vector<battleIA*>*)_mapa2D->getIa_units();
-				vector<Unidades*>* udub= (vector<Unidades*>*)_mapa2D->getUser_units();
+				vector<shared_ptr<battleIA>>* idub= (vector<shared_ptr<battleIA>>*)_mapa2D->getIa_units();
+				vector<shared_ptr<Unidades>>* udub= (vector<shared_ptr<Unidades>>*)_mapa2D->getUser_units();
 				int numper = 0;
 				
 				for(int i=0; i<idub->size(); i++)
@@ -197,7 +197,7 @@ void hud::dibujarRecursos()
 		video::SColor(255,255,255,255));
 }
 
-void hud::dibujaEnHUD(int numper,Unidades* posuni)
+void hud::dibujaEnHUD(int numper,shared_ptr<Unidades> posuni)
 {
 	/*core::stringw posx="";
 	posx+=posuni->getPosition().X;

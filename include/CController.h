@@ -42,7 +42,7 @@ private:
 	vector<SGenome>	     m_vecThePopulation;
 
 	//and the minesweepers
-  vector<CUnidadesAprendizaje*> m_vecUnidades;
+  vector<shared_ptr<CUnidadesAprendizaje>> m_vecUnidades;
 
 	int					         m_NumUnidades;
 	//pointer to the GA
@@ -73,12 +73,9 @@ private:
 	IrrlichtDevice* device;
 	video::IVideoDriver* driver;
 
-	Unidades* unidad_seleccionada;
+	shared_ptr<Unidades> unidad_seleccionada;
 
 	IGUIFont* font;
-	void mapa0();
-	void mapa1();
-	void mapa2();
 	void guardarPesos();
 
 public:
@@ -91,9 +88,9 @@ public:
 	CController(IrrlichtDevice* dev);
 
 	~CController();
-	CUnidadesAprendizaje* getUnidadPosicion(position2di pos);
+	shared_ptr<CUnidadesAprendizaje>  getUnidadPosicion(position2di pos);
 	//bool		Update();
-	bool tickRedNeuronalUnidad(CUnidadesAprendizaje* unidad, int i);
+	bool tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad, int i);
 	bool		tickRedNeuronal();
 	bool		redNeuronal();
 	bool		genetico();
@@ -101,7 +98,6 @@ public:
 	void Pintar();
 	
 	void generarMapa(int tipoMapa);
-	void modificarUnidad(CUnidadesAprendizaje* unidad);
 	bool OnEvent(const SEvent& event);
 	void PintarInformacionUnidad();
 void ponerWeightFichero(std::string fichero);
