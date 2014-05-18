@@ -35,7 +35,7 @@ bool CurrentIA::inicial()
 	return current->inicial();
 }
 
-int CurrentIA::doSomething(battleIA* bIA, IDibujable* &casilla)
+int CurrentIA::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
 	int st = current->doSomething(bIA, casilla);
 	return st;
@@ -48,7 +48,7 @@ BUSCANDO::BUSCANDO()
 	cout << "BUSCANDO-ctor " << endl;
 }
 
-int BUSCANDO::doSomething(battleIA* bIA, IDibujable* &casilla)
+int BUSCANDO::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
 	//Unidades* enemy = (Unidades*)casilla->getVinculado();
 	if(casilla != NULL)
@@ -72,7 +72,7 @@ ACERCARSE::ACERCARSE()
 	cout << "ACERCARSE-ctor " << endl;
 }
 
-int ACERCARSE::doSomething(battleIA* bIA, IDibujable* &casilla)
+int ACERCARSE::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
 	
 	if(casilla == NULL)
@@ -82,7 +82,7 @@ int ACERCARSE::doSomething(battleIA* bIA, IDibujable* &casilla)
 	}
 	else
 	{
-		Unidades* enemy = (Unidades*)casilla->getVinculado();
+		shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
 		/*Comprobar si el enemigo está dentro de rango*/
 		if(bIA->enemy_in_attack_range(enemy->getPosition()))
 		{
@@ -118,12 +118,12 @@ ATACAR::ATACAR()
 	cout << "ATACAR-ctor " << endl;
 }
 
-int ATACAR::doSomething(battleIA* bIA, IDibujable* &casilla)
+int ATACAR::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
-	
+
 	if(casilla != NULL)
 	{
-		Unidades* enemy = (Unidades*)casilla->getVinculado();
+		shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
 		if(bIA->enemy_in_attack_range(enemy->getPosition()) && bIA->getLife() > 25)
 		{
 			 int danyo = bIA->Attack(enemy);
@@ -172,9 +172,9 @@ HUIR::HUIR()
 	cout << "HUIR-ctor " << endl;
 }
 
-int HUIR::doSomething(battleIA* bIA, IDibujable* &casilla)
+int HUIR::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
-	
+
 	cout << "HUIR" << endl;
 	if(casilla == NULL)
 	{
@@ -211,8 +211,9 @@ RECUPERARSE::RECUPERARSE()
 	cout << "RECUPERARSE-ctor " << endl;
 }
 
-int RECUPERARSE::doSomething(battleIA* bIA, IDibujable* &casilla)
+int RECUPERARSE::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
+
 	cout << "RECUPERARSE" << endl;
 	if(casilla != NULL)
 	{

@@ -12,7 +12,7 @@ PantallaIABatalla::~PantallaIABatalla(){
     delete debug;
 }
 
-void PantallaIABatalla::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units, vector<IDibujable*>* buildings){
+void PantallaIABatalla::pintarPantalla(vector<shared_ptr<IDibujable>>* ia_units,vector<shared_ptr<IDibujable>>* user_units, vector<shared_ptr<IDibujable>>* buildings){
 
 
 	if(mapa.get() == NULL)

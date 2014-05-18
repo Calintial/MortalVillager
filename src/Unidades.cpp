@@ -82,7 +82,7 @@ void Unidades::Move(Camino* _camino){
 	}
 }
 
-void Unidades::Move(Unidades* _objetivo){
+void Unidades::Move(shared_ptr<Unidades> _objetivo){
 	if(_objetivo != NULL){
 		if(state != DEAD)
 			state = MOVE;
@@ -188,9 +188,9 @@ int Unidades::getState()
 	return state;
 }
 
-int Unidades::Attack(Unidades* enemigo)
+int Unidades::Attack(shared_ptr<Unidades> enemigo)
 {
-	cerr<<"Unidad: <"<<getPosition().X<<","<<getPosition().Y<<"> atacando a <"<<enemigo->getPosition().X<<","<<enemigo->getPosition().Y<<">"<<endl;
+//	cerr<<"Unidad: <"<<getPosition().X<<","<<getPosition().Y<<"> atacando a <"<<enemigo->getPosition().X<<","<<enemigo->getPosition().Y<<">"<<endl;
 	int ataque = TrianguloArmas(enemigo);
 	
 	enemigo->PierdoVida(ataque+getAttackValue());
@@ -211,7 +211,7 @@ void Unidades::PierdoVida(int danyo)
 }
 
 //Saca tu factor de ataque
-int Unidades::TrianguloArmas(Unidades* enemigo)
+int Unidades::TrianguloArmas(shared_ptr<Unidades> enemigo)
 {
 	switch(this->getType())
 	{

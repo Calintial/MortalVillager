@@ -139,7 +139,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 							cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
 							if (estado == ESTADO_PINTAR)
 							{
-								Muro* muro = new Muro(pos_grid.X,pos_grid.Y);
+								shared_ptr<Muro> muro = shared_ptr<Muro>(new Muro(pos_grid.X,pos_grid.Y));
 								muro->aplicarTextura(device->getVideoDriver());
 								mapa->setTile(pos_grid.X,pos_grid.Y,muro);
 							}else{
@@ -162,7 +162,7 @@ bool InterfazPathfinding::OnEvent(const SEvent& event)
 							cout<<"Me has clicado en: "<< event.MouseInput.X << "," << event.MouseInput.Y << " - que corresponde a: "<< pos_grid.X<<","<<pos_grid.Y<<endl;
 							if (estado == ESTADO_PINTAR)
 							{
-								Suelo* suelo = new Suelo(pos_grid.X,pos_grid.Y);
+								shared_ptr<Suelo> suelo = shared_ptr<Suelo>(new Suelo(pos_grid.X,pos_grid.Y));
 								suelo->aplicarTextura(device->getVideoDriver());
 								mapa->setTile(pos_grid.X,pos_grid.Y,suelo);
 							}else{

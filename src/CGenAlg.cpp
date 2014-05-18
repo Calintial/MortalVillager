@@ -11,17 +11,18 @@
 CGenAlg::CGenAlg(int	  popsize,
                  double	MutRat,
                  double	CrossRat,
-                 int	  numweights) :	m_iPopSize(popsize),
+                 int	  numweights,std::string nombreCarpeta) :	m_iPopSize(popsize),
                                       m_dMutationRate(MutRat),
 										                  m_dCrossoverRate(CrossRat),
 										                  m_iChromoLength(numweights),
-										                  m_dTotalFitness(0),
+										                  m_dTotalFitness(1),
 										                  m_cGeneration(0),
 										                  m_iFittestGenome(0),
-										                  m_dBestFitness(0),
+										                  m_dBestFitness(1),
 										                  m_dWorstFitness(99999999),
-										                  m_dAverageFitness(0)
+										                  m_dAverageFitness(1)
 {
+	carpeta=nombreCarpeta;
 	//initialise population with chromosomes consisting of random
 	//weights and all fitnesses set to zero
 	for (int i=0; i<m_iPopSize; ++i)
@@ -96,7 +97,7 @@ SGenome CGenAlg::GetChromoRoulette()
 	SGenome TheChosenOne;
 	
 	//go through the chromosones adding up the fitness so far
-	double FitnessSoFar = 0;
+	double FitnessSoFar = 1;
 	
 	for (int i=0; i<m_iPopSize; ++i)
 	{
@@ -265,8 +266,8 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 		Mutate(baby2);
 
 		//now copy into vecNewPop population
-		vecNewPop.push_back(SGenome(baby1, 0));
-		vecNewPop.push_back(SGenome(baby2, 0));
+		vecNewPop.push_back(SGenome(baby1, 1));
+		vecNewPop.push_back(SGenome(baby2, 1));
 	}
 
 	//finished so assign new pop back into m_vecPop
@@ -309,9 +310,10 @@ void CGenAlg::GrabNBest(int	            NBest,
 //---------------------------------------------------------------------
 void CGenAlg::CalculateBestWorstAvTot()
 {
-	m_dTotalFitness = 0;
+	std::string excel=carpeta+"/Excel.txt";
+	m_dTotalFitness = 1;
 	
-	double HighestSoFar = 0;
+	double HighestSoFar = 1;
 	double LowestSoFar  = 9999999;
 	
 	for (int i=0; i<m_iPopSize; ++i)
@@ -335,12 +337,13 @@ void CGenAlg::CalculateBestWorstAvTot()
 		}
 		
 		m_dTotalFitness	+= m_vecPop[i].dFitness;
-		
+	
 		
 	}//next chromo
 	
 
 	m_dAverageFitness = m_dTotalFitness / m_iPopSize;
+	double mediana= m_vecPop[m_iPopSize/2].dFitness;
 	outfile.open("Genetic.txt", ios::app);
 			if (outfile.is_open())
 			{
@@ -350,14 +353,17 @@ void CGenAlg::CalculateBestWorstAvTot()
 				outfile << "Average Fitness: "<<m_dAverageFitness<<endl;
 			}
 			outfile.close();
-	outfile.open("Red.txt", ios::out);
-			if (outfile.is_open())
-			{
-				for(double dob:m_vecPop[m_iFittestGenome].vecWeights){
-					outfile<<dob<<endl;
-				}
-			}
-			outfile.close();
+
+ 	outfile.open(excel, ios::app);
+ 			if (outfile.is_open())
+ 			{
+ 				
+ 				outfile <<m_dBestFitness<<",";
+ 				outfile <<m_dWorstFitness<<",";
+ 				outfile<<m_dAverageFitness<<",";
+ 				outfile <<mediana<<endl;
+ 			}
+ 	outfile.close();
 }
 
 //-------------------------Reset()------------------------------
@@ -366,9 +372,9 @@ void CGenAlg::CalculateBestWorstAvTot()
 //--------------------------------------------------------------
 void CGenAlg::Reset()
 {
-	m_dTotalFitness		= 0;
-	m_dBestFitness		= 0;
+	m_dTotalFitness		= 1;
+	m_dBestFitness		= 1;
 	m_dWorstFitness		= 9999999;
-	m_dAverageFitness	= 0;
+	m_dAverageFitness	= 1;
 }
 

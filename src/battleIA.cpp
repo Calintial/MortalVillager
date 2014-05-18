@@ -22,13 +22,12 @@ battleIA::~battleIA()
 
 void battleIA::updateIA(std::shared_ptr<mapa2D> mapa)
 {
-	IDibujable* casenemy = searchEnemy(mapa);
-	//if(casenemy != NULL){
-		stateIA=stadoIA->doSomething(this, casenemy);
-	//}
+
+	shared_ptr<IDibujable> casenemy = searchEnemy(mapa);
+	stateIA=stadoIA->doSomething(this, casenemy);
 }
 
-IDibujable* battleIA::searchEnemy(std::shared_ptr<mapa2D> mapa)
+shared_ptr<IDibujable> battleIA::searchEnemy(std::shared_ptr<mapa2D> mapa)
 {
 	//Busca a un enemigo en su rango establecido y devuelve un puntero con un array de sus coordenadas
 	position2di mypos = getPosition();
