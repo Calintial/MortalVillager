@@ -1,8 +1,11 @@
 #include "DecisionTree.h"
+#include "battleIA.h"
+#include "edificio.h"
+#include "Unidades.h"
 
 DecisionTree::DecisionTree()
 {
-	raiz = new NodoEnemigoCercaCC();
+	raiz = new NodoEnemigoCercaCC(this);
 	
 	enemigoCercaCC =false;
 	vidaCC = 0;
@@ -13,14 +16,14 @@ DecisionTree::DecisionTree()
 	numLancerosEnemigos = 0;
 	numEspadachinesEnemigos = 0;
 	numArquerosEnemigos = 0;
-	Cuartel = false;
-	Arqueria = false;
-	Lanceria = false;
+	cuartel = false;
+	arqueria = false;
+	lanceria = false;
 	granjas = 0;
 	recursos = 0;
 }
 
-void DecisionTree::PasarDatos(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings)
+void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings)
 {
 	setVidaCC(vidaCC);
 	setRecursos(recursos);
@@ -29,26 +32,25 @@ void DecisionTree::PasarDatos(int vidaCC, int recursos, vector<IDibujable*>* IAu
 	//1 --> Arquero
 	//2 --> Espadachin
 	//3 --> Lancero
-	
-	for(IDibujable* ia: IAUnits)
+	for(int i=0; i<IAunits->size(); i++)
 	{
-		if(ia->getType() == 1)
+		if(((battleIA*)IAunits->at(i))->getType() == 1)
 			setIncNumArquerosEnemigos();
-		if(ia->getType() == 2)
+		if(((battleIA*)IAunits->at(i))->getType() == 2)
 			setIncNumEspadachinesEnemigos();
-		if(ia->getType() == 3)
+		if(((battleIA*)IAunits->at(i))->getType() == 3)
 			setIncNumLancerosEnemigos();
 	}
 	
-	for(IDibujable* user: Userunits)
+	for(int i=0; i<Userunits->size(); i++)
 	{
-		if(user->getType() == 0)
+		if(((Unidades*)Userunits->at(i))->getType() == 0)
 			setIncNumAldeanos();
-		if(user->getType() == 1)
+		if(((Unidades*)Userunits->at(i))->getType() == 1)
 			setIncNumArqueros();
-		if(user->getType() == 2)
+		if(((Unidades*)Userunits->at(i))->getType() == 2)
 			setIncNumEspadachines();
-		if(uesr->getType() == 3)
+		if(((Unidades*)Userunits->at(i))->getType() == 3)
 			setIncNumLanceros();
 	}
 	
@@ -57,27 +59,32 @@ void DecisionTree::PasarDatos(int vidaCC, int recursos, vector<IDibujable*>* IAu
 	//2 --> Cuartel
 	//3 --> Arqueria
 	//4 --> Lanceria
-	for(IDibujable* b: buildings)
+	for(int i=0; i<buildings->size(); i++)
 	{
-		if(b->getClase()==0)
+		if(((edificio*)buildings->at(i))->getClase()==0)
 			setEnemigoCercaCC(ExisteEnemigoCercaCC(Userunits));
-		if(b->getClase()==1)
+		if(((edificio*)buildings->at(i))->getClase()==1)
 			setIncGranjas();
-		if(b->getClase()==2)
+		if(((edificio*)buildings->at(i))->getClase()==2)
 			setCuartel(true);
-		if(b->getClase()==3)
+		if(((edificio*)buildings->at(i))->getClase()==3)
 			setArqueria(true);
-		if(b->getClase()==4)
+		if(((edificio*)buildings->at(i))->getClase()==4)
 			setLanceria(true);
 	}
+	
+	cout << "Datos recibidos, empieza decision" << endl;
+	
+	raiz->Decision();
 }
 
+
 //48x29 x=351, y=370 para ia
-boolean DecisionTree::ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits)
+bool DecisionTree::ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits)
 {
-	for(IDibujable* user: Userunits)
+	for(int i=0; i<Userunits->size(); i++)
 	{
-		if(user->getPosition().X > 350 && user->getPosition() > 369)
+		if(Userunits->at(i)->getPosition().X > 350 && Userunits->at(i)->getPosition().Y > 369)
 			return true;
 	}
 	
@@ -85,339 +92,411 @@ boolean DecisionTree::ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits)
 }
 
 
+Node::Node(DecisionTree* dt)
+{
+	this->dt = dt;
+	yes = NULL;
+	no = NULL;
+}
+
+
 //-----------------------------------//
 
-NodoEnemigoCercaCC::NodoEnemigoCercaCC()
+NodoEnemigoCercaCC::NodoEnemigoCercaCC(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoVidaCC();
-		no = new NodoLanzasMayorEspadas();
+	setYes(new NodoVidaCC(getDT()));
+	setNo(new NodoLanzasMayorEspadas(getDT()));
 }
 
 void NodoEnemigoCercaCC::Decision()
 {
-	if(isEnemigoCercaCC())
-		yes.Decision();
+	if(getDT()->isEnemigoCercaCC())
+	{
+		getYes()->Decision();
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoVidaCC::NodoVidaCC()
+NodoVidaCC::NodoVidaCC(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoTengoSoldados();
-		no = new NodoUsuarioSuperioridad();
+	setYes(new NodoTengoSoldados(getDT()));
+	setNo(new NodoUsuarioSuperioridad(getDT()));
 }
 
 void NodoVidaCC::Decision()
 {
-	if(getVidaCC()<30)
-		yes.Decision();
+	if(getDT()->getVidaCC()<30)
+	{
+		getYes()->Decision();
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoTengoSoldados::NodoTengoSoldados()
+NodoTengoSoldados::NodoTengoSoldados(DecisionTree* dt):Node(dt)
 {
 		//PASAR A ESTADO DEFENDER EN LOS DOS CASOS
-		yes = null; 
-		no = new NodoLanzasMayorEspadas(); 
+		//yes es NULL
+		setNo(new NodoLanzasMayorEspadas(getDT()));
 }
 
 void NodoTengoSoldados::Decision()
 {
 	//Hay que poner estados en algun lao y cambiarlo aqui a DEFENDER
-	if(getnumSoldados()<getnumSoldadosEnemigos())
-		no.Decision();
+	if(getDT()->getnumSoldados() < getDT()->getnumSoldadosEnemigos())
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
 //Simple --> mi_ejercito > su_ejercito*1.5 || mi_ejercito es enorme
 //COMPLEJA --> hay que hacer algo con el triangulo de armas
-NodoUsuarioSuperioridad::NodoUsuarioSuperioridad()
+NodoUsuarioSuperioridad::NodoUsuarioSuperioridad(DecisionTree* dt):Node(dt)
 {
-		yes = null; //PASAR A ATACAR
-		no = new NodoLanzasMayorEspadas();
+		//yes es null //PASAR A ATACAR
+		setNo(new NodoLanzasMayorEspadas(getDT()));
 }
 
 void NodoUsuarioSuperioridad::Decision()
 {
-	if(getnumSoldados() > getnumSoldadosEnemigos()*1.5 || getnumSoldados()>10)
+	if(getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>10)
+	{
 		//Hay que poner estados en algun lao y cambiarlo aqui a ATACAR
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoLanzasMayorEspadas::NodoLanzasMayorEspadas()
+NodoLanzasMayorEspadas::NodoLanzasMayorEspadas(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoCuartel(); 
-		no = new NodoArquerosMayorLanzas();
+	setYes(new NodoCuartel(getDT()));
+	setNo(new NodoArquerosMayorLanzas(getDT()));
 }
 
 //¿Lanzas enemigas > Mis Espadas?
 void NodoLanzasMayorEspadas::Decision()
 {
-	if(getnumLancerosEnemigos()>getnumEspadachines())
-		yes.Decision();
+	if(getDT()->getnumLancerosEnemigos() > getDT()->getnumEspadachines())
+	{
+		getYes()->Decision();
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoCuartel::NodoCuartel()
+NodoCuartel::NodoCuartel(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoAldeano(); 
-		no = new NodoRecCuartel();
+	setYes(new NodoAldeano(getDT()));
+	setNo(new NodoRecCuartel(getDT()));
 }
 
 void NodoCuartel::Decision()
 {
-	if(isCuartel())
-		yes.Decision();
+	if(getDT()->isCuartel())
+	{
+		getYes()->Decision();
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoAldeano::NodoAldeano()
+NodoAldeano::NodoAldeano(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoRecEspadachin(); 
-		no = new NodoRecAldeano();
+	setYes(new NodoRecEspadachin(getDT()));
+	setNo(new NodoRecAldeano(getDT()));
 }
 
 void NodoAldeano::Decision()
 {
-	if(getnumAldeanos()>=1)
-		yes.Decision();
+	if(getDT()->getnumAldeanos()>=1)
+	{
+		getYes()->Decision();
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoRecAldeano::NodoRecAldeano()
+NodoRecAldeano::NodoRecAldeano(DecisionTree* dt):Node(dt)
 {
-		yes = null; // CREAR ALDEANO 
-		no = null;
+		//yes es null CREAR ALDEANO 
+		//no es null
 		//no = new NodoRecGranja();
 }
 
 void NodoRecAldeano::Decision()
 {
-	if(getRecursos() >= ALDEANO_COSTE)
+	if(getDT()->getRecursos() >= ALDEANO_COSTE)
+	{
 		//CREAR ALDEANO
+	}
 }
 
 //-----------------------------------//
 
-NodoRecEspadachin:NodoRecEspadachin()
+
+NodoRecEspadachin::NodoRecEspadachin(DecisionTree* dt):Node(dt)
 {
-		yes = null; //CREAR ESPADACHIN 
+		//yes es nullCREAR ESPADACHIN 
 		
-		/*
-		 * null --> Podria pasar que el usuario siempre tenga mas de algo, y no se construya nunca granja
-		 * intento construir granja --> Nunca pasara, porque la granja vale mas cara,que el espadachin. //Probar poniendo la granja a 150
-		 *  
-		*/
-		no = null; //NADA
+	//-----
+		 // null --> Podria pasar que el usuario siempre tenga mas de algo, y no se construya nunca granja
+		 // intento construir granja --> Nunca pasara, porque la granja vale mas cara,que el espadachin. //Probar poniendo la granja a 150
+	//----- 
+		//no es null NADA
 		//no = new NodoRecGranja();
 }
 
 void NodoRecEspadachin::Decision()
 {
-	if(getRecursos() >= CONVERTIR_COSTE)
+	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
+	{
 		//CREAR ESPADACHIN
+	}
 }
 
 //-----------------------------------//
 
-NodoRecCuartel::NodoRecCuartel()
+NodoRecCuartel::NodoRecCuartel(DecisionTree* dt):Node(dt)
 {
-		yes = null; //CREAR CUARTEL
-		/*
-		 * Podria pasar que construya granjas como un colgao, porque vale menos.
-		 * 
-		 * Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
-		*/ 
-		no = new NodoRecGranja();
+		//yes es null CREAR CUARTEL
+	//---
+		//Podria pasar que construya granjas como un colgao, porque vale menos.
+		 
+		//Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
+	//--- 
+		setNo(new NodoRecGranja(getDT()));
 }
 
 void NodoRecCuartel::Decision()
 {
-	if(getRecursos() >= CUARTEL_COSTE)
+	if(getDT()->getRecursos() >= CUARTEL_COSTE)
+	{
 		//CREAR CUARTEL
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoRecGranja::NodoRecGranja()
+NodoRecGranja::NodoRecGranja(DecisionTree* dt):Node(dt)
 {
-		yes = null; // CREAR GRANJA 
-		no = null; // NADA
+		//yes es null CREAR GRANJA 
+		//no es null NADA
 }
 
 void NodoRecGranja::Decision()
 {
-	if(getRecursos() >= GRANJA_COSTE)
+	if(getDT()->getRecursos() >= GRANJA_COSTE)
+	{
 		//CREAR GRANJA
+	}
 }
 
 //-----------------------------------//
 
 //¿Arqueros enemigos > Mis Lanceros?
-NodoArquerosMayorLanzas::NodoArquerosMayorLanzas()
+NodoArquerosMayorLanzas::NodoArquerosMayorLanzas(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoLanceria();
-		no = new NodoEspadachinesMayorArcos();
+	setYes(new NodoLanceria(getDT()));
+	setNo(new NodoEspadachinesMayorArcos(getDT()));
 }
 
 void NodoArquerosMayorLanzas::Decision()
 {
-	if(getnumArquerosEnemigos()>getnumLanceros())
-		yes.Decision();
+	if(getDT()->getnumArquerosEnemigos() > getDT()->getnumLanceros())
+	{
+		getYes()->Decision();
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoLanceria::NodoLanceria()
+NodoLanceria::NodoLanceria(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoAldeano(); 
-		no = new NodoRecLanceria();
+	setYes(new NodoAldeano(getDT())); 
+	setNo(new NodoRecLanceria(getDT()));
 }
 
 void NodoLanceria::Decision()
 {
-	if(isLanceria())
-		yes.Decision();
+	if(getDT()->isLanceria())
+	{
+		getYes()->Decision();
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoRecLanceria::NodoRecLanceria()
+NodoRecLanceria::NodoRecLanceria(DecisionTree* dt):Node(dt)
 {
-		yes = null; //CREAR LANCERIA 
-		/*
-		 * Podria pasar que construya granjas como un colgao, porque vale menos.
-		 * 
-		 * Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
-		*/ 
-		no = new NodoRecGranja();
+		//yes es null CREAR LANCERIA
+	//---
+		//Podria pasar que construya granjas como un colgao, porque vale menos.
+		 
+		//Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
+	//--- 
+		setNo(new NodoRecGranja(getDT()));
 }
 
 void NodoRecLanceria::Decision()
 {
-	if(getRecursos() >= LANCERIA_COSTE)
+	if(getDT()->getRecursos() >= LANCERIA_COSTE)
+	{
 		//CREAR LANCERIA
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoRecLancero::NodoRecLancero()
+NodoRecLancero::NodoRecLancero(DecisionTree* dt):Node(dt)
 {
-		yes = null; //CREAR LANCERO
-		
-		/*
-		 * null --> Podria pasar que el usuario siempre tenga mas de algo, y no se construya nunca granja
-		 * intento construir granja --> Nunca pasara, porque la granja vale mas cara,que el lancero. //Probar poniendo la granja a 150
-		 *  
-		*/
-		no = null; //NADA
+		//yes es null, CREAR LANCERO
+	//---
+		//null --> Podria pasar que el usuario siempre tenga mas de algo, y no se construya nunca granja
+		//intento construir granja --> Nunca pasara, porque la granja vale mas cara,que el lancero. //Probar poniendo la granja a 150
+		  
+	//---
+		//no es null, NADA
 		//no = new NodoRecGranja();
 }
 
 void NodoRecLancero::Decision()
 {
-	if(getRecursos() >= CONVERTIR_COSTE)
+	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
+	{
 		//CREAR LANCERO
+	}
 }
 
 //-----------------------------------//
 
-NodoEspadachinesMayorArcos::NodoEspadachinesMayorArcos()
+NodoEspadachinesMayorArcos::NodoEspadachinesMayorArcos(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoArqueria(); 
-		no = null; //PASAR A MODO ATACAR
+		setYes(new NodoArqueria(getDT()));
+		//no es null PASAR A MODO ATACAR
 }
 
 //¿Espadachines enemigos > Mis Arqueros?
 void NodoEspadachinesMayorArcos::Decision()
 {
-	if(getnumEspadachinesEnemigos()>getnumArqueros())
-		yes.Decision();
+	if(getDT()->getnumEspadachinesEnemigos() > getDT()->getnumArqueros())
+	{
+		getYes()->Decision();
+	}
 	else
+	{
 		//PASAR A MODO ATACAR
+	}
 }
 
 //-----------------------------------//
 
-NodoArqueria::NodoArqueria()
+NodoArqueria::NodoArqueria(DecisionTree* dt):Node(dt)
 {
-		yes = new NodoAldeano(); 
-		no = new NodoRecArqueria();
+		setYes(new NodoAldeano(getDT()));
+		setNo(new NodoRecArqueria(getDT()));
 }
 
 void NodoArqueria::Decision()
 {
-	if(isArqueria())
-		yes.Decision();
+	if(getDT()->isArqueria())
+	{
+		getYes()->Decision();
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoRecArqueria::NodoRecArqueria()
+NodoRecArqueria::NodoRecArqueria(DecisionTree* dt):Node(dt)
 {
-		yes = null; //CREAR ARQUERIA 
-		/*
-		 * Podria pasar que construya granjas como un colgao, porque vale menos.
-		 * 
-		 * Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
-		*/ 
-		no = new NodoRecGranja();
+		//yes es null CREAR ARQUERIA 
+	//---
+		 //Podria pasar que construya granjas como un colgao, porque vale menos.
+		 
+		 //Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
+	//--- 
+	
+		setNo(new NodoRecGranja(getDT()));
 }
 
 void NodoRecArqueria::Decision()
 {
-	if(getRecursos() >= ARQUERIA_COSTE)
+	if(getDT()->getRecursos() >= ARQUERIA_COSTE)
+	{
 		//CREAR ARQUERIA
+	}
 	else
-		no.Decision();
+	{
+		getNo()->Decision();
+	}
 }
 
 //-----------------------------------//
 
-NodoRecArquero::NodoRecArquero()
+NodoRecArquero::NodoRecArquero(DecisionTree* dt) : Node(dt)
 {
-		yes = null;//CREARARQUERO 
-		/*
-		 * null --> Podria pasar que el usuario siempre tenga mas de algo, y no se construya nunca granja
-		 * intento construir granja --> Nunca pasara, porque la granja vale mas cara,que el arquero. //Probar poniendo la granja a 150
-		 *  
-		*/
-		no = null; //NADA
+		//yes es null CREARARQUERO 
+	//---
+		 //null --> Podria pasar que el usuario siempre tenga mas de algo, y no se construya nunca granja
+		 //intento construir granja --> Nunca pasara, porque la granja vale mas cara,que el arquero. //Probar poniendo la granja a 150
+		  
+	//---
+		//no es null //NADA
 		//no = new NodoRecGranja();
 }
 
 void NodoRecArquero::Decision()
 {
-	if(getRecursos() >= CONVERTIR_COSTE)
+	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
+	{
 		//CREAR ARQUERO
+	}
 }
 
 //-----------------------------------//
