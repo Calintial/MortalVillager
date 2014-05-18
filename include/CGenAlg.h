@@ -33,7 +33,7 @@ struct SGenome
 
 	double          dFitness;
 
-	SGenome():dFitness(0){}
+	SGenome():dFitness(1){}
 
 	SGenome( vector <double> w, double f): vecWeights(w), dFitness(f){}
 
@@ -51,31 +51,11 @@ struct SGenome
 class CGenAlg
 {
 private:
-	
-	//this holds the entire population of chromosomes
-	vector <SGenome>	 m_vecPop;
 
 	//size of population
-	int m_iPopSize;
-	
-	//amount of weights per chromo
-	int m_iChromoLength;
-
-	//total fitness of population
-	double m_dTotalFitness;
-
-	//best fitness this population
-	double m_dBestFitness;
-
-	//average fitness
-	double m_dAverageFitness;
-
-	//worst
-	double m_dWorstFitness;
-
-	//keeps track of the best genome
-	int		m_iFittestGenome;
-
+	int m_iPopSize;	
+	//this holds the entire population of chromosomes
+	vector <SGenome>	 m_vecPop;
 	//probability that a chromosones bits will mutate.
 	//Try figures around 0.05 to 0.3 ish
 	double m_dMutationRate;
@@ -83,9 +63,31 @@ private:
 	//probability of chromosones crossing over bits
 	//0.7 is pretty good
 	double m_dCrossoverRate;
+	
+	//amount of weights per chromo
+	int m_iChromoLength;
 
+	//total fitness of population
+	double m_dTotalFitness;
 	//generation counter
 	int	  m_cGeneration;
+		//keeps track of the best genome
+	int		m_iFittestGenome;
+	//best fitness this population
+	double m_dBestFitness;
+	//worst
+	double m_dWorstFitness;
+	//average fitness
+	double m_dAverageFitness;
+
+
+
+
+
+
+
+
+
 
 
 	void    Crossover(const vector<double> &mum,
@@ -111,11 +113,12 @@ private:
 
 
 public:
+	std::string carpeta;
 	std::ofstream outfile;
 	CGenAlg(int 		popsize,
 			    double	MutRat,
 			    double	CrossRat,
-			    int	  	numweights);
+			    int	  	numweights,std::string nombreCarpeta);
 
 	//this runs the GA for one generation.
 	vector<SGenome>	Epoch(vector<SGenome> &old_pop,int n_generation);

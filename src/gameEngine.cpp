@@ -5,9 +5,9 @@ float gameEngine::volumen = 0.5;
 int gameEngine::game_speed = 100;
 Current gameEngine::stado;
 
-vector<battleIA*> gameEngine::Add_IAUnits;
-vector<Unidades*> gameEngine::Add_UserUnits;
-vector<edificio*> gameEngine::Add_Buildings;
+vector<shared_ptr<battleIA>> gameEngine::Add_IAUnits;
+vector<shared_ptr<Unidades>> gameEngine::Add_UserUnits;
+vector<shared_ptr<edificio>> gameEngine::Add_Buildings;
 
 int gameEngine::recursos_jugador = 1000;
 int gameEngine::recursos_ia = 1000;
@@ -57,10 +57,12 @@ float gameEngine::getVolume()
 
 void gameEngine::updatePlayer()
 {
-	for(IDibujable* u : UserUnits)
+	Unidades* uni_ptr;
+	for(shared_ptr<IDibujable> u : UserUnits)
 	{
 		graphics->mapa->getTile(u->getPosition().X,u->getPosition().Y)->setVinculado(NULL);
-		((Unidades*)u)->updateUnit();
+		uni_ptr = (Unidades*)(u.get());
+		uni_ptr->updateUnit();
 		graphics->mapa->getTile(u->getPosition().X,u->getPosition().Y)->setVinculado(u);
 	}
 }
@@ -81,33 +83,34 @@ int gameEngine::getSpeed()
 	return game_speed;
 }
 
-IDibujable* gameEngine::addUserUnit(int x,int y, int tipo)
+shared_ptr<IDibujable> gameEngine::addUserUnit(int x,int y, int tipo)
 {
-	Unidades* new_unit;
+	shared_ptr<Unidades> new_unit;
 	switch(tipo)
 	{
-		case 0: new_unit = new Aldeano(x,y); break;
-		case 1: new_unit = new Espadachin(x,y); break;
-		case 2: new_unit = new Lancero(x,y); break;
-		case 3: new_unit = new Arquero(x,y); break;
+		case 0: new_unit = shared_ptr<Unidades>(new Aldeano(x,y)); break;
+		case 1: new_unit = shared_ptr<Unidades>(new Espadachin(x,y)); break;
+		case 2: new_unit = shared_ptr<Unidades>(new Lancero(x,y)); break;
+		case 3: new_unit = shared_ptr<Unidades>(new Arquero(x,y)); break;
 		
 	}
 	
 	Add_UserUnits.push_back(new_unit);
+
 	return new_unit;
 }
 
 
-IDibujable* gameEngine::addIAUnit(int x,int y,int tipo)
+shared_ptr<IDibujable> gameEngine::addIAUnit(int x,int y,int tipo)
 {	
-	battleIA* new_unit;
+	shared_ptr<battleIA> new_unit;
 	switch(tipo)
 	{
-		case 0: new_unit = new AldeanoIA(x,y); break;
-		case 1: new_unit = new EspadachinIA(x,y); break;
-		case 2: new_unit = new LanceroIA(x,y); break;
-		case 3: new_unit = new ArqueroIA(x,y); break;
-		case 4: new_unit = new AldeanoDemo(position2di(25,150),position2di(175,150)); break;
+		case 0: new_unit = shared_ptr<battleIA>(new AldeanoIA(x,y)); break;
+		case 1: new_unit = shared_ptr<battleIA>(new EspadachinIA(x,y)); break;
+		case 2: new_unit = shared_ptr<battleIA>(new LanceroIA(x,y)); break;
+		case 3: new_unit = shared_ptr<battleIA>(new ArqueroIA(x,y)); break;
+		case 4: new_unit = shared_ptr<battleIA>(new AldeanoDemo(position2di(25,150),position2di(175,150))); break;
 	}
 	
 	Add_IAUnits.push_back(new_unit);
@@ -115,17 +118,21 @@ IDibujable* gameEngine::addIAUnit(int x,int y,int tipo)
 }
 
 
-IDibujable* gameEngine::addBuildings(int x,int y, int tipo, bool usuario)
+shared_ptr<IDibujable> gameEngine::addBuildings(int x,int y, int tipo,bool usuario)
 {
-	edificio* new_build;
+	shared_ptr<edificio> new_build;
 	switch(tipo)
 	{
-		case 0: new_build = new CentroCiudad(x,y,usuario); break;
-		case 1: new_build = new Granja(x,y,usuario); if(usuario) granjas_usuario++; else granjas_ia++; break;
-		case 2: new_build = new Cuartel(x,y,usuario); break;
-		case 3: new_build = new Arqueria(x,y,usuario); break;
-		case 4: new_build = new Lanceria(x,y,usuario); break;
-		
+		case 0: new_build = shared_ptr<edificio>(new CentroCiudad(x,y,usuario)); break;
+		case 1: new_build = shared_ptr<edificio>(new Granja(x,y,usuario)); 
+				if(usuario)
+					granjas_usuario++;
+				else 
+					granjas_ia++; 
+				break;
+		case 2: new_build = shared_ptr<edificio>(new Cuartel(x,y,usuario)); break;
+		case 3: new_build = shared_ptr<edificio>(new Arqueria(x,y,usuario)); break;
+		case 4: new_build = shared_ptr<edificio>(new Lanceria(x,y,usuario)); break;		
 	}
 
 	Add_Buildings.push_back(new_build);
@@ -136,21 +143,21 @@ void gameEngine::addNewUnits()
 {
 	if(graphics->mapa.get() !=NULL)
 	{
-		for(battleIA* ia : Add_IAUnits)
+		for(shared_ptr<battleIA> ia : Add_IAUnits)
 		{
 			ia->setPathfinding(graphics->mapa->getPathfinding());
 			graphics->mapa->AnyadirObjeto(ia);
 			IAUnits.push_back(ia);
 		}
 		Add_IAUnits.clear();
-		for(Unidades* unit : Add_UserUnits)
+		for(shared_ptr<Unidades> unit : Add_UserUnits)
 		{
 			unit->setPathfinding(graphics->mapa->getPathfinding());
 			graphics->mapa->AnyadirObjeto(unit);
 			UserUnits.push_back(unit);
 		}
 		Add_UserUnits.clear();
-		for(edificio* build : Add_Buildings)
+		for(shared_ptr<edificio> build : Add_Buildings)
 		{
 			build->setPathfinding(graphics->mapa->getPathfinding());
 			buildings.push_back(build);

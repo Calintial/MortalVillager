@@ -12,7 +12,7 @@ PantallaBasica::~PantallaBasica()
     delete hudmapa;
 }
 
-void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings)
+void PantallaBasica::pintarPantalla(vector<shared_ptr<IDibujable>>* ia_units,vector<shared_ptr<IDibujable>>* user_units,vector<shared_ptr<IDibujable>>* buildings)
 {
 	if(hudmapa == NULL){
 		hudmapa= new hud(pantallaDevice,mapa);

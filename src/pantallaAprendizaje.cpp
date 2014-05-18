@@ -7,14 +7,19 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	setTipo(tipo);
 	srand (time(NULL));
 	aprendizaje = new CController(pantallaDevice);
-
-	paused = false;
+	cantidadVecesCadaMapa=5;
+	cantidadIndice=0;
+	tipoMapa=1;
+	cantidadMapas=4;
+	paused = true;
 	continuar = false;
 
 	env->addCheckBox(false,rect<s32>(dimensionPantallaX+10,0,dimensionPantallaX+160,25), 0, CB_PAUSE, 
 							   L"Pause");
 	env->addButton(rect<s32>(dimensionPantallaX + 220,0,dimensionPantallaX + 430,25), 0, BUTTON_CONTINUAR,
         L"Continuar", L"");
+	env->addButton(rect<s32>(dimensionPantallaX + 220,30,dimensionPantallaX + 430,55), 0, BUTTON_CARGAR,
+        L"Cargar", L"");
 
 }
 
@@ -22,7 +27,7 @@ PantallaAprendizaje::~PantallaAprendizaje()
 {
 }
 
-void PantallaAprendizaje::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings)
+void PantallaAprendizaje::pintarPantalla(vector<shared_ptr<IDibujable>>* ia_units,vector<shared_ptr<IDibujable>>* user_units,vector<shared_ptr<IDibujable>>* buildings)
 {
 	/*if(aprendizaje == NULL){
 		aprendizaje= new CController();
@@ -30,7 +35,7 @@ void PantallaAprendizaje::pintarPantalla(vector<IDibujable*>* ia_units,vector<ID
 /*		int cont=1;  	
 for(int i=0;i<cont;i++){
 */
-	
+
 	pantallaDevice->getVideoDriver()->beginScene(true, true, SColor(0,200,200,200));
 	pantallaDevice->setEventReceiver(this);
 	pantallaDevice->getVideoDriver()->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(32*20,0,pantallaDevice->getVideoDriver()->getScreenSize().Width,pantallaDevice->getVideoDriver()->getScreenSize().Height));
@@ -40,8 +45,20 @@ for(int i=0;i<cont;i++){
 	{
 	//	cerr<<"ejecutando"<<endl;
 		if(!aprendizaje->redNeuronal()){
-			aprendizaje->genetico();		
+			aprendizaje->genetico();
+			cantidadIndice++;		
 		}
+		
+		if(cantidadIndice==cantidadVecesCadaMapa){
+			tipoMapa++;
+			if(tipoMapa>cantidadMapas){
+				tipoMapa=1;
+			}
+
+			aprendizaje->generarMapa(tipoMapa);
+			cantidadIndice=0;
+		}
+
 		continuar = false;
 	}else{
 	//	cerr<<"pausado"<<endl;
@@ -193,7 +210,17 @@ bool PantallaAprendizaje::OnEvent(const SEvent& event){
 		{
 			case BUTTON_CONTINUAR: continuar = true;
 								  break;
+			case BUTTON_CARGAR:{
+				env->addFileOpenDialog(L"Cargar pesos", true, 0, -1, true);
+				break;
+			}
 		}
+	}else if(event.GUIEvent.EventType == EGET_FILE_SELECTED){
+		IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
+		std::wstring file_wide = std::wstring(dialog->getFileName());
+		std::string file( file_wide.begin(), file_wide.end() );
+		cout<<"Cargando archivo: <"<<file<<">"<<std::endl;
+		aprendizaje->ponerWeightFichero(file);
 	}
 
 	/*if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)

@@ -37,7 +37,7 @@ bool hud::OnEvent(const SEvent& event)
 	printf("Estas clickando en el hud \n" );
 	return true;
 }
-void hud::paintInformation(vector<Unidades*>* pers){
+void hud::paintInformation(vector<shared_ptr<Unidades>>* pers){
 
 	if(pers!=NULL)
 		personajes=pers;
@@ -62,7 +62,7 @@ void hud::pintarMiniMapa(){
 	int xhud=0;
 	int yhud=0;
 	position2di dimPantalla=_mapa2D->GetCameraScroll();
-	IDibujable *dib;
+	shared_ptr<IDibujable> dib;
 	for(int i=0;i<WIDTH;i++){
 		for(int j=0;j<HEIGHT;j++){
 			dib= _mapa2D->getTile(j,i);
@@ -111,7 +111,7 @@ void hud::pintarMiniMapa(){
 		}
 	}
 
-	vector<IDibujable*>* bdub=_mapa2D->getBuildings();
+	vector<shared_ptr<IDibujable>>* bdub=_mapa2D->getBuildings();
 	for(unsigned int i=0;i<bdub->size();i++){
 		xhud=bdub->at(i)->getPosition().X;
 		yhud=bdub->at(i)->getPosition().Y;
@@ -166,8 +166,8 @@ void hud::paint(){
 			dibujarRecursos();
 
 			if(ensenyarInformacion==true){
-				vector<battleIA*>* idub= (vector<battleIA*>*)_mapa2D->getIa_units();
-				vector<Unidades*>* udub= (vector<Unidades*>*)_mapa2D->getUser_units();
+				vector<shared_ptr<battleIA>>* idub= (vector<shared_ptr<battleIA>>*)_mapa2D->getIa_units();
+				vector<shared_ptr<Unidades>>* udub= (vector<shared_ptr<Unidades>>*)_mapa2D->getUser_units();
 				int numper = 0;
 				
 				for(int i=0; i<idub->size(); i++)
@@ -202,7 +202,7 @@ void hud::dibujarRecursos()
 		video::SColor(255,255,255,255));
 }
 
-void hud::dibujaEnHUD(int numper,Unidades* posuni)
+void hud::dibujaEnHUD(int numper,shared_ptr<Unidades> posuni)
 {
 	/*core::stringw posx="";
 	posx+=posuni->getPosition().X;

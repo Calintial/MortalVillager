@@ -46,16 +46,22 @@ public:
 	static void setVolume(float);
 	static float getVolume();
 
-	vector<IDibujable*>* getIAUnits(){ return &IAUnits; }
-	vector<IDibujable*>* getUserUnits(){ return &UserUnits; }
-	vector<IDibujable*>* getBuildings(){ return &buildings; }
+	vector<shared_ptr<IDibujable>>* getIAUnits(){ return &IAUnits; }
+	vector<shared_ptr<IDibujable>>* getUserUnits(){ return &UserUnits; }
+	vector<shared_ptr<IDibujable>>* getBuildings(){ return &buildings; }
 
 	static void setSpeed(int);
 	static int getSpeed();
 
+<<<<<<< HEAD
+	static shared_ptr<IDibujable> addIAUnit(int,int,int);
+	static shared_ptr<IDibujable> addUserUnit(int,int,int);
+	static shared_ptr<IDibujable> addBuildings(int,int,int);
+=======
 	static IDibujable* addIAUnit(int,int,int);
 	static IDibujable* addUserUnit(int,int,int);
 	static IDibujable* addBuildings(int,int,int,bool);
+>>>>>>> master
 
 	void sleep(unsigned int);
 	static Current stado;
@@ -82,14 +88,14 @@ private:
 	static float volumen;
 
 	static int game_speed;
-	vector<IDibujable*> IAUnits;
-	vector<IDibujable*> UserUnits;
-	vector<IDibujable*> buildings;
+	vector<shared_ptr<IDibujable>> IAUnits;
+	vector<shared_ptr<IDibujable>> UserUnits;
+	vector<shared_ptr<IDibujable>> buildings;
 
 	/*Añadir unidades dinamicamente*/
-	static vector<battleIA*> Add_IAUnits;
-	static vector<Unidades*> Add_UserUnits;
-	static vector<edificio*> Add_Buildings;
+	static vector<shared_ptr<battleIA>> Add_IAUnits;
+	static vector<shared_ptr<Unidades>> Add_UserUnits;
+	static vector<shared_ptr<edificio>> Add_Buildings;
 
 	std::thread thread_resources;
 

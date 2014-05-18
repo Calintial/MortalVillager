@@ -27,7 +27,7 @@ public:
 	graphicEngine();
 	~graphicEngine();
 	void DrawMainMenu();
-	void DrawMap(vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*);
+	void DrawMap(vector<shared_ptr<IDibujable>>*,vector<shared_ptr<IDibujable>>*,vector<shared_ptr<IDibujable>>*);
 	void DrawPausa();
 	void setPantalla(Pantalla* _pantalla);
 

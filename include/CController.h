@@ -24,7 +24,10 @@
 #include "muro.h"
 #include "gameEngine.h"
 #include <fstream>
-#define MAPSIZE 20
+#include "MapaAprendizaje.h"
+#include <ctime>
+#include <boost/algorithm/string.hpp>
+#include <iomanip>
 using namespace std;
 
 const int TILE_W	= 32;
@@ -39,13 +42,16 @@ private:
 	vector<SGenome>	     m_vecThePopulation;
 
 	//and the minesweepers
-  vector<CUnidadesAprendizaje*> m_vecUnidades;
-
-
-	//pointer to the GA
-	CGenAlg*		         m_pGA;
+  vector<shared_ptr<CUnidadesAprendizaje>> m_vecUnidades;
 
 	int					         m_NumUnidades;
+	//pointer to the GA
+	CGenAlg*		         m_pGA;
+	//cycles per generation
+	int					m_iTicks;
+		//generation counter
+	int					m_iGenerations;
+
 
 	int					         m_NumWeightsInNN;
 
@@ -58,38 +64,43 @@ private:
 	//stores the best fitness per generation
 	vector<double>		   m_vecBestFitness;
 
-	//cycles per generation
-	int					m_iTicks;
 
-	//generation counter
-	int					m_iGenerations;
+
+
 	//0 transitable y 1 no transitable
-	IDibujable* 				Matriz[MAPSIZE][MAPSIZE];
+	MapaAprendizaje* 				matriz;
 
 	IrrlichtDevice* device;
 	video::IVideoDriver* driver;
 
-	Unidades* unidad_seleccionada;
+	shared_ptr<Unidades> unidad_seleccionada;
 
 	IGUIFont* font;
+	void guardarPesos();
 
 public:
+	time_t t;
+	std::string versionGit;
 	std::ofstream outfile;
+	std::string nombreCarpeta;
+	std::string red;
+	vector<double > prueba;
 	CController(IrrlichtDevice* dev);
 
 	~CController();
-	CUnidadesAprendizaje* getUnidadPosicion(position2di pos);
+	shared_ptr<CUnidadesAprendizaje>  getUnidadPosicion(position2di pos);
 	//bool		Update();
+	bool tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad, int i);
 	bool		tickRedNeuronal();
 	bool		redNeuronal();
 	bool		genetico();
 
 	void Pintar();
-	void generarMapa();
-	void modificarUnidad(CUnidadesAprendizaje* unidad);
+	
+	void generarMapa(int tipoMapa);
 	bool OnEvent(const SEvent& event);
 	void PintarInformacionUnidad();
-
+void ponerWeightFichero(std::string fichero);
 };
 
 

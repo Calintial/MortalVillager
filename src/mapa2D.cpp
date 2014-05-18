@@ -11,30 +11,44 @@ using namespace video;
 using namespace std;
 using namespace core;
 
-
-mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* b, bool suelo)
-{
-	ia_units = IAunits;
-	user_units = Userunits;
-	buildings = b;
-
-	MapaDevice = IrrDevice;
-
-    env = IrrDevice->getGUIEnvironment();
+mapa2D::mapa2D(IrrlichtDevice* dev){
+	ia_units = user_units = buildings = NULL;
+	MapaDevice = dev;
+	env = dev->getGUIEnvironment();
     env->clear();
 
     //Get the Scene Manager from the MapaDevice.
-    smgr = IrrDevice->getSceneManager();
+    smgr = dev->getSceneManager();
 
     //Get the Video Driver from the MapaDevice.
-    driver = IrrDevice->getVideoDriver();
+    driver = dev->getVideoDriver();
     
-	file = IrrDevice->getFileSystem();
+	file = dev->getFileSystem();
 	WorkingDirectory = file->getWorkingDirectory() + "/";
 	
 	skin = env->getSkin();
 
-	Init();   
+	Init();
+	Sel_Pulsado = false;
+
+	drawVision = false;
+	drawAttackVision = false;
+
+	ia_selected = -1;
+	sombra_edificio = false;
+	
+}
+
+mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<shared_ptr<IDibujable>>* IAunits, vector<shared_ptr<IDibujable>>* Userunits, vector<shared_ptr<IDibujable>>* b, bool suelo)
+:mapa2D(IrrDevice)
+{
+
+
+	ia_units = IAunits;
+	user_units = Userunits;
+	buildings = b;
+
+	
     
     //GenerarMapa();
     
@@ -42,24 +56,18 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<IDibujable*>* IAunits, vector<
 
     AllocateMap(suelo);
 
-	Sel_Pulsado = false;
-
-	drawVision = false;
-	drawAttackVision = false;
-
-	ia_selected = -1;
+	
 	pathFinding=new Pathfinding(shared_ptr<mapa2D>(this));
 	// Esto es bastante sucio, pero bueno...
-	for(IDibujable* unidad: *IAunits){
+	for(shared_ptr<IDibujable> unidad: *IAunits){
 		unidad->setPathfinding(pathFinding);
 	}
-	for(IDibujable* unidad: *Userunits){
+	for(shared_ptr<IDibujable> unidad: *Userunits){
 		unidad->setPathfinding(pathFinding);
 	}
-	for(IDibujable* unidad: *b){
+	for(shared_ptr<IDibujable> unidad: *b){
 		unidad->setPathfinding(pathFinding);
 	}
-	sombra_edificio = false;
 	
 	user_selvector = new vector<int>();
 	pathFinding->preprocesar();
@@ -92,22 +100,11 @@ void mapa2D::Init()
 }
 
 bool mapa2D::free()
-{
-	if(vTiles) 
-    {
-		for(int i = 0; i < WIDTH; i++)
-		{
-			for (int j = 0; j < HEIGHT; j++)
-			{
-				delete vTiles[i][j];
-			}			
-		}
-	}
-    
+{    
     return true;
 }
 
-vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
+vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
@@ -143,27 +140,27 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 				for(int i=0; i<user_units->size(); i++)
 				{
 					cout << "Deselecciono users" << endl;
-					((Unidades*)user_units->at(i))->TexturaSeleccionada(driver,false);
-					((Unidades*)user_units->at(i))->SetSelect(false);
+					std::dynamic_pointer_cast<Unidades>(user_units->at(i))->TexturaSeleccionada(driver,false);
+					std::dynamic_pointer_cast<Unidades>(user_units->at(i))->SetSelect(false);
 				}
 				for(int i=0; i<ia_units->size(); i++)
 				{
 					cout << "Deselecciono ia" << endl;
-					((Unidades*)ia_units->at(i))->TexturaSeleccionada(driver,false);
-					((Unidades*)ia_units->at(i))->SetSelect(false);
+					std::dynamic_pointer_cast<Unidades>(ia_units->at(i))->TexturaSeleccionada(driver,false);
+					std::dynamic_pointer_cast<Unidades>(ia_units->at(i))->SetSelect(false);
 				}
 				
 				if(user_selvector->size() >= 1)
 				{	
-					vector<Unidades*>* usuarios_Seleccionados = new vector<Unidades*>();
+					vector<shared_ptr<Unidades>>* usuarios_Seleccionados = new vector<shared_ptr<Unidades>>();
 					usuarios_Seleccionados->clear();
 					
 					cout << "CANTIDAD DE SELECCIONADOS:" << user_selvector->size() << endl;
 					for(int i=0; i<user_selvector->size(); i++)
 					{
-						((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,true);
-						((Unidades*)user_units->at(user_selvector->at(i)))->SetSelect(true);
-						usuarios_Seleccionados->push_back((Unidades*)user_units->at(user_selvector->at(i)));
+						std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,true);
+						std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->SetSelect(true);
+						usuarios_Seleccionados->push_back(std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i))));
 					}
 										
 					return usuarios_Seleccionados;
@@ -176,16 +173,16 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					
 					if(ia_selvector->size() >= 1)
 					{
-						vector<Unidades*>* ia_Seleccionados = new vector<Unidades*>();
+						vector<shared_ptr<Unidades>>* ia_Seleccionados = new vector<shared_ptr<Unidades>>();
 						ia_Seleccionados->clear();
 					
 						cout << "CANTIDAD DE IA SELECCIONADOS:" << ia_selvector->size() << endl;
 						
 						for(int i=0; i<ia_selvector->size(); i++)
 						{
-							((battleIA*)ia_units->at(ia_selvector->at(i)))->TexturaSeleccionada(driver,true);
-							((battleIA*)ia_units->at(ia_selvector->at(i)))->SetSelect(true);
-							ia_Seleccionados->push_back((Unidades*)ia_units->at(ia_selvector->at(i)));
+							std::dynamic_pointer_cast<Unidades>(ia_units->at(ia_selvector->at(i)))->TexturaSeleccionada(driver,true);
+							std::dynamic_pointer_cast<Unidades>(ia_units->at(ia_selvector->at(i)))->SetSelect(true);
+							ia_Seleccionados->push_back(std::dynamic_pointer_cast<Unidades>(ia_units->at(ia_selvector->at(i))));
 						}
 										
 						return ia_Seleccionados;
@@ -196,16 +193,16 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 						{
 							for(int i=0; i<user_selvector->size(); i++)
 							{
-								((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,false);
-								((Unidades*)user_units->at(ia_selvector->at(i)))->SetSelect(false);
+								std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								std::dynamic_pointer_cast<Unidades>(user_units->at(ia_selvector->at(i)))->SetSelect(false);
 							}
 						}
 						if(ia_selvector->size() > 1)
 						{
 							for(int i=0; i<ia_selvector->size(); i++)
 							{
-								((battleIA*)ia_units->at(ia_selvector->at(i)))->TexturaSeleccionada(driver,false);
-								((battleIA*)ia_units->at(ia_selvector->at(i)))->SetSelect(false);
+								std::dynamic_pointer_cast<battleIA>(ia_units->at(ia_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								std::dynamic_pointer_cast<battleIA>(ia_units->at(ia_selvector->at(i)))->SetSelect(false);
 							}
 						}
 					}
@@ -237,7 +234,7 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 								
 								cout << "POSICION INICIAL " << pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y << endl;
 
-								Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
+								shared_ptr<Unidades> unidad = std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)));
 								position2di posnueva=position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
 								
 								if(pos_grid.X+CameraScroll.X>=0 && pos_grid.Y+CameraScroll.Y>=0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
@@ -246,7 +243,7 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 									if (index != -1)
 									{
 										// esto hace que se fusionen las unidades sobre la unidad objetivo >_<
-										unidad->Move((Unidades*)ia_units->at(index));
+										unidad->Move(std::dynamic_pointer_cast<Unidades>(ia_units->at(index)));
 									}else{
 										unidad->Move(posnueva.X,posnueva.Y);
 									}
@@ -292,7 +289,7 @@ void mapa2D::AllocateMap(bool suelo)
 		{
 			for(int j=0; j < HEIGHT; j++) 
 			{
-				vTiles[i][j] = new Suelo(i,j);
+				vTiles[i][j] = shared_ptr<Suelo>(new Suelo(i,j));
 				vTiles[i][j]->aplicarTextura(driver);
 			}		
 		}
@@ -317,11 +314,11 @@ void mapa2D::AllocateMap(bool suelo)
 			{
 				if(mapatext[k]=='0')
 				{
-					vTiles[i][j] = new Suelo(i,j);
+					vTiles[i][j] = shared_ptr<Suelo>(new Suelo(i,j));
 				}
 				else
 				{
-					vTiles[i][j] = new Muro(i,j);
+					vTiles[i][j] = shared_ptr<Muro>(new Muro(i,j));
 				}
 				vTiles[i][j]->aplicarTextura(driver);
 				k++;
@@ -424,10 +421,10 @@ void mapa2D::GenerarMapa()
 				c=10;
 				if(vTiles[i][j]==NULL)
 				{
-					vTiles[i][j] =new Suelo(i,j);
+					vTiles[i][j] =shared_ptr<Suelo>(new Suelo(i,j));
 					mapatext+="0";
 					if(rand()%c!=1)
-						vTiles[i+1][j] = new Suelo(i,j);
+						vTiles[i+1][j] = shared_ptr<Suelo>(new Suelo(i+1,j));
 				}
 				else if(vTiles[i][j]->getTipo()==1)
 				{
@@ -445,10 +442,10 @@ void mapa2D::GenerarMapa()
 				c=3;
 				if(vTiles[i][j]==NULL)
 				{
-					vTiles[i][j] =new Muro(i,j);
+					vTiles[i][j] =shared_ptr<Muro>(new Muro(i,j));
 					mapatext+="1";
 					if(rand()%c!=1)
-						vTiles[i+1][j] = new Muro(i,j);
+						vTiles[i+1][j] = shared_ptr<Muro>(new Muro(i+1,j));
 				}
 				else if(vTiles[i][j]->getTipo()==0)
 				{
@@ -493,23 +490,19 @@ void mapa2D::GuardarMapa(){
 	}
 }
 
-IDibujable* mapa2D::getTile(int y, int x){
-	if (x >= WIDTH || y >= HEIGHT)
+shared_ptr<IDibujable> mapa2D::getTile(int y, int x){
+	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
 	{
 		return NULL;
 	}
 	return vTiles[x][y];
 }
 
-IDibujable* mapa2D::getTile(position2di pos){
-	if (pos.X >= WIDTH || pos.Y >= HEIGHT)
-	{
-		return NULL;
-	}
-	return vTiles[pos.X][pos.Y];
+shared_ptr<IDibujable> mapa2D::getTile(position2di pos){
+	return getTile(pos.Y,pos.X);
 }
 
-void mapa2D::setTile(int x, int y, IDibujable* contenido){
+void mapa2D::setTile(int x, int y, shared_ptr<IDibujable> contenido){
 	vTiles[x][y] = contenido;
 }
 
@@ -544,7 +537,7 @@ void mapa2D::Pintar()
 					DrawPosition = getIsoFromTile(i - CameraScroll.X, j - CameraScroll.Y);
 					// position2di((i*TILE_WIDTH) - CameraScroll.X, (j*TILE_HEIGHT) - CameraScroll.Y);
 					// Validar coordenada
-						IDibujable *Tile = vTiles[i][j];
+						shared_ptr<IDibujable> Tile = vTiles[i][j];
 						//Pinta
 						if(Tile->getTextura())
 							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
@@ -638,16 +631,16 @@ void mapa2D::PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY
 	driver->draw2DImage(TTexture, position2di(TPositionX, TPositionY), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 
-vector<IDibujable*>* mapa2D::getIa_units(){
+vector<shared_ptr<IDibujable>>* mapa2D::getIa_units(){
 	return ia_units;
 }
-vector<IDibujable*>* mapa2D::getUser_units(){
+vector<shared_ptr<IDibujable>>* mapa2D::getUser_units(){
 	return user_units;
 }
 
 
 
-vector<IDibujable*>* mapa2D::getBuildings(){
+vector<shared_ptr<IDibujable>>* mapa2D::getBuildings(){
 	return buildings;
 }
 
@@ -1180,7 +1173,7 @@ bool mapa2D::collide(position2di obj1, int w_obj1, int h_obj1, position2di obj2,
 }
 
 void mapa2D::colocarEdificio(position2di pos_colocar){
-	IDibujable* edificio = NULL;
+	shared_ptr<IDibujable> edificio = NULL;
 
 	switch(getTipoEdificio())
 	{
@@ -1230,7 +1223,7 @@ void mapa2D::colocarEdificio(position2di pos_colocar){
 }
 
 
-void mapa2D::AnyadirObjeto(IDibujable* obj)
+void mapa2D::AnyadirObjeto(shared_ptr<IDibujable> obj)
 {
 	cout << obj->getPosition().X << endl;
 	cout << obj->getPosition().Y << endl;
