@@ -77,6 +77,10 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<shared_ptr<IDibujable>>* IAuni
 	recol_RangoAux=0;
 	recol_Grados = vector<int>(16);
 	reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
+
+
+	IniciarUnidades();
+	IniciarEdificios();
 }
 
 
@@ -105,6 +109,16 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 	if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		position2di pos_grid = getTileCoordinates(event.MouseInput.X,event.MouseInput.Y);
+
+		int tipo = 0;
+		if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X) != NULL)
+		{
+			if(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado() != NULL)
+			{
+				tipo = getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado()->getTipo();
+			}
+		}
+
 
 		switch(event.MouseInput.Event)
 		{
@@ -202,12 +216,13 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 				if(Sel_Pulsado==true)
 				{
 					Sel_Fin = MapaDevice->getCursorControl()->getPosition();
+					ponertextura = true;
 				}
 				break;
 			
 			case EMIE_RMOUSE_PRESSED_DOWN:
 					//MIRAR COMO HACER MOVER TODOS
-					if(user_selvector->size() >= 1)
+					if(user_selvector->size() >= 1 && tipo != 2)
 					{
 						cout<<"Boton derecho, pulsado en:"<<pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y <<endl;
 						for(int i=0; i<user_selvector->size(); i++)
@@ -238,6 +253,25 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 						recol_Rango=1;
 						recol_RangoAux=0;
 						reasignarVectorRecolocacion(recol_RangoAux,recol_Rango);
+					}
+					else if(user_selvector->size() == 1 && tipo == 2)
+					{
+						Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(0)));
+						if(unidad->getType() == 0 && gameEngine::recursos_jugador >= 300)
+						{
+							cout<<"Transformacion!!"<<endl;
+							int clase = ((edificio*)getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado())->getClase();
+							user_units->erase(user_units->begin() + user_selvector->at(0));
+
+							switch(clase)
+							{
+								case 2: (gameEngine::addUserUnit(unidad->getPosicion().X,unidad->getPosicion().Y,1))->aplicarTextura(driver); gameEngine::recursos_jugador -= 300; break;
+								case 3: (gameEngine::addUserUnit(unidad->getPosicion().X,unidad->getPosicion().Y,3))->aplicarTextura(driver); gameEngine::recursos_jugador -= 300; break;
+								case 4: (gameEngine::addUserUnit(unidad->getPosicion().X,unidad->getPosicion().Y,2))->aplicarTextura(driver); gameEngine::recursos_jugador -= 300; break;
+								default:;
+							}					
+						}
+
 					}
 					break;
 			default:;
@@ -290,23 +324,78 @@ void mapa2D::AllocateMap(bool suelo)
 				k++;
 			}
 		}
-		
-		//Añadimos 2 IAS por defecto
-		(gameEngine::addIAUnit(0,0,0))->aplicarTextura(driver);
-		(gameEngine::addIAUnit(10,10,0))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(24,12,0))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(30,15,0))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(40,20,0))->aplicarTextura(driver);
-		(gameEngine::addUserUnit(34,17,0))->aplicarTextura(driver);
-		/*addIAUnit(0,0,0)->aplicarTextura(driver);
-		addIAUnit(10,10,0)->aplicarTextura(driver);
-		addUserUnit(24,12,0)->aplicarTextura(driver);
-		addUserUnit(30,15,0)->aplicarTextura(driver);
-		addUserUnit(40,20,0)->aplicarTextura(driver);
-		addUserUnit(34,17,0)->aplicarTextura(driver);*/
+
 	}
 }
 
+void mapa2D::IniciarUnidades()
+{
+	//Unidades IA
+	for(int i=188; i < 191; i++)
+	{
+		for(int j=190; j < 193; j++)
+		{
+			(gameEngine::addIAUnit(i,j,0))->aplicarTextura(driver);
+		}
+	}
+
+	//Unidades usuario
+
+	for(int i=11; i < 14; i++)
+	{
+		for(int j=10; j < 13; j++)
+		{
+			(gameEngine::addUserUnit(i,j,0))->aplicarTextura(driver);
+		}
+	}
+}
+
+void mapa2D::IniciarEdificios()
+{
+	
+	//Edificios IA
+	position2di pos_ia; pos_ia.X = 190; pos_ia.Y = 193;
+	IDibujable* cc_ia = gameEngine::addBuildings(pos_ia.X,pos_ia.Y,0,false);
+	cc_ia->aplicarTextura(driver);
+
+	ITexture* tex = cc_ia->getTextura();
+	int i,j;
+	for (i = 0; i < tex->getSize().Width/TILE_WIDTH; ++i)
+	{
+		for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j)
+		{
+			if(i==0 && j==0)
+				cc_ia->setPintable(true);
+			else
+				cc_ia->setPintable(false);
+			getTile(pos_ia.Y + j,pos_ia.X + i)->setVinculado(cc_ia);
+		}
+	}
+	position2di down_right_ia(pos_ia.X + i,pos_ia.Y + j);
+	pathFinding->actualizarRegiones(pos_ia,down_right_ia);
+
+	//Edificios usuario
+	position2di pos_usuario; pos_usuario.X = 5; pos_usuario.Y = 3;
+	IDibujable* cc_usuario = (gameEngine::addBuildings(pos_usuario.X,pos_usuario.Y,0,true));
+	cc_usuario->aplicarTextura(driver);
+
+	tex = cc_ia->getTextura();
+
+	for (i = 0; i < tex->getSize().Width/TILE_WIDTH; ++i)
+	{
+		for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j)
+		{
+			if(i==0 && j==0)
+				cc_usuario->setPintable(true);
+			else
+				cc_usuario->setPintable(false);
+			getTile(pos_usuario.Y + j,pos_usuario.X + i)->setVinculado(cc_usuario);
+		}
+	}
+	position2di down_right_usuario(pos_usuario.X + i,pos_usuario.Y + j);
+	pathFinding->actualizarRegiones(pos_usuario,down_right_usuario);
+
+}
 
 //Suelo==0, Montaña=1, Bosque=2, CC=3, ALDEANO=4
 void mapa2D::GenerarMapa()
@@ -433,7 +522,7 @@ void mapa2D::SetCameraScroll(const position2di &TPosition)
 void mapa2D::Pintar()
 {
 	if (MapaDevice->run())
-    {        
+    {
         if(driver)
         {
 			position2di GridPosition, DrawPosition;
@@ -453,16 +542,16 @@ void mapa2D::Pintar()
 						if(Tile->getTextura())
 							Tile->Pintar(driver, DrawPosition.X, DrawPosition.Y);
 						//Pintando cosas vinculadas (de momento solo IAs)
-						if(Tile->getVinculado()!=NULL)
+						/*if(Tile->getVinculado()!=NULL)
 						{
 							DrawPosition = getDrawPosition(Tile->getVinculado()->getPosition());
 							DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
 							Tile->getVinculado()->Pintar(driver,DrawPosition.X, DrawPosition.Y);
-						}
+						}*/
 				}
 			}
 
-			//DrawIAUnits();
+			DrawIAUnits();
 			DrawUserUnits();
 			DrawBuildings();
 			
@@ -474,32 +563,60 @@ void mapa2D::Pintar()
 			//Pintar seleccion
 			if(Sel_Pulsado==true)
 			{	
+				position2di IsoSel_Inicio = getTileCoordinates(Sel_Inicio.X,Sel_Inicio.Y)+CameraScroll;
+				position2di IsoSel_Fin = getTileCoordinates(Sel_Fin.X,Sel_Fin.Y)+CameraScroll;
+				
+				cout << Sel_Inicio.X << "," << Sel_Inicio.Y << endl;
+				cout << Sel_Fin.X << "," << Sel_Fin.Y << endl;
+				ITexture* shadow_texture2;
+				
 				//rect<s32>(top_left, bottom_right)
 				if(Sel_Inicio.X > Sel_Fin.X && Sel_Inicio.Y > Sel_Fin.X)
 				{
-					//cout << "CASO ARRIBA IZQUIERDA: "<< Sel_Inicio.X << "," << Sel_Inicio.Y << " a " << Sel_Fin.X << "," << Sel_Fin.Y << endl;
-					driver->draw2DRectangle(video::SColor(100,255,255,255),
-					core::rect<s32>(Sel_Fin.X, Sel_Fin.Y, Sel_Inicio.X, Sel_Inicio.Y));
+					for(int i=Sel_Fin.X; i<Sel_Inicio.X; i++)
+					{
+						for(int j=Sel_Fin.Y; j<Sel_Inicio.Y; j++)
+						{
+							shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+							PintarTile(shadow_texture2, i, j);
+						}
+					}	
 				}
 				else if(Sel_Inicio.X < Sel_Fin.X && Sel_Inicio.Y < Sel_Fin.Y)
 				{
-					//cout << "CASO ABAJO DERECHA: "<< Sel_Inicio.X << "," << Sel_Inicio.Y << " a " << Sel_Fin.X << "," << Sel_Fin.Y << endl;
-					driver->draw2DRectangle(video::SColor(100,255,255,255),
-					core::rect<s32>(Sel_Inicio.X, Sel_Inicio.Y, Sel_Fin.X, Sel_Fin.Y));		
+					for(int i=Sel_Inicio.X; i<Sel_Fin.X; i++)
+					{
+						for(int j=Sel_Inicio.Y; j<Sel_Fin.Y; j++)
+						{
+							shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+							PintarTile(shadow_texture2, i, j);
+						}
+					}	
 				}
 				else if(Sel_Inicio.X > Sel_Fin.X && Sel_Inicio.Y < Sel_Fin.Y)
 				{
-					//cout << "CASO ABAJO IZQUIERDA: "<< Sel_Inicio.X << "," << Sel_Inicio.Y << " a " << Sel_Fin.X << "," << Sel_Fin.Y << endl;
-					driver->draw2DRectangle(video::SColor(100,255,255,255),
-					core::rect<s32>(Sel_Fin.X, Sel_Inicio.Y, Sel_Inicio.X, Sel_Fin.Y));		
+					for(int i=Sel_Fin.X; i<Sel_Inicio.X; i++)
+					{
+						for(int j=Sel_Inicio.Y; j<Sel_Fin.Y; j++)
+						{
+							shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+							PintarTile(shadow_texture2, i, j);
+						}
+					}	
 				}
 				else
 				{
-					//cout << "CASO ARRIBA DERECHA: " << Sel_Inicio.X << "," << Sel_Inicio.Y << " a " << Sel_Fin.X << "," << Sel_Fin.Y << endl;			
-					driver->draw2DRectangle(video::SColor(100,255,255,255),
-					core::rect<s32>(Sel_Inicio.X, Sel_Fin.Y, Sel_Fin.X, Sel_Inicio.Y));		
+					cout << "AGGGG" << endl;
+					for(int i=Sel_Inicio.X; i<Sel_Fin.X; i++)
+					{
+						for(int j=Sel_Fin.Y; j<Sel_Inicio.Y; j++)
+						{
+							shadow_texture2 = driver->getTexture("../media/Texturas/building/shadow.png");
+							PintarTile(shadow_texture2, i, j);
+						}
+					}			
 				}
-			}      	
+			}    	
         }
     }
     else
@@ -526,6 +643,7 @@ vector<shared_ptr<IDibujable>>* mapa2D::getUser_units(){
 vector<shared_ptr<IDibujable>>* mapa2D::getBuildings(){
 	return buildings;
 }
+
 void mapa2D::DrawBuildings()
 {
 	position2di DrawPosition;
@@ -533,9 +651,12 @@ void mapa2D::DrawBuildings()
 	int n_build = buildings->size();	
 	for(int i=0; i<n_build; i++)
 	{
-		DrawPosition = getDrawPosition(buildings->at(i)->getPosition());
-		DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
-		buildings->at(i)->Pintar(driver,DrawPosition.X  - 25, DrawPosition.Y);
+		/*if(buildings->at(i)->isPintable())
+		{*/
+			DrawPosition = getDrawPosition(buildings->at(i)->getPosition());
+			DrawPosition = twoDToIso(DrawPosition.X, DrawPosition.Y);
+			buildings->at(i)->Pintar(driver,DrawPosition.X  - 25, DrawPosition.Y);
+		//}
 	}
 }
 
@@ -647,6 +768,8 @@ vector<int>* mapa2D::IASelected()
 
 	vector<int>* Sel_IA = new vector<int>();
 
+	cout << Sel_Inicio.X << endl;
+
 	position2di IsoSel_Inicio = getTileCoordinates(Sel_Inicio.X,Sel_Inicio.Y)+CameraScroll;
 	position2di IsoSel_Fin = getTileCoordinates(Sel_Fin.X,Sel_Fin.Y)+CameraScroll;
 
@@ -722,12 +845,16 @@ vector<int>* mapa2D::UserSelected()
 	cout << "INICIOISO: " << IsoSel_Inicio.X << "," << IsoSel_Inicio.Y << endl;
 	cout << "FINISO: " << IsoSel_Fin.X << "," << IsoSel_Fin.Y << endl;
 
+	cout << "INICIOPANTALLA: " << Sel_Inicio.X << "," << Sel_Inicio.Y << endl;
+	cout << "FINPANTALLA: " << Sel_Fin.X << "," << Sel_Fin.Y << endl;
+
 	for(int i=0; i<n_units; i++)
 	{
+		position2di posuserPantalla = getScreenCoordinates(user_units->at(i)->getPosition());
+		cout << "pos_userPANTALLA" << i << " " << posuserPantalla.X << "," << posuserPantalla.Y << endl; 
+		cout << "pos_user" << i << " " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
 		if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y < IsoSel_Fin.Y)
-		{
-			cout << "pos user1 " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
-				
+		{		
 			if( user_units->at(i)->getPosition().X >= IsoSel_Inicio.X &&
 				user_units->at(i)->getPosition().Y >= IsoSel_Inicio.Y &&
 				user_units->at(i)->getPosition().X <= IsoSel_Fin.X &&
@@ -738,14 +865,7 @@ vector<int>* mapa2D::UserSelected()
 			}
 		}
 		else if(IsoSel_Inicio.X > IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
-		{
-			cout << "pos user2 " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
-			
-			cout << user_units->at(i)->getPosition().X << "<=" << IsoSel_Inicio.X << endl;
-			cout << user_units->at(i)->getPosition().Y << "<=" << IsoSel_Inicio.Y << endl;
-			cout << user_units->at(i)->getPosition().X << ">=" << IsoSel_Fin.X << endl;
-			cout << user_units->at(i)->getPosition().Y << ">=" << IsoSel_Fin.Y << endl;
-			
+		{		
 			if( user_units->at(i)->getPosition().X <= IsoSel_Inicio.X &&
 				user_units->at(i)->getPosition().Y <= IsoSel_Inicio.Y &&
 				user_units->at(i)->getPosition().X >= IsoSel_Fin.X &&
@@ -754,14 +874,9 @@ vector<int>* mapa2D::UserSelected()
 				Sel_User->push_back(i);
 				cout << "2)Pos USER encontrada:" << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
 			}
-			else
-			{
-				cout << "NOP2" << endl;
-			}
 		}
 		else if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
 		{
-			cout << "pos user3 " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
 			if( user_units->at(i)->getPosition().X >= IsoSel_Inicio.X &&
 				user_units->at(i)->getPosition().X <= IsoSel_Fin.X &&
 				user_units->at(i)->getPosition().Y <= IsoSel_Inicio.Y &&
@@ -773,7 +888,6 @@ vector<int>* mapa2D::UserSelected()
 		}
 		else if(IsoSel_Inicio.X < IsoSel_Fin.X && IsoSel_Inicio.Y > IsoSel_Fin.Y)
 		{
-			cout << "pos user4 " << user_units->at(i)->getPosition().X << "," << user_units->at(i)->getPosition().Y << endl;
 			if( user_units->at(i)->getPosition().X <= IsoSel_Inicio.X &&
 				user_units->at(i)->getPosition().X >= IsoSel_Fin.X &&
 				user_units->at(i)->getPosition().Y >= IsoSel_Inicio.Y &&
@@ -836,6 +950,18 @@ position2di mapa2D::getTileCoordinates(int x, int y)
 	pos.Y=round(ymouse/TILE_WIDTH);
 	pos.X=round(xmouse/TILE_WIDTH)-1;
 	return pos;
+}
+
+position2di mapa2D::getScreenCoordinates(position2di pos)
+{
+	position2di posScreen;
+	pos.X = pos.X*TILE_WIDTH;
+	pos.Y = pos.Y*TILE_WIDTH;
+	
+	posScreen.X = pos.X - pos.Y;
+	posScreen.Y = (2*pos.Y + posScreen.X)/2;
+	
+	return  posScreen;
 }
 
 position2di mapa2D::getIsoFromTile(int tilex, int tiley)
@@ -913,27 +1039,36 @@ bool mapa2D::puede_colocar(position2di pos)
 	{
 		for(int y = pos.Y; y < pos.Y + 5; y++)
 		{
-			if(getTile(y,x)->getTipo() == 1)
+			IDibujable* tile = getTile(y,x);
+			if(tile != NULL)
+			{
+				if(getTile(y,x)->getTipo() == 1)
+				{
+					return false;
+				}
+				
+
+				for(int i=0; i<ia_units->size(); i++)
+				{
+					if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
+					{
+						return false;
+					}
+				}
+
+				for(int i=0; i<user_units->size(); i++)
+				{
+					if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
+					{
+						return false;
+					}
+				}
+			}
+			else
 			{
 				return false;
 			}
-			
 
-			for(int i=0; i<ia_units->size(); i++)
-			{
-				if(ia_units->at(i)->getPosition().X == x && ia_units->at(i)->getPosition().Y == y)
-				{
-					return false;
-				}
-			}
-
-			for(int i=0; i<user_units->size(); i++)
-			{
-				if(user_units->at(i)->getPosition().X == x && user_units->at(i)->getPosition().Y == y)
-				{
-					return false;
-				}
-			}
 		}
 	}
 
@@ -1042,25 +1177,25 @@ void mapa2D::colocarEdificio(position2di pos_colocar){
 
 	switch(getTipoEdificio())
 	{
-		case 0: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0); break;
+		case 0: edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,0,true); break;
 		case 1: if(gameEngine::recursos_jugador >= 400)
 				{
-					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1);
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,1,true);
 					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 400;
 				} break;
 		case 2: if(gameEngine::recursos_jugador >= 600)
 				{
-					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2);
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,2,true);
 					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
 				} break;
 		case 3: if(gameEngine::recursos_jugador >= 600)
 				{
-					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3);
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,3,true);
 					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
 				} break;
 		case 4: if(gameEngine::recursos_jugador >= 600)
 				{
-					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4);
+					edificio = gameEngine::addBuildings(pos_colocar.X,pos_colocar.Y,4,true);
 					gameEngine::recursos_jugador = gameEngine::recursos_jugador - 600;
 				} break;
 	}
@@ -1072,8 +1207,12 @@ void mapa2D::colocarEdificio(position2di pos_colocar){
 		int i,j;
 		for (i = 0; i < tex->getSize().Width/TILE_WIDTH; ++i)
 		{
-			for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j){
-
+			for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j)
+			{
+				if(i==0 && j==0)
+					edificio->setPintable(true);
+				else
+					edificio->setPintable(false);
 				getTile(pos_colocar.Y + j,pos_colocar.X + i)->setVinculado(edificio);
 			}
 		}

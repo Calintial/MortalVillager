@@ -1,26 +1,43 @@
-OPTS=-g -Wall -std=c++11
+CC=ccache g++
+
+OPTS=-Wall -std=c++11 -O0 -g
 INCLUDES=-I/usr/include/irrlicht/ -Iinclude -I/usr/include/fmodex/
 LINKS=-lIrrlicht -lGL -lGLU -lX11 -lXxf86vm -lfmodex -lboost_graph
 
-
-OBJECTS=graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMenu.o Unidades.o battleIA.o suelo.o mapa2D.o IDibujable.o DebugMenu.o hud.o pantalla.o pausa.o state.o muro.o
+OBJECTS=battleIA.o graphicEngine.o gameEngine.o intelEngine.o edificio.o mainMenu.o Unidades.o suelo.o mapa2D.o IDibujable.o hud.o pausa.o state.o muro.o stateIA.o Region.o Camino.o Pathfinding.o Nodo.o NodoLocal.o NodoRegional.o pantallaBasica.o
+OBJECTS_CLASES=Arquero.o Lancero.o Aldeano.o Espadachin.o ArqueroIA.o LanceroIA.o AldeanoIA.o EspadachinIA.o AldeanoDemo.o
+OBJECTS_EDIFICIOS=CentroCiudad.o Lanceria.o Arqueria.o Cuartel.o Granja.o
+OBJECTS_MAIN=pantalla.o pantallaPathfinding.o InterfazPathfinding.o pantallaIABatalla.o pantallaAprendizaje.o DebugMenu.o $(OBJECTS) $(OBJECTS_CLASES) $(OBJECTS_EDIFICIOS) $(OBJECTS_APRENDIZAJE)
+OBJECTS_APRENDIZAJE= CController.o CGenAlg.o CUnidadesAprendizaje.o CNeuralNet.o CParams.o utils.o ObjetosCercanos.o EspadachinRedes.o
 
 .PHONY: all clean
 
+all: main
+	echo "COMPILADO ALL"
+
+# pathfinding: bin/pathfinding
+# 	echo "COMPILADO PATHFINDING"
+
+# ia_batalla: bin/ia_batalla
+# 	echo "COMPILADO IA_BATALLA"
+#aprendizaje: bin/aprendizaje
+#	echo "COMPILADO EL APRENDIZAJE"
 main: bin/main
+	echo "COMPILADO MAIN"
 
-bin/main: src/main.cpp $(OBJECTS)
-
+bin/main: src/main.cpp $(OBJECTS_MAIN)
 	mkdir -p bin
-	g++ -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
+	$(CC) -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
-# To obtain object files
-%.o: src/%.cpp include/%.h
-	g++ -c $< $(OPTS) $(INCLUDES) -o $@
+# http://stackoverflow.com/questions/8025766/makefile-auto-dependency-generation
+%.o: src/%.cpp
+	g++ -MD -c -o $@ $< $(OPTS) $(INCLUDES) $(LINKS) && mkdir -p bin/.deps && \
+	cp $*.d bin/.deps/$*.P && \
+	sed -e 's/#.*//' -e 's/^[^:]*: *//' \
+	-e 's/ *\\$$//' -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> bin/.deps/$*.P && rm -f $*.d
 
-# bin/hello: src/HelloWorld.cpp
-# 	mkdir -p bin;g++ -o bin/hello src/HelloWorld.cpp $(OPTS) $(INCLUDES) $(LINKS)
+-include bin/.deps/*.P
 
 clean:
-	rm *.o
+	rm -f *.o
 	rm -rf bin

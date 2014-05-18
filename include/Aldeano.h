@@ -5,6 +5,8 @@
 #include "IDibujable.h"
 #include "Unidades.h"
 
+
+
 class Aldeano : public Unidades{
 
 public:
@@ -26,12 +28,14 @@ public:
 	virtual void Pintar(IVideoDriver* driver,int,int);
 	virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
 	void aplicarTextura(IVideoDriver* driver);
+	void nextSprite();
 	
 
 private:
 	int sprite_Width;
 	int sprite_Height;
 	int current_sprite;
+	int delay_sprite;
 	int attack_value;
 	int vision_range;
 	int attack_range;

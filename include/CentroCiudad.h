@@ -10,7 +10,7 @@
 class CentroCiudad  : public edificio{
 public:
 	CentroCiudad();
-	CentroCiudad(int, int);
+	CentroCiudad(int, int,bool);
 	~CentroCiudad();
 
 	virtual void Pintar(IVideoDriver*,int,int);

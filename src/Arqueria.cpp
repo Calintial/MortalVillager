@@ -1,11 +1,11 @@
 #include "Arqueria.h"
 
 
-Arqueria::Arqueria() : edificio(2)
+Arqueria::Arqueria() : edificio(3)
 {
 }
 
-Arqueria::Arqueria(int x, int y) : edificio(3,x,y)
+Arqueria::Arqueria(int x, int y, bool usuario) : edificio(3,x,y,usuario)
 {
 }
 

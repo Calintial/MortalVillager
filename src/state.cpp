@@ -35,6 +35,12 @@ bool Current::sfinal()
 	return current->sfinal();
 }
 
+
+bool Current::is_ingame()
+{
+	return current->is_ingame();
+}
+
 void Current::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 {
 	current->doSomething(ge, graphics,ia,mapa);
@@ -83,6 +89,17 @@ void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* i
 	
 	graphics->DrawMap(StIAUnits,StUserUnits,StBuildingsUnits);
 	
+	ge->Siguiente_tick_juego += ge->SALTO_TICKS_RELOJ;
+	ge->tiempo_durmiendo = ge->Siguiente_tick_juego - ge->clockMS(clock());
+
+
+	if(ge->tiempo_durmiendo >= 0)
+	{
+
+		ge->sleep(ge->tiempo_durmiendo);
+	}
+
+
 	ge->sleep(100-gameEngine::getSpeed());
 	//cout << "MOSTRAR PANTALLA DE JUEGO" << endl;
 }

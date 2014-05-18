@@ -12,6 +12,10 @@ vector<shared_ptr<edificio>> gameEngine::Add_Buildings;
 int gameEngine::recursos_jugador = 1000;
 int gameEngine::recursos_ia = 1000;
 
+int gameEngine::granjas_usuario = 0;
+int gameEngine::granjas_ia = 0;
+
+
 gameEngine::gameEngine()
 {
 	gameState = 0;
@@ -19,15 +23,20 @@ gameEngine::gameEngine()
 	graphics = new graphicEngine();
 	
 	ia = new intelEngine(&IAUnits,&UserUnits);
+
+
 }
 
 gameEngine::~gameEngine()
 {
 	delete graphics;
+	thread_resources.join();
+
 }
 
 void gameEngine::run()
 {
+ 	thread_resources = std::thread(&gameEngine::scheduler, this, 10000);
 	//Bucle principal del juego. Mientras el estado no cambia a FINISH el programa no termina.
 	//En cada estado se llamará a los motores necesarios(IA,Graficos,etc...)
 	while(!stado.sfinal())
@@ -109,17 +118,21 @@ shared_ptr<IDibujable> gameEngine::addIAUnit(int x,int y,int tipo)
 }
 
 
-shared_ptr<IDibujable> gameEngine::addBuildings(int x,int y, int tipo)
+shared_ptr<IDibujable> gameEngine::addBuildings(int x,int y, int tipo,bool usuario)
 {
 	shared_ptr<edificio> new_build;
 	switch(tipo)
 	{
-		case 0: new_build = shared_ptr<edificio>(new CentroCiudad(x,y)); break;
-		case 1: new_build = shared_ptr<edificio>(new Granja(x,y)); break;
-		case 2: new_build = shared_ptr<edificio>(new Cuartel(x,y)); break;
-		case 3: new_build = shared_ptr<edificio>(new Arqueria(x,y)); break;
-		case 4: new_build = shared_ptr<edificio>(new Lanceria(x,y)); break;
-		
+		case 0: new_build = shared_ptr<edificio>(new CentroCiudad(x,y,usuario)); break;
+		case 1: new_build = shared_ptr<edificio>(new Granja(x,y,usuario)); 
+				if(usuario)
+					granjas_usuario++;
+				else 
+					granjas_ia++; 
+				break;
+		case 2: new_build = shared_ptr<edificio>(new Cuartel(x,y,usuario)); break;
+		case 3: new_build = shared_ptr<edificio>(new Arqueria(x,y,usuario)); break;
+		case 4: new_build = shared_ptr<edificio>(new Lanceria(x,y,usuario)); break;		
 	}
 
 	Add_Buildings.push_back(new_build);
@@ -153,3 +166,22 @@ void gameEngine::addNewUnits()
 	}
 }
 
+void gameEngine::scheduler (int variables) 
+{
+
+  while (!stado.sfinal()){
+  	if(stado.is_ingame())
+  	{
+		recursos_jugador+=10 * (granjas_usuario+1);
+		recursos_ia+=10  * (granjas_ia+1);
+		cout<<recursos_jugador<<endl;
+	    sleep (variables);
+  	}
+
+  }
+}
+
+long gameEngine::clockMS(clock_t ticks)
+{
+	return (ticks*1000)/CLOCKS_PER_SEC;
+}
