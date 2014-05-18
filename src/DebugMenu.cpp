@@ -1,7 +1,7 @@
 #include "DebugMenu.h"
 
 
-DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<IDibujable*>* ia_units, shared_ptr<mapa2D> map)
+DebugMenu::DebugMenu(IrrlichtDevice * IrrDevice, vector<shared_ptr<IDibujable>>* ia_units, shared_ptr<mapa2D> map)
 {
 	DebugDevice = IrrDevice;
     env = IrrDevice->getGUIEnvironment();
@@ -97,8 +97,10 @@ void DebugMenu::DrawMEF()
 	int ia_selected = mapa->getIASelected();
 	int ia_state = -1;
 
-	if(ia_selected != -1)
-		ia_state = ((battleIA*)vUnits->at(ia_selected))->getState();
+	if(ia_selected != -1){
+		battleIA* batiA = (battleIA*)vUnits->at(ia_selected).get();
+		ia_state = batiA->getState();
+	}
 
 	if(ia_state == SEARCHING)
 	{
@@ -255,7 +257,9 @@ void DebugMenu::DrawParameters()
 	int ia_selected = mapa->getIASelected();
 	if(ia_selected != -1)
 	{
-		int ia_life = ((Unidades*)vUnits->at(ia_selected))->getLife();
+
+		Unidades* unidad = (Unidades*)vUnits->at(ia_selected).get();
+		int ia_life = unidad->getLife();
 		std::string string_life = "Vida:" + to_string(ia_life);
 		std::string string_unit_selected = "Unidad IA seleccionada: " + to_string(ia_selected);
 
@@ -279,8 +283,9 @@ void DebugMenu::DrawVisions()
 	for(int i=0; i<n_ia; i++)
 	{
 		position2di pos = vUnits->at(i)->getPosition() - mapa->GetCameraScroll();
-		int v_range = ((Unidades*)vUnits->at(i))->getVisionRange();
-		int a_range = ((Unidades*)vUnits->at(i))->getAttackRange();
+		Unidades* uni_ptr = (Unidades*)(vUnits->at(i).get());
+		int v_range = uni_ptr->getVisionRange();
+		int a_range = uni_ptr->getAttackRange();
 
 		position2di limits;
 		limits.X = WIDTH;

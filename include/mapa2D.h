@@ -46,7 +46,7 @@ public:
 	};
 
 
-	mapa2D(IrrlichtDevice * IrrDevice,vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*,bool);
+	mapa2D(IrrlichtDevice * IrrDevice,vector<shared_ptr<IDibujable>>*,vector<shared_ptr<IDibujable>>*,vector<shared_ptr<IDibujable>>*,bool);
 	virtual ~mapa2D();
 	//mapa2D(const mapa2D&) {};
 	//mapa2D& operator=(const mapa2D&) {};
@@ -56,10 +56,10 @@ public:
 	void GenerarMapa();
 	void GuardarMapa();
 
-	IDibujable* getTile(int x, int y);
-	IDibujable* getTile(position2di);
-	void setTile(int x, int y, IDibujable* contenido);
-	void AnyadirObjeto(IDibujable*);
+	shared_ptr<IDibujable> getTile(int x, int y);
+	shared_ptr<IDibujable> getTile(position2di);
+	void setTile(int x, int y, shared_ptr<IDibujable>contenido);
+	void AnyadirObjeto(shared_ptr<IDibujable>);
 
 	//VISTAS
 	void SetCameraScroll(const position2di &TPosition);
@@ -72,13 +72,13 @@ public:
 	position2di getDrawPosition(position2di pos);
 	
 	//Eventos
-	vector<Unidades*>* OnEventMapa(const SEvent& event);
+	vector<shared_ptr<Unidades>>* OnEventMapa(const SEvent& event);
 	
 	//Manejo de objetos
-	vector<IDibujable*>* getIa_units();
-	vector<IDibujable*>* getUser_units();
+	vector<shared_ptr<IDibujable>>* getIa_units();
+	vector<shared_ptr<IDibujable>>* getUser_units();
 	
-	vector<IDibujable*>* getBuildings();
+	vector<shared_ptr<IDibujable>>* getBuildings();
 	int getIASelected();
 	vector<int>* getUserSelected();
 	Pathfinding* getPathfinding();
@@ -107,8 +107,8 @@ public:
 	position2di posicionDisponible(position2di );
 
 	
-	IDibujable* addIAUnit(int,int,int);
-	IDibujable* addUserUnit(int,int,int);
+	shared_ptr<IDibujable> addIAUnit(int,int,int);
+	shared_ptr<IDibujable> addUserUnit(int,int,int);
 
 private:
 	
@@ -172,10 +172,10 @@ protected:
 	IGUISkin* skin;
 	int gameState;
 
-	IDibujable* vTiles[WIDTH][HEIGHT];
-	vector<IDibujable*>* ia_units;
-	vector<IDibujable*>* user_units;
-	vector<IDibujable*>* buildings;
+	shared_ptr<IDibujable> vTiles[WIDTH][HEIGHT];
+	vector<shared_ptr<IDibujable>>* ia_units;
+	vector<shared_ptr<IDibujable>>* user_units;
+	vector<shared_ptr<IDibujable>>* buildings;
 
 	position2di CameraScroll;
 };

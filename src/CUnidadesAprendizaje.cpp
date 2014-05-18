@@ -154,7 +154,7 @@ void CUnidadesAprendizaje::calcular8Objetos(MapaAprendizaje* matriz){
 							}
 
 							outfile.close();*/
-							ObjetosCercanos obj(3,((CUnidadesAprendizaje*) matriz->getTile(i,j))->getLife(),j,i);
+							ObjetosCercanos obj(3, std::dynamic_pointer_cast<CUnidadesAprendizaje>(matriz->getTile(i,j))->getLife(),j,i);
 							m_vObjetosCerca.push_back(obj);
 						
 					}
@@ -194,7 +194,7 @@ void CUnidadesAprendizaje::calcular8Objetos(MapaAprendizaje* matriz){
 							}
 
 							outfile.close();
-						m_vObjetosCerca.push_back(ObjetosCercanos(3,((CUnidadesAprendizaje*) matriz->getTile(i,j))->getLife(),matriz->getTile(i,j)->getPosicion().X,matriz->getTile(i,j)->getPosicion().Y));
+						m_vObjetosCerca.push_back(ObjetosCercanos(3, std::dynamic_pointer_cast<CUnidadesAprendizaje>(matriz->getTile(i,j))->getLife(),matriz->getTile(i,j)->getPosicion().X,matriz->getTile(i,j)->getPosicion().Y));
 						
 					}
 					else{
@@ -305,7 +305,7 @@ void CUnidadesAprendizaje::TexturaSeleccionada(IVideoDriver* driver,bool selecci
 		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
 }
 //E Vida quitada x tipox fitness /max fitness) x vida/100
-void CUnidadesAprendizaje::IncrementFitness(CUnidadesAprendizaje *atacado,int danyo,double max_fitness){
+void CUnidadesAprendizaje::IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo,double max_fitness){
 	float tipo=0.5;
 	double fitnessAtacado=atacado->Fitness();
 	if(danyo>=3){

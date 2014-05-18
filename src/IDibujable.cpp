@@ -4,8 +4,7 @@ IDibujable::IDibujable(){
 	vinculado = NULL;
 }
 IDibujable::~IDibujable() {
-	//delete textura;
-	delete vinculado;
+
 }
 ITexture* IDibujable::getTextura() const {
 	return textura;
@@ -41,10 +40,10 @@ void IDibujable::setPathfinding(Pathfinding* _pathfinding){
 	pathfinding = _pathfinding;
 }
 
-void IDibujable::setVinculado(IDibujable* _vinculado){
+void IDibujable::setVinculado(shared_ptr<IDibujable> _vinculado){
 	vinculado = _vinculado;
 }
-IDibujable* IDibujable::getVinculado(){
+shared_ptr<IDibujable> IDibujable::getVinculado(){
 	return vinculado;
 }
 

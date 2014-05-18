@@ -22,7 +22,7 @@ public:
 	virtual void updateIA(std::shared_ptr<mapa2D> mapa);
 	int getState();
 	CurrentIA* stadoIA;
-	IDibujable* searchEnemy(std::shared_ptr<mapa2D> mapa);
+	shared_ptr<IDibujable> searchEnemy(std::shared_ptr<mapa2D> mapa);
 
 	//Acciones de la IA
 	virtual bool enemy_in_attack_range(position2di) = 0;
