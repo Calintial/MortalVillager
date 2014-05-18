@@ -200,8 +200,11 @@ void MapaBasicoDummy::reset(const vector<SGenome>& poblacion){
 		position2di posicion = unidad->getPosition();
 
 
-		// aqui deberia borrar la unidad, pero peta >_<
-		nuevoSuelo(posicion.X,posicion.Y);
+		if (posicion.X != -1)
+		{
+			nuevoSuelo(posicion.X,posicion.Y);
+		}
+		
 
 	}
 	m_vecUnidades.clear();
@@ -289,9 +292,15 @@ void MapaBasicoMuroYUnidad::reset(const vector<SGenome>& poblacion){
 
 		shared_ptr<CUnidadesAprendizaje> enemigo = m_vecEnemigos[i];
 		position2di posicionEnemigo = enemigo->getPosition();
-		// aqui deberia borrar la unidad, pero peta >_<
-		nuevoSuelo(posicion.X,posicion.Y);
-		nuevoSuelo(posicionEnemigo.X,posicionEnemigo.Y);
+		
+		if(posicion.X != -1){
+			nuevoSuelo(posicion.X,posicion.Y);	
+		}
+		if (posicionEnemigo.X != -1)
+		{
+			nuevoSuelo(posicionEnemigo.X,posicionEnemigo.Y);
+		}
+		
 
 	}
 	m_vecUnidades.clear();
@@ -373,8 +382,10 @@ void MapaCuadrado::reset(const vector<SGenome>&  poblacion){
 		position2di posicion = unidad->getPosition();
 
 
-		// aqui deberia borrar la unidad, pero peta >_<
-		nuevoSuelo(posicion.X,posicion.Y);
+		if(posicion.X != -1){
+			nuevoSuelo(posicion.X,posicion.Y);	
+		}
+		
 
 	}
 	m_vecUnidades.clear();

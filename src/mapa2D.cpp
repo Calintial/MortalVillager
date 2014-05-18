@@ -402,7 +402,7 @@ void mapa2D::GuardarMapa(){
 }
 
 shared_ptr<IDibujable> mapa2D::getTile(int y, int x){
-	if (x >= WIDTH || y >= HEIGHT)
+	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
 	{
 		return NULL;
 	}
@@ -410,11 +410,7 @@ shared_ptr<IDibujable> mapa2D::getTile(int y, int x){
 }
 
 shared_ptr<IDibujable> mapa2D::getTile(position2di pos){
-	if (pos.X >= WIDTH || pos.Y >= HEIGHT)
-	{
-		return NULL;
-	}
-	return vTiles[pos.X][pos.Y];
+	return getTile(pos.Y,pos.X);
 }
 
 void mapa2D::setTile(int x, int y, shared_ptr<IDibujable> contenido){
