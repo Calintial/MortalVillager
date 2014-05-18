@@ -80,6 +80,7 @@ INGAME::INGAME()
 
 void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 {
+	ge->deleteUnits();
 	ge->addNewUnits();
 	ge->updatePlayer();
 	ia->updateBattleIA(mapa);

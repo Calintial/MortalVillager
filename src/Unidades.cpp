@@ -12,6 +12,7 @@ Unidades::Unidades()
 	last_clicked.Y = 1;
 	setTipo(3);
 	pesoComprobacion = 0;
+	eliminar_unidad = false;
 }
 
 Unidades::Unidades(int x, int y)
@@ -26,6 +27,7 @@ Unidades::Unidades(int x, int y)
 	last_clicked.Y = y;
 	setTipo(3);
 	pesoComprobacion = 0;
+	eliminar_unidad = false;
 }
 
 Unidades::~Unidades()
@@ -38,6 +40,7 @@ Unidades::~Unidades()
 	select = false;
 	state = 0;
 	pesoComprobacion = 0;
+	eliminar_unidad = false;
 }
 
 
@@ -71,7 +74,8 @@ void Unidades::Move(Camino* _camino){
 		{
 			pesoComprobacion = _camino->getPeso()/2;
 		}
-		state = MOVE;
+		if(state != DEAD)
+			state = MOVE;
 		position2di pos = _camino->darPaso();
 		setPosition(pos);
 		camino = _camino;
@@ -80,7 +84,8 @@ void Unidades::Move(Camino* _camino){
 
 void Unidades::Move(Unidades* _objetivo){
 	if(_objetivo != NULL){
-		state = MOVE;
+		if(state != DEAD)
+			state = MOVE;
 		objetivo = _objetivo;
 		posicionObjetivo = objetivo->getPosition();
 		Move(posicionObjetivo.X,posicionObjetivo.Y);
@@ -96,7 +101,8 @@ void Unidades::updateUnit()
 		{
 			if(enemy_in_attack_range(objetivo->getPosition()))
 			{
-				state = ATTACKING;
+				if(state != DEAD)
+					state = ATTACKING;
 				delete camino;
 				camino = NULL;
 			}
@@ -152,8 +158,9 @@ void Unidades::updateUnit()
 				objetivo = NULL;
 				posicionObjetivo = position2di(0,0);
 				camino = NULL;
-			}			
-			state = NOTHING;
+			}
+			if(state != DEAD)		
+				state = NOTHING;
 		}
 	}
 	else if(state == ATTACKING)
@@ -169,7 +176,8 @@ void Unidades::updateUnit()
 		}*/
 		else
 		{
-			state = NOTHING;
+			if(state != DEAD)
+				state = NOTHING;
 			objetivo = NULL;
 		}
 	}

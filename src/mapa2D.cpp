@@ -161,9 +161,13 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 					cout << "CANTIDAD DE SELECCIONADOS:" << user_selvector->size() << endl;
 					for(int i=0; i<user_selvector->size(); i++)
 					{
-						((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,true);
-						((Unidades*)user_units->at(user_selvector->at(i)))->SetSelect(true);
-						usuarios_Seleccionados->push_back((Unidades*)user_units->at(user_selvector->at(i)));
+						if(user_selvector->at(i) < user_units->size())
+						{
+							((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,true);
+							((Unidades*)user_units->at(user_selvector->at(i)))->SetSelect(true);
+							usuarios_Seleccionados->push_back((Unidades*)user_units->at(user_selvector->at(i)));
+						}
+
 					}
 										
 					return usuarios_Seleccionados;
@@ -196,7 +200,11 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 						{
 							for(int i=0; i<user_selvector->size(); i++)
 							{
-								((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								if(user_selvector->at(i) < user_units->size())
+								{
+									((Unidades*)user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								}
+								
 								((Unidades*)user_units->at(ia_selvector->at(i)))->SetSelect(false);
 							}
 						}
@@ -236,19 +244,21 @@ vector<Unidades*>* mapa2D::OnEventMapa(const SEvent& event)
 								//no hay otro personaje --> Dar vuelta a todo el vector de unidades user
 								
 								cout << "POSICION INICIAL " << pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y << endl;
-
-								Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
-								position2di posnueva=position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
-								
-								if(pos_grid.X+CameraScroll.X>=0 && pos_grid.Y+CameraScroll.Y>=0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
+								if(user_selvector->at(i) < user_units->size())
 								{
-									int index = IASelected(posnueva);
-									if (index != -1)
+									Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(i)));
+									position2di posnueva=position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+									
+									if(pos_grid.X+CameraScroll.X>=0 && pos_grid.Y+CameraScroll.Y>=0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
 									{
-										// esto hace que se fusionen las unidades sobre la unidad objetivo >_<
-										unidad->Move((Unidades*)ia_units->at(index));
-									}else{
-										unidad->Move(posnueva.X,posnueva.Y);
+										int index = IASelected(posnueva);
+										if (index != -1)
+										{
+											// esto hace que se fusionen las unidades sobre la unidad objetivo >_<
+											unidad->Move((Unidades*)ia_units->at(index));
+										}else{
+											unidad->Move(posnueva.X,posnueva.Y);
+										}
 									}
 								}
 						}

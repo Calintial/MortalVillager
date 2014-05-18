@@ -164,6 +164,7 @@ void ArqueroIA::nextSprite()
 		else if(current_sprite >= 39)
 		{
 			current_sprite = 30;
+			setEliminar(true);
 		}
 		else
 		{

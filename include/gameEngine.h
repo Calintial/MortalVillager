@@ -60,6 +60,7 @@ public:
 	void sleep(unsigned int);
 	static Current stado;
 	void addNewUnits();
+	void deleteUnits();
 
 	void scheduler (int); 
 	long clockMS(clock_t clock);

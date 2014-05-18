@@ -182,6 +182,7 @@ void Lancero::nextSprite()
 		else if(current_sprite >= 36)
 		{
 			current_sprite = 28;
+			setEliminar(true);
 		}
 		else
 		{

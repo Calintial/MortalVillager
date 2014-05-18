@@ -39,6 +39,9 @@ public:
 	int getLife(){return life;};
 	void setLife(int l){life=l;};
 	Camino* getCamino(){return camino;};
+
+	bool getEliminar(){return eliminar_unidad;};
+	void setEliminar(bool eliminar){eliminar_unidad = eliminar;};
 	
 	//Getters virtuales
 	virtual int getVisionRange() = 0;
@@ -61,6 +64,7 @@ protected:
 	int state;
 	bool select;
 	int life;
+	bool eliminar_unidad;
 };
 
 #endif

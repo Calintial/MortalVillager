@@ -159,6 +159,39 @@ void gameEngine::addNewUnits()
 	}
 }
 
+void gameEngine::deleteUnits()
+{
+	for(int i = 0; i<IAUnits.size();i++)
+	{
+		battleIA* ia = (battleIA*) IAUnits.at(i);
+
+		if(ia->getEliminar())
+			IAUnits.erase(IAUnits.begin() + i);
+
+	}
+
+	for(int i = 0; i<UserUnits.size();i++)
+	{
+		Unidades* unit = (Unidades*) UserUnits.at(i);
+
+		if(unit->getEliminar())
+		{
+			UserUnits.erase(UserUnits.begin() + i);
+						
+			vector<int>* seleccionados = graphics->mapa->getUserSelected();
+			for(int j=0; j<seleccionados->size(); j++)
+			{
+				if(seleccionados->at(j) == i)
+					seleccionados->erase(seleccionados->begin() + j);
+			}
+		}
+
+	}
+
+	
+
+}
+
 void gameEngine::scheduler (int variables) 
 {
 

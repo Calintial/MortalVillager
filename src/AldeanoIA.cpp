@@ -162,6 +162,7 @@ void AldeanoIA::nextSprite()
 		else if(current_sprite >= 50)
 		{
 			current_sprite = 36;
+			setEliminar(true);
 		}
 		else
 		{
