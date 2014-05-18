@@ -3,6 +3,21 @@
 DecisionTree::DecisionTree()
 {
 	raiz = new NodoEnemigoCercaCC();
+	
+	enemigoCercaCC =false;
+	vidaCC = 0;
+	numLanceros = 0;
+	numEspadachines = 0;
+	numArqueros = 0;
+	numAldeanos = 0;
+	numLancerosEnemigos = 0;
+	numEspadachinesEnemigos = 0;
+	numArquerosEnemigos = 0;
+	Cuartel = false;
+	Arqueria = false;
+	Lanceria = false;
+	granjas = 0;
+	recursos = 0;
 }
 
 void DecisionTree::PasarDatos(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings)
@@ -10,42 +25,63 @@ void DecisionTree::PasarDatos(int vidaCC, int recursos, vector<IDibujable*>* IAu
 	setVidaCC(vidaCC);
 	setRecursos(recursos);
 	
+	//0 --> Aldeano
+	//1 --> Arquero
+	//2 --> Espadachin
+	//3 --> Lancero
+	
 	for(IDibujable* ia: IAUnits)
 	{
-		
+		if(ia->getType() == 1)
+			setIncNumArquerosEnemigos();
+		if(ia->getType() == 2)
+			setIncNumEspadachinesEnemigos();
+		if(ia->getType() == 3)
+			setIncNumLancerosEnemigos();
 	}
 	
 	for(IDibujable* user: Userunits)
 	{
-		
+		if(user->getType() == 0)
+			setIncNumAldeanos();
+		if(user->getType() == 1)
+			setIncNumArqueros();
+		if(user->getType() == 2)
+			setIncNumEspadachines();
+		if(uesr->getType() == 3)
+			setIncNumLanceros();
 	}
 	
 	//0 --> CC
+	//1 --> Granja
+	//2 --> Cuartel
+	//3 --> Arqueria
+	//4 --> Lanceria
 	for(IDibujable* b: buildings)
 	{
-		
+		if(b->getClase()==0)
+			setEnemigoCercaCC(ExisteEnemigoCercaCC(Userunits));
+		if(b->getClase()==1)
+			setIncGranjas();
+		if(b->getClase()==2)
+			setCuartel(true);
+		if(b->getClase()==3)
+			setArqueria(true);
+		if(b->getClase()==4)
+			setLanceria(true);
 	}
-		/*
-		void setnumLanceros(int numLanceros){ this.numLanceros = numLanceros;};
-		void setnumEspadachines(int numEspadachines){ this.numEspadachines = numEspadachines;};
-		void setnumArqueros(int numArqueros){ this.numArqueros = numArqueros;};
-		void setnumAldeanos(int numAldeanos){ this.numAldeanos = numAldeanos;};
-
-		void setnumLancerosEnemigos(int numLancerosEnemigos){ this.numLancerosEnemigos = numLancerosEnemigos;};
-		void setnumEspadachinesEnemigos(int numEspadachinesEnemigos){ this.numEspadachinesEnemigos = numEspadachinesEnemigos;};
-		void setnumArquerosEnemigos(int numArquerosEnemigos){ this.numArquerosEnemigos = numArquerosEnemigos;};
-
-		void setCuartel(boolean cuartel){this.cuartel = cuartel;};
-		void setArqueria(boolean arqueria){this.arqueria = arqueria;};
-		void setLanceria(boolean lanceria){this.lanceria = lanceria;};
-		
-		void setEnemigoCercaCC(boolean enemigoCercaCC){this.enemigoCercaCC = enemigoCercaCC;};*/
 }
 
-boolean DecisionTree::ExisteEnemigoCercaCC(IDibujable* building, vector<IDibujable*>* IAUnits)
+//48x29 x=351, y=370 para ia
+boolean DecisionTree::ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits)
 {
+	for(IDibujable* user: Userunits)
+	{
+		if(user->getPosition().X > 350 && user->getPosition() > 369)
+			return true;
+	}
 	
-	
+	return false;
 }
 
 
@@ -59,7 +95,10 @@ NodoEnemigoCercaCC::NodoEnemigoCercaCC()
 
 void NodoEnemigoCercaCC::Decision()
 {
-	
+	if(isEnemigoCercaCC())
+		yes.Decision();
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -72,7 +111,10 @@ NodoVidaCC::NodoVidaCC()
 
 void NodoVidaCC::Decision()
 {
-	
+	if(getVidaCC()<30)
+		yes.Decision();
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -86,20 +128,27 @@ NodoTengoSoldados::NodoTengoSoldados()
 
 void NodoTengoSoldados::Decision()
 {
-	
+	//Hay que poner estados en algun lao y cambiarlo aqui a DEFENDER
+	if(getnumSoldados()<getnumSoldadosEnemigos())
+		no.Decision();
 }
 
 //-----------------------------------//
 
+//Simple --> mi_ejercito > su_ejercito*1.5 || mi_ejercito es enorme
+//COMPLEJA --> hay que hacer algo con el triangulo de armas
 NodoUsuarioSuperioridad::NodoUsuarioSuperioridad()
 {
-		yes = new NodoLanzasMayorEspadas();
-		no = null; //PASAR A ATACAR
+		yes = null; //PASAR A ATACAR
+		no = new NodoLanzasMayorEspadas();
 }
 
 void NodoUsuarioSuperioridad::Decision()
 {
-	
+	if(getnumSoldados() > getnumSoldadosEnemigos()*1.5 || getnumSoldados()>10)
+		//Hay que poner estados en algun lao y cambiarlo aqui a ATACAR
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -110,9 +159,13 @@ NodoLanzasMayorEspadas::NodoLanzasMayorEspadas()
 		no = new NodoArquerosMayorLanzas();
 }
 
+//¿Lanzas enemigas > Mis Espadas?
 void NodoLanzasMayorEspadas::Decision()
 {
-	
+	if(getnumLancerosEnemigos()>getnumEspadachines())
+		yes.Decision();
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -125,7 +178,10 @@ NodoCuartel::NodoCuartel()
 
 void NodoCuartel::Decision()
 {
-	
+	if(isCuartel())
+		yes.Decision();
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -138,7 +194,10 @@ NodoAldeano::NodoAldeano()
 
 void NodoAldeano::Decision()
 {
-	
+	if(getnumAldeanos()>=1)
+		yes.Decision();
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -152,7 +211,8 @@ NodoRecAldeano::NodoRecAldeano()
 
 void NodoRecAldeano::Decision()
 {
-	
+	if(getRecursos() >= ALDEANO_COSTE)
+		//CREAR ALDEANO
 }
 
 //-----------------------------------//
@@ -172,7 +232,8 @@ NodoRecEspadachin:NodoRecEspadachin()
 
 void NodoRecEspadachin::Decision()
 {
-	
+	if(getRecursos() >= CONVERTIR_COSTE)
+		//CREAR ESPADACHIN
 }
 
 //-----------------------------------//
@@ -190,7 +251,10 @@ NodoRecCuartel::NodoRecCuartel()
 
 void NodoRecCuartel::Decision()
 {
-	
+	if(getRecursos() >= CUARTEL_COSTE)
+		//CREAR CUARTEL
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -203,11 +267,13 @@ NodoRecGranja::NodoRecGranja()
 
 void NodoRecGranja::Decision()
 {
-	
+	if(getRecursos() >= GRANJA_COSTE)
+		//CREAR GRANJA
 }
 
 //-----------------------------------//
 
+//¿Arqueros enemigos > Mis Lanceros?
 NodoArquerosMayorLanzas::NodoArquerosMayorLanzas()
 {
 		yes = new NodoLanceria();
@@ -216,7 +282,10 @@ NodoArquerosMayorLanzas::NodoArquerosMayorLanzas()
 
 void NodoArquerosMayorLanzas::Decision()
 {
-	
+	if(getnumArquerosEnemigos()>getnumLanceros())
+		yes.Decision();
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -229,7 +298,10 @@ NodoLanceria::NodoLanceria()
 
 void NodoLanceria::Decision()
 {
-	
+	if(isLanceria())
+		yes.Decision();
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -247,7 +319,10 @@ NodoRecLanceria::NodoRecLanceria()
 
 void NodoRecLanceria::Decision()
 {
-	
+	if(getRecursos() >= LANCERIA_COSTE)
+		//CREAR LANCERIA
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -267,7 +342,8 @@ NodoRecLancero::NodoRecLancero()
 
 void NodoRecLancero::Decision()
 {
-	
+	if(getRecursos() >= CONVERTIR_COSTE)
+		//CREAR LANCERO
 }
 
 //-----------------------------------//
@@ -278,9 +354,13 @@ NodoEspadachinesMayorArcos::NodoEspadachinesMayorArcos()
 		no = null; //PASAR A MODO ATACAR
 }
 
+//¿Espadachines enemigos > Mis Arqueros?
 void NodoEspadachinesMayorArcos::Decision()
 {
-	
+	if(getnumEspadachinesEnemigos()>getnumArqueros())
+		yes.Decision();
+	else
+		//PASAR A MODO ATACAR
 }
 
 //-----------------------------------//
@@ -293,7 +373,10 @@ NodoArqueria::NodoArqueria()
 
 void NodoArqueria::Decision()
 {
-	
+	if(isArqueria())
+		yes.Decision();
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -311,7 +394,10 @@ NodoRecArqueria::NodoRecArqueria()
 
 void NodoRecArqueria::Decision()
 {
-	
+	if(getRecursos() >= ARQUERIA_COSTE)
+		//CREAR ARQUERIA
+	else
+		no.Decision();
 }
 
 //-----------------------------------//
@@ -330,7 +416,8 @@ NodoRecArquero::NodoRecArquero()
 
 void NodoRecArquero::Decision()
 {
-	
+	if(getRecursos() >= CONVERTIR_COSTE)
+		//CREAR ARQUERO
 }
 
 //-----------------------------------//

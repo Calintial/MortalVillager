@@ -18,33 +18,42 @@ class DecisionTree
 		DecisionTree();
 		void PasarDatos(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings);
 		//48x29 desde x=0, y=0 para user, y x=351, y=370 para ia
-		boolean ExisteEnemigoCercaCC(IDibujable* building, vector<IDibujable*>* IAUnits);
+		boolean ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits);
 		
 		Node getRaiz(){ return raiz;};
+		
 		boolean isEnemigoCercaCC(){ return enemigoCercaCC;};
 		void setEnemigoCercaCC(boolean enemigoCercaCC){this.enemigoCercaCC = enemigoCercaCC;};
 		int getVidaCC(){ return vidaCC;};
 		void setVidaCC(int vidaCC){ this.vidaCC = vidaCC;};
-		int getnumLanceros(){ return numLanceros;};
-		void setnumLanceros(int numLanceros){ this.numLanceros = numLanceros;};
-		int getnumEspadachines(){ return numEspadachines;};
-		void setnumEspadachines(int numEspadachines){ this.numEspadachines = numEspadachines;};
-		int getnumArqueros(){ return numArqueros;};
-		void setnumArqueros(int numArqueros){ this.numArqueros = numArqueros;};
 		int getnumAldeanos(){ return numAldeanos;};
-		void setnumAldeanos(int numAldeanos){ this.numAldeanos = numAldeanos;};
+		void setIncNumAldeanos(){ this.numAldeanos++;};
+		
+		int getnumLanceros(){ return numLanceros;};
+		void setIncNumLanceros(){ this.numLanceros++;};
+		int getnumEspadachines(){ return numEspadachines;};
+		void setIncNumEspadachines(){ this.numEspadachines++;};
+		int getnumArqueros(){ return numArqueros;};
+		void setIncNumArqueros(){ this.numArqueros++;};
+		int getnumSoldados(){ return numLanceros+numEspadachines+numArqueros;};
+		
 		int getnumLancerosEnemigos(){ return numLancerosEnemigos;};
-		void setnumLancerosEnemigos(int numLancerosEnemigos){ this.numLancerosEnemigos = numLancerosEnemigos;};
+		void setIncNumLancerosEnemigos(){ this.numLancerosEnemigos++;};
 		int getnumEspadachinesEnemigos(){ return numEspadachinesEnemigos;};
-		void setnumEspadachinesEnemigos(int numEspadachinesEnemigos){ this.numEspadachinesEnemigos = numEspadachinesEnemigos;};
+		void setIncNumEspadachinesEnemigos(){ this.numEspadachinesEnemigos++;};
 		int getnumArquerosEnemigos(){ return numArquerosEnemigos;};
-		void setnumArquerosEnemigos(int numArquerosEnemigos){ this.numArquerosEnemigos = numArquerosEnemigos;};
-		boolean isCuartel(){ return Cuartel;};
+		void setIncNumArquerosEnemigos(){ this.numArquerosEnemigos++;};
+		int getnumSoldadosEnemigos(){ return numLancerosEnemigos+numEspadachinesEnemigos+numArquerosEnemigos;};
+		
+		boolean isCuartel(){ return cuartel;};
 		void setCuartel(boolean cuartel){this.cuartel = cuartel;};
-		boolean isArqueria(){ return Arqueria;};
+		boolean isArqueria(){ return arqueria;};
 		void setArqueria(boolean arqueria){this.arqueria = arqueria;};
-		boolean isLanceria(){ return Lanceria;};
+		boolean isLanceria(){ return lanceria;};
 		void setLanceria(boolean lanceria){this.lanceria = lanceria;};
+		int getnumGranjas(){ return granjas;};
+		void setIncGranjas(){ this.granjas++;};
+		
 		int getRecursos(){ return recursos;};
 		void setRecursos(int recursos){this.recursos = recursos;};
 		
@@ -63,6 +72,7 @@ class DecisionTree
 		boolean Cuartel;
 		boolean Arqueria;
 		boolean Lanceria;
+		int granjas;
 		int recursos;
 }
 
