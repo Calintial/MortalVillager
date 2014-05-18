@@ -104,7 +104,7 @@ public:
 	void modificarUnidad(CUnidadesAprendizaje* unidad);
 	bool OnEvent(const SEvent& event);
 	void PintarInformacionUnidad();
-void ponerWeightFichero();
+void ponerWeightFichero(std::string fichero);
 };
 
 

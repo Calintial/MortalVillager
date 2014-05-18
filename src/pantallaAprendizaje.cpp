@@ -18,6 +18,8 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 							   L"Pause");
 	env->addButton(rect<s32>(dimensionPantallaX + 220,0,dimensionPantallaX + 430,25), 0, BUTTON_CONTINUAR,
         L"Continuar", L"");
+	env->addButton(rect<s32>(dimensionPantallaX + 220,30,dimensionPantallaX + 430,55), 0, BUTTON_CARGAR,
+        L"Cargar", L"");
 
 }
 
@@ -209,7 +211,17 @@ bool PantallaAprendizaje::OnEvent(const SEvent& event){
 		{
 			case BUTTON_CONTINUAR: continuar = true;
 								  break;
+			case BUTTON_CARGAR:{
+				env->addFileOpenDialog(L"Cargar pesos", true, 0, -1, true);
+				break;
+			}
 		}
+	}else if(event.GUIEvent.EventType == EGET_FILE_SELECTED){
+		IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
+		std::wstring file_wide = std::wstring(dialog->getFileName());
+		std::string file( file_wide.begin(), file_wide.end() );
+		cout<<"Cargando archivo: <"<<file<<">"<<std::endl;
+		aprendizaje->ponerWeightFichero(file);
 	}
 
 	/*if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
