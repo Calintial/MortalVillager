@@ -306,13 +306,9 @@ void CUnidadesAprendizaje::TexturaSeleccionada(IVideoDriver* driver,bool selecci
 }
 //E Vida quitada x tipox fitness /max fitness) x vida/100
 void CUnidadesAprendizaje::IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo,double max_fitness){
-	float tipo=0.5;
-	double fitnessAtacado=atacado->Fitness();
-	if(danyo>=3){
-		tipo=2;
+	if(danyo>0 && atacado->getLife()==0){
+		m_dFitness++;
 	}
-	else if(danyo==2){
-		tipo=1;
-	}
-	m_dFitness+=(danyo*tipo*fitnessAtacado/max_fitness)+1;
+	m_dFitness+=danyo;
+
 }

@@ -160,9 +160,17 @@ int Unidades::Attack(shared_ptr<Unidades> enemigo)
 {
 //	cerr<<"Unidad: <"<<getPosition().X<<","<<getPosition().Y<<"> atacando a <"<<enemigo->getPosition().X<<","<<enemigo->getPosition().Y<<">"<<endl;
 	int ataque = TrianguloArmas(enemigo);
-	
-	enemigo->PierdoVida(ataque+getAttackValue());
-	return ataque+getAttackValue();
+	int danyo=ataque+getAttackValue();
+
+	if(enemigo->getLife()-danyo>=0){
+		enemigo->PierdoVida(danyo);		
+		return ataque+getAttackValue();
+	}
+	else{
+		enemigo->PierdoVida(danyo);
+		return 0;
+	}
+
 }
 
 void Unidades::PierdoVida(int danyo)
