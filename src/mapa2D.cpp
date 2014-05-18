@@ -351,6 +351,8 @@ void mapa2D::IniciarUnidades()
 			(gameEngine::addUserUnit(i,j,0))->aplicarTextura(driver);
 		}
 	}
+
+	(gameEngine::addIAUnit(20,20,0))->aplicarTextura(driver);
 }
 
 void mapa2D::IniciarEdificios()

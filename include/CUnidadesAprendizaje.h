@@ -75,6 +75,8 @@ public:
 
 	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
 
+	virtual bool enemy_in_attack_range(position2di){return false;};
+	virtual bool enemy_in_vision_range(position2di){return false;};
 
 	
 

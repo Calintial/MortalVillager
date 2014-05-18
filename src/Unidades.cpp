@@ -48,6 +48,7 @@ void Unidades::Move(int x, int y)
 	{
 		if (camino->getFinal().X == x && camino->getFinal().Y == y)
 		{
+			cout<<"ok"<<endl;
 			updateUnit();
 			newPath = false;
 		}else{
@@ -93,7 +94,13 @@ void Unidades::updateUnit()
 	{
 		if (objetivo)
 		{
-			if (camino)
+			if(enemy_in_attack_range(objetivo->getPosition()))
+			{
+				state = ATTACKING;
+				delete camino;
+				camino = NULL;
+			}
+			else if (camino)
 			{
 				if (camino->getPeso() <= pesoComprobacion){
 					position2di nuevaPos = objetivo->getPosition();
@@ -149,6 +156,23 @@ void Unidades::updateUnit()
 			state = NOTHING;
 		}
 	}
+	else if(state == ATTACKING)
+	{
+		if(enemy_in_attack_range(objetivo->getPosition()))
+		{
+			Attack(objetivo);
+		}
+		/*else if(enemy_in_vision_range(objetivo->getPosition()))
+		{
+			state = MOVE;
+			Move(objetivo);
+		}*/
+		else
+		{
+			state = NOTHING;
+			objetivo = NULL;
+		}
+	}
 }
 
 int Unidades::getState()
@@ -170,7 +194,7 @@ void Unidades::PierdoVida(int danyo)
 	if(life-danyo<0)
 	{
 		life = 0;
-		//DEBERIA DE MORIR
+		state = DEAD;
 	}
 	else
 	{	

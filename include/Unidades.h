@@ -33,10 +33,12 @@ public:
 	void Move(Unidades*);
 	void updateUnit();
 	int getState();
+	void setState(int s){state = s;};
 	bool getSelect(){return select;};
 	void SetSelect(bool sel){select=sel;};
 	int getLife(){return life;};
 	void setLife(int l){life=l;};
+	Camino* getCamino(){return camino;};
 	
 	//Getters virtuales
 	virtual int getVisionRange() = 0;
@@ -46,6 +48,9 @@ public:
 
 	//Pintado
 	virtual void TexturaSeleccionada(IVideoDriver* driver,bool) = 0;
+
+	virtual bool enemy_in_attack_range(position2di) = 0;
+	virtual bool enemy_in_vision_range(position2di) = 0;
 	
 protected:
 	position2di last_clicked;
