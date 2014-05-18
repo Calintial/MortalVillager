@@ -22,13 +22,13 @@ public:
 	~Unidades();
 	//void updateIA();
 	//Metodos de movimiento y actualización de la unidad
-	int Attack(Unidades*);
+	int Attack(shared_ptr<Unidades>);
 	void PierdoVida(int);
-	int TrianguloArmas(Unidades*);
+	int TrianguloArmas(shared_ptr<Unidades>);
 	
 	void Move(int,int);
 	void Move(Camino*);
-	void Move(Unidades*);
+	void Move(shared_ptr<Unidades>);
 	void updateUnit();
 	int getState();
 	bool getSelect(){return select;};
@@ -48,7 +48,7 @@ public:
 protected:
 	position2di last_clicked;
 	Camino* camino;
-	Unidades* objetivo;
+	shared_ptr<Unidades> objetivo;
 	position2di posicionObjetivo;
 	int pesoComprobacion;
 	int state;

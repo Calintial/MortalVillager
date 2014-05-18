@@ -97,10 +97,10 @@ void MapaAprendizaje::PintarInformacionUnidad(){
 	}
 }
 
-void MapaAprendizaje::setTile(position2di pos,IDibujable* elem){
+void MapaAprendizaje::setTile(position2di pos,shared_ptr<IDibujable> elem){
 	setTile(pos.Y,pos.X,elem);
 }
-void MapaAprendizaje::setTile(int y,int x,IDibujable* elem){
+void MapaAprendizaje::setTile(int y,int x,shared_ptr<IDibujable> elem){
 	vTiles[y][x] = elem;
 }
 
@@ -224,7 +224,7 @@ void MapaBasicoDummy::generarUnidades(){
  		
 		EspadachinRedes* unidadDummy=new EspadachinRedes(posX,posY);
 		unidadDummy->aplicarTextura(driver);
-		IDibujable* aux = vTiles[posY][posX];
+		shared_ptr<IDibujable> aux = vTiles[posY][posX];
 		delete aux;
 		vTiles[posY][posX]=unidadDummy;
 		
@@ -318,7 +318,7 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
  		
 		EspadachinRedes* unidadDummy=new EspadachinRedes(posX,posY);
 		unidadDummy->aplicarTextura(driver);
-		IDibujable* aux = vTiles[posY][posX];
+		shared_ptr<IDibujable> aux = vTiles[posY][posX];
 		delete aux;
 		vTiles[posY][posX]=unidadDummy;
 		m_vecEnemigos.push_back(unidadDummy);
@@ -419,7 +419,7 @@ void MapaCuadrado::generarUnidades(){
 	int finalMapaCuadradoUnidades=(m_NumUnidades/2)-1;
 	EspadachinRedes* unidad=new EspadachinRedes(0,0);
 	unidad->aplicarTextura(driver);
-	IDibujable* aux = vTiles[0][0];
+	shared_ptr<IDibujable> aux = vTiles[0][0];
 	delete aux;
 	vTiles[0][0]=unidad;
 	m_vecUnidades.push_back(unidad);
@@ -439,7 +439,7 @@ void MapaCuadrado::generarUnidades(){
 
 				EspadachinRedes* unidad=new EspadachinRedes(j,i);
 				unidad->aplicarTextura(driver);
-				IDibujable* aux = vTiles[i][j];
+				shared_ptr<IDibujable> aux = vTiles[i][j];
 				delete aux;
 				vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);
@@ -462,7 +462,7 @@ void MapaCuadrado::generarUnidades(){
 
 				EspadachinRedes* unidad=new EspadachinRedes(j,i);
 				unidad->aplicarTextura(driver);
-				IDibujable* aux = vTiles[i][j];
+				shared_ptr<IDibujable> aux = vTiles[i][j];
 				delete aux;
 				vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);

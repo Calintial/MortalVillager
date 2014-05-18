@@ -540,7 +540,7 @@ bool CController::OnEvent(const SEvent& event)
 				}
 				
 
-				IDibujable* tile =  matriz->getTile(pos_grid.Y,pos_grid.X);
+				shared_ptr<IDibujable> tile =  matriz->getTile(pos_grid.Y,pos_grid.X);
 				cerr<<"Has clicado en ["<<pos_grid.X<<","<<pos_grid.Y<<"]";
 				if (tile->getTipo() == 3)
 				{

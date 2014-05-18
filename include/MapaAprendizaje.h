@@ -27,10 +27,10 @@ public:
 	void Pintar();
 	void PintarInformacionUnidad();
 	
-	void setTile(position2di,IDibujable*);
-	void setTile(int y,int x,IDibujable*);
-	IDibujable* getTile(int y,int x){return vTiles[y][x];};
-	IDibujable* getTile(position2di pos){return getTile(pos.Y,pos.X);};
+	void setTile(position2di,shared_ptr<IDibujable>);
+	void setTile(int y,int x,shared_ptr<IDibujable>);
+	shared_ptr<IDibujable> getTile(int y,int x){return vTiles[y][x];};
+	shared_ptr<IDibujable> getTile(position2di pos){return getTile(pos.Y,pos.X);};
 	void setUnidadSeleccionada(Unidades* unit){unidad_seleccionada = unit;}
 
 	vector<CUnidadesAprendizaje*> getUnidadesAprendizaje() const {return m_vecUnidades;}

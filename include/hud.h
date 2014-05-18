@@ -30,8 +30,8 @@ public:
 	hud(IrrlichtDevice * IrrDevice, shared_ptr<mapa2D>);
 	~hud();
 	void paint();
-	void paintInformation(vector<Unidades*>*);
-	void dibujaEnHUD(int ,Unidades* );
+	void paintInformation(vector<shared_ptr<Unidades>>*);
+	void dibujaEnHUD(int ,shared_ptr<Unidades> );
 	void dibujarRecursos();
 	virtual bool OnEvent(const SEvent& event);
 	int P1X,P1Y,P2X,P2Y;
@@ -47,7 +47,7 @@ private:
 	IGUISkin* skin;
 	IGUIFont* font;
 	video::ITexture* images;
-	vector<Unidades*>* personajes;
+	vector<shared_ptr<Unidades>>* personajes;
 	bool ensenyarInformacion;
 	std::string mapa;
 	shared_ptr<mapa2D> _mapa2D;

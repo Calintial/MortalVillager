@@ -37,7 +37,7 @@ bool hud::OnEvent(const SEvent& event)
 	printf("Estas clickando en el hud \n" );
 	return true;
 }
-void hud::paintInformation(vector<Unidades*>* pers){
+void hud::paintInformation(vector<shared_ptr<Unidades>>* pers){
 
 	if(pers!=NULL)
 		personajes=pers;
@@ -62,7 +62,7 @@ void hud::pintarMiniMapa(){
 	int xhud=0;
 	int yhud=0;
 	position2di dimPantalla=_mapa2D->GetCameraScroll();
-	IDibujable *dib;
+	shared_ptr<IDibujable> dib;
 	for(int i=0;i<WIDTH;i++){
 		for(int j=0;j<HEIGHT;j++){
 			dib= _mapa2D->getTile(i,j);
@@ -111,7 +111,7 @@ void hud::pintarMiniMapa(){
 		}
 	}
 
-	vector<IDibujable*>* bdub=_mapa2D->getBuildings();
+	vector<shared_ptr<IDibujable>>* bdub=_mapa2D->getBuildings();
 	for(unsigned int i=0;i<bdub->size();i++){
 		xhud=bdub->at(i)->getPosition().X;
 		yhud=bdub->at(i)->getPosition().Y;
