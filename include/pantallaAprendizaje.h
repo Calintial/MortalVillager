@@ -7,7 +7,8 @@
 
 enum{
 	CB_PAUSE = 0,
-	BUTTON_CONTINUAR = 1
+	BUTTON_CONTINUAR = 1,
+	BUTTON_CARGAR = 2
 };
 
 /*class mapa2D;

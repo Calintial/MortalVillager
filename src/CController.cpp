@@ -443,7 +443,7 @@ void CController::generarMapa(int tipoMapa){
 		m_vecUnidades[i]->calcular8Objetos(matriz);
 	}
 	if(tipoMapa!=1){
-		ponerWeightFichero();
+		ponerWeightFichero(red);
 		vector<double> vecW=m_vecUnidades[0]->getCNeuralWeight();
 		for (int i = 0; i < vecW.size(); ++i)
 		{
@@ -454,14 +454,14 @@ void CController::generarMapa(int tipoMapa){
 	}
 
 }
-void CController::ponerWeightFichero(){
+void CController::ponerWeightFichero(std::string fichero){
 	vector<double> weights;
 	std::string cadena,buf;
 	vector<std::string> parser;
 	ifstream myReadFile;
 	int numFilas=0;
 
-	myReadFile.open(red,ios::in);
+	myReadFile.open(fichero,ios::in);
  	if (myReadFile.is_open()) {
 
  		while (!myReadFile.eof()) {
