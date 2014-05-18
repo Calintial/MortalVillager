@@ -112,10 +112,12 @@ void NodoEnemigoCercaCC::Decision()
 {
 	if(getDT()->isEnemigoCercaCC())
 	{
+		cout << "SI --> NodoVidaCC" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> NodoLanzasMayorEspadas" << endl;
 		getNo()->Decision();
 	}
 }
@@ -132,10 +134,12 @@ void NodoVidaCC::Decision()
 {
 	if(getDT()->getVidaCC()<30)
 	{
+		cout << "SI --> NodoTengoSoldados" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> NodoUsuarioSuperioridad" << endl;
 		getNo()->Decision();
 	}
 }
@@ -154,7 +158,12 @@ void NodoTengoSoldados::Decision()
 	//Hay que poner estados en algun lao y cambiarlo aqui a DEFENDER
 	if(getDT()->getnumSoldados() < getDT()->getnumSoldadosEnemigos())
 	{
+		cout << "NO --> NodoLanzasMayorEspadas + STATE=DEFENDER" << endl;
 		getNo()->Decision();
+	}
+	else
+	{
+		cout << "SI --> HOJA + STATE=DEFENDER" << endl;
 	}
 }
 
@@ -172,10 +181,12 @@ void NodoUsuarioSuperioridad::Decision()
 {
 	if(getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>10)
 	{
+		cout << "SI --> HOJA + STATE=ATACAR" << endl;
 		//Hay que poner estados en algun lao y cambiarlo aqui a ATACAR
 	}
 	else
 	{
+		cout << "NO --> NODOLANZASMAYORESPADAS" << endl;
 		getNo()->Decision();
 	}
 }
@@ -193,10 +204,12 @@ void NodoLanzasMayorEspadas::Decision()
 {
 	if(getDT()->getnumLancerosEnemigos() > getDT()->getnumEspadachines())
 	{
+		cout << "SI --> NODOCUARTEL" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> NODOARQUEROSMAYORLANZAS" << endl;
 		getNo()->Decision();
 	}
 }
@@ -213,10 +226,12 @@ void NodoCuartel::Decision()
 {
 	if(getDT()->isCuartel())
 	{
+		cout << "YES --> NODOALDEANO" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> NODORECCUARTEL" << endl;
 		getNo()->Decision();
 	}
 }
@@ -233,10 +248,12 @@ void NodoAldeano::Decision()
 {
 	if(getDT()->getnumAldeanos()>=1)
 	{
+		cout << "SI --> NODORECESPADACHIN" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> NODORECALDEANO" << endl;
 		getNo()->Decision();
 	}
 }
@@ -254,7 +271,12 @@ void NodoRecAldeano::Decision()
 {
 	if(getDT()->getRecursos() >= ALDEANO_COSTE)
 	{
+		cout << "SI --> HOJA, CREA ALDEANO" << endl; 
 		//CREAR ALDEANO
+	}
+	else
+	{
+		cout << "NO --> HOJA, NADA" << endl;
 	}
 }
 
@@ -277,7 +299,12 @@ void NodoRecEspadachin::Decision()
 {
 	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
 	{
+		cout << "SI --> HOJA, CREA ESPADACHIN" << endl;
 		//CREAR ESPADACHIN
+	}
+	else
+	{
+		cout << "NO --> HOJA, NADA" << endl;
 	}
 }
 
@@ -298,10 +325,12 @@ void NodoRecCuartel::Decision()
 {
 	if(getDT()->getRecursos() >= CUARTEL_COSTE)
 	{
+		cout << "SI --> HOJA, CREAR CUARTEL" << endl;
 		//CREAR CUARTEL
 	}
 	else
 	{
+		cout << "NO --> NODORECGRANJA" << endl;
 		getNo()->Decision();
 	}
 }
@@ -318,7 +347,12 @@ void NodoRecGranja::Decision()
 {
 	if(getDT()->getRecursos() >= GRANJA_COSTE)
 	{
+		cout << "SI --> HOJA, CREAR GRANJA" << endl;
 		//CREAR GRANJA
+	}
+	else
+	{
+		cout << "NO --> HOJA, NADA" << endl;
 	}
 }
 
@@ -335,10 +369,12 @@ void NodoArquerosMayorLanzas::Decision()
 {
 	if(getDT()->getnumArquerosEnemigos() > getDT()->getnumLanceros())
 	{
+		cout << "SI --> NODOLANCERIA" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> NODOESPADACHINESMAYORARCOS" << endl;
 		getNo()->Decision();
 	}
 }
@@ -355,10 +391,12 @@ void NodoLanceria::Decision()
 {
 	if(getDT()->isLanceria())
 	{
+		cout << "SI --> NODOALDEANO" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> NODORECLANCERIA" << endl;
 		getNo()->Decision();
 	}
 }
@@ -371,7 +409,7 @@ NodoRecLanceria::NodoRecLanceria(DecisionTree* dt):Node(dt)
 	//---
 		//Podria pasar que construya granjas como un colgao, porque vale menos.
 		 
-		//Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
+		//Poner limite de 1, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
 	//--- 
 		setNo(new NodoRecGranja(getDT()));
 }
@@ -380,10 +418,12 @@ void NodoRecLanceria::Decision()
 {
 	if(getDT()->getRecursos() >= LANCERIA_COSTE)
 	{
+		cout << "SI --> HOJA, CREAR LANCERIA" << endl;
 		//CREAR LANCERIA
 	}
 	else
 	{
+		cout << "NO --> NODORECGRANJA" << endl;
 		getNo()->Decision();
 	}
 }
@@ -406,7 +446,12 @@ void NodoRecLancero::Decision()
 {
 	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
 	{
+		cout << "SI --> HOJA, CREAR LANCERO" << endl;
 		//CREAR LANCERO
+	}
+	else
+	{
+		cout << "NO --> HOJA, NADA" << endl;
 	}
 }
 
@@ -423,10 +468,12 @@ void NodoEspadachinesMayorArcos::Decision()
 {
 	if(getDT()->getnumEspadachinesEnemigos() > getDT()->getnumArqueros())
 	{
+		cout << "SI --> NODOARQUERIA" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> HOJA, STATE=ATACAR" << endl;
 		//PASAR A MODO ATACAR
 	}
 }
@@ -443,10 +490,12 @@ void NodoArqueria::Decision()
 {
 	if(getDT()->isArqueria())
 	{
+		cout << "SI --> NODOALDEANO" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
+		cout << "NO --> NODORECARQUERIA" << endl;
 		getNo()->Decision();
 	}
 }
@@ -469,10 +518,12 @@ void NodoRecArqueria::Decision()
 {
 	if(getDT()->getRecursos() >= ARQUERIA_COSTE)
 	{
+		cout << "SI --> HOJA, CREAR ARQUERIA" << endl;
 		//CREAR ARQUERIA
 	}
 	else
 	{
+		cout << "NO --> NODORECGRANJA" << endl;
 		getNo()->Decision();
 	}
 }
@@ -495,7 +546,12 @@ void NodoRecArquero::Decision()
 {
 	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
 	{
+		cout << "SI --> HOJA, CREAR ARQUERO" << endl;
 		//CREAR ARQUERO
+	}
+	else
+	{
+		cout << "NO --> HOJA, NADA" << endl;
 	}
 }
 
