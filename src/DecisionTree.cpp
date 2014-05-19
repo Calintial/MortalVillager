@@ -26,6 +26,10 @@ DecisionTree::DecisionTree(video::IVideoDriver* driver)
 
 void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings)
 {
+	this->IAunits = IAunits;
+	this->Userunits = Userunits;
+	this->buildings = buildings;
+
 	setVidaCC(vidaCC);
 	setRecursos(recursos);
 	
@@ -75,6 +79,7 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAu
 	}
 	
 	cout << "Datos recibidos, empieza decision" << endl;
+	cout << "RECURSOS IA: "<< recursos << endl;
 	
 	raiz->Decision();
 }
@@ -279,7 +284,9 @@ void NodoRecAldeano::Decision()
 		cout << "SI --> HOJA, CREA ALDEANO" << endl; 
 		//CREAR ALDEANO
 		AldeanoIA* aldeano = (AldeanoIA*) gameEngine::addIAUnit(191,194,0);
+		aldeano->aplicarTextura(getDT()->driver);
 		aldeano->Move(188,191);
+		gameEngine::recursos_ia -= ALDEANO_COSTE;
 	}
 	else
 	{
@@ -308,6 +315,22 @@ void NodoRecEspadachin::Decision()
 	{
 		cout << "SI --> HOJA, CREA ESPADACHIN" << endl;
 		//CREAR ESPADACHIN
+		vector<IDibujable*>* unidades = getDT()->IAunits;
+
+		for(int i = 0; i < unidades->size(); i++)
+		{
+			battleIA* unit = (battleIA*) unidades->at(i);
+			
+			if(unit->getType() == 0)
+			{
+				gameEngine::recursos_ia -= CONVERTIR_COSTE;
+				gameEngine::addIAUnit(unit->getPosicion().X,unit->getPosicion().Y,1)->aplicarTextura(getDT()->driver);
+				unidades->erase(unidades->begin() + i);
+				break;
+			}
+		}
+
+
 	}
 	else
 	{
@@ -334,7 +357,9 @@ void NodoRecCuartel::Decision()
 	{
 		cout << "SI --> HOJA, CREAR CUARTEL" << endl;
 		
+		//Crear cuartel
 		gameEngine::addBuildings(190,187,2,false)->aplicarTextura(getDT()->driver);
+		gameEngine::recursos_ia -= CUARTEL_COSTE;
 	}
 	else
 	{
@@ -357,6 +382,8 @@ void NodoRecGranja::Decision()
 	{
 		cout << "SI --> HOJA, CREAR GRANJA" << endl;
 		//CREAR GRANJA
+		gameEngine::addBuildings(190,180,1,false)->aplicarTextura(getDT()->driver);
+		gameEngine::recursos_ia -= GRANJA_COSTE;
 	}
 	else
 	{
@@ -428,6 +455,9 @@ void NodoRecLanceria::Decision()
 	{
 		cout << "SI --> HOJA, CREAR LANCERIA" << endl;
 		//CREAR LANCERIA
+		gameEngine::addBuildings(184,193,4,false)->aplicarTextura(getDT()->driver);
+		gameEngine::recursos_ia -= LANCERIA_COSTE;
+
 	}
 	else
 	{
@@ -456,6 +486,20 @@ void NodoRecLancero::Decision()
 	{
 		cout << "SI --> HOJA, CREAR LANCERO" << endl;
 		//CREAR LANCERO
+		vector<IDibujable*>* unidades = getDT()->IAunits;
+
+		for(int i = 0; i < unidades->size(); i++)
+		{
+			battleIA* unit = (battleIA*) unidades->at(i);
+			
+			if(unit->getType() == 0)
+			{
+				gameEngine::recursos_ia -= CONVERTIR_COSTE;
+				gameEngine::addIAUnit(unit->getPosicion().X,unit->getPosicion().Y,2)->aplicarTextura(getDT()->driver);
+				unidades->erase(unidades->begin() + i);
+				break;
+			}
+		}
 	}
 	else
 	{
@@ -528,6 +572,8 @@ void NodoRecArqueria::Decision()
 	{
 		cout << "SI --> HOJA, CREAR ARQUERIA" << endl;
 		//CREAR ARQUERIA
+		gameEngine::addBuildings(178,193,3,false)->aplicarTextura(getDT()->driver);
+		gameEngine::recursos_ia -= ARQUERIA_COSTE;
 	}
 	else
 	{
@@ -556,6 +602,20 @@ void NodoRecArquero::Decision()
 	{
 		cout << "SI --> HOJA, CREAR ARQUERO" << endl;
 		//CREAR ARQUERO
+		vector<IDibujable*>* unidades = getDT()->IAunits;
+
+		for(int i = 0; i < unidades->size(); i++)
+		{
+			battleIA* unit = (battleIA*) unidades->at(i);
+			
+			if(unit->getType() == 0)
+			{
+				gameEngine::recursos_ia -= CONVERTIR_COSTE;
+				gameEngine::addIAUnit(unit->getPosicion().X,unit->getPosicion().Y,3)->aplicarTextura(getDT()->driver);
+				unidades->erase(unidades->begin() + i);
+				break;
+			}
+		}
 	}
 	else
 	{

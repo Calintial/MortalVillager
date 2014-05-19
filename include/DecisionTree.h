@@ -64,6 +64,9 @@ class DecisionTree
 		void setRecursos(int recursos){this->recursos = recursos;};
 
 		video::IVideoDriver* driver;
+		vector<IDibujable*>* IAunits;
+		vector<IDibujable*>* Userunits;
+		vector<IDibujable*>* buildings;
 		
 	private:
 		Node* raiz;
