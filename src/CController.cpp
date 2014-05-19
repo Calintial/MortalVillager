@@ -107,7 +107,7 @@ bool CController::tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad,
 			}
 
 			outfile.close();
-
+			unidad->PintarAtacar(driver,unidad->getAtaque());
 			if(unidad->getAtaque()==1){
 				position2di atacando=unidad->getAtaqueMovimiento();
 
