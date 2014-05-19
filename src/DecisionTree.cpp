@@ -3,7 +3,7 @@
 #include "edificio.h"
 #include "Unidades.h"
 
-DecisionTree::DecisionTree()
+DecisionTree::DecisionTree(video::IVideoDriver* driver)
 {
 	raiz = new NodoEnemigoCercaCC(this);
 	
@@ -21,6 +21,7 @@ DecisionTree::DecisionTree()
 	lanceria = false;
 	granjas = 0;
 	recursos = 0;
+	this->driver = driver;
 }
 
 void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings)
@@ -85,9 +86,13 @@ bool DecisionTree::ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits)
 	for(int i=0; i<Userunits->size(); i++)
 	{
 		if(Userunits->at(i)->getPosition().X > 350 && Userunits->at(i)->getPosition().Y > 369)
+		{
+			cout<<"Devuelve true"<<endl;
 			return true;
+		}
+			
 	}
-	
+	cout<<"Devuelve false"<<endl;
 	return false;
 }
 
@@ -202,7 +207,7 @@ NodoLanzasMayorEspadas::NodoLanzasMayorEspadas(DecisionTree* dt):Node(dt)
 //¿Lanzas enemigas > Mis Espadas?
 void NodoLanzasMayorEspadas::Decision()
 {
-	if(getDT()->getnumLancerosEnemigos() > getDT()->getnumEspadachines())
+	if(getDT()->getnumLancerosEnemigos() >= getDT()->getnumEspadachines())
 	{
 		cout << "SI --> NODOCUARTEL" << endl;
 		getYes()->Decision();
@@ -273,6 +278,8 @@ void NodoRecAldeano::Decision()
 	{
 		cout << "SI --> HOJA, CREA ALDEANO" << endl; 
 		//CREAR ALDEANO
+		AldeanoIA* aldeano = (AldeanoIA*) gameEngine::addIAUnit(191,194,0);
+		aldeano->Move(188,191);
 	}
 	else
 	{
@@ -326,7 +333,8 @@ void NodoRecCuartel::Decision()
 	if(getDT()->getRecursos() >= CUARTEL_COSTE)
 	{
 		cout << "SI --> HOJA, CREAR CUARTEL" << endl;
-		//CREAR CUARTEL
+		
+		gameEngine::addBuildings(190,187,2,false)->aplicarTextura(getDT()->driver);
 	}
 	else
 	{
@@ -367,7 +375,7 @@ NodoArquerosMayorLanzas::NodoArquerosMayorLanzas(DecisionTree* dt):Node(dt)
 
 void NodoArquerosMayorLanzas::Decision()
 {
-	if(getDT()->getnumArquerosEnemigos() > getDT()->getnumLanceros())
+	if(getDT()->getnumArquerosEnemigos() >= getDT()->getnumLanceros())
 	{
 		cout << "SI --> NODOLANCERIA" << endl;
 		getYes()->Decision();
@@ -466,7 +474,7 @@ NodoEspadachinesMayorArcos::NodoEspadachinesMayorArcos(DecisionTree* dt):Node(dt
 //¿Espadachines enemigos > Mis Arqueros?
 void NodoEspadachinesMayorArcos::Decision()
 {
-	if(getDT()->getnumEspadachinesEnemigos() > getDT()->getnumArqueros())
+	if(getDT()->getnumEspadachinesEnemigos() >= getDT()->getnumArqueros())
 	{
 		cout << "SI --> NODOARQUERIA" << endl;
 		getYes()->Decision();

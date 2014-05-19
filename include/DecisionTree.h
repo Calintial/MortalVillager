@@ -2,6 +2,7 @@
 #define DECISIONTREE_H
 
 #include "IDibujable.h"
+#include "gameEngine.h"
 
 #include <vector>
 #include <iostream>
@@ -20,7 +21,7 @@ class Node;
 class DecisionTree
 {	
 	public:
-		DecisionTree();
+		DecisionTree(video::IVideoDriver*);
 		void doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings);
 		//48x29 desde x=0, y=0 para user, y x=351, y=370 para ia
 		bool ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits);
@@ -28,7 +29,7 @@ class DecisionTree
 		Node* getRaiz(){ return raiz;};
 		
 		bool isEnemigoCercaCC(){ return enemigoCercaCC;};
-		void setEnemigoCercaCC(bool enemigoCercaCC){this->enemigoCercaCC = enemigoCercaCC;};
+		void setEnemigoCercaCC(bool CercaCC){this->enemigoCercaCC = CercaCC;};
 		int getVidaCC(){ return vidaCC;};
 		void setVidaCC(int vidaCC){ this->vidaCC = vidaCC;};
 		int getnumAldeanos(){ return numAldeanos;};
@@ -61,6 +62,8 @@ class DecisionTree
 		
 		int getRecursos(){ return recursos;};
 		void setRecursos(int recursos){this->recursos = recursos;};
+
+		video::IVideoDriver* driver;
 		
 	private:
 		Node* raiz;

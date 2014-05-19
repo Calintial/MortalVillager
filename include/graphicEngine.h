@@ -30,6 +30,7 @@ public:
 	void DrawMap(vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*);
 	void DrawPausa();
 	void setPantalla(Pantalla* _pantalla);
+	video::IVideoDriver* getDriver(){return IrrDevice->getVideoDriver();};
 
 //private:
 	IrrlichtDevice * IrrDevice;

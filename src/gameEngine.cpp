@@ -21,8 +21,10 @@ gameEngine::gameEngine()
 	gameState = 0;
 
 	graphics = new graphicEngine();
+
+	video::IVideoDriver* driver = graphics->getDriver();
 	
-	ia = new intelEngine(&IAUnits,&UserUnits);
+	ia = new intelEngine(&IAUnits,&UserUnits,&buildings,driver);
 
 
 }
