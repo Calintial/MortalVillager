@@ -68,7 +68,7 @@ private:
 
 
 	//0 transitable y 1 no transitable
-	MapaAprendizaje* 				matriz;
+	shared_ptr<MapaAprendizaje> 				matriz;
 
 	IrrlichtDevice* device;
 	video::IVideoDriver* driver;
@@ -90,7 +90,7 @@ public:
 	~CController();
 	shared_ptr<CUnidadesAprendizaje>  getUnidadPosicion(position2di pos);
 	//bool		Update();
-	bool tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad, int i);
+	//bool tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad, int i);
 	bool		tickRedNeuronal();
 	bool		redNeuronal();
 	bool		genetico();

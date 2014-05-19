@@ -51,7 +51,7 @@ void CUnidadesAprendizaje::Reset()
 //	and acceleration and apply to current velocity vector.
 //
 //-----------------------------------------------------------------------
-bool CUnidadesAprendizaje::Update(MapaAprendizaje* matriz)
+bool CUnidadesAprendizaje::Update(std::shared_ptr<mapa2D> matriz)
 {
 
 	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,	getLife(),getPosicion().X,getPosicion().Y);
@@ -132,7 +132,7 @@ bool CUnidadesAprendizaje::Update(MapaAprendizaje* matriz)
 	return true;
 
 }
-void CUnidadesAprendizaje::calcular8Objetos(MapaAprendizaje* matriz){
+void CUnidadesAprendizaje::calcular8Objetos(std::shared_ptr<mapa2D> matriz){
 	m_vObjetosCerca.clear();
 	int cant=0;
 	for(int i= getPosicion().Y-1;i<=getPosicion().Y+1 && cant<8;i++){
@@ -217,7 +217,7 @@ void CUnidadesAprendizaje::calcular8Objetos(MapaAprendizaje* matriz){
 	}
 }
 }
-position2di CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,MapaAprendizaje* matriz){
+position2di CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,std::shared_ptr<mapa2D> matriz){
 	
 	int x=0,y=0;
 	x=	getPosicion().Y;
@@ -305,7 +305,7 @@ void CUnidadesAprendizaje::TexturaSeleccionada(IVideoDriver* driver,bool selecci
 		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
 }
 //E Vida quitada x tipox fitness /max fitness) x vida/100
-void CUnidadesAprendizaje::IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo,double max_fitness){
+void CUnidadesAprendizaje::IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo){
 	if(danyo>0 && atacado->getLife()==0){
 		m_dFitness++;
 	}
@@ -313,9 +313,8 @@ void CUnidadesAprendizaje::IncrementFitness(shared_ptr<CUnidadesAprendizaje> ata
 
 }
 
-void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
-	// TODO: aun no est´a hecho
-}
+
+	
 bool CUnidadesAprendizaje::enemy_in_attack_range(position2di){
 	// TODO: qu´e se supone que hace esto?...
 	return false;
@@ -325,4 +324,96 @@ void CUnidadesAprendizaje::Recovery(){
 	if(getLife()<100){
 		setLife(getLife()+1);	
 	}
+}
+void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
+//bool CController::tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad, const int i){
+	if (this->getLife() > 0)
+		{
+			this->calcular8Objetos(mapa);
+			//Pintar();
+				//update the NN and position
+			/*outfile.open("GeneticMovimientos.txt", ios::app);
+			if (outfile.is_open())
+			{
+				outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<this->Fitness()<<" y esta en la posición: ("<<this->getPosicion().X <<","<<this->getPosicion().Y<<")"<<endl;
+
+			}
+
+			outfile.close();*/
+			if (!this->Update(mapa))
+			{
+
+					//error in processing the neural net
+				cout<<"Wrong amount of NN inputs!"<<endl;
+//				return false;
+			}
+
+
+			/*outfile.open("GeneticMovimientos.txt", ios::app);
+			if (outfile.is_open())
+			{
+				outfile << "La unidad : "<<i<<" tiene de Fitness :"<<this->Fitness()<<" y esta en la posición: ("<<this->getPosicion().X <<","<<this->getPosicion().Y<<")"<<endl;
+
+			}
+
+			outfile.close();*/
+
+			if(this->getAtaque()==1){
+				position2di atacando=this->getAtaqueMovimiento();
+
+				if(mapa->getTile(atacando.Y,atacando.X)!=NULL && mapa->getTile(atacando.Y,atacando.X)->getTipo()==3){
+
+					int dano = this->Attack(std::dynamic_pointer_cast<Unidades>(mapa->getTile(atacando.Y,atacando.X)));
+					this->IncrementFitness(
+						std::dynamic_pointer_cast<CUnidadesAprendizaje>(mapa->getTile(atacando.Y,atacando.X)),
+						this->TrianguloArmas(
+							std::dynamic_pointer_cast<Unidades>(mapa->getTile(
+								atacando.Y,atacando.X))));
+					
+					outfile.open("GeneticMovimientos.txt", ios::app);
+					if (outfile.is_open())
+					{
+
+						outfile << "Y esta atacando a: ("<<atacando.X<<","<<atacando.Y<<")"<<endl;
+					}
+
+					outfile.close();
+					
+				}
+
+				
+			}
+			else{
+
+				if(this->getMover()==1){
+					//video::IVideoDriver* driver = device->getVideoDriver();
+					mapa->setTile(this->getPosicion(),shared_ptr<Suelo>( new Suelo(this->getPosicion().X,this->getPosicion().Y)));
+					std::dynamic_pointer_cast<Suelo>(mapa->getTile(this->getPosicion().Y,this->getPosicion().X))->setIsometric(false);
+					//mapa->getTile(this->getPosicion())->aplicarTextura(driver);
+					position2di moverse=this->getMovimiento();
+					if(mapa->getTile(moverse.Y,moverse.X)->getTipo()==0){
+						//cout<<"Estoy en ("<<this->getPosition().X<<","<<this->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
+						this->setPosition(this->getMovimiento());
+
+					}
+					
+					mapa->setTile(this->getPosicion(),shared_ptr<IDibujable>(this));
+				}else{
+					this->Recovery();
+				}
+			}
+		}else{
+			position2di pos = this->getPosicion();
+			if (pos.X >=0)
+			{
+				cout<<"##### HE MUERTO! POS: <"<<pos.X<<","<<pos.Y<<">"<<endl;
+				mapa->setTile(pos.Y,pos.X,shared_ptr<Suelo>( new Suelo(pos.X,pos.Y)));
+				std::dynamic_pointer_cast<Suelo>(mapa->getTile(pos.Y,pos.X))->setIsometric(false);
+				//mapa->getTile(pos.Y,pos.X)->aplicarTextura(driver);
+				this->setPosition(-1,-1);
+			}
+			
+			
+		}
+		//return true;
 }

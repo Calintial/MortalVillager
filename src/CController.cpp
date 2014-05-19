@@ -76,98 +76,7 @@ CController::~CController()
 
 }
 
-bool CController::tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad, const int i){
-	if (unidad->getLife() > 0)
-		{
-			unidad->calcular8Objetos(matriz);
-			//Pintar();
-				//update the NN and position
-			outfile.open("GeneticMovimientos.txt", ios::app);
-			if (outfile.is_open())
-			{
-				outfile << "La unidad ANTES : "<<i<<" tiene de Fitness :"<<unidad->Fitness()<<" y esta en la posición: ("<<unidad->getPosicion().X <<","<<unidad->getPosicion().Y<<")"<<endl;
 
-			}
-
-			outfile.close();
-			if (!unidad->Update(matriz))
-			{
-
-					//error in processing the neural net
-				cout<<"Wrong amount of NN inputs!"<<endl;
-				return false;
-			}
-
-
-			outfile.open("GeneticMovimientos.txt", ios::app);
-			if (outfile.is_open())
-			{
-				outfile << "La unidad : "<<i<<" tiene de Fitness :"<<unidad->Fitness()<<" y esta en la posición: ("<<unidad->getPosicion().X <<","<<unidad->getPosicion().Y<<")"<<endl;
-
-			}
-
-			outfile.close();
-
-			if(unidad->getAtaque()==1){
-				position2di atacando=unidad->getAtaqueMovimiento();
-
-				if(matriz->getTile(atacando.Y,atacando.X)!=NULL && matriz->getTile(atacando.Y,atacando.X)->getTipo()==3){
-
-					int dano = unidad->Attack(std::dynamic_pointer_cast<Unidades>(matriz->getTile(atacando.Y,atacando.X)));
-					unidad->IncrementFitness(
-						std::dynamic_pointer_cast<CUnidadesAprendizaje>(matriz->getTile(atacando.Y,atacando.X)),
-						unidad->TrianguloArmas(
-							std::dynamic_pointer_cast<Unidades>(matriz->getTile(
-								atacando.Y,atacando.X))),
-						m_pGA->BestFitness());
-					
-					outfile.open("GeneticMovimientos.txt", ios::app);
-					if (outfile.is_open())
-					{
-
-						outfile << "Y esta atacando a: ("<<atacando.X<<","<<atacando.Y<<")"<<endl;
-					}
-
-					outfile.close();
-					
-				}
-
-				
-			}
-			else{
-
-				if(unidad->getMover()==1){
-					video::IVideoDriver* driver = device->getVideoDriver();
-					matriz->setTile(unidad->getPosicion(),shared_ptr<Suelo>( new Suelo(unidad->getPosicion().X,unidad->getPosicion().Y)));
-					std::dynamic_pointer_cast<Suelo>(matriz->getTile(unidad->getPosicion().Y,unidad->getPosicion().X))->setIsometric(false);
-					matriz->getTile(unidad->getPosicion())->aplicarTextura(driver);
-					position2di moverse=unidad->getMovimiento();
-					if(matriz->getTile(moverse.Y,moverse.X)->getTipo()==0){
-						//cout<<"Estoy en ("<<unidad->getPosition().X<<","<<unidad->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
-						unidad->setPosition(unidad->getMovimiento());
-
-					}
-					
-					matriz->setTile(unidad->getPosicion(),unidad);
-				}else{
-					unidad->Recovery();
-				}
-			}
-		}else{
-			position2di pos = unidad->getPosicion();
-			if (pos.X >=0)
-			{
-				cout<<"##### HE MUERTO! POS: <"<<pos.X<<","<<pos.Y<<">"<<endl;
-				matriz->setTile(pos.Y,pos.X,shared_ptr<Suelo>( new Suelo(pos.X,pos.Y)));
-				std::dynamic_pointer_cast<Suelo>(matriz->getTile(pos.Y,pos.X))->setIsometric(false);
-				matriz->getTile(pos.Y,pos.X)->aplicarTextura(driver);
-				unidad->setPosition(-1,-1);
-			}
-			
-			
-		}
-		return true;
-}
 
 bool CController::tickRedNeuronal(){
 	outfile.open("GeneticMovimientos.txt", ios::app);
@@ -183,13 +92,13 @@ bool CController::tickRedNeuronal(){
 	for (int i=0; i<m_NumUnidades; ++i)
 
 	{
-		tickRedNeuronalUnidad(m_vecUnidades[i],i);
+		m_vecUnidades[i]->updateIA(matriz);
 
 	}
 	
 	for (int i = m_NumUnidades; i < m_vecUnidades.size(); ++i)
 	{
-		tickRedNeuronalUnidad(m_vecUnidades[i],i);
+		m_vecUnidades[i]->updateIA(matriz);
 	}
 return true;
 
@@ -317,18 +226,18 @@ void CController::Pintar(){
 
 void CController::generarMapa(int tipoMapa){
 	if(tipoMapa==1){
-		matriz = new MapaBasicoDummy(device,m_NumUnidades);
+		matriz = shared_ptr<MapaAprendizaje>(new MapaBasicoDummy(device,m_NumUnidades));
 	}
 	else if(tipoMapa==2){
-		matriz = new MapaBasicoMuroYUnidad(device,m_NumUnidades);
+		matriz = shared_ptr<MapaAprendizaje>(new MapaBasicoMuroYUnidad(device,m_NumUnidades));
 			
 	}
 	else if(tipoMapa==3){
-		matriz= new MapaCuatroUnidades(device,m_NumUnidades);
+		matriz= shared_ptr<MapaAprendizaje>(new MapaCuatroUnidades(device,m_NumUnidades));
 		
 	}
 	else if(tipoMapa==4){
-		matriz= new MapaCuadrado(device,m_NumUnidades);
+		matriz= shared_ptr<MapaAprendizaje>(new MapaCuadrado(device,m_NumUnidades));
 	}
 	else{
 		cerr<<"NO HAY MAPA: "<<tipoMapa<<endl;

@@ -56,9 +56,10 @@ public:
 	void GenerarMapa();
 	void GuardarMapa();
 
-	shared_ptr<IDibujable> getTile(int x, int y);
-	shared_ptr<IDibujable> getTile(position2di);
-	void setTile(int x, int y, shared_ptr<IDibujable>contenido);
+	virtual shared_ptr<IDibujable> getTile(int x, int y);
+	virtual shared_ptr<IDibujable> getTile(position2di);
+	virtual void setTile(int x, int y, shared_ptr<IDibujable>contenido);
+	virtual void setTile(position2di pos, shared_ptr<IDibujable>contenido){setTile(pos.Y,pos.X,contenido);}
 	void AnyadirObjeto(shared_ptr<IDibujable>);
 
 	//VISTAS
@@ -67,7 +68,7 @@ public:
     const dimension2di &GetViewSize() const { return ViewSize; }
     
     //Graficos
-    void Pintar();
+    virtual void Pintar();
     void PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY);
 	position2di getDrawPosition(position2di pos);
 	
