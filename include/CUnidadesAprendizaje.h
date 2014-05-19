@@ -24,7 +24,7 @@
 #include "MapaAprendizaje.h"
 using namespace std;
 
-class CUnidadesAprendizaje :  public Unidades
+class CUnidadesAprendizaje :  public battleIA
 {
 
 private:
@@ -82,6 +82,9 @@ public:
 void setFitness(double fitness){m_dFitness=fitness;};
  vector<double> getCNeuralWeight(){return m_ItsBrain.GetWeights();};
 	
+	void updateIA(std::shared_ptr<mapa2D> mapa);
+	bool enemy_in_attack_range(position2di);
+	void Recovery();
 
 
 };

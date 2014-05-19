@@ -149,6 +149,8 @@ bool CController::tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad,
 					}
 					
 					matriz->setTile(unidad->getPosicion(),unidad);
+				}else{
+					unidad->Recovery();
 				}
 			}
 		}else{

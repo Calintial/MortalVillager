@@ -312,3 +312,17 @@ void CUnidadesAprendizaje::IncrementFitness(shared_ptr<CUnidadesAprendizaje> ata
 	m_dFitness+=danyo;
 
 }
+
+void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
+	// TODO: aun no est´a hecho
+}
+bool CUnidadesAprendizaje::enemy_in_attack_range(position2di){
+	// TODO: qu´e se supone que hace esto?...
+	return false;
+}
+void CUnidadesAprendizaje::Recovery(){
+	//cout<<"Me recupero <" << getPosition().X <<","<<getPosition().Y << ">"<<endl;
+	if(getLife()<100){
+		setLife(getLife()+1);	
+	}
+}

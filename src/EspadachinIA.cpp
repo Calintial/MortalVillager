@@ -46,8 +46,11 @@ bool EspadachinIA::enemy_in_attack_range(position2di pos)
 }
 
 void EspadachinIA::Recovery()
-{
-	setLife(getLife()+1);
+{	
+	if(getLife()<100){
+		setLife(getLife()+1);
+	}
+	
 }
 
 int EspadachinIA::getVisionRange()
