@@ -241,10 +241,9 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 	//Now to add a little elitism we shall add in some copies of the
 	//fittest genomes. Make sure we add an EVEN number or the roulette
   //wheel sampling will crash
-	if (!(CParams::iNumCopiesElite * CParams::iNumElite % 2))
-	{
+	
 		GrabNBest(CParams::iNumElite, CParams::iNumCopiesElite, vecNewPop);
-	}
+	
 	
 
 	//now we enter the GA loop
@@ -313,13 +312,15 @@ void CGenAlg::CalculateBestWorstAvTot()
 	std::string excel=carpeta+"/Excel.txt";
 	m_dTotalFitness = 1;
 	
-	double HighestSoFar = 1;
-	double LowestSoFar  = 9999999;
+	double HighestSoFar = m_vecPop[m_iPopSize-1].dFitness;
+	m_iFittestGenome=m_iPopSize-1;
+	double LowestSoFar  = m_vecPop[0].dFitness;
+	m_dWorstFitness=0;
 	
 	for (int i=0; i<m_iPopSize; ++i)
 	{
 		//update fittest if necessary
-		if (m_vecPop[i].dFitness > HighestSoFar)
+		/*if (m_vecPop[i].dFitness > HighestSoFar)
 		{
 			HighestSoFar	 = m_vecPop[i].dFitness;
 			
@@ -334,7 +335,7 @@ void CGenAlg::CalculateBestWorstAvTot()
 			LowestSoFar = m_vecPop[i].dFitness;
 			
 			m_dWorstFitness = LowestSoFar;
-		}
+		}*/
 		
 		m_dTotalFitness	+= m_vecPop[i].dFitness;
 	
