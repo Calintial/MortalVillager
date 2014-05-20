@@ -3,15 +3,17 @@
 
 CentroCiudad::CentroCiudad() : edificio(0)
 {
+	life = 100;
 }
 
 CentroCiudad::CentroCiudad(int x, int y, bool usuario) : edificio(0,x,y,usuario)
 {
+	life = 100;
 }
 
 CentroCiudad::~CentroCiudad()
 {
-
+	life = 0;
 }
 
 void CentroCiudad::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
@@ -31,4 +33,16 @@ void CentroCiudad::aplicarTextura(IVideoDriver* driver)
 bool CentroCiudad::isTransitable()
 {
 	return false;
+}
+
+void CentroCiudad::PierdoVida(int danyo)
+{
+	if(life-danyo<0)
+	{
+		life = 0;
+	}
+	else
+	{	
+		life = life-danyo;
+	}
 }

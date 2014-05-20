@@ -92,6 +92,16 @@ void Unidades::Move(shared_ptr<Unidades> _objetivo){
 	}
 }
 
+void Unidades::Move(shared_ptr<edificio> _objetivo){
+	if(_objetivo != NULL){
+		if(state != DEAD)
+			state = MOVE;
+		CC_Objetivo = _objetivo;
+		posicionObjetivo = _objetivo->getPosition();
+		Move(posicionObjetivo.X,posicionObjetivo.Y);
+	}
+}
+
 void Unidades::updateUnit()
 {
 	//position2di position = getPosition();
@@ -99,6 +109,7 @@ void Unidades::updateUnit()
 	{
 		if (objetivo)
 		{
+			CC_Objetivo = NULL;
 			if(enemy_in_attack_range(objetivo->getPosition()))
 			{
 				if(state != DEAD)
@@ -131,6 +142,42 @@ void Unidades::updateUnit()
 				}
 			}	
 		}
+		else if(CC_Objetivo)
+		{
+			objetivo = NULL;
+			if(CC_in_range(CC_Objetivo->getPosition()))
+			{
+				cerr<<"ATACAR CENTRO CIUDAD!"<<endl;
+				if(state != DEAD)
+					state = ATTACKING;
+				delete camino;
+				camino = NULL;
+			}
+			else if (camino)
+			{
+				if (camino->getPeso() <= pesoComprobacion){
+					position2di nuevaPos = CC_Objetivo->getPosition();
+					if (nuevaPos != posicionObjetivo)
+					{
+						cout << "### NUEVAPOS OBJETIVO = <"<<nuevaPos.X<<","<<nuevaPos.Y<<">"<<endl;
+						delete camino;
+						camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
+						if (camino)
+						{
+							pesoComprobacion = camino->getPeso()/2;
+						}
+					}
+				}
+			}else{
+				position2di nuevaPos = CC_Objetivo->getPosition();
+				cout << "### NUEVAPOS OBJETIVO = <"<<nuevaPos.X<<","<<nuevaPos.Y<<">"<<endl;
+				camino = pathfinding->calcularCamino(getPosition(), nuevaPos);
+				if (camino)
+				{
+					pesoComprobacion = camino->getPeso()/2;
+				}
+			}				
+		}
 
 		if (camino)
 		{
@@ -150,12 +197,13 @@ void Unidades::updateUnit()
 			Move(camino);
 		}
 		
-		if ((camino == NULL || camino->getPeso() <= 0) && !objetivo)
+		if ((camino == NULL || camino->getPeso() <= 0) && !objetivo && !CC_Objetivo)
 		{
 			if (camino)
 			{
 				delete camino;
 				objetivo = NULL;
+				CC_Objetivo = NULL;
 				posicionObjetivo = position2di(0,0);
 				camino = NULL;
 			}
@@ -165,15 +213,22 @@ void Unidades::updateUnit()
 	}
 	else if(state == ATTACKING)
 	{
-		if(enemy_in_attack_range(objetivo->getPosition()))
+		if(CC_Objetivo)
 		{
-			Attack(objetivo);
+			if(CC_in_range(CC_Objetivo->getPosition()))
+			{
+				shared_ptr<CentroCiudad> Centro_Ciudad = std::dynamic_pointer_cast<CentroCiudad>(CC_Objetivo);
+
+				Centro_Ciudad->PierdoVida(getAttackValue());
+			}
 		}
-		/*else if(enemy_in_vision_range(objetivo->getPosition()))
+		else if(objetivo)
 		{
-			state = MOVE;
-			Move(objetivo);
-		}*/
+			if(enemy_in_attack_range(objetivo->getPosition()))
+			{
+				Attack(objetivo);
+			}
+		}
 		else
 		{
 			if(state != DEAD)
@@ -258,4 +313,29 @@ int Unidades::TrianguloArmas(shared_ptr<Unidades> enemigo)
 		default:;
 	};
 	return 0;
+}
+
+bool Unidades::CC_in_range(position2di pos)
+{
+	position2di mypos = getPosition();
+
+	for(int x = mypos.X - 1; x <= mypos.X + 1; x++)
+	{
+		for(int y = mypos.Y - 1; y <= mypos.Y + 1; y++)
+		{
+			for(int i = pos.X; i < pos.X +3; i++)
+			{
+				for(int j = pos.Y; j < pos.Y +3; j++)
+				{
+					if(i == x && j == y)
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+
+
 }
