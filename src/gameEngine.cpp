@@ -54,7 +54,7 @@ void gameEngine::updatePlayer()
 		graphics->mapa->getTile(u->getPosition().X,u->getPosition().Y)->setVinculado(NULL);
 		uni_ptr = (Unidades*)(u.get());
 		uni_ptr->updateUnit();
-		graphics->mapa->getTile(u->getPosition().X,u->getPosition().Y)->setVinculado(u);
+		graphics->mapa->getTile(u->getPosition().X,u->getPosition().Y)->setVinculado(u.get());
 	}
 }
 

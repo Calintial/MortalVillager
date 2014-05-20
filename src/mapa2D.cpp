@@ -228,7 +228,7 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 									if (index != -1)
 									{
 										// esto hace que se fusionen las unidades sobre la unidad objetivo >_<
-										unidad->Move(std::dynamic_pointer_cast<Unidades>(ia_units->at(index)));
+										unidad->Move((Unidades*)ia_units->at(index).get());
 									}else{
 										unidad->Move(posnueva.X,posnueva.Y);
 									}
@@ -1075,7 +1075,7 @@ void mapa2D::colocarEdificio(position2di pos_colocar){
 		{
 			for (j = 0; j < tex->getSize().Height/TILE_HEIGHT; ++j){
 
-				getTile(pos_colocar.Y + j,pos_colocar.X + i)->setVinculado(edificio);
+				getTile(pos_colocar.Y + j,pos_colocar.X + i)->setVinculado(edificio.get());
 			}
 		}
 		position2di down_right(pos_colocar.X + i,pos_colocar.Y + j);
@@ -1089,5 +1089,5 @@ void mapa2D::AnyadirObjeto(shared_ptr<IDibujable> obj)
 {
 	cout << obj->getPosition().X << endl;
 	cout << obj->getPosition().Y << endl;
-	vTiles[obj->getPosition().X][obj->getPosition().Y]->setVinculado(obj);
+	vTiles[obj->getPosition().X][obj->getPosition().Y]->setVinculado(obj.get());
 }

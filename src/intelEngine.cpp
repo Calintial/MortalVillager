@@ -25,7 +25,7 @@ void intelEngine::updateBattleIA(std::shared_ptr<mapa2D> mapa)
 
 		std::dynamic_pointer_cast<battleIA>(ia_units->at(i))->updateIA(mapa);
 		//Lo vinculamos a su posible nueva posicion
-		mapa->getTile(ia_units->at(i)->getPosition().X,ia_units->at(i)->getPosition().Y)->setVinculado(ia_units->at(i));
+		mapa->getTile(ia_units->at(i)->getPosition().X,ia_units->at(i)->getPosition().Y)->setVinculado(ia_units->at(i).get());
 		
 	}
 }

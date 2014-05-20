@@ -40,10 +40,10 @@ void IDibujable::setPathfinding(Pathfinding* _pathfinding){
 	pathfinding = _pathfinding;
 }
 
-void IDibujable::setVinculado(shared_ptr<IDibujable> _vinculado){
+void IDibujable::setVinculado(IDibujable* _vinculado){
 	vinculado = _vinculado;
 }
-shared_ptr<IDibujable> IDibujable::getVinculado(){
+IDibujable* IDibujable::getVinculado(){
 	return vinculado;
 }
 

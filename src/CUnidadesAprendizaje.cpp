@@ -363,12 +363,10 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 
 				if(mapa->getTile(atacando.Y,atacando.X)!=NULL && mapa->getTile(atacando.Y,atacando.X)->getTipo()==3){
 
-					int dano = this->Attack(std::dynamic_pointer_cast<Unidades>(mapa->getTile(atacando.Y,atacando.X)));
+					int dano = this->Attack((Unidades*)mapa->getTile(atacando.Y,atacando.X).get());
 					this->IncrementFitness(
 						std::dynamic_pointer_cast<CUnidadesAprendizaje>(mapa->getTile(atacando.Y,atacando.X)),
-						this->TrianguloArmas(
-							std::dynamic_pointer_cast<Unidades>(mapa->getTile(
-								atacando.Y,atacando.X))));
+						this->TrianguloArmas((Unidades*)mapa->getTile(atacando.Y,atacando.X).get()));
 					
 					outfile.open("GeneticMovimientos.txt", ios::app);
 					if (outfile.is_open())
@@ -387,17 +385,18 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 
 				if(this->getMover()==1){
 					//video::IVideoDriver* driver = device->getVideoDriver();
-					mapa->setTile(this->getPosicion(),shared_ptr<Suelo>( new Suelo(this->getPosicion().X,this->getPosicion().Y)));
-					std::dynamic_pointer_cast<Suelo>(mapa->getTile(this->getPosicion().Y,this->getPosicion().X))->setIsometric(false);
+					/*mapa->setTile(this->getPosicion(),shared_ptr<Suelo>( new Suelo(this->getPosicion().X,this->getPosicion().Y)));
+					std::dynamic_pointer_cast<Suelo>(mapa->getTile(this->getPosicion().Y,this->getPosicion().X))->setIsometric(false);*/
 					//mapa->getTile(this->getPosicion())->aplicarTextura(driver);
 					position2di moverse=this->getMovimiento();
 					if(mapa->getTile(moverse.Y,moverse.X)->getTipo()==0){
 						//cout<<"Estoy en ("<<this->getPosition().X<<","<<this->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
+						mapa->getTile(getPosition())->setVinculado(NULL);
 						this->setPosition(this->getMovimiento());
-
+						mapa->getTile(moverse)->setVinculado(this);
 					}
 					
-					mapa->setTile(this->getPosicion(),shared_ptr<IDibujable>(this));
+					//mapa->setTile(this->getPosicion(),shared_ptr<IDibujable>(this));
 				}else{
 					this->Recovery();
 				}
@@ -407,10 +406,12 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 			if (pos.X >=0)
 			{
 				cout<<"##### HE MUERTO! POS: <"<<pos.X<<","<<pos.Y<<">"<<endl;
-				mapa->setTile(pos.Y,pos.X,shared_ptr<Suelo>( new Suelo(pos.X,pos.Y)));
-				std::dynamic_pointer_cast<Suelo>(mapa->getTile(pos.Y,pos.X))->setIsometric(false);
+				//mapa->setTile(pos.Y,pos.X,shared_ptr<Suelo>( new Suelo(pos.X,pos.Y)));
+				//std::dynamic_pointer_cast<Suelo>(mapa->getTile(pos.Y,pos.X))->setIsometric(false);
 				//mapa->getTile(pos.Y,pos.X)->aplicarTextura(driver);
+				mapa->getTile(pos)->setVinculado(NULL);
 				this->setPosition(-1,-1);
+
 			}
 			
 			

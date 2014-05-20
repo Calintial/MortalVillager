@@ -42,6 +42,13 @@ void MapaAprendizaje::Pintar()
 				}
 			}
 
+			for (int i = 0; i < m_vecUnidades.size(); ++i)
+			{
+				position2di pos = m_vecUnidades[i]->getPosition();
+				DrawPosition = position2di(pos.X*TILE_WIDTH - CameraScroll.X, pos.Y * TILE_HEIGHT - CameraScroll.Y);
+				m_vecUnidades[i]->Pintar(driver, DrawPosition.X, DrawPosition.Y);
+			}
+
 			if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
 			{
 				PintarInformacionUnidad();
@@ -109,9 +116,10 @@ void MapaAprendizaje::generarMapa(){
 	for (int i=0;i<MAPSIZE;i++){
 		for(int j=0;j<MAPSIZE;j++){
 			//0 transitable 1 no transitable
-			setTile(i,j, shared_ptr<Suelo>(new Suelo(j,i)));
+			/*setTile(i,j, shared_ptr<Suelo>(new Suelo(j,i)));
 			std::dynamic_pointer_cast<Suelo>(getTile(i,j))->setIsometric(false);
-			getTile(i,j)->aplicarTextura(driver);
+			getTile(i,j)->aplicarTextura(driver);*/
+			nuevoSuelo(j,i);
 
 		}
 	}
@@ -119,9 +127,10 @@ void MapaAprendizaje::generarMapa(){
 	for(int i=0;i<30;i++){
 		int RandIntX=RandInt(1,MAPSIZE-1);
 		int RandIntY=RandInt(1,MAPSIZE-1);
-		setTile(RandIntY,RandIntX,shared_ptr<Muro>(new Muro(RandIntX,RandIntY)));
+		/*setTile(RandIntY,RandIntX,shared_ptr<Muro>(new Muro(RandIntX,RandIntY)));
 		std::dynamic_pointer_cast<Muro>(getTile(RandIntY,RandIntX))->setIsometric(false);
-		getTile(RandIntY,RandIntX)->aplicarTextura(driver);
+		getTile(RandIntY,RandIntX)->aplicarTextura(driver);*/
+		nuevoMuro(RandIntX,RandIntY);
 	}
 
 	//creamos las unidades 
@@ -228,13 +237,13 @@ void MapaBasicoDummy::generarUnidades(){
 		shared_ptr<EspadachinRedes> unidadDummy=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX,posY));
 		unidadDummy->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
-		vTiles[posY][posX]=unidadDummy;
+		//vTiles[posY][posX]=unidadDummy;
 		
 
 		shared_ptr<EspadachinRedes>  unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
 		aux = vTiles[posY + 2][posX + 2];
-		vTiles[posY + 2][posX + 2]=unidad;
+		//vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
 }
@@ -326,14 +335,14 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
 		shared_ptr<EspadachinRedes> unidadDummy=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX,posY));
 		unidadDummy->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
-		vTiles[posY][posX]=unidadDummy;
+		//vTiles[posY][posX]=unidadDummy;
 		m_vecEnemigos.push_back(unidadDummy);
 		
 
 		shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
 		aux = vTiles[posY + 2][posX + 2];
-		vTiles[posY + 2][posX + 2]=unidad;
+		//vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
 	m_vecUnidades.reserve(m_vecUnidades.size()*2);
@@ -427,14 +436,14 @@ void MapaCuadrado::generarUnidades(){
 	shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(0,0));
 	unidad->aplicarTextura(driver);
 	shared_ptr<IDibujable> aux = vTiles[0][0];
-	vTiles[0][0]=unidad;
+	//vTiles[0][0]=unidad;
 	m_vecUnidades.push_back(unidad);
 	numUnidadesLeft++;
 
 	unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(finalMapaCuadradoUnidades,finalMapaCuadradoUnidades));
 	unidad->aplicarTextura(driver);
 	aux = vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades];
-	vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades]=unidad;
+	//vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades]=unidad;
 	m_vecUnidades.push_back(unidad);
 	numUnidadesLeft++;
 
@@ -446,13 +455,13 @@ void MapaCuadrado::generarUnidades(){
 				shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(j,i));
 				unidad->aplicarTextura(driver);
 				shared_ptr<IDibujable> aux = vTiles[i][j];
-				vTiles[i][j]=unidad;
+				//vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
 				unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(i,j));
 				unidad->aplicarTextura(driver);
 				aux = vTiles[j][i];
-				vTiles[j][i]=unidad;
+				//vTiles[j][i]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
 			}
@@ -467,13 +476,13 @@ void MapaCuadrado::generarUnidades(){
 				shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(j,i));
 				unidad->aplicarTextura(driver);
 				shared_ptr<IDibujable> aux = vTiles[i][j];
-				vTiles[i][j]=unidad;
+				//vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
 				unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(i,j));
 				unidad->aplicarTextura(driver);
 				aux = vTiles[j][i];
-				vTiles[j][i]=unidad;
+				//vTiles[j][i]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
 			}
@@ -568,10 +577,47 @@ void MapaCuatroUnidades::generarUnidades(){
 		shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY + 2][posX + 2];
-		vTiles[posY + 2][posX + 2]=unidad;
+		//vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 
 	}
 
 }
 // ================== ~MapaCuatroUnidades ===================== //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
+
+
+
+
+TODO: PONER LAS UNIDADES COMO VINCULADAS EN EL MAPA, CAMBIAR TODAS LAS FUNCIONES DE OBJETOSCERCANOS, MOVIMIENTO, ATAQUE Y DEM´AS PARA TENER EN CUENTA LOS VINCULADOS, NO LAS CASILLAS
+QUITAR TODOS LOS NEW SUELO CUANDO SE MUEVE Y DEJARLO EN SETPOSITION Y SI ESO SETVINCULADO
+
+
+
+
+
+*/
