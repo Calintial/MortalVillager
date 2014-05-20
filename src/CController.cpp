@@ -116,9 +116,7 @@ bool CController::tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad,
 					int dano = unidad->Attack(std::dynamic_pointer_cast<Unidades>(matriz->getTile(atacando.Y,atacando.X)));
 					unidad->IncrementFitness(
 						std::dynamic_pointer_cast<CUnidadesAprendizaje>(matriz->getTile(atacando.Y,atacando.X)),
-						unidad->TrianguloArmas(
-							std::dynamic_pointer_cast<Unidades>(matriz->getTile(
-								atacando.Y,atacando.X))),
+						dano,
 						m_pGA->BestFitness());
 					
 					outfile.open("GeneticMovimientos.txt", ios::app);

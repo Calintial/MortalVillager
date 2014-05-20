@@ -321,6 +321,7 @@ void CUnidadesAprendizaje::IncrementFitness(shared_ptr<CUnidadesAprendizaje> ata
 	if(danyo>0 && atacado->getLife()==0){
 		m_dFitness++;
 	}
+	
 	m_dFitness+=danyo;
 
 }
