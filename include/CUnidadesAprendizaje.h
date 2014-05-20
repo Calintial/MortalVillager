@@ -81,7 +81,7 @@ public:
  void IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo,double max_fitness);
 void setFitness(double fitness){m_dFitness=fitness;};
  vector<double> getCNeuralWeight(){return m_ItsBrain.GetWeights();};
-	
+	void PintarAtacar(IVideoDriver* driver,bool atacando);
 
 
 };
