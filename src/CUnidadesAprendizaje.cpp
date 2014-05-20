@@ -309,7 +309,7 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 //bool CController::tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad, const int i){
 	if (this->getLife() > 0)
 		{
-			this->calcular8Objetos(mapa);
+			
 			//Pintar();
 				//update the NN and position
 			/*outfile.open("GeneticMovimientos.txt", ios::app);
@@ -395,5 +395,6 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 			
 			
 		}
+		this->calcular8Objetos(mapa);
 		//return true;
 }
