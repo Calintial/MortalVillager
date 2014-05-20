@@ -287,8 +287,11 @@ outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y m
 
 void CUnidadesAprendizaje::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
-	ITexture *TTexture = getTextura();
-	driver->draw2DImage(TTexture, position2di(TPositionX, TPositionY), rect<s32>(0,0,TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+
+		ITexture *TTexture = getTextura();
+		
+
+			driver->draw2DImage(TTexture, position2di(TPositionX, TPositionY), rect<s32>(0,0,TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 
 }
 
@@ -296,11 +299,20 @@ void CUnidadesAprendizaje::aplicarTextura(IVideoDriver* driver)
 {
 	setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
 }
+void CUnidadesAprendizaje::PintarAtacar(IVideoDriver* driver,bool atacando)
+{
+	if(atacando)
+		setTextura(driver->getTexture("../media/Texturas/units/user_swordman.png"));
+
+	else
+		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
+}
 
 void CUnidadesAprendizaje::TexturaSeleccionada(IVideoDriver* driver,bool seleccionada)
 {
 	if(seleccionada)
 		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje_seleccionado.png"));
+
 	else
 		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
 }
