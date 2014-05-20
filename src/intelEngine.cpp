@@ -38,6 +38,15 @@ void intelEngine::updateBattleIA(std::shared_ptr<mapa2D> mapa)
 
 	dt->doDecision(vidaCC,gameEngine::recursos_ia,ia_units,user_units,ia_buildings);
 
+	/*
+	 * CONFORME ESTA AHORA --> El hace una decision y la hace, y la battle ia actua cuando hay alguien cerca,
+	 * PERO --> no manda a nadie a Atacar nunca, o a Defender la base 
+	 * 
+	 * MIENTRAS ESTE EN ATACAR --> Mando a num_soldados/2 a atacar (se puede poner variable en cada unidad para saber cuantos ya estan atacando)
+	 * MIENTRAS ESTE EN DEFENDER --> Mando a todos a las coodenadas del centro ciudad (habria que mandar solo a los que no esten)
+	 *
+	*/
+
 	for(unsigned int i=0; i<ia_units->size(); i++)
 	{
 		//Lo devinculamos de su posicion anterior

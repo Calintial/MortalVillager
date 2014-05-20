@@ -14,6 +14,7 @@ int gameEngine::recursos_ia = 1000;
 
 int gameEngine::granjas_usuario = 0;
 int gameEngine::granjas_ia = 0;
+int gameEngine::state_war_ia = 0;
 
 
 gameEngine::gameEngine()

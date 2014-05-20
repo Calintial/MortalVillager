@@ -68,6 +68,7 @@ public:
 	static int recursos_ia;
 	static int granjas_usuario;
 	static int granjas_ia;
+	static int state_war_ia;
 
 	int FPS = 25;
 	int SALTO_TICKS_RELOJ = 3500 / FPS; 

@@ -163,11 +163,27 @@ class NodoGranja: public Node
 		void Decision();
 };
 
-//¿Aldeano?
-class NodoAldeano: public Node
+//¿Aldeano --> Que podria ser espadachin?
+class NodoAldeanoEspadachin: public Node
 {
 	public:
-		NodoAldeano(DecisionTree* dt);
+		NodoAldeanoEspadachin(DecisionTree* dt);
+		void Decision();
+};
+
+//¿Aldeano --> Que podria ser lancero?
+class NodoAldeanoLancero: public Node
+{
+	public:
+		NodoAldeanoLancero(DecisionTree* dt);
+		void Decision();
+};
+
+//¿Aldeano --> Que podria ser arquero?
+class NodoAldeanoArquero: public Node
+{
+	public:
+		NodoAldeanoArquero(DecisionTree* dt);
 		void Decision();
 };
 

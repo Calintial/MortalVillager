@@ -21,7 +21,7 @@ DecisionTree::DecisionTree(video::IVideoDriver* driver)
 	lanceria = false;
 	granja = false;
 	recursos = 0;
-	this->driver = driver;
+	this->driver = driver;	
 }
 
 void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings)
@@ -166,6 +166,10 @@ NodoTengoSoldados::NodoTengoSoldados(DecisionTree* dt):Node(dt)
 void NodoTengoSoldados::Decision()
 {
 	//Hay que poner estados en algun lao y cambiarlo aqui a DEFENDER
+	if(gameEngine::state_war_ia != 2)
+	{
+		gameEngine::state_war_ia = 2;
+	}
 	if(getDT()->getnumSoldados() < getDT()->getnumSoldadosEnemigos())
 	{
 		cout << "NO --> NodoLanzasMayorEspadas + STATE=DEFENDER" << endl;
@@ -189,10 +193,10 @@ NodoUsuarioSuperioridad::NodoUsuarioSuperioridad(DecisionTree* dt):Node(dt)
 
 void NodoUsuarioSuperioridad::Decision()
 {
-	if(getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>10)
+	if(gameEngine::state_war_ia != 1 && (getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>15))
 	{
 		cout << "SI --> HOJA + STATE=ATACAR" << endl;
-		//Hay que poner estados en algun lao y cambiarlo aqui a ATACAR
+		gameEngine::state_war_ia = 1;
 	}
 	else
 	{
@@ -228,7 +232,7 @@ void NodoLanzasMayorEspadas::Decision()
 
 NodoCuartel::NodoCuartel(DecisionTree* dt):Node(dt)
 {
-	setYes(new NodoAldeano(getDT()));
+	setYes(new NodoAldeanoEspadachin(getDT()));
 	setNo(new NodoRecCuartel(getDT()));
 }
 
@@ -236,7 +240,7 @@ void NodoCuartel::Decision()
 {
 	if(getDT()->isCuartel())
 	{
-		cout << "YES --> NODOALDEANO" << endl;
+		cout << "YES --> NODOALDEANOESPADACHIN" << endl;
 		getYes()->Decision();
 	}
 	else
@@ -259,7 +263,6 @@ void NodoGranja::Decision()
 	if(getDT()->isGranja())
 	{
 		cout << "YES --> HOJA, NADA" << endl;
-		getYes()->Decision();
 	}
 	else
 	{
@@ -271,17 +274,61 @@ void NodoGranja::Decision()
 //-----------------------------------//
 
 
-NodoAldeano::NodoAldeano(DecisionTree* dt):Node(dt)
+NodoAldeanoEspadachin::NodoAldeanoEspadachin(DecisionTree* dt):Node(dt)
 {
 	setYes(new NodoRecEspadachin(getDT()));
 	setNo(new NodoRecAldeano(getDT()));
 }
 
-void NodoAldeano::Decision()
+void NodoAldeanoEspadachin::Decision()
 {
 	if(getDT()->getnumAldeanos()>=1)
 	{
 		cout << "SI --> NODORECESPADACHIN" << endl;
+		getYes()->Decision();
+	}
+	else
+	{
+		cout << "NO --> NODORECALDEANO" << endl;
+		getNo()->Decision();
+	}
+}
+
+//-----------------------------------//
+
+NodoAldeanoLancero::NodoAldeanoLancero(DecisionTree* dt):Node(dt)
+{
+	setYes(new NodoRecLancero(getDT()));
+	setNo(new NodoRecAldeano(getDT()));
+}
+
+void NodoAldeanoLancero::Decision()
+{
+	if(getDT()->getnumAldeanos()>=1)
+	{
+		cout << "SI --> NODORECLANCERO" << endl;
+		getYes()->Decision();
+	}
+	else
+	{
+		cout << "NO --> NODORECALDEANO" << endl;
+		getNo()->Decision();
+	}
+}
+
+//-----------------------------------//
+
+NodoAldeanoArquero::NodoAldeanoArquero(DecisionTree* dt):Node(dt)
+{
+	setYes(new NodoRecArquero(getDT()));
+	setNo(new NodoRecAldeano(getDT()));
+}
+
+void NodoAldeanoArquero::Decision()
+{
+	if(getDT()->getnumAldeanos()>=1)
+	{
+		cout << "SI --> NODORECARQUERO" << endl;
 		getYes()->Decision();
 	}
 	else
@@ -441,7 +488,7 @@ void NodoArquerosMayorLanzas::Decision()
 
 NodoLanceria::NodoLanceria(DecisionTree* dt):Node(dt)
 {
-	setYes(new NodoAldeano(getDT())); 
+	setYes(new NodoAldeanoLancero(getDT())); 
 	setNo(new NodoRecLanceria(getDT()));
 }
 
@@ -449,7 +496,7 @@ void NodoLanceria::Decision()
 {
 	if(getDT()->isLanceria())
 	{
-		cout << "SI --> NODOALDEANO" << endl;
+		cout << "SI --> NODOALDEANOLANCERO" << endl;
 		getYes()->Decision();
 	}
 	else
@@ -535,6 +582,7 @@ void NodoRecLancero::Decision()
 NodoEspadachinesMayorArcos::NodoEspadachinesMayorArcos(DecisionTree* dt):Node(dt)
 {
 		setYes(new NodoArqueria(getDT()));
+		setNo(new NodoGranja(getDT()));
 		//no es null PASAR A MODO ATACAR
 }
 
@@ -548,14 +596,16 @@ void NodoEspadachinesMayorArcos::Decision()
 	}
 	else
 	{
-		if(getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>10)
+		if(gameEngine::state_war_ia != 1 && (getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>15))
 		{
-			//PASAR A MODO ATACAR
-			cout << "NO --> HOJA, STATE=ATACAR" << endl;
+			cout << "NO --> NODOGRANJA, STATE=ATACAR" << endl;
+			gameEngine::state_war_ia=1;
+			getNo()->Decision();
 		}
 		else
 		{
-			cout << "NO --> HOJA, NADA" << endl;
+			cout << "NO --> NODOGRANJA" << endl;
+			getNo()->Decision();
 		}
 	}
 }
@@ -564,7 +614,7 @@ void NodoEspadachinesMayorArcos::Decision()
 
 NodoArqueria::NodoArqueria(DecisionTree* dt):Node(dt)
 {
-		setYes(new NodoAldeano(getDT()));
+		setYes(new NodoAldeanoArquero(getDT()));
 		setNo(new NodoRecArqueria(getDT()));
 }
 
@@ -572,7 +622,7 @@ void NodoArqueria::Decision()
 {
 	if(getDT()->isArqueria())
 	{
-		cout << "SI --> NODOALDEANO" << endl;
+		cout << "SI --> NODOALDEANOARQUERO" << endl;
 		getYes()->Decision();
 	}
 	else
