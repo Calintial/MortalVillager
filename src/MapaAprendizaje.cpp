@@ -249,7 +249,7 @@ void MapaBasicoDummy::generarUnidades(){
 		posY = i / size * 6 + 2;
 		posX = i % size * 6 + 2;
  		
-		shared_ptr<EspadachinRedes> unidadDummy=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX,posY));
+		shared_ptr<CUnidadesAprendizajeDummy> unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(posX,posY));
 		unidadDummy->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
 		//vTiles[posY][posX]=unidadDummy;

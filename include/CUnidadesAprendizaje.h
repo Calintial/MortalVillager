@@ -78,17 +78,16 @@ public:
   void calcular8Objetos(std::shared_ptr<mapa2D>);
 
 	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,std::shared_ptr<mapa2D>);
- void IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo);
+ void IncrementFitness(CUnidadesAprendizaje* atacado,int danyo);
 void setFitness(double fitness){m_dFitness=fitness;};
  vector<double> getCNeuralWeight(){return m_ItsBrain.GetWeights();};
 	
-	void updateIA(std::shared_ptr<mapa2D> mapa);
+	virtual void updateIA(std::shared_ptr<mapa2D> mapa);
 	bool enemy_in_attack_range(position2di);
 	void Recovery();
 
 
 };
-
 
 #endif
 

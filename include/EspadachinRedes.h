@@ -16,4 +16,12 @@ class EspadachinRedes : public CUnidadesAprendizaje{
 		int vision_range;
 		int attack_range;
 };
+
+class CUnidadesAprendizajeDummy :  public EspadachinRedes{
+public:
+	CUnidadesAprendizajeDummy(int x, int y):EspadachinRedes(x,y){}
+	void updateIA(std::shared_ptr<mapa2D> mapa){
+		this->calcular8Objetos(mapa);
+	}
+};
 #endif

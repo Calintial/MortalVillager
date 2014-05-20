@@ -84,7 +84,7 @@ bool CUnidadesAprendizaje::Update(std::shared_ptr<mapa2D> matriz)
 		yint=getPosicion().Y+1;
 	}
 
-	if(xint<MAPSIZE && xint>0 && yint<MAPSIZE && yint>0 && output[2]>0.5 && matriz->getTile(yint,xint)!=NULL && matriz->getTile(yint,xint)->getTipo()==3){
+	if(xint<MAPSIZE && xint>0 && yint<MAPSIZE && yint>0 && output[2]>0.5 && matriz->getTile(yint,xint)->getVinculado()!=NULL && matriz->getTile(yint,xint)->getVinculado()->getTipo()==3){
 		setAtaque(xint,yint);
 		m_ataque=1;
 		move=0;
@@ -144,33 +144,17 @@ void CUnidadesAprendizaje::calcular8Objetos(std::shared_ptr<mapa2D> matriz){
 				}
 
 				if(matriz->getTile(i,j)->getTipo()!=0){
-					if(matriz->getTile(i,j)->getTipo()==3){
-						/*outfile.open("GeneticMovimientos.txt", ios::app);
-							if (outfile.is_open())
-							{
-												
-									outfile<<"He visto un enemigo ("<<j<<","<<i<<")"<<endl;
-								
-							}
-
-							outfile.close();*/
-							ObjetosCercanos obj(3, std::dynamic_pointer_cast<CUnidadesAprendizaje>(matriz->getTile(i,j))->getLife(),j,i);
-							m_vObjetosCerca.push_back(obj);
-						
-					}
-					else{
-						/*outfile.open("GeneticMovimientos.txt", ios::app);
-							if (outfile.is_open())
-							{
-												
-									outfile<<"He visto un muro ("<<j<<","<<i<<")"<<endl;
-								
-							}
-
-							outfile.close();*/
-						m_vObjetosCerca.push_back(ObjetosCercanos(matriz->getTile(i,j)->getTipo(),0,j,i));
-					}
+					m_vObjetosCerca.push_back(ObjetosCercanos(matriz->getTile(i,j)->getTipo(),0,j,i));
 					cant++;
+				}else{
+					if(matriz->getTile(i,j)->getVinculado() != NULL){
+						if(matriz->getTile(i,j)->getVinculado()->getTipo()==3){
+							CUnidadesAprendizaje* unidad = (CUnidadesAprendizaje*)matriz->getTile(i,j)->getVinculado();
+							ObjetosCercanos obj(3, unidad->getLife(),j,i);
+							m_vObjetosCerca.push_back(obj);
+							cant++;
+						}	
+					}
 				}
 
 			}
@@ -184,60 +168,44 @@ void CUnidadesAprendizaje::calcular8Objetos(std::shared_ptr<mapa2D> matriz){
 			}
 			if(i>=0 && i<=MAPSIZE-1 && j>=0 && j<=MAPSIZE-1){
 				if(matriz->getTile(i,j)->getTipo()!=0){
-					if(matriz->getTile(i,j)->getTipo()==3){
-						outfile.open("GeneticMovimientos.txt", ios::app);
-							if (outfile.is_open())
-							{
-												
-									outfile<<"He visto un enemigo ("<<i<<","<<j<<")"<<endl;
-								
-							}
-
-							outfile.close();
-						m_vObjetosCerca.push_back(ObjetosCercanos(3, std::dynamic_pointer_cast<CUnidadesAprendizaje>(matriz->getTile(i,j))->getLife(),matriz->getTile(i,j)->getPosicion().X,matriz->getTile(i,j)->getPosicion().Y));
-						
-					}
-					else{
-							outfile.open("GeneticMovimientos.txt", ios::app);
-							if (outfile.is_open())
-							{
-												
-									outfile<<"He visto un muro ("<<i<<","<<j<<")"<<endl;
-								
-							}
-
-							outfile.close();
-						m_vObjetosCerca.push_back(ObjetosCercanos(matriz->getTile(i,j)->getTipo(),0,matriz->getTile(i,j)->getPosicion().X,matriz->getTile(i,j)->getPosicion().Y));
-					}
+					m_vObjetosCerca.push_back(ObjetosCercanos(matriz->getTile(i,j)->getTipo(),0,j,i));
 					cant++;
-
+				}else{
+					if(matriz->getTile(i,j)->getVinculado() != NULL){
+						if(matriz->getTile(i,j)->getVinculado()->getTipo()==3){
+							CUnidadesAprendizaje* unidad = (CUnidadesAprendizaje*)matriz->getTile(i,j)->getVinculado();
+							ObjetosCercanos obj(3, unidad->getLife(),j,i);
+							m_vObjetosCerca.push_back(obj);
+							cant++;
+						}	
+					}
+				}
 			}
-		}
 		
+		}
 	}
-}
 }
 position2di CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,std::shared_ptr<mapa2D> matriz){
 	
 	int x=0,y=0;
 	x=	getPosicion().Y;
 	y=getPosicion().X-1;
-	if(!( x>=0 && x<MAPSIZE &&  y>=0 &&  y<MAPSIZE) || matriz->getTile(y,x)->getTipo()!=0){
+	if(!( x>=0 && x<MAPSIZE &&  y>=0 &&  y<MAPSIZE) || matriz->getTile(y,x)->getTipo()!=0 || matriz->getTile(y,x)->getVinculado() != NULL){
 		arriba=0;
 	}
 	x=	getPosicion().Y;
 	y=getPosicion().X+1;
-	if( !( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0){
+	if( !( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0 || matriz->getTile(y,x)->getVinculado() != NULL){
 		abajo=0;
 	}
 	x=	getPosicion().Y-1;
 	y=getPosicion().X;
-	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0){
+	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0 || matriz->getTile(y,x)->getVinculado() != NULL){
 		izquierda=0;
 	}
 	x=	getPosicion().Y+1;
 	y=getPosicion().X;
-	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0){
+	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0 || matriz->getTile(y,x)->getVinculado() != NULL){
 		derecha=0;
 	}
 	double mejor=max(max(max(arriba,abajo),izquierda),derecha);
@@ -305,7 +273,7 @@ void CUnidadesAprendizaje::TexturaSeleccionada(IVideoDriver* driver,bool selecci
 		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
 }
 //E Vida quitada x tipox fitness /max fitness) x vida/100
-void CUnidadesAprendizaje::IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo){
+void CUnidadesAprendizaje::IncrementFitness(CUnidadesAprendizaje* atacado,int danyo){
 	if(danyo>0 && atacado->getLife()==0){
 		m_dFitness++;
 	}
@@ -361,12 +329,11 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 			if(this->getAtaque()==1){
 				position2di atacando=this->getAtaqueMovimiento();
 
-				if(mapa->getTile(atacando.Y,atacando.X)!=NULL && mapa->getTile(atacando.Y,atacando.X)->getTipo()==3){
+				if(mapa->getTile(atacando.Y,atacando.X)->getVinculado()!=NULL && mapa->getTile(atacando.Y,atacando.X)->getVinculado()->getTipo()==3){
 
-					int dano = this->Attack((Unidades*)mapa->getTile(atacando.Y,atacando.X).get());
-					this->IncrementFitness(
-						std::dynamic_pointer_cast<CUnidadesAprendizaje>(mapa->getTile(atacando.Y,atacando.X)),
-						this->TrianguloArmas((Unidades*)mapa->getTile(atacando.Y,atacando.X).get()));
+					CUnidadesAprendizaje* enemigo = (CUnidadesAprendizaje*)mapa->getTile(atacando.Y,atacando.X)->getVinculado();
+					int dano = this->Attack(enemigo);
+					this->IncrementFitness(enemigo,dano);
 					
 					outfile.open("GeneticMovimientos.txt", ios::app);
 					if (outfile.is_open())
@@ -389,7 +356,7 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 					std::dynamic_pointer_cast<Suelo>(mapa->getTile(this->getPosicion().Y,this->getPosicion().X))->setIsometric(false);*/
 					//mapa->getTile(this->getPosicion())->aplicarTextura(driver);
 					position2di moverse=this->getMovimiento();
-					if(mapa->getTile(moverse.Y,moverse.X)->getTipo()==0){
+					if(mapa->getTile(moverse.Y,moverse.X)->getTipo()==0 && mapa->getTile(moverse.Y,moverse.X)->getVinculado() ==NULL){
 						//cout<<"Estoy en ("<<this->getPosition().X<<","<<this->getPosition().Y<<") Y me muevo a ("<<moverse.X<<","<<moverse.Y<<")"<<"y hay en el vector: "<<m_vecUnidades.size()<<endl;
 						mapa->getTile(getPosition())->setVinculado(NULL);
 						this->setPosition(this->getMovimiento());
