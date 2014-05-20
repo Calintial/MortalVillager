@@ -76,8 +76,6 @@ CController::~CController()
 
 }
 
-
-
 bool CController::tickRedNeuronal(){
 	outfile.open("GeneticMovimientos.txt", ios::app);
 	if (outfile.is_open())

@@ -74,26 +74,17 @@ void MapaAprendizaje::Pintar()
 }
 
 void MapaAprendizaje::PintarInformacionUnidad(){
-	vector<ObjetosCercanos> objCercanos =  ((CUnidadesAprendizaje*)unidad_seleccionada)->getVectorObjetos();
+	CUnidadesAprendizaje* cunidad = (CUnidadesAprendizaje*)unidad_seleccionada;
+	vector<ObjetosCercanos> objCercanos =  cunidad->getVectorObjetos();
+
 	core::stringw Vida="Vida: ";
 	Vida+=unidad_seleccionada->getLife();
-	core::stringw Ataque="Ataque: ";
-	Ataque+= unidad_seleccionada->getAttackValue();
+	core::stringw Ataque="Fitness: ";
+	Ataque+= cunidad->Fitness();
 	core::stringw Posicion="Posicion: ";
 	Posicion+= unidad_seleccionada->getPosition().X;
 	Posicion+= ",";
 	Posicion+= unidad_seleccionada->getPosition().Y;
-
-
-	font->draw(Vida,
-		core::rect<s32>(650,100,650,100),
-		video::SColor(255,0,0,0));
-	font->draw(Ataque,
-		core::rect<s32>(750,100,750,100),
-		video::SColor(255,0,0,0));
-	font->draw(Posicion,
-		core::rect<s32>(850,100,850,100),
-		video::SColor(255,0,0,0));
 
 
 	for(ObjetosCercanos objeto: objCercanos){
@@ -109,6 +100,18 @@ void MapaAprendizaje::PintarInformacionUnidad(){
 			driver->draw2DRectangle(video::SColor(255,0,0,255),core::rect<s32>(drawPos,drawPos + position2di(TILE_WIDTH,TILE_HEIGHT)));
 		}
 	}
+		driver->draw2DRectangle(video::SColor(255,255,255,255),core::rect<s32>(600,100,950,115));
+
+	font->draw(Vida,
+		core::rect<s32>(650,100,650,100),
+		video::SColor(255,0,0,0));
+	font->draw(Ataque,
+		core::rect<s32>(750,100,750,100),
+		video::SColor(255,0,0,0));
+	font->draw(Posicion,
+		core::rect<s32>(850,100,850,100),
+		video::SColor(255,0,0,0));
+
 }
 
 void MapaAprendizaje::setTile(position2di pos,shared_ptr<IDibujable> elem){

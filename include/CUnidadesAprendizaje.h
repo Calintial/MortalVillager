@@ -85,6 +85,7 @@ void setFitness(double fitness){m_dFitness=fitness;};
 	virtual void updateIA(std::shared_ptr<mapa2D> mapa);
 	bool enemy_in_attack_range(position2di);
 	void Recovery();
+	void PintarAtacar(IVideoDriver* driver,bool atacando);
 
 
 };
