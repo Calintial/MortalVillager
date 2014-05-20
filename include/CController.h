@@ -73,7 +73,7 @@ private:
 	IrrlichtDevice* device;
 	video::IVideoDriver* driver;
 
-	shared_ptr<Unidades> unidad_seleccionada;
+	Unidades* unidad_seleccionada;
 
 	IGUIFont* font;
 	void guardarPesos();
@@ -88,7 +88,7 @@ public:
 	CController(IrrlichtDevice* dev);
 
 	~CController();
-	shared_ptr<CUnidadesAprendizaje>  getUnidadPosicion(position2di pos);
+	CUnidadesAprendizaje*  getUnidadPosicion(position2di pos);
 	//bool		Update();
 	//bool tickRedNeuronalUnidad(shared_ptr<CUnidadesAprendizaje> unidad, int i);
 	bool		tickRedNeuronal();

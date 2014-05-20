@@ -209,9 +209,9 @@ void CController::guardarPesos(){
 	return true;
 }*/
 //Devuelve la unidad que hay en esa posición 
-shared_ptr<CUnidadesAprendizaje> CController::getUnidadPosicion(position2di pos){
+CUnidadesAprendizaje* CController::getUnidadPosicion(position2di pos){
 	
-	return std::dynamic_pointer_cast<CUnidadesAprendizaje>( matriz->getTile(pos.Y,pos.X));
+	return (CUnidadesAprendizaje*)matriz->getTile(pos.Y,pos.X)->getVinculado();
 
 }
 
@@ -312,10 +312,11 @@ bool CController::OnEvent(const SEvent& event)
 				
 
 				shared_ptr<IDibujable> tile =  matriz->getTile(pos_grid.Y,pos_grid.X);
+				IDibujable* vinculado = tile->getVinculado();
 				cerr<<"Has clicado en ["<<pos_grid.X<<","<<pos_grid.Y<<"]";
-				if (tile->getTipo() == 3)
+				if (vinculado != NULL)
 				{
-					shared_ptr<CUnidadesAprendizaje> unit = std::dynamic_pointer_cast<CUnidadesAprendizaje>( tile);
+					CUnidadesAprendizaje* unit = (CUnidadesAprendizaje*)vinculado;
 					unit->TexturaSeleccionada(device->getVideoDriver(),true);
 					unidad_seleccionada = unit;
 					cerr<<" - Unidad seleccionada.pos = ["<<unit->getPosicion().X<<","<<unit->getPosicion().Y<<"]";

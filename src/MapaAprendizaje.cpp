@@ -74,7 +74,7 @@ void MapaAprendizaje::Pintar()
 }
 
 void MapaAprendizaje::PintarInformacionUnidad(){
-	vector<ObjetosCercanos> objCercanos =  std::dynamic_pointer_cast<CUnidadesAprendizaje>(unidad_seleccionada)->getVectorObjetos();
+	vector<ObjetosCercanos> objCercanos =  ((CUnidadesAprendizaje*)unidad_seleccionada)->getVectorObjetos();
 	core::stringw Vida="Vida: ";
 	Vida+=unidad_seleccionada->getLife();
 	core::stringw Ataque="Ataque: ";
@@ -252,6 +252,7 @@ void MapaBasicoDummy::generarUnidades(){
 		shared_ptr<CUnidadesAprendizajeDummy> unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(posX,posY));
 		unidadDummy->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
+		aux->setVinculado(unidadDummy.get());
 		//vTiles[posY][posX]=unidadDummy;
 		m_vecEnemigos.push_back(unidadDummy);
 		
@@ -259,6 +260,7 @@ void MapaBasicoDummy::generarUnidades(){
 		shared_ptr<EspadachinRedes>  unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
 		aux = vTiles[posY + 2][posX + 2];
+		aux->setVinculado(unidad.get());
 		//vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
@@ -351,6 +353,7 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
 		shared_ptr<EspadachinRedes> unidadDummy=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX,posY));
 		unidadDummy->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
+		aux->setVinculado(unidadDummy.get());
 		//vTiles[posY][posX]=unidadDummy;
 		m_vecEnemigos.push_back(unidadDummy);
 		
@@ -358,6 +361,7 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
 		shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
 		aux = vTiles[posY + 2][posX + 2];
+		aux->setVinculado(unidad.get());
 		//vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
@@ -470,11 +474,14 @@ void MapaCuadrado::generarUnidades(){
 				unidad->aplicarTextura(driver);
 				shared_ptr<IDibujable> aux = vTiles[i][j];
 				//vTiles[i][j]=unidad;
+				aux->setVinculado(unidad.get());
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
+
 				unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(i,j));
 				unidad->aplicarTextura(driver);
 				aux = vTiles[j][i];
+				aux->setVinculado(unidad.get());
 				//vTiles[j][i]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
@@ -490,12 +497,14 @@ void MapaCuadrado::generarUnidades(){
 				shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(j,i));
 				unidad->aplicarTextura(driver);
 				shared_ptr<IDibujable> aux = vTiles[i][j];
+				aux->setVinculado(unidad.get());
 				//vTiles[i][j]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
 				unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(i,j));
 				unidad->aplicarTextura(driver);
 				aux = vTiles[j][i];
+				aux->setVinculado(unidad.get());
 				//vTiles[j][i]=unidad;
 				m_vecUnidades.push_back(unidad);
 				numUnidadesLeft++;
@@ -591,6 +600,7 @@ void MapaCuatroUnidades::generarUnidades(){
 		shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY + 2][posX + 2];
+		aux->setVinculado(unidad.get());
 		//vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 

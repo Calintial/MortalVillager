@@ -31,7 +31,7 @@ public:
 	void setTile(int y,int x,shared_ptr<IDibujable>);
 	shared_ptr<IDibujable> getTile(int y,int x){return vTiles[y][x];};
 	shared_ptr<IDibujable> getTile(position2di pos){return getTile(pos.Y,pos.X);};
-	void setUnidadSeleccionada(shared_ptr<Unidades> unit){unidad_seleccionada = unit;}
+	void setUnidadSeleccionada(Unidades* unit){unidad_seleccionada = unit;}
 
 	vector<shared_ptr<CUnidadesAprendizaje>> getUnidadesAprendizaje() const;
 
@@ -42,7 +42,7 @@ protected:
 	void nuevoSuelo(int,int);
 	void nuevoMuro(int,int);
 
-	shared_ptr<Unidades> unidad_seleccionada;
+	Unidades* unidad_seleccionada;
 	vector<shared_ptr<CUnidadesAprendizaje>> m_vecUnidades;
 	vector<shared_ptr<CUnidadesAprendizaje>> m_vecEnemigos;
 	int m_NumUnidades;
