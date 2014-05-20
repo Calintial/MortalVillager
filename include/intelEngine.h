@@ -18,18 +18,20 @@ class DecisionTree;
 class intelEngine {
 public:
 	intelEngine();
-	intelEngine(vector<IDibujable*>*,vector<IDibujable*>*,vector<IDibujable*>*,video::IVideoDriver*);
+
+	intelEngine(vector<shared_ptr<IDibujable>>*,vector<shared_ptr<IDibujable>>*,vector<shared_ptr<IDibujable>>*,video::IVideoDriver*);
 	~intelEngine();
 	void updateBattleIA(std::shared_ptr<mapa2D> mapa);
 	/*intelEngine(const intelEngine&) {};
 	intelEngine& operator=(const intelEngine&) {};*/
 
 private:
-	vector<IDibujable*>* ia_units;
-	vector<IDibujable*>* user_units;
-	vector<IDibujable*>* buildings;
+	vector<shared_ptr<IDibujable>>* ia_units;
+	vector<shared_ptr<IDibujable>>* user_units;
+	vector<shared_ptr<IDibujable>>* buildings;
 	DecisionTree* dt;
 	video::IVideoDriver* driver;
+
 };
 
 #endif

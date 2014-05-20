@@ -37,7 +37,7 @@ class mapa2D;
 class DebugMenu : public IEventReceiver
 {
 private:
-	vector<IDibujable*>* vUnits;
+	vector<shared_ptr<IDibujable>>* vUnits;
 
 	IrrlichtDevice * DebugDevice;
 	video::IVideoDriver* driver;
@@ -59,7 +59,7 @@ private:
 
 
 public:
-	DebugMenu(IrrlichtDevice * IrrDevice,vector<IDibujable*>* ia_units,shared_ptr<mapa2D>);
+	DebugMenu(IrrlichtDevice * IrrDevice,vector<shared_ptr<IDibujable>>* ia_units,shared_ptr<mapa2D>);
 	~DebugMenu();
 	void initDebugMenu();
 	void Draw();

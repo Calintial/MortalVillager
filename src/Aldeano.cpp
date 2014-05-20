@@ -46,6 +46,27 @@ bool Aldeano::enemy_in_attack_range(position2di pos)
 	{
 		for(int y = mypos.Y - attack_range; y <= mypos.Y + attack_range; y++)
 		{
+			if(x != mypos.X && y != mypos.Y)
+			{
+				if(pos.X == x && pos.Y == y)
+				{
+					return true;
+				}
+			}
+
+		}
+	}
+	return false;	
+}
+
+bool Aldeano::enemy_in_vision_range(position2di pos)
+{
+	position2di mypos = getPosition();
+	/*Comprobar si esta en rango de ataque el enemigo*/
+	for(int x = mypos.X - vision_range; x <= mypos.X + vision_range; x++)
+	{
+		for(int y = mypos.Y - vision_range; y <= mypos.Y + vision_range; y++)
+		{
 			if(pos.X == x && pos.Y == y)
 			{
 				return true;
@@ -163,6 +184,7 @@ void Aldeano::nextSprite()
 		else if(current_sprite >= 50)
 		{
 			current_sprite = 36;
+			setEliminar(true);
 		}
 		else
 		{

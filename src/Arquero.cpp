@@ -56,6 +56,23 @@ bool Arquero::enemy_in_attack_range(position2di pos)
 	return false;	
 }
 
+bool Arquero::enemy_in_vision_range(position2di pos)
+{
+	position2di mypos = getPosition();
+	/*Comprobar si esta en rango de ataque el enemigo*/
+	for(int x = mypos.X - vision_range; x <= mypos.X + vision_range; x++)
+	{
+		for(int y = mypos.Y - vision_range; y <= mypos.Y + vision_range; y++)
+		{
+			if(pos.X == x && pos.Y == y)
+			{
+				return true;
+			}
+		}
+	}
+	return false;	
+}
+
 void Arquero::Recovery()
 {
 	setLife(getLife()+1);
@@ -164,6 +181,7 @@ void Arquero::nextSprite()
 		else if(current_sprite >= 39)
 		{
 			current_sprite = 30;
+			setEliminar(true);
 		}
 		else
 		{

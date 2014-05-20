@@ -22,9 +22,9 @@ class DecisionTree
 {	
 	public:
 		DecisionTree(video::IVideoDriver*);
-		void doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings);
+		void doDecision(int vidaCC, int recursos, vector<shared_ptr<IDibujable>>* IAunits, vector<shared_ptr<IDibujable>>* Userunits, vector<shared_ptr<IDibujable>>* buildings);
 		//48x29 desde x=0, y=0 para user, y x=351, y=370 para ia
-		bool ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits);
+		bool ExisteEnemigoCercaCC(vector<shared_ptr<IDibujable>>* Userunits);
 		
 		Node* getRaiz(){ return raiz;};
 		
@@ -64,9 +64,9 @@ class DecisionTree
 		void setRecursos(int recursos){this->recursos = recursos;};
 
 		video::IVideoDriver* driver;
-		vector<IDibujable*>* IAunits;
-		vector<IDibujable*>* Userunits;
-		vector<IDibujable*>* buildings;
+		vector<shared_ptr<IDibujable>>* IAunits;
+		vector<shared_ptr<IDibujable>>* Userunits;
+		vector<shared_ptr<IDibujable>>* buildings;
 		
 	private:
 		Node* raiz;

@@ -25,8 +25,8 @@ class IDibujable{
 		void setTipo(int t);
 		virtual bool isTransitable();
 		void setPathfinding(Pathfinding*);
-		void setVinculado(IDibujable*);
-		IDibujable* getVinculado();
+		void setVinculado(shared_ptr<IDibujable>);
+		shared_ptr<IDibujable> getVinculado();
 		//void setSeleccionado(IVideoDriver* );
 		
 		bool isPintable(){return pintable;};
@@ -39,7 +39,7 @@ class IDibujable{
 		position2di position;
 	protected:
 		Pathfinding* pathfinding;
-		IDibujable* vinculado;
+		shared_ptr<IDibujable> vinculado;
 		bool pintable;
 };
 #endif
