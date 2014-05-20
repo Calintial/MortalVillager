@@ -575,3 +575,78 @@ void MapaCuatroUnidades::generarUnidades(){
 
 }
 // ================== ~MapaCuatroUnidades ===================== //
+// ================== ~MapaRandom ===================== //
+
+
+MapaRandom::MapaRandom(IrrlichtDevice* dev,int num):MapaAprendizaje(dev,num){
+	driver = dev->getVideoDriver();
+	generarMapa();
+}
+
+MapaRandom::~MapaRandom(){
+
+}
+
+void MapaRandom::generarMapa(){
+int j=0;
+	for (int i=0;i<MAPSIZE;i++){
+		for(int j=0;j<MAPSIZE;j++){
+			//0 transitable 1 no transitable
+			nuevoSuelo(j,i);
+
+		}
+	}
+
+	for(int i=0;i<3000;i++){
+		int RandIntX=RandInt(1,MAPSIZE-1);
+		int RandIntY=RandInt(1,MAPSIZE-1);
+
+		nuevoMuro(RandIntY,RandIntX);
+	}
+	generarUnidades();
+}
+
+void MapaRandom::reset(const vector<SGenome>& poblacion){
+	for (int i = 0; i < m_NumUnidades; ++i)
+	{
+		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
+		position2di posicion = unidad->getPosition();
+
+		if(posicion.X != -1){
+			nuevoSuelo(posicion.X,posicion.Y);			
+		}
+
+
+	}
+	m_vecUnidades.clear();
+
+	generarUnidades();
+	for (int i=0; i<m_NumUnidades; ++i)
+	{	
+		m_vecUnidades[i]->PutWeights(poblacion[i].vecWeights);
+
+	}
+}
+
+void MapaRandom::generarUnidades(){
+	int x=0,y=0;
+	bool noEstar=true;
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		do{
+			x= RandInt(0,MAPSIZE-1);
+			y=RandInt(0,MAPSIZE-1);
+
+			if(getTile(y,x)->getTipo()==0){
+				shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(x,y));
+				unidad->aplicarTextura(driver);
+				shared_ptr<IDibujable> aux = vTiles[y][x];
+				vTiles[y][x]=unidad;
+				m_vecUnidades.push_back(unidad);
+				noEstar=false;
+			}
+		}while(noEstar);
+	noEstar=true;
+	}
+}
+// ================== ~MapaRandom ===================== //

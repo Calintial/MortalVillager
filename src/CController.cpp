@@ -328,6 +328,9 @@ void CController::generarMapa(int tipoMapa){
 	else if(tipoMapa==4){
 		matriz= new MapaCuadrado(device,m_NumUnidades);
 	}
+	else if(tipoMapa==5){
+		matriz= new MapaRandom(device,m_NumUnidades);
+	}
 	else{
 		cerr<<"NO HAY MAPA: "<<tipoMapa<<endl;
 	}

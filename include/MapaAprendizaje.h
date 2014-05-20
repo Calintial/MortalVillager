@@ -96,4 +96,15 @@ public:
 private:
 	void generarUnidades();
 };
+class MapaRandom: public MapaAprendizaje
+{
+public:
+	MapaRandom(IrrlichtDevice* dev,int);
+	~MapaRandom();
+	void generarSuelos(int inicio,int fin);
+	void generarMapa();
+		void reset(const vector<SGenome> &);
+private:
+	void generarUnidades();
+};
 #endif
