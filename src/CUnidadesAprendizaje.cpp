@@ -337,7 +337,7 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 			}
 
 			outfile.close();*/
-			unidad->PintarAtacar(driver,unidad->getAtaque());
+			PintarAtacar(m_driver,getAtaque());
 			if(this->getAtaque()==1){
 				position2di atacando=this->getAtaqueMovimiento();
 

@@ -171,11 +171,13 @@ void MapaAprendizaje::nuevoSuelo(int x, int y){
 	vTiles[y][x]=shared_ptr<Suelo>( new Suelo(x,y));
 	std::dynamic_pointer_cast<Suelo>( vTiles[y][x])->setIsometric(false);
 	vTiles[y][x]->aplicarTextura(driver);
+	vTiles[y][x]->setDriver(driver);
 }
 void MapaAprendizaje::nuevoMuro(int x, int y){
 	vTiles[y][x]= shared_ptr<Muro>(new Muro(x,y));
 	std::dynamic_pointer_cast<Muro>( vTiles[y][x])->setIsometric(false);
 	vTiles[y][x]->aplicarTextura(driver);
+	vTiles[y][x]->setDriver(driver);
 }
 
 
@@ -254,6 +256,7 @@ void MapaBasicoDummy::generarUnidades(){
  		
 		shared_ptr<CUnidadesAprendizajeDummy> unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(posX,posY));
 		unidadDummy->aplicarTextura(driver);
+		unidadDummy->setDriver(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
 		aux->setVinculado(unidadDummy.get());
 		//vTiles[posY][posX]=unidadDummy;
@@ -262,6 +265,7 @@ void MapaBasicoDummy::generarUnidades(){
 
 		shared_ptr<EspadachinRedes>  unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
+		unidad->setDriver(driver);
 		aux = vTiles[posY + 2][posX + 2];
 		aux->setVinculado(unidad.get());
 		//vTiles[posY + 2][posX + 2]=unidad;
@@ -355,6 +359,7 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
  		
 		shared_ptr<EspadachinRedes> unidadDummy=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX,posY));
 		unidadDummy->aplicarTextura(driver);
+		unidadDummy->setDriver(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
 		aux->setVinculado(unidadDummy.get());
 		//vTiles[posY][posX]=unidadDummy;
@@ -363,6 +368,7 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
 
 		shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
+		unidad->setDriver(driver);
 		aux = vTiles[posY + 2][posX + 2];
 		aux->setVinculado(unidad.get());
 		//vTiles[posY + 2][posX + 2]=unidad;
@@ -456,6 +462,7 @@ void MapaCuadrado::generarUnidades(){
 	int finalMapaCuadradoUnidades=(m_NumUnidades/2)-1;
 	shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(0,0));
 	unidad->aplicarTextura(driver);
+	unidad->setDriver(driver);
 	shared_ptr<IDibujable> aux = vTiles[0][0];
 	//vTiles[0][0]=unidad;
 	m_vecUnidades.push_back(unidad);
@@ -463,6 +470,7 @@ void MapaCuadrado::generarUnidades(){
 
 	unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(finalMapaCuadradoUnidades,finalMapaCuadradoUnidades));
 	unidad->aplicarTextura(driver);
+	unidad->setDriver(driver);
 	aux = vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades];
 	//vTiles[finalMapaCuadradoUnidades][finalMapaCuadradoUnidades]=unidad;
 	m_vecUnidades.push_back(unidad);
@@ -475,6 +483,7 @@ void MapaCuadrado::generarUnidades(){
 
 				shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(j,i));
 				unidad->aplicarTextura(driver);
+				unidad->setDriver(driver);
 				shared_ptr<IDibujable> aux = vTiles[i][j];
 				//vTiles[i][j]=unidad;
 				aux->setVinculado(unidad.get());
@@ -483,6 +492,7 @@ void MapaCuadrado::generarUnidades(){
 
 				unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(i,j));
 				unidad->aplicarTextura(driver);
+				unidad->setDriver(driver);
 				aux = vTiles[j][i];
 				aux->setVinculado(unidad.get());
 				//vTiles[j][i]=unidad;
@@ -499,6 +509,7 @@ void MapaCuadrado::generarUnidades(){
 
 				shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(j,i));
 				unidad->aplicarTextura(driver);
+				unidad->setDriver(driver);
 				shared_ptr<IDibujable> aux = vTiles[i][j];
 				aux->setVinculado(unidad.get());
 				//vTiles[i][j]=unidad;
@@ -506,6 +517,7 @@ void MapaCuadrado::generarUnidades(){
 				numUnidadesLeft++;
 				unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(i,j));
 				unidad->aplicarTextura(driver);
+				unidad->setDriver(driver);
 				aux = vTiles[j][i];
 				aux->setVinculado(unidad.get());
 				//vTiles[j][i]=unidad;
@@ -602,6 +614,7 @@ void MapaCuatroUnidades::generarUnidades(){
 
 		shared_ptr<EspadachinRedes> unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
 		unidad->aplicarTextura(driver);
+		unidad->setDriver(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY + 2][posX + 2];
 		aux->setVinculado(unidad.get());
 		//vTiles[posY + 2][posX + 2]=unidad;

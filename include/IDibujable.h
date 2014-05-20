@@ -16,6 +16,7 @@ class IDibujable{
 		ITexture* getTextura() const;
 		virtual void Pintar(IVideoDriver*,int,int) = 0;
 		virtual void aplicarTextura(IVideoDriver* driver) = 0;
+		void setDriver(IVideoDriver* _driver){m_driver = _driver;}
 		position2di getPosition();
 		void setPosition(int x, int y);
 		void setPosition(position2di p);
@@ -35,5 +36,6 @@ class IDibujable{
 	protected:
 		Pathfinding* pathfinding;
 		IDibujable* vinculado;
+		IVideoDriver* m_driver;
 };
 #endif

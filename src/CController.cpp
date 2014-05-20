@@ -108,6 +108,7 @@ bool CController::redNeuronal(){
 	{
 		tickRedNeuronal();
 	}else{
+		unidad_seleccionada = NULL;
 		for (int i=0; i<m_NumUnidades; ++i){
 			m_vecUnidades[i]->setFitness(m_vecUnidades[i]->Fitness()*m_vecUnidades[i]->getLife()/100);
 			//update the chromos fitness score
