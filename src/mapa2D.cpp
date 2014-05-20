@@ -36,6 +36,7 @@ mapa2D::mapa2D(IrrlichtDevice* dev){
 
 	ia_selected = -1;
 	sombra_edificio = false;
+	pathFinding = NULL;
 	
 }
 
@@ -83,7 +84,11 @@ mapa2D::mapa2D(IrrlichtDevice * IrrDevice, vector<shared_ptr<IDibujable>>* IAuni
 mapa2D::~mapa2D()
 {
    sombra_edificio = false;
-   delete pathFinding;
+   if (pathFinding)
+   {
+   	delete pathFinding;
+   }
+   
    free();
 }
 
