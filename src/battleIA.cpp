@@ -24,7 +24,24 @@ void battleIA::updateIA(std::shared_ptr<mapa2D> mapa)
 {
 
 	shared_ptr<IDibujable> casenemy = searchEnemy(mapa);
+	
 	stateIA=stadoIA->doSomething(this, casenemy);
+	cout << "STADO ES -->" << stateIA;
+	if(stateIA == 0)
+	{
+		cout << "SU STADO BELICO ES --> " << gameEngine::state_war_ia << endl;
+		if(gameEngine::state_war_ia == 1)
+		{
+			//CC de usuario
+			this->Move(9,7);
+			this->setState(MOVE);
+		}
+		else if(gameEngine::state_war_ia == 2)
+		{
+			this->Move(177,192);
+			this->setState(MOVE);
+		}
+	}
 }
 
 shared_ptr<IDibujable> battleIA::searchEnemy(std::shared_ptr<mapa2D> mapa)

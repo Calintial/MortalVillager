@@ -30,8 +30,16 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<shared_ptr<IDibuj
 	this->Userunits = Userunits;
 	this->buildings = buildings;
 
-	setVidaCC(vidaCC);
+	setVidaCC(0);
 	setRecursos(recursos);
+	
+	numLanceros = 0;
+	numEspadachines = 0;
+	numArqueros = 0;
+	numAldeanos = 0;
+	numLancerosEnemigos = 0;
+	numEspadachinesEnemigos = 0;
+	numArquerosEnemigos = 0;
 	
 	//0 --> Aldeano
 	//1 --> Arquero
@@ -90,7 +98,7 @@ bool DecisionTree::ExisteEnemigoCercaCC(vector<shared_ptr<IDibujable>>* Userunit
 {
 	for(int i=0; i<Userunits->size(); i++)
 	{
-		if(Userunits->at(i)->getPosition().X > 350 && Userunits->at(i)->getPosition().Y > 369)
+		if(Userunits->at(i)->getPosition().X > 150 && Userunits->at(i)->getPosition().Y > 174)
 		{
 			cout<<"Devuelve true"<<endl;
 			return true;
@@ -589,6 +597,8 @@ NodoEspadachinesMayorArcos::NodoEspadachinesMayorArcos(DecisionTree* dt):Node(dt
 //¿Espadachines enemigos > Mis Arqueros?
 void NodoEspadachinesMayorArcos::Decision()
 {
+	cout << "numEspadachines del User" << getDT()->getnumEspadachinesEnemigos() << endl;
+	cout << "numArqueros de la IA" << getDT()->getnumArqueros() << endl;
 	if(getDT()->getnumEspadachinesEnemigos() > getDT()->getnumArqueros())
 	{
 		cout << "SI --> NODOARQUERIA" << endl;
