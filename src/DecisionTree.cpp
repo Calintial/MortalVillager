@@ -19,7 +19,7 @@ DecisionTree::DecisionTree(video::IVideoDriver* driver)
 	cuartel = false;
 	arqueria = false;
 	lanceria = false;
-	granjas = 0;
+	granja = false;
 	recursos = 0;
 	this->driver = driver;
 }
@@ -37,25 +37,25 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAu
 	//1 --> Arquero
 	//2 --> Espadachin
 	//3 --> Lancero
-	for(int i=0; i<IAunits->size(); i++)
+	for(int i=0; i<Userunits->size(); i++)
 	{
-		if(((battleIA*)IAunits->at(i))->getType() == 1)
+		if(((Unidades*)Userunits->at(i))->getType() == 1)
 			setIncNumArquerosEnemigos();
-		if(((battleIA*)IAunits->at(i))->getType() == 2)
+		else if(((Unidades*)Userunits->at(i))->getType() == 2)
 			setIncNumEspadachinesEnemigos();
-		if(((battleIA*)IAunits->at(i))->getType() == 3)
+		else if(((Unidades*)Userunits->at(i))->getType() == 3)
 			setIncNumLancerosEnemigos();
 	}
 	
-	for(int i=0; i<Userunits->size(); i++)
+	for(int i=0; i<IAunits->size(); i++)
 	{
-		if(((Unidades*)Userunits->at(i))->getType() == 0)
+		if(((battleIA*)IAunits->at(i))->getType() == 0)
 			setIncNumAldeanos();
-		if(((Unidades*)Userunits->at(i))->getType() == 1)
+		else if(((battleIA*)IAunits->at(i))->getType() == 1)
 			setIncNumArqueros();
-		if(((Unidades*)Userunits->at(i))->getType() == 2)
+		else if(((battleIA*)IAunits->at(i))->getType() == 2)
 			setIncNumEspadachines();
-		if(((Unidades*)Userunits->at(i))->getType() == 3)
+		else if(((battleIA*)IAunits->at(i))->getType() == 3)
 			setIncNumLanceros();
 	}
 	
@@ -68,13 +68,13 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAu
 	{
 		if(((edificio*)buildings->at(i))->getClase()==0)
 			setEnemigoCercaCC(ExisteEnemigoCercaCC(Userunits));
-		if(((edificio*)buildings->at(i))->getClase()==1)
-			setIncGranjas();
-		if(((edificio*)buildings->at(i))->getClase()==2)
+		else if(((edificio*)buildings->at(i))->getClase()==1)
+			setGranja(true);
+		else if(((edificio*)buildings->at(i))->getClase()==2)
 			setCuartel(true);
-		if(((edificio*)buildings->at(i))->getClase()==3)
+		else if(((edificio*)buildings->at(i))->getClase()==3)
 			setArqueria(true);
-		if(((edificio*)buildings->at(i))->getClase()==4)
+		else if(((edificio*)buildings->at(i))->getClase()==4)
 			setLanceria(true);
 	}
 	
@@ -212,7 +212,7 @@ NodoLanzasMayorEspadas::NodoLanzasMayorEspadas(DecisionTree* dt):Node(dt)
 //¿Lanzas enemigas > Mis Espadas?
 void NodoLanzasMayorEspadas::Decision()
 {
-	if(getDT()->getnumLancerosEnemigos() >= getDT()->getnumEspadachines())
+	if(getDT()->getnumLancerosEnemigos() > getDT()->getnumEspadachines())
 	{
 		cout << "SI --> NODOCUARTEL" << endl;
 		getYes()->Decision();
@@ -247,6 +247,29 @@ void NodoCuartel::Decision()
 }
 
 //-----------------------------------//
+
+NodoGranja::NodoGranja(DecisionTree* dt):Node(dt)
+{
+	//yes es null, NADA
+	setNo(new NodoRecGranja(getDT()));
+}
+
+void NodoGranja::Decision()
+{
+	if(getDT()->isGranja())
+	{
+		cout << "YES --> HOJA, NADA" << endl;
+		getYes()->Decision();
+	}
+	else
+	{
+		cout << "NO --> NODORECGRANJA" << endl;
+		getNo()->Decision();
+	}
+}
+
+//-----------------------------------//
+
 
 NodoAldeano::NodoAldeano(DecisionTree* dt):Node(dt)
 {
@@ -348,7 +371,7 @@ NodoRecCuartel::NodoRecCuartel(DecisionTree* dt):Node(dt)
 		 
 		//Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
 	//--- 
-		setNo(new NodoRecGranja(getDT()));
+		setNo(new NodoGranja(getDT()));
 }
 
 void NodoRecCuartel::Decision()
@@ -363,7 +386,7 @@ void NodoRecCuartel::Decision()
 	}
 	else
 	{
-		cout << "NO --> NODORECGRANJA" << endl;
+		cout << "NO --> NODOGRANJA" << endl;
 		getNo()->Decision();
 	}
 }
@@ -402,7 +425,7 @@ NodoArquerosMayorLanzas::NodoArquerosMayorLanzas(DecisionTree* dt):Node(dt)
 
 void NodoArquerosMayorLanzas::Decision()
 {
-	if(getDT()->getnumArquerosEnemigos() >= getDT()->getnumLanceros())
+	if(getDT()->getnumArquerosEnemigos() > getDT()->getnumLanceros())
 	{
 		cout << "SI --> NODOLANCERIA" << endl;
 		getYes()->Decision();
@@ -446,7 +469,7 @@ NodoRecLanceria::NodoRecLanceria(DecisionTree* dt):Node(dt)
 		 
 		//Poner limite de 1, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
 	//--- 
-		setNo(new NodoRecGranja(getDT()));
+		setNo(new NodoGranja(getDT()));
 }
 
 void NodoRecLanceria::Decision()
@@ -461,7 +484,7 @@ void NodoRecLanceria::Decision()
 	}
 	else
 	{
-		cout << "NO --> NODORECGRANJA" << endl;
+		cout << "NO --> NODOGRANJA" << endl;
 		getNo()->Decision();
 	}
 }
@@ -518,15 +541,22 @@ NodoEspadachinesMayorArcos::NodoEspadachinesMayorArcos(DecisionTree* dt):Node(dt
 //¿Espadachines enemigos > Mis Arqueros?
 void NodoEspadachinesMayorArcos::Decision()
 {
-	if(getDT()->getnumEspadachinesEnemigos() >= getDT()->getnumArqueros())
+	if(getDT()->getnumEspadachinesEnemigos() > getDT()->getnumArqueros())
 	{
 		cout << "SI --> NODOARQUERIA" << endl;
 		getYes()->Decision();
 	}
 	else
 	{
-		cout << "NO --> HOJA, STATE=ATACAR" << endl;
-		//PASAR A MODO ATACAR
+		if(getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>10)
+		{
+			//PASAR A MODO ATACAR
+			cout << "NO --> HOJA, STATE=ATACAR" << endl;
+		}
+		else
+		{
+			cout << "NO --> HOJA, NADA" << endl;
+		}
 	}
 }
 
@@ -563,7 +593,7 @@ NodoRecArqueria::NodoRecArqueria(DecisionTree* dt):Node(dt)
 		 //Poner limite de 5, aun así, podria construir las 5 granjas y luego ya el resto de cosas 
 	//--- 
 	
-		setNo(new NodoRecGranja(getDT()));
+		setNo(new NodoGranja(getDT()));
 }
 
 void NodoRecArqueria::Decision()
@@ -577,7 +607,7 @@ void NodoRecArqueria::Decision()
 	}
 	else
 	{
-		cout << "NO --> NODORECGRANJA" << endl;
+		cout << "NO --> NODOGRANJA" << endl;
 		getNo()->Decision();
 	}
 }

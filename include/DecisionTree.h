@@ -57,8 +57,8 @@ class DecisionTree
 		void setArqueria(bool arqueria){this->arqueria = arqueria;};
 		bool isLanceria(){ return lanceria;};
 		void setLanceria(bool lanceria){this->lanceria = lanceria;};
-		int getnumGranjas(){ return granjas;};
-		void setIncGranjas(){ this->granjas++;};
+		int isGranja(){ return granja;};
+		void setGranja(bool granja){ this->granja = granja;};
 		
 		int getRecursos(){ return recursos;};
 		void setRecursos(int recursos){this->recursos = recursos;};
@@ -83,7 +83,7 @@ class DecisionTree
 		bool cuartel;
 		bool arqueria;
 		bool lanceria;
-		int granjas;
+		bool granja;
 		int recursos;
 };
 
@@ -152,6 +152,14 @@ class NodoCuartel: public Node
 {
 	public:
 		NodoCuartel(DecisionTree* dt);
+		void Decision();
+};
+
+//¿Granja?
+class NodoGranja: public Node
+{
+	public:
+		NodoGranja(DecisionTree* dt);
 		void Decision();
 };
 
