@@ -33,7 +33,7 @@ public:
 	shared_ptr<IDibujable> getTile(position2di pos){return getTile(pos.Y,pos.X);};
 	void setUnidadSeleccionada(shared_ptr<Unidades> unit){unidad_seleccionada = unit;}
 
-	vector<shared_ptr<CUnidadesAprendizaje>> getUnidadesAprendizaje() const {return m_vecUnidades;}
+	vector<shared_ptr<CUnidadesAprendizaje>> getUnidadesAprendizaje() const;
 
 	virtual void generarMapa() = 0;
 	virtual void reset(const vector<SGenome> &) = 0;
@@ -44,6 +44,7 @@ protected:
 
 	shared_ptr<Unidades> unidad_seleccionada;
 	vector<shared_ptr<CUnidadesAprendizaje>> m_vecUnidades;
+	vector<shared_ptr<CUnidadesAprendizaje>> m_vecEnemigos;
 	int m_NumUnidades;
 private:
 	IGUIFont* font;

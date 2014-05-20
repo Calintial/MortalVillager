@@ -49,6 +49,13 @@ void MapaAprendizaje::Pintar()
 				m_vecUnidades[i]->Pintar(driver, DrawPosition.X, DrawPosition.Y);
 			}
 
+			for (int i = 0; i < m_vecEnemigos.size(); ++i)
+			{
+				position2di pos = m_vecEnemigos[i]->getPosition();
+				DrawPosition = position2di(pos.X*TILE_WIDTH - CameraScroll.X, pos.Y * TILE_HEIGHT - CameraScroll.Y);
+				m_vecEnemigos[i]->Pintar(driver, DrawPosition.X, DrawPosition.Y);
+			}
+
 			if(unidad_seleccionada != NULL && unidad_seleccionada->getTipo() == 3)
 			{
 				PintarInformacionUnidad();
@@ -109,6 +116,13 @@ void MapaAprendizaje::setTile(position2di pos,shared_ptr<IDibujable> elem){
 }
 void MapaAprendizaje::setTile(int y,int x,shared_ptr<IDibujable> elem){
 	vTiles[y][x] = elem;
+}
+
+vector<shared_ptr<CUnidadesAprendizaje>> MapaAprendizaje::getUnidadesAprendizaje() const{
+	vector<shared_ptr<CUnidadesAprendizaje>> vecTotal = m_vecUnidades;
+	vecTotal.reserve(vecTotal.size()*2);
+	vecTotal.insert(vecTotal.end(), m_vecEnemigos.begin(), m_vecEnemigos.end());
+	return vecTotal;
 }
 
 void MapaAprendizaje::generarMapa(){
@@ -217,6 +231,7 @@ void MapaBasicoDummy::reset(const vector<SGenome>& poblacion){
 
 	}
 	m_vecUnidades.clear();
+	m_vecEnemigos.clear();
 	generarUnidades();
 	for (int i=0; i<m_NumUnidades; ++i)
 	{	
@@ -238,6 +253,7 @@ void MapaBasicoDummy::generarUnidades(){
 		unidadDummy->aplicarTextura(driver);
 		shared_ptr<IDibujable> aux = vTiles[posY][posX];
 		//vTiles[posY][posX]=unidadDummy;
+		m_vecEnemigos.push_back(unidadDummy);
 		
 
 		shared_ptr<EspadachinRedes>  unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX + 2,posY + 2));
@@ -345,8 +361,6 @@ void MapaBasicoMuroYUnidad::generarUnidades(){
 		//vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 	}
-	m_vecUnidades.reserve(m_vecUnidades.size()*2);
-	m_vecUnidades.insert(m_vecUnidades.end(), m_vecEnemigos.begin(), m_vecEnemigos.end());
 }
 
 
