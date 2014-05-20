@@ -85,7 +85,7 @@ public:
 	int				      GetNumberOfWeights()const;
 
 	//replaces the weights with new ones
-	void			      PutWeights(vector<double> &weights);
+	void			      PutWeights(const vector<double> &weights);
 
 	//calculates the outputs from a set of inputs
 	vector<double>	Update(vector<double> &inputs);

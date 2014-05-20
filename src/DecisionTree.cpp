@@ -24,7 +24,7 @@ DecisionTree::DecisionTree(video::IVideoDriver* driver)
 	this->driver = driver;
 }
 
-void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAunits, vector<IDibujable*>* Userunits, vector<IDibujable*>* buildings)
+void DecisionTree::doDecision(int vidaCC, int recursos, vector<shared_ptr<IDibujable>>* IAunits, vector<shared_ptr<IDibujable>>* Userunits, vector<shared_ptr<IDibujable>>* buildings)
 {
 	this->IAunits = IAunits;
 	this->Userunits = Userunits;
@@ -39,23 +39,23 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAu
 	//3 --> Lancero
 	for(int i=0; i<Userunits->size(); i++)
 	{
-		if(((Unidades*)Userunits->at(i))->getType() == 1)
+		if(std::dynamic_pointer_cast<Unidades>(Userunits->at(i))->getType() == 1)
 			setIncNumArquerosEnemigos();
-		else if(((Unidades*)Userunits->at(i))->getType() == 2)
+		else if(std::dynamic_pointer_cast<Unidades>(Userunits->at(i))->getType() == 2)
 			setIncNumEspadachinesEnemigos();
-		else if(((Unidades*)Userunits->at(i))->getType() == 3)
+		else if(std::dynamic_pointer_cast<Unidades>(Userunits->at(i))->getType() == 3)
 			setIncNumLancerosEnemigos();
 	}
 	
 	for(int i=0; i<IAunits->size(); i++)
 	{
-		if(((battleIA*)IAunits->at(i))->getType() == 0)
+		if(std::dynamic_pointer_cast<battleIA>(IAunits->at(i))->getType() == 0)
 			setIncNumAldeanos();
-		else if(((battleIA*)IAunits->at(i))->getType() == 1)
+		else if(std::dynamic_pointer_cast<battleIA>(IAunits->at(i))->getType() == 1)
 			setIncNumArqueros();
-		else if(((battleIA*)IAunits->at(i))->getType() == 2)
+		else if(std::dynamic_pointer_cast<battleIA>(IAunits->at(i))->getType() == 2)
 			setIncNumEspadachines();
-		else if(((battleIA*)IAunits->at(i))->getType() == 3)
+		else if(std::dynamic_pointer_cast<battleIA>(IAunits->at(i))->getType() == 3)
 			setIncNumLanceros();
 	}
 	
@@ -66,15 +66,15 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAu
 	//4 --> Lanceria
 	for(int i=0; i<buildings->size(); i++)
 	{
-		if(((edificio*)buildings->at(i))->getClase()==0)
+		if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==0)
 			setEnemigoCercaCC(ExisteEnemigoCercaCC(Userunits));
-		else if(((edificio*)buildings->at(i))->getClase()==1)
+		else if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==1)
 			setGranja(true);
-		else if(((edificio*)buildings->at(i))->getClase()==2)
+		else if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==2)
 			setCuartel(true);
-		else if(((edificio*)buildings->at(i))->getClase()==3)
+		else if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==3)
 			setArqueria(true);
-		else if(((edificio*)buildings->at(i))->getClase()==4)
+		else if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==4)
 			setLanceria(true);
 	}
 	
@@ -86,7 +86,7 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<IDibujable*>* IAu
 
 
 //48x29 x=351, y=370 para ia
-bool DecisionTree::ExisteEnemigoCercaCC(vector<IDibujable*>* Userunits)
+bool DecisionTree::ExisteEnemigoCercaCC(vector<shared_ptr<IDibujable>>* Userunits)
 {
 	for(int i=0; i<Userunits->size(); i++)
 	{
@@ -306,7 +306,7 @@ void NodoRecAldeano::Decision()
 	{
 		cout << "SI --> HOJA, CREA ALDEANO" << endl; 
 		//CREAR ALDEANO
-		AldeanoIA* aldeano = (AldeanoIA*) gameEngine::addIAUnit(191,194,0);
+		shared_ptr<AldeanoIA> aldeano = std::dynamic_pointer_cast<AldeanoIA>(gameEngine::addIAUnit(191,194,0));
 		aldeano->aplicarTextura(getDT()->driver);
 		aldeano->Move(188,191);
 		gameEngine::recursos_ia -= ALDEANO_COSTE;
@@ -338,11 +338,11 @@ void NodoRecEspadachin::Decision()
 	{
 		cout << "SI --> HOJA, CREA ESPADACHIN" << endl;
 		//CREAR ESPADACHIN
-		vector<IDibujable*>* unidades = getDT()->IAunits;
+		vector<shared_ptr<IDibujable>>* unidades = getDT()->IAunits;
 
 		for(int i = 0; i < unidades->size(); i++)
 		{
-			battleIA* unit = (battleIA*) unidades->at(i);
+			shared_ptr<battleIA> unit = std::dynamic_pointer_cast<battleIA>(unidades->at(i));
 			
 			if(unit->getType() == 0)
 			{
@@ -509,11 +509,11 @@ void NodoRecLancero::Decision()
 	{
 		cout << "SI --> HOJA, CREAR LANCERO" << endl;
 		//CREAR LANCERO
-		vector<IDibujable*>* unidades = getDT()->IAunits;
+		vector<shared_ptr<IDibujable>>* unidades = getDT()->IAunits;
 
 		for(int i = 0; i < unidades->size(); i++)
 		{
-			battleIA* unit = (battleIA*) unidades->at(i);
+			shared_ptr<battleIA> unit =  std::dynamic_pointer_cast<battleIA>(unidades->at(i));
 			
 			if(unit->getType() == 0)
 			{
@@ -632,11 +632,11 @@ void NodoRecArquero::Decision()
 	{
 		cout << "SI --> HOJA, CREAR ARQUERO" << endl;
 		//CREAR ARQUERO
-		vector<IDibujable*>* unidades = getDT()->IAunits;
+		vector<shared_ptr<IDibujable>>* unidades = getDT()->IAunits;
 
 		for(int i = 0; i < unidades->size(); i++)
 		{
-			battleIA* unit = (battleIA*) unidades->at(i);
+			shared_ptr<battleIA> unit =  std::dynamic_pointer_cast<battleIA>(unidades->at(i));
 			
 			if(unit->getType() == 0)
 			{

@@ -8,7 +8,7 @@ OBJECTS=battleIA.o DecisionTree.o graphicEngine.o gameEngine.o intelEngine.o edi
 OBJECTS_CLASES=Arquero.o Lancero.o Aldeano.o Espadachin.o ArqueroIA.o LanceroIA.o AldeanoIA.o EspadachinIA.o AldeanoDemo.o
 OBJECTS_EDIFICIOS=CentroCiudad.o Lanceria.o Arqueria.o Cuartel.o Granja.o
 OBJECTS_MAIN=pantalla.o pantallaPathfinding.o InterfazPathfinding.o pantallaIABatalla.o pantallaAprendizaje.o DebugMenu.o $(OBJECTS) $(OBJECTS_CLASES) $(OBJECTS_EDIFICIOS) $(OBJECTS_APRENDIZAJE)
-OBJECTS_APRENDIZAJE= CController.o CGenAlg.o CUnidadesAprendizaje.o CNeuralNet.o CParams.o utils.o ObjetosCercanos.o EspadachinRedes.o
+OBJECTS_APRENDIZAJE= CController.o CGenAlg.o CUnidadesAprendizaje.o CNeuralNet.o CParams.o utils.o ObjetosCercanos.o EspadachinRedes.o MapaAprendizaje.o
 
 .PHONY: all clean
 
@@ -27,6 +27,7 @@ main: bin/main
 
 bin/main: src/main.cpp $(OBJECTS_MAIN)
 	mkdir -p bin
+	mkdir -p logs
 	$(CC) -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
 # http://stackoverflow.com/questions/8025766/makefile-auto-dependency-generation

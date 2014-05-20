@@ -1,6 +1,6 @@
 #ifndef CUNIDADESAPRENDIZAJE_H
 #define CUNIDADESAPRENDIZAJE_H
-#define MAPSIZE 20
+#define MAPSIZE 200
 
 //------------------------------------------------------------------------
 //
@@ -21,6 +21,7 @@
 #include "Unidades.h"
 #include "ObjetosCercanos.h"
 #include <fstream>
+#include "MapaAprendizaje.h"
 using namespace std;
 
 class CUnidadesAprendizaje :  public Unidades
@@ -31,15 +32,18 @@ private:
   //the minesweeper's neural net
   CNeuralNet		m_ItsBrain;
 
-	//its position in the world
-	int 			move;
+
 	//the sweeper's fitness score 
 	double			m_dFitness;
-	int 			m_ataque;
 	int 			m_moveX;
 	int 			m_moveY;
 	int 			m_ataqueX;
 	int 			m_ataqueY;
+	//its position in the world
+	int 			move;
+	int 			m_ataque;
+
+
 	vector<ObjetosCercanos> m_vObjetosCerca;
 
 
@@ -54,28 +58,33 @@ public:
 	CUnidadesAprendizaje(int x, int y);
 	
 	//updates the ANN with information from the sweepers enviroment
-	bool			Update(IDibujable* Matriz[][MAPSIZE]);
+	bool			Update(MapaAprendizaje*);
 
 
 	void			Reset();
   	vector<ObjetosCercanos> getVectorObjetos(){return m_vObjetosCerca;};
 
 	//-------------------accessor functions
-	void			IncrementFitness(int valor){m_dFitness+=valor;}
+
 
 	double		Fitness()const{return m_dFitness;}
   
-  void      PutWeights(vector<double> &w){m_ItsBrain.PutWeights(w);}
+  void      PutWeights(const vector<double> &w){m_ItsBrain.PutWeights(w);}
 
   int       GetNumberOfWeights()const{return m_ItsBrain.GetNumberOfWeights();}
   void Pintar(IVideoDriver*,int,int);
   void aplicarTextura(IVideoDriver* driver);
   virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
-  void calcular8Objetos(IDibujable* [][MAPSIZE]);
 
-	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,IDibujable* Matriz[][MAPSIZE]);
+  void calcular8Objetos(MapaAprendizaje*);
+  	virtual bool enemy_in_attack_range(position2di){return false;};
+	virtual bool enemy_in_vision_range(position2di){return false;};
 
 
+	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,MapaAprendizaje*);
+ void IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo,double max_fitness);
+void setFitness(double fitness){m_dFitness=fitness;};
+ vector<double> getCNeuralWeight(){return m_ItsBrain.GetWeights();};
 	
 
 

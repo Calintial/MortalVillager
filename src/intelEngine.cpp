@@ -6,7 +6,8 @@ intelEngine::intelEngine()
 	//dt = new DecisionTree(NULL);
 }
 
-intelEngine::intelEngine(vector<IDibujable*>* units,vector<IDibujable*>* Userunits, vector<IDibujable*>* build, video::IVideoDriver* driver)
+
+intelEngine::intelEngine(vector<shared_ptr<IDibujable>>* units,vector<shared_ptr<IDibujable>>* Userunits, vector<shared_ptr<IDibujable>>* build, video::IVideoDriver* driver)
 {
 	this->driver = driver;
 	dt = new DecisionTree(driver);
@@ -24,11 +25,11 @@ void intelEngine::updateBattleIA(std::shared_ptr<mapa2D> mapa)
 {
 	int vidaCC = 100;
 
-	vector<IDibujable*>* ia_buildings = new vector<IDibujable*>();
+	vector<std::shared_ptr<IDibujable>>* ia_buildings = new vector<std::shared_ptr<IDibujable>>();
 
-	for(IDibujable* iBuild : *buildings)
+	for(std::shared_ptr<IDibujable> iBuild : *buildings)
 	{
-		edificio* build = (edificio*) iBuild;
+		std::shared_ptr<edificio> build = std::dynamic_pointer_cast<edificio>(iBuild);
 
 		if(!build->getDeUsuario())
 		{
@@ -42,7 +43,8 @@ void intelEngine::updateBattleIA(std::shared_ptr<mapa2D> mapa)
 	{
 		//Lo devinculamos de su posicion anterior
 		mapa->getTile(ia_units->at(i)->getPosition().X,ia_units->at(i)->getPosition().Y)->setVinculado(NULL);
-		((battleIA*)ia_units->at(i))->updateIA(mapa);
+
+		std::dynamic_pointer_cast<battleIA>(ia_units->at(i))->updateIA(mapa);
 		//Lo vinculamos a su posible nueva posicion
 		mapa->getTile(ia_units->at(i)->getPosition().X,ia_units->at(i)->getPosition().Y)->setVinculado(ia_units->at(i));
 		

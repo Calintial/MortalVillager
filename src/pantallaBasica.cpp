@@ -12,7 +12,7 @@ PantallaBasica::~PantallaBasica()
     delete hudmapa;
 }
 
-void PantallaBasica::pintarPantalla(vector<IDibujable*>* ia_units,vector<IDibujable*>* user_units,vector<IDibujable*>* buildings)
+void PantallaBasica::pintarPantalla(vector<shared_ptr<IDibujable>>* ia_units,vector<shared_ptr<IDibujable>>* user_units,vector<shared_ptr<IDibujable>>* buildings)
 {
 	if(hudmapa == NULL){
 		hudmapa= new hud(pantallaDevice,mapa);
@@ -112,7 +112,7 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 									//Implementar código de creación de aldeanos
 									if(gameEngine::recursos_jugador >= 100)
 									{
-										Aldeano* u = (Aldeano*) gameEngine::addUserUnit(5,3,0);
+										shared_ptr<Aldeano>  u = std::dynamic_pointer_cast<Aldeano>(gameEngine::addUserUnit(5,3,0));
 										u->aplicarTextura(pantallaDevice->getVideoDriver());
 										u->setPathfinding(mapa->getPathfinding());
 										u->Move(11,10);

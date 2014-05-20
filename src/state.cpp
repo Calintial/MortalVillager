@@ -80,12 +80,13 @@ INGAME::INGAME()
 
 void INGAME::doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa)
 {
+	ge->deleteUnits();
 	ge->addNewUnits();
 	ge->updatePlayer();
 	ia->updateBattleIA(mapa);
-	vector<IDibujable*>* StIAUnits = ge->getIAUnits();
-	vector<IDibujable*>* StUserUnits = ge->getUserUnits();
-	vector<IDibujable*>* StBuildingsUnits = ge->getBuildings();
+	vector<shared_ptr<IDibujable>>* StIAUnits = ge->getIAUnits();
+	vector<shared_ptr<IDibujable>>* StUserUnits = ge->getUserUnits();
+	vector<shared_ptr<IDibujable>>* StBuildingsUnits = ge->getBuildings();
 	
 	graphics->DrawMap(StIAUnits,StUserUnits,StBuildingsUnits);
 	

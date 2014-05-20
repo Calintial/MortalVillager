@@ -13,7 +13,8 @@ public:
 	~Espadachin();
 
 	//Metodos de acción
-	bool enemy_in_attack_range(position2di);
+	virtual bool enemy_in_attack_range(position2di);
+	virtual bool enemy_in_vision_range(position2di);
 	void Recovery();
 
 	//Getters
