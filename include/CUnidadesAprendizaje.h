@@ -75,7 +75,11 @@ public:
   void Pintar(IVideoDriver*,int,int);
   void aplicarTextura(IVideoDriver* driver);
   virtual void TexturaSeleccionada(IVideoDriver* driver,bool);
+
   void calcular8Objetos(MapaAprendizaje*);
+  	virtual bool enemy_in_attack_range(position2di){return false;};
+	virtual bool enemy_in_vision_range(position2di){return false;};
+
 
 	position2di mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,MapaAprendizaje*);
  void IncrementFitness(shared_ptr<CUnidadesAprendizaje> atacado,int danyo,double max_fitness);

@@ -53,19 +53,16 @@ public:
 	static void setSpeed(int);
 	static int getSpeed();
 
-<<<<<<< HEAD
+
 	static shared_ptr<IDibujable> addIAUnit(int,int,int);
 	static shared_ptr<IDibujable> addUserUnit(int,int,int);
-	static shared_ptr<IDibujable> addBuildings(int,int,int);
-=======
-	static IDibujable* addIAUnit(int,int,int);
-	static IDibujable* addUserUnit(int,int,int);
-	static IDibujable* addBuildings(int,int,int,bool);
->>>>>>> master
+	static shared_ptr<IDibujable> addBuildings(int,int,int,bool);
+
 
 	void sleep(unsigned int);
 	static Current stado;
 	void addNewUnits();
+	void deleteUnits();
 
 	void scheduler (int); 
 	long clockMS(clock_t clock);

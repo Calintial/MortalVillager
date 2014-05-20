@@ -158,9 +158,13 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 					cout << "CANTIDAD DE SELECCIONADOS:" << user_selvector->size() << endl;
 					for(int i=0; i<user_selvector->size(); i++)
 					{
-						std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,true);
-						std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->SetSelect(true);
-						usuarios_Seleccionados->push_back(std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i))));
+						if(user_selvector->at(i) < user_units->size())
+						{
+							std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,true);
+							std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->SetSelect(true);
+							usuarios_Seleccionados->push_back(std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i))));
+						}
+
 					}
 										
 					return usuarios_Seleccionados;
@@ -193,8 +197,13 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 						{
 							for(int i=0; i<user_selvector->size(); i++)
 							{
-								std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								if(user_selvector->at(i) < user_units->size())
+								{
+									std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)))->TexturaSeleccionada(driver,false);
+								}
+
 								std::dynamic_pointer_cast<Unidades>(user_units->at(ia_selvector->at(i)))->SetSelect(false);
+
 							}
 						}
 						if(ia_selvector->size() > 1)
@@ -232,13 +241,17 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 								//lugar transitable --> Mirar en el vector del mapa (edificios deberia estar en mapa)
 								//no hay otro personaje --> Dar vuelta a todo el vector de unidades user
 								
-								cout << "POSICION INICIAL " << pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y << endl;
+							cout << "POSICION INICIAL " << pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y << endl;
+
+							if(user_selvector->at(i) < user_units->size())
+							{
 
 								shared_ptr<Unidades> unidad = std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)));
 								position2di posnueva=position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
 								
 								if(pos_grid.X+CameraScroll.X>=0 && pos_grid.Y+CameraScroll.Y>=0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
 								{
+
 									int index = IASelected(posnueva);
 									if (index != -1)
 									{
@@ -248,6 +261,8 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 										unidad->Move(posnueva.X,posnueva.Y);
 									}
 								}
+							}
+								
 						}
 						recol_gradosel=0;
 						recol_Rango=1;
@@ -256,11 +271,11 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 					}
 					else if(user_selvector->size() == 1 && tipo == 2)
 					{
-						Unidades* unidad = ((Unidades*)user_units->at(user_selvector->at(0)));
+						shared_ptr<Unidades> unidad = std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(0)));
 						if(unidad->getType() == 0 && gameEngine::recursos_jugador >= 300)
 						{
 							cout<<"Transformacion!!"<<endl;
-							int clase = ((edificio*)getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado())->getClase();
+							int clase = std::dynamic_pointer_cast<edificio>(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado())->getClase();
 							user_units->erase(user_units->begin() + user_selvector->at(0));
 
 							switch(clase)
@@ -348,6 +363,8 @@ void mapa2D::IniciarUnidades()
 			(gameEngine::addUserUnit(i,j,0))->aplicarTextura(driver);
 		}
 	}
+
+	(gameEngine::addIAUnit(20,20,0))->aplicarTextura(driver);
 }
 
 void mapa2D::IniciarEdificios()
@@ -355,7 +372,7 @@ void mapa2D::IniciarEdificios()
 	
 	//Edificios IA
 	position2di pos_ia; pos_ia.X = 190; pos_ia.Y = 193;
-	IDibujable* cc_ia = gameEngine::addBuildings(pos_ia.X,pos_ia.Y,0,false);
+	shared_ptr<IDibujable> cc_ia = gameEngine::addBuildings(pos_ia.X,pos_ia.Y,0,false);
 	cc_ia->aplicarTextura(driver);
 
 	ITexture* tex = cc_ia->getTextura();
@@ -376,7 +393,7 @@ void mapa2D::IniciarEdificios()
 
 	//Edificios usuario
 	position2di pos_usuario; pos_usuario.X = 5; pos_usuario.Y = 3;
-	IDibujable* cc_usuario = (gameEngine::addBuildings(pos_usuario.X,pos_usuario.Y,0,true));
+	shared_ptr<IDibujable> cc_usuario = (gameEngine::addBuildings(pos_usuario.X,pos_usuario.Y,0,true));
 	cc_usuario->aplicarTextura(driver);
 
 	tex = cc_ia->getTextura();
@@ -1039,7 +1056,7 @@ bool mapa2D::puede_colocar(position2di pos)
 	{
 		for(int y = pos.Y; y < pos.Y + 5; y++)
 		{
-			IDibujable* tile = getTile(y,x);
+			shared_ptr<IDibujable> tile = getTile(y,x);
 			if(tile != NULL)
 			{
 				if(getTile(y,x)->getTipo() == 1)

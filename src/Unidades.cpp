@@ -12,6 +12,7 @@ Unidades::Unidades()
 	last_clicked.Y = 1;
 	setTipo(3);
 	pesoComprobacion = 0;
+	eliminar_unidad = false;
 }
 
 Unidades::Unidades(int x, int y)
@@ -26,6 +27,7 @@ Unidades::Unidades(int x, int y)
 	last_clicked.Y = y;
 	setTipo(3);
 	pesoComprobacion = 0;
+	eliminar_unidad = false;
 }
 
 Unidades::~Unidades()
@@ -38,6 +40,7 @@ Unidades::~Unidades()
 	select = false;
 	state = 0;
 	pesoComprobacion = 0;
+	eliminar_unidad = false;
 }
 
 
@@ -48,6 +51,7 @@ void Unidades::Move(int x, int y)
 	{
 		if (camino->getFinal().X == x && camino->getFinal().Y == y)
 		{
+			cout<<"ok"<<endl;
 			updateUnit();
 			newPath = false;
 		}else{
@@ -70,7 +74,8 @@ void Unidades::Move(Camino* _camino){
 		{
 			pesoComprobacion = _camino->getPeso()/2;
 		}
-		state = MOVE;
+		if(state != DEAD)
+			state = MOVE;
 		position2di pos = _camino->darPaso();
 		setPosition(pos);
 		camino = _camino;
@@ -79,7 +84,8 @@ void Unidades::Move(Camino* _camino){
 
 void Unidades::Move(shared_ptr<Unidades> _objetivo){
 	if(_objetivo != NULL){
-		state = MOVE;
+		if(state != DEAD)
+			state = MOVE;
 		objetivo = _objetivo;
 		posicionObjetivo = objetivo->getPosition();
 		Move(posicionObjetivo.X,posicionObjetivo.Y);
@@ -93,7 +99,14 @@ void Unidades::updateUnit()
 	{
 		if (objetivo)
 		{
-			if (camino)
+			if(enemy_in_attack_range(objetivo->getPosition()))
+			{
+				if(state != DEAD)
+					state = ATTACKING;
+				delete camino;
+				camino = NULL;
+			}
+			else if (camino)
 			{
 				if (camino->getPeso() <= pesoComprobacion){
 					position2di nuevaPos = objetivo->getPosition();
@@ -145,8 +158,27 @@ void Unidades::updateUnit()
 				objetivo = NULL;
 				posicionObjetivo = position2di(0,0);
 				camino = NULL;
-			}			
-			state = NOTHING;
+			}
+			if(state != DEAD)		
+				state = NOTHING;
+		}
+	}
+	else if(state == ATTACKING)
+	{
+		if(enemy_in_attack_range(objetivo->getPosition()))
+		{
+			Attack(objetivo);
+		}
+		/*else if(enemy_in_vision_range(objetivo->getPosition()))
+		{
+			state = MOVE;
+			Move(objetivo);
+		}*/
+		else
+		{
+			if(state != DEAD)
+				state = NOTHING;
+			objetivo = NULL;
 		}
 	}
 }
@@ -170,7 +202,7 @@ void Unidades::PierdoVida(int danyo)
 	if(life-danyo<0)
 	{
 		life = 0;
-		//DEBERIA DE MORIR
+		state = DEAD;
 	}
 	else
 	{	

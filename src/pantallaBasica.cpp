@@ -112,7 +112,7 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 									//Implementar código de creación de aldeanos
 									if(gameEngine::recursos_jugador >= 100)
 									{
-										Aldeano* u = (Aldeano*) gameEngine::addUserUnit(5,3,0);
+										shared_ptr<Aldeano>  u = std::dynamic_pointer_cast<Aldeano>(gameEngine::addUserUnit(5,3,0));
 										u->aplicarTextura(pantallaDevice->getVideoDriver());
 										u->setPathfinding(mapa->getPathfinding());
 										u->Move(11,10);

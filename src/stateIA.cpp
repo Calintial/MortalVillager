@@ -50,11 +50,12 @@ BUSCANDO::BUSCANDO()
 
 int BUSCANDO::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
-	shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
-	if(!(enemy->getPosition().X == -1 && enemy->getPosition().Y == -1))
+	//Unidades* enemy = (Unidades*)casilla->getVinculado();
+	if(casilla.get() != NULL)
 	{
 		bIA->stadoIA->acercarse();
 	}
+	bIA->setState(NOTHING);
 	return SEARCHING;
 }
 
@@ -73,13 +74,15 @@ ACERCARSE::ACERCARSE()
 
 int ACERCARSE::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
-	shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
-	if(enemy->getPosition().X == -1 && enemy->getPosition().Y == -1)
+	
+	if(casilla.get() == NULL)
 	{
 		bIA->stadoIA->buscando();
+		bIA->setState(NOTHING);
 	}
 	else
 	{
+		shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
 		/*Comprobar si el enemigo está dentro de rango*/
 		if(bIA->enemy_in_attack_range(enemy->getPosition()))
 		{
@@ -88,6 +91,7 @@ int ACERCARSE::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 		else
 		{
 			bIA->Move(enemy);
+			bIA->setState(MOVE);
 		}
 	}
 	
@@ -116,12 +120,14 @@ ATACAR::ATACAR()
 
 int ATACAR::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
-	shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
-	if(!(enemy->getPosition().X == -1 && enemy->getPosition().Y == -1))
+
+	if(casilla.get() != NULL)
 	{
+		shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
 		if(bIA->enemy_in_attack_range(enemy->getPosition()) && bIA->getLife() > 25)
 		{
 			 int danyo = bIA->Attack(enemy);
+			 bIA->setState(ATTACKING);
 		}
 		else if(!bIA->enemy_in_attack_range(enemy->getPosition()))
 		{
@@ -168,15 +174,24 @@ HUIR::HUIR()
 
 int HUIR::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
-	shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
+
 	cout << "HUIR" << endl;
-	if(enemy->getPosition().X == -1 && enemy->getPosition().Y == -1)
+	if(casilla.get() == NULL)
 	{
+		bIA->setState(NOTHING);
 		bIA->stadoIA->recuperarse();
 	}
 	else
 	{
-		bIA->Move(0,0);
+		if(bIA->getState() != MOVE)
+		{
+			bIA->Move(188,190);
+			bIA->setState(MOVE);
+		}
+		else
+		{
+			bIA->Move(bIA->getCamino());
+		}
 	}
 	
 	return FLEE;
@@ -198,8 +213,9 @@ RECUPERARSE::RECUPERARSE()
 
 int RECUPERARSE::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 {
-	shared_ptr<Unidades> enemy = std::dynamic_pointer_cast<Unidades>(casilla->getVinculado());
-	if(enemy->getPosition().X != -1 && enemy->getPosition().Y != -1)
+
+	cout << "RECUPERARSE" << endl;
+	if(casilla.get() != NULL)
 	{
 		bIA->stadoIA->huir();
 	}
