@@ -12,6 +12,7 @@
 #include "edificio.h"
 #include "Unidades.h"
 #include "Pathfinding.h"
+	#include "CParams.h"
 
 #include <string>
 #include <vector>
@@ -179,6 +180,7 @@ protected:
 	vector<shared_ptr<IDibujable>>* buildings;
 
 	position2di CameraScroll;
+	CParams   g_Params;
 };
 
 #endif

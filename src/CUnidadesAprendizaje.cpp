@@ -265,7 +265,7 @@ void CUnidadesAprendizaje::Pintar(IVideoDriver* driver,int TPositionX,int TPosit
 
 void CUnidadesAprendizaje::aplicarTextura(IVideoDriver* driver)
 {
-	setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
+	setTextura(driver->getTexture("../media/Texturas/units/ia_swordman.png"));
 }
 void CUnidadesAprendizaje::PintarAtacar(IVideoDriver* driver,bool atacando)
 {
@@ -278,11 +278,10 @@ void CUnidadesAprendizaje::PintarAtacar(IVideoDriver* driver,bool atacando)
 
 void CUnidadesAprendizaje::TexturaSeleccionada(IVideoDriver* driver,bool seleccionada)
 {
-	if(seleccionada)
-		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje_seleccionado.png"));
-
+	if(selected)
+		setTextura(driver->getTexture("../media/Texturas/units/ia_unit_selected.png"));
 	else
-		setTextura(driver->getTexture("../media/Texturas/units/aprendizaje.png"));
+		setTextura(driver->getTexture("../media/Texturas/units/ia_swordman.png"));
 }
 //E Vida quitada x tipox fitness /max fitness) x vida/100
 void CUnidadesAprendizaje::IncrementFitness(CUnidadesAprendizaje* atacado,int danyo){
@@ -337,7 +336,7 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 			}
 
 			outfile.close();*/
-			PintarAtacar(m_driver,getAtaque());
+			//PintarAtacar(m_driver,getAtaque());
 			if(this->getAtaque()==1){
 				position2di atacando=this->getAtaqueMovimiento();
 

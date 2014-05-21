@@ -1,5 +1,6 @@
 #include "gameEngine.h"
 #include "AldeanoDemo.h"
+#include "EspadachinRedes.h"
 
 float gameEngine::volumen = 0.5;
 int gameEngine::game_speed = 100;
@@ -98,7 +99,7 @@ shared_ptr<IDibujable> gameEngine::addIAUnit(int x,int y,int tipo)
 	switch(tipo)
 	{
 		case 0: new_unit = shared_ptr<battleIA>(new AldeanoIA(x,y)); break;
-		case 1: new_unit = shared_ptr<battleIA>(new EspadachinIA(x,y)); break;
+		case 1: new_unit = shared_ptr<battleIA>(new EspadachinRedes(x,y)); break;
 		case 2: new_unit = shared_ptr<battleIA>(new LanceroIA(x,y)); break;
 		case 3: new_unit = shared_ptr<battleIA>(new ArqueroIA(x,y)); break;
 		case 4: new_unit = shared_ptr<battleIA>(new AldeanoDemo(position2di(25,150),position2di(175,150))); break;
