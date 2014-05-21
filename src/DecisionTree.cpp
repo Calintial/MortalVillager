@@ -22,7 +22,6 @@ DecisionTree::DecisionTree(video::IVideoDriver* driver)
 	granja = false;
 	recursos = 0;
 	this->driver = driver;
-	caminoNodos = new vector<int>();
 }
 
 void DecisionTree::doDecision(int vidaCC, int recursos, vector<shared_ptr<IDibujable>>* IAunits, vector<shared_ptr<IDibujable>>* Userunits, vector<shared_ptr<IDibujable>>* buildings)

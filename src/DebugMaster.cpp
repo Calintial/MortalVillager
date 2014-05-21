@@ -72,6 +72,34 @@ void DebugMaster::Draw()
 
 void DebugMaster::DrawMEF(vector<int> caminoNodos)
 {
+	switch(subarbolElegido)
+	{
+		case 0:
+			break;
+		case 1:
+			//Principal
+			break;
+		case 2:
+			//Defensa
+			break;
+		case 3:
+			//Construcción
+			break;
+		case 4:
+			//Espadachines
+			break;
+		case 5:
+			//Lanceros
+			break;
+		case 6:
+			//Arqueros
+			break;
+	}
+}
+	
+/*	
+void DebugMaster::DrawMEF()
+{	
 	int ia_selected = mapa->getIASelected();
 	int ia_state = -1;
 
@@ -228,7 +256,7 @@ void DebugMaster::DrawMEF(vector<int> caminoNodos)
     core::rect<s32>(0,0,100 ,22), 0,
     video::SColor(255,255,255,255), true);
 
-}
+}*/
 /*
 void DebugMaster::DrawParameters()
 {
@@ -307,11 +335,11 @@ void DebugMaster::DrawVisions()
 		}
 	}
 }
-
+*/
 bool DebugMaster::OnEvent(const SEvent& event)
 {
-
-	/*if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
+	/*
+	if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
 		switch(id)
