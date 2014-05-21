@@ -30,15 +30,18 @@ void DebugMaster::initDebugMenu()
     speed_bar->setPos(gameEngine::getSpeed());
 
     /*Botones para añadir IA o unidades de usuario*/
-	env->addButton(rect<s32>(550,dimensionPantallaY+45,750,dimensionPantallaY+70), 0, BUTTON_SEE_SUBARBOL,
+	env->addButton(rect<s32>(1050,dimensionPantallaY+45,1250,dimensionPantallaY+70), 0, BUTTON_SEE_SUBARBOL,
         L"Ver Subarbol", L"Ver subarbol seleccionado");
 
 	/*Desplegables para seleccionar unidad a insertar*/
 	IGUIComboBox* combo_subarbol = env->addComboBox (rect<s32>(900,dimensionPantallaY+65,1000,dimensionPantallaY+85), 0,COMBO_SUBARBOL);
-	combo_subarbol->addItem(L"Subarbol BLA");
-	combo_subarbol->addItem(L"Subarbol BLA");
-	combo_subarbol->addItem(L"Subarbol BLA");
-	combo_subarbol->addItem(L"Subarbol BLA");
+	combo_subarbol->addItem(L"Ninguno");
+	combo_subarbol->addItem(L"Principal");
+	combo_subarbol->addItem(L"Subarbol Defensa");
+	combo_subarbol->addItem(L"Subarbol Construccion");
+	combo_subarbol->addItem(L"Subarbol Espadachines");
+	combo_subarbol->addItem(L"Subarbol Lanceros");
+	combo_subarbol->addItem(L"Subarbol Arqueros");
 
 	/*Cargar texturas imagenes*/
 	state_search = driver->getTexture("../media/Imagenes/Debug/MEF/Search.png");
@@ -48,7 +51,7 @@ void DebugMaster::initDebugMenu()
 	state_recovery = driver->getTexture("../media/Imagenes/Debug/MEF/Recovery.png");
 }
 
-void DebugMaster::Draw()
+void DebugMaster::Draw(vector<int> caminoNodos)
 {
 	if (DebugDevice->run())
 	{        

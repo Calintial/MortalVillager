@@ -54,7 +54,7 @@ public:
 	DebugMaster(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D>);
 	~DebugMaster();
 	void initDebugMenu();
-	void Draw();
+	void Draw(vector<int> caminoNodos);
 	void DrawMEF(vector<int> caminoNodos);
 	void DrawParameters();
 	void DrawVisions();

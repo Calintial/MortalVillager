@@ -57,6 +57,8 @@ public:
 	static shared_ptr<IDibujable> addUserUnit(int,int,int);
 	static shared_ptr<IDibujable> addBuildings(int,int,int,bool);
 
+	static intelEngine* getIntelEngine(){return ia;}
+
 
 	void sleep(unsigned int);
 	static Current stado;
@@ -80,7 +82,7 @@ public:
 
 private:
 	graphicEngine* graphics;
-	intelEngine* ia;
+	static intelEngine* ia;
 	int gameState;
 	static float volumen;
 

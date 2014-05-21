@@ -36,7 +36,7 @@ void PantallaIAMaster::pintarPantalla(vector<shared_ptr<IDibujable>>* ia_units,v
 	mapa->Pintar();
 	
 	hudmapa->paint();
-	debug->Draw();
+	debug->Draw(gameEngine::getIntelEngine()->getDT()->caminoNodos);
 	
 	pantallaDevice->getVideoDriver()->endScene();
 	if(eliminar){

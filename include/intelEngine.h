@@ -22,6 +22,7 @@ public:
 	intelEngine(vector<shared_ptr<IDibujable>>*,vector<shared_ptr<IDibujable>>*,vector<shared_ptr<IDibujable>>*,video::IVideoDriver*);
 	~intelEngine();
 	void updateBattleIA(std::shared_ptr<mapa2D> mapa);
+	DecisionTree* getDT(){return dt;}
 	/*intelEngine(const intelEngine&) {};
 	intelEngine& operator=(const intelEngine&) {};*/
 
