@@ -91,7 +91,7 @@ void DebugMaster::Draw()
 	}
 }
 
-/*void DebugMaster::DrawMEF()
+void DebugMaster::DrawMEF(vector<int> caminoNodos)
 {
 	int ia_selected = mapa->getIASelected();
 	int ia_state = -1;
@@ -239,18 +239,18 @@ void DebugMaster::Draw()
     core::rect<s32>(0,0,59 ,56), 0,
     video::SColor(255,255,255,255), true);
 
-	/*Ya recuperado*//*
+	//Ya recuperado
 	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/supLarge.png"), core::position2d<s32>(dimensionPantallaX + 105,90),
     core::rect<s32>(0,0,22 ,282), 0,
     video::SColor(255,255,255,255), true);
 
-    /*Enemigo en rango*//*
+    //Enemigo en rango
 	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/der.png"), core::position2d<s32>(dimensionPantallaX + 159,420),
     core::rect<s32>(0,0,100 ,22), 0,
     video::SColor(255,255,255,255), true);
 
 }
-
+/*
 void DebugMaster::DrawParameters()
 {
 	int ia_selected = mapa->getIASelected();
@@ -291,7 +291,7 @@ void DebugMaster::DrawVisions()
 		limits.Y = HEIGHT;
 		limits = limits - mapa->GetCameraScroll();
 
-		/*Pintar vision de la unidad*//*
+		//Pintar vision de la unidad
 		if(drawVision)
 		{
 			for(int x = pos.X - v_range; x <= pos.X + v_range; x++)
@@ -309,7 +309,7 @@ void DebugMaster::DrawVisions()
 			}
 		}
 
-		/*Pintar rango de ataque de la unidad*//*
+		//Pintar rango de ataque de la unidad
 		if(drawAttackVision)
 		{
 			for(int x = pos.X - a_range; x <= pos.X + a_range; x++)
@@ -328,7 +328,7 @@ void DebugMaster::DrawVisions()
 		}
 	}
 }
-*/
+
 bool DebugMaster::OnEvent(const SEvent& event)
 {
 

@@ -68,6 +68,8 @@ class DecisionTree
 		vector<shared_ptr<IDibujable>>* Userunits;
 		vector<shared_ptr<IDibujable>>* buildings;
 		
+		vector<int> caminoNodos;
+		
 	private:
 		Node* raiz;
 		
