@@ -65,6 +65,13 @@ bool Pantalla::OnEvent(const SEvent& event){
     		grEngine->setPantalla(new PantallaAprendizaje(pantallaDevice,grEngine,mapa,3));
     		return true;
     	}
+    	else if (event.KeyInput.Key == irr::KEY_F6 && event.KeyInput.PressedDown)
+    	{
+    		cout<<"F6 presionado -> pantallaIAMaster"<<endl;
+    		setTipo(4);
+    		grEngine->setPantalla(new pantallaIAMaster(pantallaDevice,grEngine,mapa,4));
+    		return true;
+    	}
     	
     	if (event.KeyInput.Key == KEY_UP && event.KeyInput.PressedDown)
 		{
