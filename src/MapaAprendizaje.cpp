@@ -86,30 +86,35 @@ void MapaAprendizaje::PintarInformacionUnidad(){
 	Posicion+= ",";
 	Posicion+= unidad_seleccionada->getPosition().Y;
 	core::stringw  output=" Output: ";
-	output+="X: ";
-	output+=cunidad->output[0];
-	output+="          ";
-	output+="Y: ";
-	output+=cunidad->output[1];
-	output+="          ";
-	output+="Atacar: ";
-	output+=cunidad->output[2];
-	output+="          ";
-	output+="Izquierda: ";
-	output+=cunidad->output[3];
-	output+="          ";
-	output+="Derecha: ";
-	output+=cunidad->output[4];
-	output+="          ";
-	output+="Arriba: ";
-	output+=cunidad->output[5];
-	output+="          ";
-	output+="Abajo: ";
-	output+=cunidad->output[6];
-	output+="          ";
-	output+="Moverse: ";
-	output+=cunidad->output[7];
-	output+="          ";
+	if (cunidad->output.size() > 0)
+	{
+		
+		output+="X: ";
+		output+=cunidad->output[0];
+		output+="          ";
+		output+="Y: ";
+		output+=cunidad->output[1];
+		output+="          ";
+		output+="Atacar: ";
+		output+=cunidad->output[2];
+		output+="          ";
+		output+="Izquierda: ";
+		output+=cunidad->output[3];
+		output+="          ";
+		output+="Derecha: ";
+		output+=cunidad->output[4];
+		output+="          ";
+		output+="Arriba: ";
+		output+=cunidad->output[5];
+		output+="          ";
+		output+="Abajo: ";
+		output+=cunidad->output[6];
+		output+="          ";
+		output+="Moverse: ";
+		output+=cunidad->output[7];
+		output+="          ";
+	}
+	
 	
 	for(ObjetosCercanos objeto: objCercanos){
 		position2di drawPos = position2di(objeto.posicion.X*TILE_WIDTH, objeto.posicion.Y * TILE_HEIGHT);
@@ -248,6 +253,7 @@ void MapaBasicoDummy::generarMapa(){
 }
 
 void MapaBasicoDummy::reset(const vector<SGenome>& poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -345,6 +351,7 @@ void MapaBasicoMuroYUnidad::generarMapa(){
 }
 
 void MapaBasicoMuroYUnidad::reset(const vector<SGenome>& poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -438,6 +445,7 @@ void MapaCuadrado::generarMapa(){
 }
 
 void MapaCuadrado::reset(const vector<SGenome>&  poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -605,6 +613,7 @@ for (int i=0;i<MAPSIZE;i+=Tamanyo){
 }
 
 void MapaCuatroUnidades::reset(const vector<SGenome>& poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -691,6 +700,7 @@ for (int i=0;i<MAPSIZE;i+=Tamanyo){
 }
 
 void MapaCuatroEnemigos::reset(const vector<SGenome>& poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -737,8 +747,16 @@ void MapaCuatroEnemigos::generarUnidades(){
 		aux->setVinculado(unidad.get());
 		m_vecUnidades.push_back(unidad);
 
-		enemigoY=posY-2;
-		enemigoX=RandInt(posX-2,posX+1);
+		int fila = RandInt(1,2);
+		enemigoY=posY-fila;
+		if (fila == 2)
+		{
+			enemigoX=RandInt(posX-2,posX+1);
+		}else{
+			enemigoX=RandInt(posX-1,posX);
+		}
+		
+		
 		shared_ptr<CUnidadesAprendizajeDummy> unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(enemigoX,enemigoY));
 		unidadDummy->aplicarTextura(driver);
 		unidadDummy->setDriver(driver);
@@ -747,8 +765,16 @@ void MapaCuatroEnemigos::generarUnidades(){
 		//vTiles[posY][posX]=unidadDummy;
 		m_vecEnemigos.push_back(unidadDummy);
 
-		enemigoY=RandInt(posY-2,posY+1);
-		enemigoX=posX+2;
+
+		fila = RandInt(1,2);
+		enemigoX=posX+fila;
+		if (fila == 2)
+		{
+			enemigoY=RandInt(posY-2,posY+1);
+		}else{
+			enemigoY=RandInt(posY-1,posY);
+		}
+		
 		 unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(enemigoX,enemigoY));
 		unidadDummy->aplicarTextura(driver);
 		unidadDummy->setDriver(driver);
@@ -757,8 +783,15 @@ void MapaCuatroEnemigos::generarUnidades(){
 		//vTiles[posY][posX]=unidadDummy;
 		m_vecEnemigos.push_back(unidadDummy);
 		
-		enemigoY=posY+2;
-		enemigoX=RandInt(posX-1,posX+2);
+		fila = RandInt(1,2);
+		enemigoY=posY+fila;
+		if (fila == 2)
+		{
+			enemigoX=RandInt(posX-1,posX+2);
+		}else{
+			enemigoX=RandInt(posX,posX+1);
+		}
+		
 		 unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(enemigoX,enemigoY));
 		unidadDummy->aplicarTextura(driver);
 		unidadDummy->setDriver(driver);
@@ -767,8 +800,14 @@ void MapaCuatroEnemigos::generarUnidades(){
 		//vTiles[posY][posX]=unidadDummy;
 		m_vecEnemigos.push_back(unidadDummy);
 
-		enemigoY=RandInt(posY-1,posY+2);
-		enemigoX=posX-2;
+		fila = RandInt(1,2);
+		enemigoX=posX-fila;
+		if (fila == 2)
+		{
+			enemigoY=RandInt(posY-1,posY+2);
+		}else{
+			enemigoY=RandInt(posY,posY+1);
+		}
 		 unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(enemigoX,enemigoY));
 		unidadDummy->aplicarTextura(driver);
 		unidadDummy->setDriver(driver);

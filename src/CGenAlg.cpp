@@ -242,7 +242,11 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 	//fittest genomes. Make sure we add an EVEN number or the roulette
   //wheel sampling will crash
 	
-		GrabNBest(CParams::iNumElite, CParams::iNumCopiesElite, vecNewPop);
+	GrabNBest(CParams::iNumElite, CParams::iNumCopiesElite, vecNewPop);
+	if(vecNewPop.size() == 0){
+		cout<<"No hay elite!"<<endl;
+		throw;
+	}
 	
 	
 
@@ -265,8 +269,10 @@ vector<SGenome> CGenAlg::Epoch(vector<SGenome> &old_pop,int m_iGenerations)
 		Mutate(baby2);
 
 		//now copy into vecNewPop population
-		vecNewPop.push_back(SGenome(baby1, 1));
-		vecNewPop.push_back(SGenome(baby2, 1));
+		if(vecNewPop.size() < m_iPopSize)
+			vecNewPop.push_back(SGenome(baby1, 1));
+		if(vecNewPop.size() < m_iPopSize)
+			vecNewPop.push_back(SGenome(baby2, 1));
 	}
 
 	//finished so assign new pop back into m_vecPop
@@ -293,13 +299,28 @@ void CGenAlg::GrabNBest(int	            NBest,
 {
   //add the required amount of copies of the n most fittest 
 	//to the supplied vector
-	while(NBest--)
+	//while(NBest--)
+	//{
+	//	for (int i=0; i<NumCopies; ++i)
+	//	{
+	int mejorFitness = 0;
+	int mejor = -1;
+	for (int i = 0; i < m_iPopSize; ++i)
 	{
-		for (int i=0; i<NumCopies; ++i)
+		if(m_vecPop[i].dFitness > mejorFitness)
 		{
-			Pop.push_back(m_vecPop[(m_iPopSize - 1) - NBest]);
-	  }
+			mejorFitness = m_vecPop[i].dFitness;
+			mejor = i;
+		}
 	}
+
+	if(mejorFitness > 0){
+		Pop.push_back(m_vecPop[mejor]);
+	  //}
+	}else{
+		cout<<"ESTO HA PETADO"<<endl;
+	}
+//	}
 }
 
 //-----------------------CalculateBestWorstAvTot-----------------------	
