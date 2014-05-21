@@ -4,6 +4,7 @@ Unidades::Unidades()
 {
 	camino = NULL;
 	objetivo = NULL;
+	CC_Objetivo = NULL;
 	posicionObjetivo = position2di(0,0);
 	setPosition(1,1);
 	state = 0;
@@ -13,12 +14,14 @@ Unidades::Unidades()
 	setTipo(3);
 	pesoComprobacion = 0;
 	eliminar_unidad = false;
+	
 }
 
 Unidades::Unidades(int x, int y)
 {
 	camino = NULL;
 	objetivo = NULL;
+	CC_Objetivo = NULL;
 	posicionObjetivo = position2di(0,0);
 	setPosition(x,y);
 	state = 0;
