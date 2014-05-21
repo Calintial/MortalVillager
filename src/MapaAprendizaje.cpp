@@ -85,8 +85,32 @@ void MapaAprendizaje::PintarInformacionUnidad(){
 	Posicion+= unidad_seleccionada->getPosition().X;
 	Posicion+= ",";
 	Posicion+= unidad_seleccionada->getPosition().Y;
-
-
+	core::stringw  output=" Output: ";
+	output+="X: ";
+	output+=cunidad->output[0];
+	output+="          ";
+	output+="Y: ";
+	output+=cunidad->output[1];
+	output+="          ";
+	output+="Atacar: ";
+	output+=cunidad->output[2];
+	output+="          ";
+	output+="Izquierda: ";
+	output+=cunidad->output[3];
+	output+="          ";
+	output+="Derecha: ";
+	output+=cunidad->output[4];
+	output+="          ";
+	output+="Arriba: ";
+	output+=cunidad->output[5];
+	output+="          ";
+	output+="Abajo: ";
+	output+=cunidad->output[6];
+	output+="          ";
+	output+="Moverse: ";
+	output+=cunidad->output[7];
+	output+="          ";
+	
 	for(ObjetosCercanos objeto: objCercanos){
 		position2di drawPos = position2di(objeto.posicion.X*TILE_WIDTH, objeto.posicion.Y * TILE_HEIGHT);
 		//Pinta
@@ -111,7 +135,9 @@ void MapaAprendizaje::PintarInformacionUnidad(){
 	font->draw(Posicion,
 		core::rect<s32>(850,100,850,100),
 		video::SColor(255,0,0,0));
-
+	font->draw(output,
+		core::rect<s32>(950,100,950,100),
+		video::SColor(255,0,0,0));
 }
 
 void MapaAprendizaje::setTile(position2di pos,shared_ptr<IDibujable> elem){

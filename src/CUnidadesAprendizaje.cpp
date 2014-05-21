@@ -56,15 +56,18 @@ bool CUnidadesAprendizaje::Update(std::shared_ptr<mapa2D> matriz)
 
 	vector<double> inputs=m_ItsBrain.changeObjectstoInputs(m_vObjetosCerca,	getLife(),getPosicion().X,getPosicion().Y);
 
-	vector<double> output = m_ItsBrain.Update(inputs);
+	output = m_ItsBrain.Update(inputs);
 	if( output.size()<CParams::iNumOutputs){
 		return false;
 	}
 	double x,y;
 	int xint,yint;
+	setMovimiento(0,0);
+	setAtaque(0,0);
 	x=output[0];
 	y=output[1];
-
+	m_ataque=0;
+	move=0;
 	if(0<x && x<=0.33){
 		xint=getPosicion().X-1;
 	}
@@ -185,60 +188,60 @@ void CUnidadesAprendizaje::calcular8Objetos(std::shared_ptr<mapa2D> matriz){
 		}
 	}
 }
-position2di CUnidadesAprendizaje::mayorMovimiento(double arriba, double abajo, double izquierda, double derecha,std::shared_ptr<mapa2D> matriz){
+position2di CUnidadesAprendizaje::mayorMovimiento(double _izquierda, double _derecha, double _arriba, double _abajo,std::shared_ptr<mapa2D> matriz){
 	
 	int x=0,y=0;
-	x=	getPosicion().Y;
-	y=getPosicion().X-1;
+	y=	getPosicion().Y;
+	x=getPosicion().X-1;
 	if(!( x>=0 && x<MAPSIZE &&  y>=0 &&  y<MAPSIZE) || matriz->getTile(y,x)->getTipo()!=0 || matriz->getTile(y,x)->getVinculado() != NULL){
-		arriba=0;
+		_izquierda=0;
 	}
-	x=	getPosicion().Y;
-	y=getPosicion().X+1;
+	y=	getPosicion().Y;
+	x=getPosicion().X+1;
 	if( !( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0 || matriz->getTile(y,x)->getVinculado() != NULL){
-		abajo=0;
+		_derecha=0;
 	}
-	x=	getPosicion().Y-1;
-	y=getPosicion().X;
+	y=	getPosicion().Y-1;
+	x=getPosicion().X;
 	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0 || matriz->getTile(y,x)->getVinculado() != NULL){
-		izquierda=0;
+		_arriba=0;
 	}
-	x=	getPosicion().Y+1;
-	y=getPosicion().X;
+	y=	getPosicion().Y+1;
+	x=getPosicion().X;
 	if(!( x>=0 &&  x<MAPSIZE &&  y>=0 &&  y<MAPSIZE)|| matriz->getTile(y,x)->getTipo()!=0 || matriz->getTile(y,x)->getVinculado() != NULL){
-		derecha=0;
+		_abajo=0;
 	}
-	double mejor=max(max(max(arriba,abajo),izquierda),derecha);
+	double mejor=max(max(max(_izquierda,_abajo),_arriba),_derecha);
 	ofstream outfile;
 	outfile.open("GeneticMovimientos.txt", ios::app);
 
 
 	
-	if(arriba==mejor){
+	if(_izquierda==mejor){
 		if (outfile.is_open())
 		{
-			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo arriba Arriba ("<<getPosicion().X-1<<","<<getPosicion().Y<<")"<<endl;
+			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo _izquierda  ("<<getPosicion().X-1<<","<<getPosicion().Y<<")"<<endl;
 		}
 		return position2di(getPosicion().X-1,getPosicion().Y);
 	}
-	else if(abajo==mejor){
+	else if(_derecha==mejor){
 		if (outfile.is_open())
 		{
-			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo arriba Abajo ("<<getPosicion().X+1<<","<<getPosicion().Y<<")"<<endl;
+			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo _derecha("<<getPosicion().X+1<<","<<getPosicion().Y<<")"<<endl;
 		}
 		return position2di(getPosicion().X+1,getPosicion().Y);
 	}
-	else if(izquierda==mejor){
+	else if(_arriba==mejor){
 		if (outfile.is_open())
 		{
-			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo arriba Izquierda ("<<getPosicion().X<<","<<getPosicion().Y-1<<")"<<endl;
+			outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo  _arriba ("<<getPosicion().X<<","<<getPosicion().Y-1<<")"<<endl;
 		}
 		return  position2di(getPosicion().X,getPosicion().Y-1);
 	}
-	else if(derecha==mejor){
+	else if(_abajo==mejor){
 		if (outfile.is_open())
 		{
-outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo arriba derecha ("<<getPosicion().X<<","<<getPosicion().Y+1<<")"<<endl;
+outfile<<"Estoy en la posición("<<getPosicion().X<<","<<getPosicion().Y<<") y me muevo  _abajo ("<<getPosicion().X<<","<<getPosicion().Y+1<<")"<<endl;
 		}
 		return  position2di(getPosicion().X,getPosicion().Y+1);
 	}
@@ -290,14 +293,14 @@ void CUnidadesAprendizaje::IncrementFitness(CUnidadesAprendizaje* atacado,int da
 		m_dFitness++;
 	}
 	m_dFitness+=danyo;
-	if(m_dFitness>=400){
+	if(m_dFitness>=280){
 		cout<<"UNO DE 400!!!!!######################################################"<<endl;
 		std::ofstream pesosActualesFile;
 			vector<double> vecW=m_ItsBrain.GetWeights();
 			pesosActualesFile.open("Mejor.txt",ios::out);
 			if (pesosActualesFile.is_open())
 			{
-				
+					pesosActualesFile<<"Fitness: "<<m_dFitness<<endl;
 					pesosActualesFile<<vecW[0];
 					for (int j = 1; j < vecW.size(); ++j)
 					{
@@ -376,7 +379,7 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 					
 				}
 
-				
+				m_ataque=0;
 			}
 			else{
 
@@ -392,7 +395,7 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 						this->setPosition(this->getMovimiento());
 						mapa->getTile(moverse)->setVinculado(this);
 					}
-					
+					move=0;
 					//mapa->setTile(this->getPosicion(),shared_ptr<IDibujable>(this));
 				}else{
 					this->Recovery();
