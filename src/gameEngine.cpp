@@ -15,6 +15,7 @@ int gameEngine::recursos_ia = 1000;
 
 int gameEngine::granjas_usuario = 0;
 int gameEngine::granjas_ia = 0;
+int gameEngine::state_war_ia = 0;
 
 
 gameEngine::gameEngine()
@@ -22,8 +23,10 @@ gameEngine::gameEngine()
 	gameState = 0;
 
 	graphics = new graphicEngine();
+
+	video::IVideoDriver* driver = graphics->getDriver();
 	
-	ia = new intelEngine(&IAUnits,&UserUnits);
+	ia = new intelEngine(&IAUnits,&UserUnits,&buildings,driver);
 
 
 }

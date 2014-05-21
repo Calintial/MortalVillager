@@ -54,7 +54,7 @@ int BUSCANDO::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 	{
 		bIA->stadoIA->acercarse();
 	}
-	bIA->setState(NOTHING);
+	//bIA->setState(NOTHING);
 	return SEARCHING;
 }
 
