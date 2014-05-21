@@ -5,7 +5,7 @@ Granja::Granja() : edificio(1)
 {
 }
 
-Granja::Granja(int x, int y) : edificio(3,x,y)
+Granja::Granja(int x, int y, bool usuario) : edificio(1,x,y,usuario)
 {
 }
 

@@ -28,6 +28,10 @@ class IDibujable{
 		void setPathfinding(Pathfinding*);
 		void setVinculado(IDibujable*);
 		IDibujable* getVinculado();
+		
+		bool isPintable(){return pintable;};
+		void setPintable(bool p){pintable=p;};
+		
 				
 	private:
 		ITexture* textura;
@@ -37,5 +41,6 @@ class IDibujable{
 		Pathfinding* pathfinding;
 		IDibujable* vinculado;
 		IVideoDriver* m_driver;
+		bool pintable;
 };
 #endif

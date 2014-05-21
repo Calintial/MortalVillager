@@ -12,6 +12,8 @@ class gameEngine;
 class graphicEngine;
 class intelEngine;
 
+
+
 class Current
 {
 	class State *current;
@@ -27,6 +29,7 @@ class Current
 		void finish();
 		bool inicial();
 		bool sfinal();
+		bool is_ingame();
 		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa);
 };
 
@@ -49,6 +52,9 @@ class State
 		{
 			cout << "finish"<<endl;
 		}
+
+		virtual bool is_ingame() = 0;
+
 		virtual bool inicial() = 0;
 
 		virtual bool sfinal() = 0;
@@ -70,6 +76,7 @@ class MAINS: public State
 		void finish(Current *c);
 		bool inicial(){return true;}
 		bool sfinal(){return false;}
+		bool is_ingame(){return false;}
 		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa);
 };
 
@@ -85,6 +92,7 @@ class INGAME: public State
 		bool inicial(){return false;}
 		bool sfinal(){return false;}
 		void finish(Current *c);
+		bool is_ingame(){return true;}
 		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa);
 };
 
@@ -100,6 +108,7 @@ class PAUSE: public State
 		void finish(Current *c);
 		bool inicial(){return false;}
 		bool sfinal(){return false;}
+		bool is_ingame(){return false;}
 		void doSomething(gameEngine* ge, graphicEngine* graphics, intelEngine* ia, std::shared_ptr<mapa2D> mapa);
 };
 
@@ -116,6 +125,7 @@ class FINISH: public State
 		};
 		bool inicial(){return false;}
 		bool sfinal(){return true;}
+		bool is_ingame(){return false;}
 };
 
 #endif

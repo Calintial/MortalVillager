@@ -10,7 +10,7 @@
 class Lanceria  : public edificio{
 public:
 	Lanceria();
-	Lanceria(int, int);
+	Lanceria(int, int, bool);
 	~Lanceria();
 
 	virtual void Pintar(IVideoDriver*,int,int);

@@ -106,6 +106,21 @@ bool PantallaBasica::OnEvent(const SEvent& event){
 									mapa->setTipoEdificio(4);
 									hudmapa->selectButton(4);
 								}
+								else if((event.MouseInput.X>=458 && event.MouseInput.X<=520 && event.MouseInput.Y >= 524 && event.MouseInput.Y<=579))
+								{
+									hudmapa->selectButton(5);
+									//Implementar código de creación de aldeanos
+									if(gameEngine::recursos_jugador >= 100)
+									{
+										shared_ptr<Aldeano>  u = std::dynamic_pointer_cast<Aldeano>(gameEngine::addUserUnit(5,3,0));
+										u->aplicarTextura(pantallaDevice->getVideoDriver());
+										u->setPathfinding(mapa->getPathfinding());
+										u->Move(11,10);
+										gameEngine::recursos_jugador = gameEngine::recursos_jugador - 100;
+									}
+
+									hudmapa->selectButton(-1);
+								}
 								else{
 									if (mapa != NULL && hudmapa != NULL)
 									{

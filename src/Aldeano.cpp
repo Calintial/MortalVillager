@@ -7,9 +7,10 @@ Aldeano::Aldeano()
 	vision_range = 3;
 	attack_range = 1;
 	current_sprite = 0;
-	sprite_Width = 28;
-	sprite_Height = 43;
+	sprite_Width = 57;
+	sprite_Height = 51;
 	attack_value = 1;
+	delay_sprite = 0;
 }
 
 Aldeano::Aldeano(int x, int y) : Unidades(x,y)
@@ -19,9 +20,10 @@ Aldeano::Aldeano(int x, int y) : Unidades(x,y)
 	vision_range = 3;
 	attack_range = 1;
 	current_sprite = 0;
-	sprite_Width = 28;
-	sprite_Height = 43;
+	sprite_Width = 57;
+	sprite_Height = 51;
 	attack_value = 1;
+	delay_sprite = 0;
 }
 
 Aldeano::~Aldeano()
@@ -33,6 +35,7 @@ Aldeano::~Aldeano()
 	current_sprite = 0;
 	TTexture = NULL;
 	attack_value = 0;
+	delay_sprite = 0;
 }
 
 bool Aldeano::enemy_in_attack_range(position2di pos)
@@ -42,6 +45,27 @@ bool Aldeano::enemy_in_attack_range(position2di pos)
 	for(int x = mypos.X - attack_range; x <= mypos.X + attack_range; x++)
 	{
 		for(int y = mypos.Y - attack_range; y <= mypos.Y + attack_range; y++)
+		{
+			if(x != mypos.X && y != mypos.Y)
+			{
+				if(pos.X == x && pos.Y == y)
+				{
+					return true;
+				}
+			}
+
+		}
+	}
+	return false;	
+}
+
+bool Aldeano::enemy_in_vision_range(position2di pos)
+{
+	position2di mypos = getPosition();
+	/*Comprobar si esta en rango de ataque el enemigo*/
+	for(int x = mypos.X - vision_range; x <= mypos.X + vision_range; x++)
+	{
+		for(int y = mypos.Y - vision_range; y <= mypos.Y + vision_range; y++)
 		{
 			if(pos.X == x && pos.Y == y)
 			{
@@ -81,41 +105,11 @@ void Aldeano::Pintar(IVideoDriver* driver,int TPositionX,int TPositionY)
 {
 	ITexture *TTexture_Suelo = getTextura();
 	
-	int pos_sprite = current_sprite * sprite_Height;
+	int pos_sprite = current_sprite * sprite_Width;
 
 	driver->draw2DImage(TTexture_Suelo, position2di(TPositionX, TPositionY), rect<s32>(0, 0, TTexture_Suelo->getSize().Width, TTexture_Suelo->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
-	driver->draw2DImage(TTexture, position2di(TPositionX + 20, TPositionY - 20), rect<s32>(0, pos_sprite, sprite_Width, pos_sprite + sprite_Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
-
-	if(getState() == NOTHING)
-	{
-
-		if(current_sprite >= 9)
-		{
-			current_sprite = 0;
-		}
-		else
-		{
-			current_sprite++;
-		}		
-	}
-	else if(getState() == MOVE)
-	{
-
-		if(current_sprite == 9)
-		{
-			current_sprite = 10;
-		}
-		else if(current_sprite == 24)
-		{
-			current_sprite = 10;
-		}
-		else
-		{
-			current_sprite++;
-		}		
-	}
-
-	
+	driver->draw2DImage(TTexture, position2di(TPositionX + 2, TPositionY - 20), rect<s32>(pos_sprite, 0, pos_sprite + sprite_Width, sprite_Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
+	nextSprite();
 }
 
 void Aldeano::TexturaSeleccionada(IVideoDriver* driver,bool selected)
@@ -128,6 +122,80 @@ void Aldeano::TexturaSeleccionada(IVideoDriver* driver,bool selected)
 
 void Aldeano::aplicarTextura(IVideoDriver* driver)
 {
-	TTexture = driver->getTexture("../media/Texturas/units/villager.png");
+	TTexture = driver->getTexture("../media/Texturas/units/villager_user.png");
 	setTextura(driver->getTexture("../media/Texturas/units/user_villager.png"));
+}
+
+void Aldeano::nextSprite()
+{
+
+	if(getState() == NOTHING && delay_sprite == MAX_DELAY)
+	{
+
+		if(current_sprite >= 14)
+		{
+			current_sprite = 0;
+		}
+		else
+		{
+			current_sprite++;
+		}
+		delay_sprite = 0;
+	}
+	else if(getState() == MOVE && delay_sprite == MAX_DELAY)
+	{
+
+		if(current_sprite <= 14)
+		{
+			current_sprite = 15;
+		}
+		else if(current_sprite >= 29)
+		{
+			current_sprite = 15;
+		}
+		else
+		{
+			current_sprite++;
+		}	
+		delay_sprite = 0;	
+	}
+	else if(getState() == ATTACKING && delay_sprite == MAX_DELAY)
+	{
+		if(current_sprite <= 29)
+		{
+			current_sprite = 30;
+		}
+		else if(current_sprite >= 35)
+		{
+			current_sprite = 30;
+		}
+		else
+		{
+			current_sprite++;
+		}	
+		delay_sprite = 0;
+	}
+	else if(getState() == DEAD && delay_sprite == MAX_DELAY)
+	{
+		if(current_sprite <= 35)
+		{
+			current_sprite = 36;
+		}
+		else if(current_sprite >= 50)
+		{
+			current_sprite = 36;
+			setEliminar(true);
+		}
+		else
+		{
+			current_sprite++;
+		}
+		delay_sprite = 0;			
+	}
+	else
+	{
+		delay_sprite++;
+	}
+
+	
 }

@@ -20,13 +20,16 @@ public:
 	battleIA(int,int);
 	~battleIA();
 	virtual void updateIA(std::shared_ptr<mapa2D> mapa);
-	int getState();
+	int getStateIA();
 	CurrentIA* stadoIA;
 	shared_ptr<IDibujable> searchEnemy(std::shared_ptr<mapa2D> mapa);
 
 	//Acciones de la IA
 	virtual bool enemy_in_attack_range(position2di) = 0;
+	virtual bool enemy_in_vision_range(position2di) {return false;};
 	virtual void Recovery() = 0;
+
+
 
 private:
 	int stateIA;

@@ -3,8 +3,9 @@ Install :
 	Irrlicht (Version 1.8):
 		sudo apt-get install libirrlicht-dev # 13.10
 		
-	Fmod (Version 1.03.03) :
+	Fmod (Version 4.44.26) :
 		Download fmod (http://www.fmod.org)
+		Archivo fmodapi44426linux.tar.gz
 		cp [...]api/inc/* /usr/include/fmodex/
 		cp [...]api/lib/* /usr/lib/
 		64x:

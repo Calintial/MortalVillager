@@ -10,7 +10,7 @@
 class Granja  : public edificio{
 public:
 	Granja();
-	Granja(int, int);
+	Granja(int, int, bool);
 	~Granja();
 
 	virtual void Pintar(IVideoDriver*,int,int);

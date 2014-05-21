@@ -9,7 +9,7 @@
 
 class edificio  : public IDibujable{
 public:
-	edificio(int,int,int);
+	edificio(int,int,int,bool);
 	edificio(int);
 	~edificio();
 
@@ -19,9 +19,11 @@ public:
 	
 	void setClase(int t){clase = t;};
 	int getClase(){return clase;};
+	bool getDeUsuario(){return de_usuario;};
 		
 private:
 	int clase;
+	bool de_usuario;
 	
 };
 

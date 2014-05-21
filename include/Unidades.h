@@ -11,9 +11,11 @@ enum{
 	/*Estados de la IA*/
 	NOTHING = 0,
 	MOVE = 1,
-	ATTACKING = 2
+	ATTACKING = 2,
+	DEAD = 3
 };
 
+const int MAX_DELAY = 3;
 
 class Unidades : public IDibujable{
 public:
@@ -31,10 +33,15 @@ public:
 	void Move(Unidades*);
 	void updateUnit();
 	int getState();
+	void setState(int s){state = s;};
 	bool getSelect(){return select;};
 	void SetSelect(bool sel){select=sel;};
 	int getLife(){return life;};
 	void setLife(int l){life=l;};
+	Camino* getCamino(){return camino;};
+
+	bool getEliminar(){return eliminar_unidad;};
+	void setEliminar(bool eliminar){eliminar_unidad = eliminar;};
 	
 	//Getters virtuales
 	virtual int getVisionRange() = 0;
@@ -44,6 +51,9 @@ public:
 
 	//Pintado
 	virtual void TexturaSeleccionada(IVideoDriver* driver,bool) = 0;
+
+	virtual bool enemy_in_attack_range(position2di) = 0;
+	virtual bool enemy_in_vision_range(position2di) = 0;
 	
 protected:
 	position2di last_clicked;
@@ -54,6 +64,7 @@ protected:
 	int state;
 	bool select;
 	int life;
+	bool eliminar_unidad;
 };
 
 #endif

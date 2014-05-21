@@ -24,18 +24,17 @@
 #include <iostream>
 #include <time.h>
 #include <memory>
+#include <thread>
 using namespace std;
 
-/*
-#define MAIN 0
-#define INGAME 1
-#define PAUSE 2
-#define FINISH 3*/
+
 
 class graphicEngine;
 class intelEngine;
 class battleIA;
 class Current;
+
+
 
 class gameEngine {
 
@@ -54,16 +53,29 @@ public:
 	static void setSpeed(int);
 	static int getSpeed();
 
+
 	static shared_ptr<IDibujable> addIAUnit(int,int,int);
 	static shared_ptr<IDibujable> addUserUnit(int,int,int);
-	static shared_ptr<IDibujable> addBuildings(int,int,int);
+	static shared_ptr<IDibujable> addBuildings(int,int,int,bool);
+
 
 	void sleep(unsigned int);
 	static Current stado;
 	void addNewUnits();
+	void deleteUnits();
+
+	void scheduler (int); 
+	long clockMS(clock_t clock);
 
 	static int recursos_jugador;
 	static int recursos_ia;
+	static int granjas_usuario;
+	static int granjas_ia;
+
+	int FPS = 25;
+	int SALTO_TICKS_RELOJ = 3500 / FPS; 
+	long Siguiente_tick_juego = clockMS(clock());
+	int tiempo_durmiendo = 0;
 
 
 private:
@@ -81,6 +93,9 @@ private:
 	static vector<shared_ptr<battleIA>> Add_IAUnits;
 	static vector<shared_ptr<Unidades>> Add_UserUnits;
 	static vector<shared_ptr<edificio>> Add_Buildings;
+
+	std::thread thread_resources;
+
 };
 
 
