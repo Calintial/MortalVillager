@@ -4,6 +4,7 @@
 PantallaIAMaster::PantallaIAMaster(IrrlichtDevice * IrrDevice,graphicEngine * _grEngine,shared_ptr<mapa2D> _mapa, int tipo):Pantalla(IrrDevice,_grEngine,_mapa){
 	debug = NULL;
 	hudmapa = NULL;
+	eventosMapa = true;
 	pantallaDevice->setEventReceiver(this);
 	setTipo(tipo);
 }
@@ -158,8 +159,17 @@ bool PantallaIAMaster::OnEvent(const SEvent& event){
 			}
 		}
 
-	}
-	if(event.EventType == EET_KEY_INPUT_EVENT)
+	}else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+
+		switch(id)
+		{
+			case SCROLL_SPEED: s32 pos = ((IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
+                 			   gameEngine::setSpeed(pos);
+							   break;
+		}
+	}else if(event.EventType == EET_KEY_INPUT_EVENT)
 	{
 		if(event.KeyInput.Key == irr::KEY_ESCAPE && event.KeyInput.PressedDown)
 		{
@@ -169,9 +179,7 @@ bool PantallaIAMaster::OnEvent(const SEvent& event){
 		}else{
 			return Pantalla::OnEvent(event);
 		}
-	}
-
-	if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
+	}else if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
 
@@ -182,6 +190,11 @@ bool PantallaIAMaster::OnEvent(const SEvent& event){
 			cout<<"sombra"<<endl;
 			mapa->setSombra(true);
 			mapa->setTipoEdificio(tipo_edificio);
+		}else if(id == BUTTON_SEE_SUBARBOL)
+		{
+			IGUIComboBox* combo_subarbol = (IGUIComboBox*) pantallaDevice->getGUIEnvironment()->getRootGUIElement()->getElementFromId(COMBO_SUBARBOL);
+			int tipo_subarbol = combo_subarbol->getSelected();
+			debug->selectSubarbol(tipo_subarbol);
 		}
 	}
 	return false;
