@@ -4,6 +4,8 @@
 #include <iostream>
 #include "IDibujable.h"
 #include "Camino.h"
+#include "edificio.h"
+#include "CentroCiudad.h"
 
 using namespace std;
 
@@ -31,6 +33,7 @@ public:
 	void Move(int,int);
 	void Move(Camino*);
 	void Move(Unidades*);
+	void Move(edificio*);
 	void updateUnit();
 	int getState();
 	void setState(int s){state = s;};
@@ -54,11 +57,13 @@ public:
 
 	virtual bool enemy_in_attack_range(position2di) = 0;
 	virtual bool enemy_in_vision_range(position2di) = 0;
+	bool CC_in_range(position2di);
 	
 protected:
 	position2di last_clicked;
 	Camino* camino;
 	Unidades* objetivo;
+	edificio* CC_Objetivo;
 	position2di posicionObjetivo;
 	int pesoComprobacion;
 	int state;

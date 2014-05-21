@@ -28,7 +28,6 @@
 using namespace std;
 
 
-
 class graphicEngine;
 class intelEngine;
 class battleIA;

@@ -239,7 +239,7 @@ void CController::generarMapa(int tipoMapa){
 		matriz= shared_ptr<MapaAprendizaje>(new MapaCuadrado(device,m_NumUnidades));
 	}
 	else if(tipoMapa==5){
-		matriz= new MapaRandom(device,m_NumUnidades);
+		matriz= shared_ptr<MapaAprendizaje>(new MapaRandom(device,m_NumUnidades));
 	}
 	else{
 		cerr<<"NO HAY MAPA: "<<tipoMapa<<endl;
