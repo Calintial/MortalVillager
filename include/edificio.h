@@ -7,6 +7,7 @@
 #include "IDibujable.h"
 #include <iostream>
 
+
 class edificio  : public IDibujable{
 public:
 	edificio(int,int,int,bool);

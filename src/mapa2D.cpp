@@ -288,6 +288,38 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 						}
 
 					}
+					else if(user_selvector->size() >= 1 && tipo == 2)
+					{
+						for(int i=0; i<user_selvector->size(); i++)
+						{
+							//FALTARIAN CASOS DE FIN DE MUNDO
+							//Lo suyo para que no falle seria, buscar una posicion mas cercana que fuera (Cutre o algoritmo de hoja) 
+								//lugar transitable --> Mirar en el vector del mapa (edificios deberia estar en mapa)
+								//no hay otro personaje --> Dar vuelta a todo el vector de unidades user
+								
+							cout << "POSICION INICIAL " << pos_grid.X+CameraScroll.X << "," << pos_grid.Y+CameraScroll.Y << endl;
+
+							if(user_selvector->at(i) < user_units->size())
+							{
+
+								shared_ptr<Unidades> unidad = std::dynamic_pointer_cast<Unidades>(user_units->at(user_selvector->at(i)));
+								position2di posnueva=position2di(pos_grid.X+CameraScroll.X,pos_grid.Y+CameraScroll.Y);
+								
+								if(pos_grid.X+CameraScroll.X>=0 && pos_grid.Y+CameraScroll.Y>=0 && pos_grid.X+CameraScroll.X<WIDTH && pos_grid.Y+CameraScroll.Y<HEIGHT)
+								{
+									shared_ptr<edificio> edificio_seleccionado = std::dynamic_pointer_cast<edificio>(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado());
+									if (!edificio_seleccionado->getDeUsuario() && edificio_seleccionado->getClase() == 0)
+									{
+										cout<<"ATACAR EDIFICIO EN: X="<<edificio_seleccionado->getPosition().X<<", Y="<<edificio_seleccionado->getPosition().Y<<endl;
+										unidad->Move(edificio_seleccionado);
+										
+									}else{
+										unidad->Move(posnueva.X,posnueva.Y);
+									}
+								}
+							}
+						}					
+					}
 					break;
 			default:;
 		}
