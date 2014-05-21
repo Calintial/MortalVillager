@@ -7,7 +7,7 @@ PantallaAprendizaje::PantallaAprendizaje(IrrlichtDevice * IrrDevice,graphicEngin
 	setTipo(tipo);
 	srand (time(NULL));
 	aprendizaje = new CController(pantallaDevice);
-	cantidadVecesCadaMapa=10;
+	cantidadVecesCadaMapa=1000000000000000;
 	cantidadIndice=0;
 	tipoMapa=1;
 	cantidadMapas=4;

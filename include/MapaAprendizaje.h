@@ -95,4 +95,15 @@ public:
 private:
 	void generarUnidades();
 };
+class MapaCuatroEnemigos: public MapaAprendizaje
+{
+public:
+	MapaCuatroEnemigos(IrrlichtDevice* dev,int);
+	~MapaCuatroEnemigos();
+	void generarSuelos(int inicio,int fin);
+	void generarMapa();
+		void reset(const vector<SGenome> &);
+private:
+	void generarUnidades();
+};
 #endif

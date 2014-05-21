@@ -22,6 +22,7 @@
 #include "ObjetosCercanos.h"
 #include <fstream>
 #include "MapaAprendizaje.h"
+#include <iomanip>
 using namespace std;
 
 class CUnidadesAprendizaje :  public battleIA

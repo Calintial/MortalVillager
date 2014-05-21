@@ -110,7 +110,7 @@ bool CController::redNeuronal(){
 	}else{
 		unidad_seleccionada = NULL;
 		for (int i=0; i<m_NumUnidades; ++i){
-			m_vecUnidades[i]->setFitness(m_vecUnidades[i]->Fitness()*m_vecUnidades[i]->getLife()/100);
+			//m_vecUnidades[i]->setFitness(m_vecUnidades[i]->Fitness()*m_vecUnidades[i]->getLife()/100);
 			//update the chromos fitness score
 			m_vecThePopulation[i].dFitness = m_vecUnidades[i]->Fitness();
 		}
@@ -225,7 +225,9 @@ void CController::Pintar(){
 
 void CController::generarMapa(int tipoMapa){
 	if(tipoMapa==1){
-		matriz = shared_ptr<MapaAprendizaje>(new MapaBasicoDummy(device,m_NumUnidades));
+		matriz = shared_ptr<MapaAprendizaje>(new MapaCuatroEnemigos(device,m_NumUnidades));
+		
+		//matriz = shared_ptr<MapaAprendizaje>(new MapaBasicoDummy(device,m_NumUnidades));
 	}
 	else if(tipoMapa==2){
 		matriz = shared_ptr<MapaAprendizaje>(new MapaBasicoMuroYUnidad(device,m_NumUnidades));

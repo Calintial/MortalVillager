@@ -290,7 +290,25 @@ void CUnidadesAprendizaje::IncrementFitness(CUnidadesAprendizaje* atacado,int da
 		m_dFitness++;
 	}
 	m_dFitness+=danyo;
+	if(m_dFitness>=400){
+		cout<<"UNO DE 400!!!!!######################################################"<<endl;
+		std::ofstream pesosActualesFile;
+			vector<double> vecW=m_ItsBrain.GetWeights();
+			pesosActualesFile.open("Mejor.txt",ios::out);
+			if (pesosActualesFile.is_open())
+			{
+				
+					pesosActualesFile<<vecW[0];
+					for (int j = 1; j < vecW.size(); ++j)
+					{
+						pesosActualesFile<<","<<vecW[j]<<std::setprecision(20);
+					}
+					pesosActualesFile<<endl;
+				
+				pesosActualesFile.close();
+			}
 
+	}
 }
 
 

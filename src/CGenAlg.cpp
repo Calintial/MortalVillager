@@ -312,15 +312,13 @@ void CGenAlg::CalculateBestWorstAvTot()
 	std::string excel=carpeta+"/Excel.txt";
 	m_dTotalFitness = 1;
 	
-	double HighestSoFar = m_vecPop[m_iPopSize-1].dFitness;
-	m_iFittestGenome=m_iPopSize-1;
-	double LowestSoFar  = m_vecPop[0].dFitness;
-	m_dWorstFitness=0;
+	double HighestSoFar = 1;
+	double LowestSoFar  = 9999999;
 	
 	for (int i=0; i<m_iPopSize; ++i)
 	{
 		//update fittest if necessary
-		/*if (m_vecPop[i].dFitness > HighestSoFar)
+		if (m_vecPop[i].dFitness > HighestSoFar)
 		{
 			HighestSoFar	 = m_vecPop[i].dFitness;
 			
@@ -335,7 +333,7 @@ void CGenAlg::CalculateBestWorstAvTot()
 			LowestSoFar = m_vecPop[i].dFitness;
 			
 			m_dWorstFitness = LowestSoFar;
-		}*/
+		}
 		
 		m_dTotalFitness	+= m_vecPop[i].dFitness;
 	
