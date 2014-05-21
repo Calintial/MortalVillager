@@ -72,8 +72,6 @@ public:
 	void reset(const vector<SGenome> &);
 private:
 	void generarUnidades();
-
-	vector<shared_ptr<CUnidadesAprendizaje>> m_vecEnemigos;
 };
 class MapaCuatroUnidades: public MapaAprendizaje
 {
