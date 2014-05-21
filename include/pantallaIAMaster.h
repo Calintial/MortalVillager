@@ -29,5 +29,6 @@ public:
 private:
 	DebugMaster* debug;
 	hud* hudmapa;
+	bool eventosMapa;
 };
 #endif 

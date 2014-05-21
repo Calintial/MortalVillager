@@ -22,6 +22,12 @@ using namespace std;
 
 class mapa2D;
 
+enum{
+	COMBO_SUBARBOL = 0,
+	BUTTON_SEE_SUBARBOL = 1/*,
+	SCROLL_SPEED = 2*/
+};
+
 class DebugMaster : public IEventReceiver
 {
 private:
@@ -40,7 +46,7 @@ private:
 
 	bool drawVision;
 	bool drawAttackVision;
-
+	int subarbolElegido;
 
 
 
@@ -53,6 +59,7 @@ public:
 	void DrawParameters();
 	void DrawVisions();
 	virtual bool OnEvent(const SEvent& event);
+	void selectSubarbol(int seleccion){subarbolElegido = seleccion;cout<<"Has elegido <"<<seleccion<<">"<<endl;}
 };
 
 #endif

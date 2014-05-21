@@ -15,6 +15,7 @@ DebugMaster::DebugMaster(IrrlichtDevice * IrrDevice, shared_ptr<mapa2D> map)
 	//DebugDevice->setEventReceiver(this); 
 	drawVision = false;
 	drawAttackVision = false;
+	subarbolElegido = 0;
 }
 
 DebugMaster::~DebugMaster()
@@ -24,42 +25,20 @@ DebugMaster::~DebugMaster()
 
 void DebugMaster::initDebugMenu()
 {
-	env->addCheckBox(false,rect<s32>(50,dimensionPantallaY+45,200,dimensionPantallaY+60), 0, CB_ATTACK_RANGE, 
-							   L"Ver distancia ataque");
-	env->addCheckBox(false,rect<s32>(50,dimensionPantallaY+70,200,dimensionPantallaY+85), 0, CB_VISION_RANGE, 
-							   L"Ver distancia visión");
-
 	IGUIScrollBar* speed_bar = env->addScrollBar(true,rect<s32>(300,dimensionPantallaY+60,500,dimensionPantallaY+85), 0, SCROLL_SPEED);
 
     speed_bar->setPos(gameEngine::getSpeed());
 
     /*Botones para añadir IA o unidades de usuario*/
-	env->addButton(rect<s32>(550,dimensionPantallaY+45,750,dimensionPantallaY+70), 0, BUTTON_ADD_IA,
-        L"Añadir IA", L"Añadir unidad controlada por la IA");
-
-	env->addButton(rect<s32>(550,dimensionPantallaY+80,750,dimensionPantallaY+105), 0, BUTTON_ADD_UNIT,
-        L"Añadir Unidad", L"Añadir unidad controlada por el usuario");
-
-	/*Spin box para obtener las coordenadas para añadir las unidades*/
-	IGUISpinBox* spbox_X = env->addSpinBox(L"0",rect<s32>(760,dimensionPantallaY+65,810,dimensionPantallaY+85),true,0,SPBOX_COORDX);
-	IGUISpinBox* spbox_Y = env->addSpinBox(L"0",rect<s32>(830,dimensionPantallaY+65,880,dimensionPantallaY+85),true,0,SPBOX_COORDY);
-
-	spbox_X->setDecimalPlaces(0);
-	spbox_Y->setDecimalPlaces(0);
-
-	spbox_X->setRange(0,25);
-	spbox_Y->setRange(0,19);
+	env->addButton(rect<s32>(550,dimensionPantallaY+45,750,dimensionPantallaY+70), 0, BUTTON_SEE_SUBARBOL,
+        L"Ver Subarbol", L"Ver subarbol seleccionado");
 
 	/*Desplegables para seleccionar unidad a insertar*/
-	IGUIComboBox* combo_unidades = env->addComboBox (rect<s32>(900,dimensionPantallaY+65,1000,dimensionPantallaY+85), 0,COMBO_UNIDADES);
-	combo_unidades->addItem(L"Aldeano");
-	combo_unidades->addItem(L"Espadachin");
-	combo_unidades->addItem(L"Lancero");
-	combo_unidades->addItem(L"Arquero");
-
-	/*Botón para añadir edificios*/
-	env->addButton(rect<s32>(1050,dimensionPantallaY+65,1150,dimensionPantallaY+85), 0, BUTTON_ADD_BUILDING,
-        L"Añadir Edificio", L"Añadir un edificio");
+	IGUIComboBox* combo_subarbol = env->addComboBox (rect<s32>(900,dimensionPantallaY+65,1000,dimensionPantallaY+85), 0,COMBO_SUBARBOL);
+	combo_subarbol->addItem(L"Subarbol BLA");
+	combo_subarbol->addItem(L"Subarbol BLA");
+	combo_subarbol->addItem(L"Subarbol BLA");
+	combo_subarbol->addItem(L"Subarbol BLA");
 
 	/*Cargar texturas imagenes*/
 	state_search = driver->getTexture("../media/Imagenes/Debug/MEF/Search.png");
@@ -332,7 +311,7 @@ void DebugMaster::DrawVisions()
 bool DebugMaster::OnEvent(const SEvent& event)
 {
 
-	if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
+	/*if(event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
 		switch(id)
@@ -344,44 +323,20 @@ bool DebugMaster::OnEvent(const SEvent& event)
 		}
 		
 	}
-	else if(event.GUIEvent.EventType == EGET_SCROLL_BAR_CHANGED)
-	{
-		s32 id = event.GUIEvent.Caller->getID();
-
-		switch(id)
-		{
-			case SCROLL_SPEED: s32 pos = ((IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
-                 			   gameEngine::setSpeed(pos);
-							   break;
-		}
-	}
+	
 
 	else if(event.GUIEvent.EventType == EGET_BUTTON_CLICKED)
 	{
 		s32 id = event.GUIEvent.Caller->getID();
 
-		if(id == BUTTON_ADD_IA || id == BUTTON_ADD_UNIT)
+		if(id == BUTTON_SEE_SUBARBOL)
 		{
-			IGUISpinBox* spbox_X = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDX);
-			IGUISpinBox* spbox_Y = (IGUISpinBox*) env->getRootGUIElement()->getElementFromId(SPBOX_COORDY);
 
-			IGUIComboBox* combo_unidades = (IGUIComboBox*) env->getRootGUIElement()->getElementFromId(COMBO_UNIDADES);
-			int tipo_unidad = combo_unidades->getSelected();
+			IGUIComboBox* combo_subarbol = (IGUIComboBox*) env->getRootGUIElement()->getElementFromId(combo_subarbol);
+			int tipo_subarbol = combo_subarbol->getSelected();
 
-			if(id == BUTTON_ADD_IA)
-			{
-				//(gameEngine::addIAUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
-			}
-			else
-			{
-				//(gameEngine::addUserUnit((int)spbox_X->getValue(),(int)spbox_Y->getValue(),tipo_unidad))->aplicarTextura(driver);
-			}
 		}
-		else if(id == BUTTON_ADD_BUILDING)
-		{
-			cout<<"sombra"<<endl;
-			mapa->setSombra(true);
-		}
+		
 	}
 	else if (event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
@@ -414,6 +369,6 @@ bool DebugMaster::OnEvent(const SEvent& event)
 		{
 			mapa->OnEventMapa(event);			
 		}
-	}
+	}*/
 	return false;
 }
