@@ -1,16 +1,15 @@
 #include "DebugMaster.h"
 
 
-DebugMaster::DebugMaster(IrrlichtDevice * IrrDevice, vector<shared_ptr<IDibujable>>* ia_units, shared_ptr<mapa2D> map)
+DebugMaster::DebugMaster(IrrlichtDevice * IrrDevice, shared_ptr<mapa2D> map)
 {
 	DebugDevice = IrrDevice;
     env = IrrDevice->getGUIEnvironment();
     driver = IrrDevice->getVideoDriver();
     font = env->getFont("../media/fonthaettenschweiler.bmp");
-    env->clear();
+    //env->clear();
     initDebugMenu();
 
-    vUnits = ia_units;
     mapa = map;
 
 	//DebugDevice->setEventReceiver(this); 
@@ -79,20 +78,20 @@ void DebugMaster::Draw()
 			font->draw(L"Velocidad del juego",
             core::rect<s32>(350,dimensionPantallaY+25,500,dimensionPantallaY+50),video::SColor(255,0,0,0));
 			
-			DrawVisions();
+			//DrawVisions();
 
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(dimensionPantallaX,0,driver->getScreenSize().Width,driver->getScreenSize().Height));
 			driver->draw2DRectangle(video::SColor(255,200,200,200),core::rect<s32>(0,dimensionPantallaY,driver->getScreenSize().Width,driver->getScreenSize().Height));
 
-			DrawParameters();
-			DrawMEF();
+			//DrawParameters();
+			//DrawMEF();
 
 			env->drawAll();
 		}
 	}
 }
 
-void DebugMaster::DrawMEF()
+/*void DebugMaster::DrawMEF()
 {
 	int ia_selected = mapa->getIASelected();
 	int ia_state = -1;
@@ -240,12 +239,12 @@ void DebugMaster::DrawMEF()
     core::rect<s32>(0,0,59 ,56), 0,
     video::SColor(255,255,255,255), true);
 
-	/*Ya recuperado*/
+	/*Ya recuperado*//*
 	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/supLarge.png"), core::position2d<s32>(dimensionPantallaX + 105,90),
     core::rect<s32>(0,0,22 ,282), 0,
     video::SColor(255,255,255,255), true);
 
-    /*Enemigo en rango*/
+    /*Enemigo en rango*//*
 	driver->draw2DImage(driver->getTexture("../media/Imagenes/Debug/MEF/flechas/der.png"), core::position2d<s32>(dimensionPantallaX + 159,420),
     core::rect<s32>(0,0,100 ,22), 0,
     video::SColor(255,255,255,255), true);
@@ -292,7 +291,7 @@ void DebugMaster::DrawVisions()
 		limits.Y = HEIGHT;
 		limits = limits - mapa->GetCameraScroll();
 
-		/*Pintar vision de la unidad*/
+		/*Pintar vision de la unidad*//*
 		if(drawVision)
 		{
 			for(int x = pos.X - v_range; x <= pos.X + v_range; x++)
@@ -310,7 +309,7 @@ void DebugMaster::DrawVisions()
 			}
 		}
 
-		/*Pintar rango de ataque de la unidad*/
+		/*Pintar rango de ataque de la unidad*//*
 		if(drawAttackVision)
 		{
 			for(int x = pos.X - a_range; x <= pos.X + a_range; x++)
@@ -329,7 +328,7 @@ void DebugMaster::DrawVisions()
 		}
 	}
 }
-
+*/
 bool DebugMaster::OnEvent(const SEvent& event)
 {
 

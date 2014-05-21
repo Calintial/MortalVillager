@@ -25,8 +25,6 @@ class mapa2D;
 class DebugMaster : public IEventReceiver
 {
 private:
-	vector<shared_ptr<IDibujable>>* vUnits;
-
 	IrrlichtDevice * DebugDevice;
 	video::IVideoDriver* driver;
 	gui::IGUIEnvironment* env;
@@ -47,7 +45,7 @@ private:
 
 
 public:
-	DebugMaster(IrrlichtDevice * IrrDevice,vector<shared_ptr<IDibujable>>* ia_units,shared_ptr<mapa2D>);
+	DebugMaster(IrrlichtDevice * IrrDevice,shared_ptr<mapa2D>);
 	~DebugMaster();
 	void initDebugMenu();
 	void Draw();

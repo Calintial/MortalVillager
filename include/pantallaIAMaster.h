@@ -9,6 +9,7 @@
 #include <irrlicht.h>
 #include "pantalla.h"
 #include "mapa2D.h"
+#include "hud.h"
 #include "DebugMaster.h"
 
 using namespace irr;
@@ -27,5 +28,6 @@ public:
 		virtual bool OnEvent(const SEvent& event);
 private:
 	DebugMaster* debug;
+	hud* hudmapa;
 };
 #endif 
