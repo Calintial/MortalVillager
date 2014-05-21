@@ -59,7 +59,7 @@ public:
 	void DrawParameters();
 	void DrawVisions();
 	virtual bool OnEvent(const SEvent& event);
-	void selectSubarbol(int seleccion){subarbolElegido = seleccion;cout<<"Has elegido <"<<seleccion<<">"<<endl;}
+	void selectSubarbol(int seleccion){subarbolElegido = seleccion;}
 };
 
 #endif
