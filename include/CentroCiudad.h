@@ -7,6 +7,7 @@
 #include "edificio.h"
 #include <iostream>
 
+
 class CentroCiudad  : public edificio{
 public:
 	CentroCiudad();

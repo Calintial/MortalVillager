@@ -1,4 +1,5 @@
 #include "CentroCiudad.h"
+#include "gameEngine.h"
 
 
 CentroCiudad::CentroCiudad() : edificio(0)
@@ -44,5 +45,18 @@ void CentroCiudad::PierdoVida(int danyo)
 	else
 	{	
 		life = life-danyo;
+
+		if(life <= 0)
+		{
+			if(getDeUsuario())
+			{
+				cout<<"Has perdido"<<endl;
+			}
+			else
+			{
+				cout<<"Has ganado"<<endl;
+			}
+			gameEngine::stado.finish();
+		}
 	}
 }
