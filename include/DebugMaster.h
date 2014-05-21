@@ -55,7 +55,7 @@ public:
 	~DebugMaster();
 	void initDebugMenu();
 	void Draw();
-	void DrawMEF();
+	void DrawMEF(vector<int> caminoNodos);
 	void DrawParameters();
 	void DrawVisions();
 	virtual bool OnEvent(const SEvent& event);
