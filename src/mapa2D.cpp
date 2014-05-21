@@ -280,7 +280,7 @@ vector<shared_ptr<Unidades>>* mapa2D::OnEventMapa(const SEvent& event)
 						if(unidad->getType() == 0 && gameEngine::recursos_jugador >= 300)
 						{
 							cout<<"Transformacion!!"<<endl;
-							int clase = std::dynamic_pointer_cast<edificio>(getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado())->getClase();
+							int clase = ((edificio*)getTile(pos_grid.Y+CameraScroll.Y,pos_grid.X+CameraScroll.X)->getVinculado())->getClase();
 							user_units->erase(user_units->begin() + user_selvector->at(0));
 
 							switch(clase)
@@ -377,7 +377,7 @@ void mapa2D::IniciarEdificios()
 	
 	//Edificios IA
 	position2di pos_ia; pos_ia.X = 190; pos_ia.Y = 193;
-	shared_ptr<IDibujable> cc_ia = gameEngine::addBuildings(pos_ia.X,pos_ia.Y,0,false);
+	IDibujable* cc_ia = gameEngine::addBuildings(pos_ia.X,pos_ia.Y,0,false).get();
 	cc_ia->aplicarTextura(driver);
 
 	ITexture* tex = cc_ia->getTextura();
@@ -398,7 +398,7 @@ void mapa2D::IniciarEdificios()
 
 	//Edificios usuario
 	position2di pos_usuario; pos_usuario.X = 5; pos_usuario.Y = 3;
-	shared_ptr<IDibujable> cc_usuario = (gameEngine::addBuildings(pos_usuario.X,pos_usuario.Y,0,true));
+	IDibujable* cc_usuario = (gameEngine::addBuildings(pos_usuario.X,pos_usuario.Y,0,true).get());
 	cc_usuario->aplicarTextura(driver);
 
 	tex = cc_ia->getTextura();
@@ -650,7 +650,7 @@ void mapa2D::Pintar()
 //Pinta alrededor de una posicion
 void mapa2D::PintarTile(const ITexture *TTexture, int TPositionX, int TPositionY)
 {
-	getTile(position2di(TPositionX,TPositionY))->aplicarTextura(driver);
+	//getTile(position2di(TPositionX,TPositionY))->aplicarTextura(driver);
 	driver->draw2DImage(TTexture, position2di(TPositionX, TPositionY), rect<s32>(0, 0, TTexture->getSize().Width, TTexture->getSize().Height), 0, SColor((u32)((1.0f - 0.0f) * 255), 255, 255, 255), true);
 }
 

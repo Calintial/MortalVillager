@@ -278,7 +278,7 @@ void CUnidadesAprendizaje::PintarAtacar(IVideoDriver* driver,bool atacando)
 
 void CUnidadesAprendizaje::TexturaSeleccionada(IVideoDriver* driver,bool seleccionada)
 {
-	if(selected)
+	if(seleccionada)
 		setTextura(driver->getTexture("../media/Texturas/units/ia_unit_selected.png"));
 	else
 		setTextura(driver->getTexture("../media/Texturas/units/ia_swordman.png"));
