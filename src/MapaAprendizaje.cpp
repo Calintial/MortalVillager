@@ -85,8 +85,37 @@ void MapaAprendizaje::PintarInformacionUnidad(){
 	Posicion+= unidad_seleccionada->getPosition().X;
 	Posicion+= ",";
 	Posicion+= unidad_seleccionada->getPosition().Y;
-
-
+	core::stringw  output=" Output: ";
+	if (cunidad->output.size() > 0)
+	{
+		
+		output+="X: ";
+		output+=cunidad->output[0];
+		output+="          ";
+		output+="Y: ";
+		output+=cunidad->output[1];
+		output+="          ";
+		output+="Atacar: ";
+		output+=cunidad->output[2];
+		output+="          ";
+		output+="Izquierda: ";
+		output+=cunidad->output[3];
+		output+="          ";
+		output+="Derecha: ";
+		output+=cunidad->output[4];
+		output+="          ";
+		output+="Arriba: ";
+		output+=cunidad->output[5];
+		output+="          ";
+		output+="Abajo: ";
+		output+=cunidad->output[6];
+		output+="          ";
+		output+="Moverse: ";
+		output+=cunidad->output[7];
+		output+="          ";
+	}
+	
+	
 	for(ObjetosCercanos objeto: objCercanos){
 		position2di drawPos = position2di(objeto.posicion.X*TILE_WIDTH, objeto.posicion.Y * TILE_HEIGHT);
 		//Pinta
@@ -111,7 +140,9 @@ void MapaAprendizaje::PintarInformacionUnidad(){
 	font->draw(Posicion,
 		core::rect<s32>(850,100,850,100),
 		video::SColor(255,0,0,0));
-
+	font->draw(output,
+		core::rect<s32>(950,100,950,100),
+		video::SColor(255,0,0,0));
 }
 
 void MapaAprendizaje::setTile(position2di pos,shared_ptr<IDibujable> elem){
@@ -222,6 +253,7 @@ void MapaBasicoDummy::generarMapa(){
 }
 
 void MapaBasicoDummy::reset(const vector<SGenome>& poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -319,6 +351,7 @@ void MapaBasicoMuroYUnidad::generarMapa(){
 }
 
 void MapaBasicoMuroYUnidad::reset(const vector<SGenome>& poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -412,6 +445,7 @@ void MapaCuadrado::generarMapa(){
 }
 
 void MapaCuadrado::reset(const vector<SGenome>&  poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -579,6 +613,7 @@ for (int i=0;i<MAPSIZE;i+=Tamanyo){
 }
 
 void MapaCuatroUnidades::reset(const vector<SGenome>& poblacion){
+	unidad_seleccionada = NULL;
 	for (int i = 0; i < m_NumUnidades; ++i)
 	{
 		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
@@ -620,6 +655,169 @@ void MapaCuatroUnidades::generarUnidades(){
 		//vTiles[posY + 2][posX + 2]=unidad;
 		m_vecUnidades.push_back(unidad);
 
+	}
+
+}
+// ================== ~MapaCuatroUnidades ===================== //
+// ================== ~MapaCuatroUnidades ===================== //
+
+
+MapaCuatroEnemigos::MapaCuatroEnemigos(IrrlichtDevice* dev,int num):MapaAprendizaje(dev,num){
+	driver = dev->getVideoDriver();
+	generarMapa();
+}
+
+MapaCuatroEnemigos::~MapaCuatroEnemigos(){
+
+}
+
+void MapaCuatroEnemigos::generarMapa(){
+	int Tamanyo=12;
+	for (int i=0;i<MAPSIZE;i++){
+		for(int j=0;j<MAPSIZE;j++){
+			//0 transitable 1 no transitable
+			nuevoSuelo(j,i);
+			
+
+		}
+	}
+for (int i=0;i<MAPSIZE;i+=Tamanyo){
+		for(int j=0;j<MAPSIZE;j+=Tamanyo){
+			if (i + Tamanyo < MAPSIZE && j+Tamanyo < MAPSIZE)
+			{	
+				for (int iteradorEsquina = 0; iteradorEsquina < Tamanyo; ++iteradorEsquina)
+				{
+					nuevoMuro(j, i + iteradorEsquina);
+					nuevoMuro(j + iteradorEsquina, i);
+				}
+
+			}
+			
+
+		}
+	}
+	generarUnidades();
+}
+
+void MapaCuatroEnemigos::reset(const vector<SGenome>& poblacion){
+	unidad_seleccionada = NULL;
+	for (int i = 0; i < m_NumUnidades; ++i)
+	{
+		shared_ptr<CUnidadesAprendizaje> unidad = m_vecUnidades[i];
+		position2di posicion = unidad->getPosition();
+
+		if(posicion.X != -1){
+			nuevoSuelo(posicion.X,posicion.Y);			
+		}
+
+
+	}
+	m_vecUnidades.clear();
+	for(int i=0;i<m_vecEnemigos.size();i++){
+		position2di p=m_vecEnemigos[i]->getPosition();
+		if(p.X>=0){
+			getTile(p)->setVinculado(NULL);
+		}
+	}
+	m_vecEnemigos.clear();
+	generarUnidades();
+	for (int i=0; i<m_NumUnidades; ++i)
+	{	
+		m_vecUnidades[i]->PutWeights(poblacion[i].vecWeights);
+
+	}
+}
+
+void MapaCuatroEnemigos::generarUnidades(){
+	//creamos las unidades 
+	int posX = 0;
+	int posY = 0;
+	int enemigoX=0;
+	int enemigoY=0;
+	int size = MAPSIZE / 12;
+	for (int i=0; i<m_NumUnidades; ++i)
+	{
+		posY = i / size * 12 +6;
+		posX = i % size * 12 +6;
+
+ 		shared_ptr<EspadachinRedes>  unidad=shared_ptr<EspadachinRedes>(new EspadachinRedes(posX ,posY ));
+		unidad->aplicarTextura(driver);
+		unidad->setDriver(driver);
+		shared_ptr<IDibujable> aux =  vTiles[posY ][posX ];
+		aux->setVinculado(unidad.get());
+		m_vecUnidades.push_back(unidad);
+
+		int fila = RandInt(1,2);
+		enemigoY=posY-fila;
+		if (fila == 2)
+		{
+			enemigoX=RandInt(posX-2,posX+1);
+		}else{
+			enemigoX=RandInt(posX-1,posX);
+		}
+		
+		
+		shared_ptr<CUnidadesAprendizajeDummy> unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(enemigoX,enemigoY));
+		unidadDummy->aplicarTextura(driver);
+		unidadDummy->setDriver(driver);
+		 aux = vTiles[enemigoY][enemigoX];
+		aux->setVinculado(unidadDummy.get());
+		//vTiles[posY][posX]=unidadDummy;
+		m_vecEnemigos.push_back(unidadDummy);
+
+
+		fila = RandInt(1,2);
+		enemigoX=posX+fila;
+		if (fila == 2)
+		{
+			enemigoY=RandInt(posY-2,posY+1);
+		}else{
+			enemigoY=RandInt(posY-1,posY);
+		}
+		
+		 unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(enemigoX,enemigoY));
+		unidadDummy->aplicarTextura(driver);
+		unidadDummy->setDriver(driver);
+		 aux = vTiles[enemigoY][enemigoX];
+		aux->setVinculado(unidadDummy.get());
+		//vTiles[posY][posX]=unidadDummy;
+		m_vecEnemigos.push_back(unidadDummy);
+		
+		fila = RandInt(1,2);
+		enemigoY=posY+fila;
+		if (fila == 2)
+		{
+			enemigoX=RandInt(posX-1,posX+2);
+		}else{
+			enemigoX=RandInt(posX,posX+1);
+		}
+		
+		 unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(enemigoX,enemigoY));
+		unidadDummy->aplicarTextura(driver);
+		unidadDummy->setDriver(driver);
+		 aux = vTiles[enemigoY][enemigoX];
+		aux->setVinculado(unidadDummy.get());
+		//vTiles[posY][posX]=unidadDummy;
+		m_vecEnemigos.push_back(unidadDummy);
+
+		fila = RandInt(1,2);
+		enemigoX=posX-fila;
+		if (fila == 2)
+		{
+			enemigoY=RandInt(posY-1,posY+2);
+		}else{
+			enemigoY=RandInt(posY,posY+1);
+		}
+		 unidadDummy=shared_ptr<CUnidadesAprendizajeDummy>(new CUnidadesAprendizajeDummy(enemigoX,enemigoY));
+		unidadDummy->aplicarTextura(driver);
+		unidadDummy->setDriver(driver);
+		 aux = vTiles[enemigoY][enemigoX];
+		aux->setVinculado(unidadDummy.get());
+		//vTiles[posY][posX]=unidadDummy;
+		m_vecEnemigos.push_back(unidadDummy);
+		
+
+		
 	}
 
 }

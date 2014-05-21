@@ -1,0 +1,19 @@
+In file included from include/CNeuralNet.h:15:0,
+                 from include/CUnidadesAprendizaje.h:16,
+                 from include/EspadachinRedes.h:3,
+                 from src/MapaAprendizaje.cpp:2:
+include/CParams.h: In constructor ‘CParams::CParams()’:
+include/CParams.h:84:41: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+     if(!LoadInParameters("../params.ini"))
+                                         ^
+src/MapaAprendizaje.cpp: In member function ‘virtual void MapaAprendizaje::generarMapa()’:
+src/MapaAprendizaje.cpp:108:6: warning: unused variable ‘j’ [-Wunused-variable]
+  int j=0;
+      ^
+src/MapaAprendizaje.cpp: In member function ‘virtual void MapaCuadrado::generarMapa()’:
+src/MapaAprendizaje.cpp:357:6: warning: unused variable ‘dimensionCuadrado’ [-Wunused-variable]
+  int dimensionCuadrado=m_NumUnidades;
+      ^
+src/MapaAprendizaje.cpp:359:6: warning: unused variable ‘finRectanguloInterior’ [-Wunused-variable]
+  int finRectanguloInterior=(MAPSIZE/2)+inicioRectanguloInterior;
+      ^

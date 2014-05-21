@@ -45,7 +45,7 @@ int CurrentIA::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)
 //---BUSCANDO--//
 BUSCANDO::BUSCANDO()
 {
-	cout << "BUSCANDO-ctor " << endl;
+	//cout << "BUSCANDO-ctor " << endl;
 }
 
 int BUSCANDO::doSomething(battleIA* bIA, shared_ptr<IDibujable> &casilla)

@@ -22,6 +22,7 @@
 #include "ObjetosCercanos.h"
 #include <fstream>
 #include "MapaAprendizaje.h"
+#include <iomanip>
 using namespace std;
 
 class CUnidadesAprendizaje :  public battleIA
@@ -48,6 +49,7 @@ private:
 
 
 public:
+	vector<double> output;
 	std::ofstream outfile;
 	int getMover(){return move;};
 	int getAtaque(){return m_ataque;}

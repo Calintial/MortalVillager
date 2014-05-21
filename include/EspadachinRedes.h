@@ -23,6 +23,15 @@ public:
 	CUnidadesAprendizajeDummy(int x, int y):EspadachinRedes(x,y){}
 	void updateIA(std::shared_ptr<mapa2D> mapa){
 		this->calcular8Objetos(mapa);
+		if (getLife()==0)
+		{
+			if(getPosition().X>=0 && getPosition().Y>=0){
+				mapa->getTile(getPosition())->setVinculado(NULL);
+				this->setPosition(-1,-1);
+			}
+		}
+	
+
 	}
 };
 #endif
