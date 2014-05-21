@@ -1,5 +1,5 @@
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef DEBUG_MASTER_H
+#define DEBUG_MASTER_H
 
 #include <iostream>
 #include <irrlicht.h>
@@ -19,18 +19,6 @@ using namespace gui;
 
 using namespace std;
 
-enum{
-	/*Estados de la IA*/
-	CB_VISION_RANGE = 0,
-	CB_ATTACK_RANGE = 1,
-	SCROLL_SPEED = 2,
-	BUTTON_ADD_IA = 3,
-	BUTTON_ADD_UNIT = 4,
-	BUTTON_ADD_BUILDING = 5,
-	SPBOX_COORDX = 6,
-	SPBOX_COORDY = 7,
-	COMBO_UNIDADES = 8
-};
 
 class mapa2D;
 

@@ -1,5 +1,5 @@
-#ifndef PANTALLA_IABATALLA_H
-#define PANTALLA_IABATALLA_H
+#ifndef PANTALLA_IAMASTER_H
+#define PANTALLA_IAMASTER_H
 
 #include <string>
 #include <iostream>
