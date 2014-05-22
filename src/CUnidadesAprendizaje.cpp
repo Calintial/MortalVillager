@@ -410,7 +410,8 @@ void CUnidadesAprendizaje::updateIA(std::shared_ptr<mapa2D> mapa){
 				//std::dynamic_pointer_cast<Suelo>(mapa->getTile(pos.Y,pos.X))->setIsometric(false);
 				//mapa->getTile(pos.Y,pos.X)->aplicarTextura(driver);
 				mapa->getTile(pos)->setVinculado(NULL);
-				this->setPosition(-1,-1);
+				//this->setPosition(-1,-1);
+				setEliminar(true);
 
 			}
 			
