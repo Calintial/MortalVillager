@@ -511,7 +511,7 @@ void NodoRecGranja::Decision()
 	}
 	else
 	{
-		cout << "NO --> HOJA, NADA" << endl;
+		cout << "NO --> HOJA, NADA" << getDT()->caminoNodos.back()+2 << endl;
 		getDT()->caminoNodos.push_back(getDT()->caminoNodos.back()+2);
 	}
 }

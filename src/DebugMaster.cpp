@@ -84,7 +84,7 @@ void DebugMaster::initDebugMenu()
 	node_38 = driver->getTexture("../media/Imagenes/Debug/DT/crear_granja_no_selected.png");
 	node_39 = driver->getTexture("../media/Imagenes/Debug/DT/nada_no_selected.png");
 	node_40 = driver->getTexture("../media/Imagenes/Debug/DT/espadachin_arcos_no_selected.png");
-	node_41 = driver->getTexture("../media/Imagenes/Debug/DT/arqueria_no_selected.png");
+	node_41 = driver->getTexture("../media/Imagenes/Debug/DT/arqueria_no_select.png");
 	node_42 = driver->getTexture("../media/Imagenes/Debug/DT/aldeano_arquero_no_selected.png");
 	node_43 = driver->getTexture("../media/Imagenes/Debug/DT/rec_arquero_no_selected.png");
 	node_44 = driver->getTexture("../media/Imagenes/Debug/DT/crear_arquero_no_selected.png");
@@ -180,7 +180,9 @@ void DebugMaster::DrawMEF(vector<int> caminoNodos)
 			//Lineas
 			driver->draw2DLine(core::position2d<s32>(dimensionPantallaX + 260,20), core::position2d<s32>(dimensionPantallaX + 180, 120), video::SColor(255,0,0,0));
 			driver->draw2DLine(core::position2d<s32>(dimensionPantallaX + 290,20), core::position2d<s32>(dimensionPantallaX + 380, 120), video::SColor(255,0,0,0));
-			
+			driver->draw2DLine(core::position2d<s32>(dimensionPantallaX + 160,180), core::position2d<s32>(dimensionPantallaX + 385, 50), video::SColor(255,0,0,0));
+			driver->draw2DLine(core::position2d<s32>(dimensionPantallaX + 150,180), core::position2d<s32>(dimensionPantallaX + 100, 250), video::SColor(255,0,0,0));
+			driver->draw2DLine(core::position2d<s32>(dimensionPantallaX + 400,80), core::position2d<s32>(dimensionPantallaX + 370, 250), video::SColor(255,0,0,0));
 			for(int i=0; i<caminoNodos.size(); i++)
 			{
 				cout << caminoNodos.at(i) << "-->";
@@ -237,16 +239,16 @@ void DebugMaster::DrawMEF(vector<int> caminoNodos)
 			driver->draw2DImage(node_4, core::position2d<s32>(dimensionPantallaX + 80,230),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_5, core::position2d<s32>(dimensionPantallaX + 79,175),
+			driver->draw2DImage(node_5, core::position2d<s32>(dimensionPantallaX + 150,180),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 			
-			driver->draw2DImage(node_8, core::position2d<s32>(dimensionPantallaX + 79,40),
+			driver->draw2DImage(node_8, core::position2d<s32>(dimensionPantallaX + 375,40),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 			
-			driver->draw2DImage(node_6, core::position2d<s32>(dimensionPantallaX + 79,120),
+			driver->draw2DImage(node_6, core::position2d<s32>(dimensionPantallaX + 350,120),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 			
-			driver->draw2DImage(node_7, core::position2d<s32>(dimensionPantallaX + 79,230),
+			driver->draw2DImage(node_7, core::position2d<s32>(dimensionPantallaX + 300,230),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 			break;
 		case 3:
@@ -328,40 +330,40 @@ void DebugMaster::DrawMEF(vector<int> caminoNodos)
 			}
 			
 			//Pinta
-			driver->draw2DImage(node_8, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_8, core::position2d<s32>(dimensionPantallaX + 80,10),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_9, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_9, core::position2d<s32>(dimensionPantallaX + 40,120),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_24, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_24, core::position2d<s32>(dimensionPantallaX + 120,120),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_25, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_25, core::position2d<s32>(dimensionPantallaX + 80,220),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_40, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_40, core::position2d<s32>(dimensionPantallaX + 160,220),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_41, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_41, core::position2d<s32>(dimensionPantallaX + 100,320),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_57, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_57, core::position2d<s32>(dimensionPantallaX + 200,375),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_56, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_56, core::position2d<s32>(dimensionPantallaX + 200,320),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_58, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_58, core::position2d<s32>(dimensionPantallaX + 160,420),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_59, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_59, core::position2d<s32>(dimensionPantallaX + 240,420),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_60, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_60, core::position2d<s32>(dimensionPantallaX + 200,520),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_61, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_61, core::position2d<s32>(dimensionPantallaX + 280,520),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 			break;
 			
@@ -416,7 +418,7 @@ void DebugMaster::DrawMEF(vector<int> caminoNodos)
 				{
 					node_19 = driver->getTexture("../media/Imagenes/Debug/DT/granja_no_selected.png");
 				}
-				if(caminoNodos.at(i) == 20)
+				if(caminoNodos.at(i) == 20)	
 				{
 					node_20 = driver->getTexture("../media/Imagenes/Debug/DT/nada_no_selected.png");
 				}
@@ -435,49 +437,49 @@ void DebugMaster::DrawMEF(vector<int> caminoNodos)
 			}
 			
 			//Pinta
-			driver->draw2DImage(node_9, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_9, core::position2d<s32>(dimensionPantallaX + 250,10),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_10, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_10, core::position2d<s32>(dimensionPantallaX + 200,110),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_11, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_11, core::position2d<s32>(dimensionPantallaX + 140,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_12, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_12, core::position2d<s32>(dimensionPantallaX + 90,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_13, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_13, core::position2d<s32>(dimensionPantallaX + 180,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_14, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_14, core::position2d<s32>(dimensionPantallaX + 270,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_15, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_15, core::position2d<s32>(dimensionPantallaX + 230,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_16, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_16, core::position2d<s32>(dimensionPantallaX + 310,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_17, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_17, core::position2d<s32>(dimensionPantallaX + 360,110),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_18, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_18, core::position2d<s32>(dimensionPantallaX + 310,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_19, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_19, core::position2d<s32>(dimensionPantallaX + 400,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_20, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_20, core::position2d<s32>(dimensionPantallaX + 360,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_21, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_21, core::position2d<s32>(dimensionPantallaX + 430,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_22, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_22, core::position2d<s32>(dimensionPantallaX + 400,410),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);	
 				
-			driver->draw2DImage(node_23, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_23, core::position2d<s32>(dimensionPantallaX + 460,410),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 			break;
 		case 5:
@@ -548,49 +550,49 @@ void DebugMaster::DrawMEF(vector<int> caminoNodos)
 			}
 			
 			//Pinta
-			driver->draw2DImage(node_25, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_25, core::position2d<s32>(dimensionPantallaX + 250,10),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_26, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_26, core::position2d<s32>(dimensionPantallaX + 200,110),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_27, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_27, core::position2d<s32>(dimensionPantallaX + 140,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_28, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_28, core::position2d<s32>(dimensionPantallaX + 90,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_29, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_29, core::position2d<s32>(dimensionPantallaX + 180,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_30, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_30, core::position2d<s32>(dimensionPantallaX + 270,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_31, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_31, core::position2d<s32>(dimensionPantallaX + 230,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_32, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_32, core::position2d<s32>(dimensionPantallaX + 310,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_33, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_33, core::position2d<s32>(dimensionPantallaX + 360,110),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_34, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_34, core::position2d<s32>(dimensionPantallaX + 310,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_35, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_35, core::position2d<s32>(dimensionPantallaX + 400,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_36, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_36, core::position2d<s32>(dimensionPantallaX + 360,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_37, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_37, core::position2d<s32>(dimensionPantallaX + 430,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_38, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_38, core::position2d<s32>(dimensionPantallaX + 400,410),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);	
 				
-			driver->draw2DImage(node_39, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_39, core::position2d<s32>(dimensionPantallaX + 460,410),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 			break;
 		case 6:
@@ -662,49 +664,49 @@ void DebugMaster::DrawMEF(vector<int> caminoNodos)
 			}
 			
 			//Pinta
-			driver->draw2DImage(node_41, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_41, core::position2d<s32>(dimensionPantallaX + 250,10),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_42, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_42, core::position2d<s32>(dimensionPantallaX + 200,110),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_43, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_43, core::position2d<s32>(dimensionPantallaX + 140,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_44, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_44, core::position2d<s32>(dimensionPantallaX + 90,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_45, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_45, core::position2d<s32>(dimensionPantallaX + 180,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_46, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_46, core::position2d<s32>(dimensionPantallaX + 270,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_47, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_47, core::position2d<s32>(dimensionPantallaX + 230,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_48, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_48, core::position2d<s32>(dimensionPantallaX + 310,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_49, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_49, core::position2d<s32>(dimensionPantallaX + 360,110),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_50, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_50, core::position2d<s32>(dimensionPantallaX + 310,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_51, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_51, core::position2d<s32>(dimensionPantallaX + 400,210),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_52, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_52, core::position2d<s32>(dimensionPantallaX + 360,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_53, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_53, core::position2d<s32>(dimensionPantallaX + 430,310),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 				
-			driver->draw2DImage(node_54, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_54, core::position2d<s32>(dimensionPantallaX + 400,410),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);	
 				
-			driver->draw2DImage(node_55, core::position2d<s32>(dimensionPantallaX + 79,10),
+			driver->draw2DImage(node_55, core::position2d<s32>(dimensionPantallaX + 460,410),
 				core::rect<s32>(0,0,75 ,75), 0, video::SColor(255,255,255,255), true);
 			break;
 	}
