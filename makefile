@@ -28,6 +28,7 @@ main: bin/main
 bin/main: src/main.cpp $(OBJECTS_MAIN)
 	mkdir -p bin
 	mkdir -p logs
+	cp media/redEspada.txt bin
 	$(CC) -o bin/main $^ $(OPTS) $(INCLUDES) $(LINKS) #$ ^ es la lista de todas las dependencias
 
 # http://stackoverflow.com/questions/8025766/makefile-auto-dependency-generation

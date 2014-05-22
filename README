@@ -17,3 +17,9 @@ Install :
 Run:
 	./game.sh
 
+Gráfica_Aprendizaje:
+	Compilación:
+		make
+	Ejecución:
+		Copiar el archivo Excel.txt que se quiera mostrar a la carpeta bin
+		./main
