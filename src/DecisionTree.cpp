@@ -21,16 +21,16 @@ DecisionTree::DecisionTree(video::IVideoDriver* driver)
 	lanceria = false;
 	granja = false;
 	recursos = 0;
-	this->driver = driver;	
+	this->driver = driver;
 }
 
 void DecisionTree::doDecision(int vidaCC, int recursos, vector<shared_ptr<IDibujable>>* IAunits, vector<shared_ptr<IDibujable>>* Userunits, vector<shared_ptr<IDibujable>>* buildings)
 {
+	caminoNodos.clear();
 	this->IAunits = IAunits;
 	this->Userunits = Userunits;
 	this->buildings = buildings;
 
-	setVidaCC(0);
 	setRecursos(recursos);
 	
 	numLanceros = 0;
@@ -75,7 +75,10 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<shared_ptr<IDibuj
 	for(int i=0; i<buildings->size(); i++)
 	{
 		if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==0)
+		{
 			setEnemigoCercaCC(ExisteEnemigoCercaCC(Userunits));
+			setVidaCC(std::dynamic_pointer_cast<CentroCiudad>(buildings->at(i))->getLife());
+		}
 		else if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==1)
 			setGranja(true);
 		else if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==2)
@@ -85,10 +88,12 @@ void DecisionTree::doDecision(int vidaCC, int recursos, vector<shared_ptr<IDibuj
 		else if(std::dynamic_pointer_cast<edificio>(buildings->at(i))->getClase()==4)
 			setLanceria(true);
 	}
-	
+
+	cout << "VIDA CC: " << getVidaCC() << endl;
 	cout << "Datos recibidos, empieza decision" << endl;
 	cout << "RECURSOS IA: "<< recursos << endl;
 	
+	caminoNodos.push_back(1);
 	raiz->Decision();
 }
 
@@ -131,11 +136,13 @@ void NodoEnemigoCercaCC::Decision()
 	if(getDT()->isEnemigoCercaCC())
 	{
 		cout << "SI --> NodoVidaCC" << endl;
+		getDT()->caminoNodos.push_back(2);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NodoLanzasMayorEspadas" << endl;
+		getDT()->caminoNodos.push_back(8);
 		getNo()->Decision();
 	}
 }
@@ -153,11 +160,13 @@ void NodoVidaCC::Decision()
 	if(getDT()->getVidaCC()<30)
 	{
 		cout << "SI --> NodoTengoSoldados" << endl;
+		getDT()->caminoNodos.push_back(3);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NodoUsuarioSuperioridad" << endl;
+		getDT()->caminoNodos.push_back(6);
 		getNo()->Decision();
 	}
 }
@@ -174,18 +183,22 @@ NodoTengoSoldados::NodoTengoSoldados(DecisionTree* dt):Node(dt)
 void NodoTengoSoldados::Decision()
 {
 	//Hay que poner estados en algun lao y cambiarlo aqui a DEFENDER
-	if(gameEngine::state_war_ia != 2)
-	{
-		gameEngine::state_war_ia = 2;
-	}
 	if(getDT()->getnumSoldados() < getDT()->getnumSoldadosEnemigos())
 	{
 		cout << "NO --> NodoLanzasMayorEspadas + STATE=DEFENDER" << endl;
+		getDT()->caminoNodos.push_back(8);
 		getNo()->Decision();
 	}
 	else
 	{
 		cout << "SI --> HOJA + STATE=DEFENDER" << endl;
+		getDT()->caminoNodos.push_back(4);
+	}
+	
+	if(gameEngine::state_war_ia != 2)
+	{
+		gameEngine::state_war_ia = 2;
+		getDT()->caminoNodos.push_back(5);
 	}
 }
 
@@ -204,11 +217,13 @@ void NodoUsuarioSuperioridad::Decision()
 	if(gameEngine::state_war_ia != 1 && (getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>15))
 	{
 		cout << "SI --> HOJA + STATE=ATACAR" << endl;
+		getDT()->caminoNodos.push_back(7);
 		gameEngine::state_war_ia = 1;
 	}
 	else
 	{
 		cout << "NO --> NODOLANZASMAYORESPADAS" << endl;
+		getDT()->caminoNodos.push_back(8);
 		getNo()->Decision();
 	}
 }
@@ -227,11 +242,13 @@ void NodoLanzasMayorEspadas::Decision()
 	if(getDT()->getnumLancerosEnemigos() > getDT()->getnumEspadachines())
 	{
 		cout << "SI --> NODOCUARTEL" << endl;
+		getDT()->caminoNodos.push_back(9);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NODOARQUEROSMAYORLANZAS" << endl;
+		getDT()->caminoNodos.push_back(24);
 		getNo()->Decision();
 	}
 }
@@ -249,11 +266,13 @@ void NodoCuartel::Decision()
 	if(getDT()->isCuartel())
 	{
 		cout << "YES --> NODOALDEANOESPADACHIN" << endl;
+		getDT()->caminoNodos.push_back(10);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NODORECCUARTEL" << endl;
+		getDT()->caminoNodos.push_back(17);
 		getNo()->Decision();
 	}
 }
@@ -271,10 +290,26 @@ void NodoGranja::Decision()
 	if(getDT()->isGranja())
 	{
 		cout << "YES --> HOJA, NADA" << endl;
+		if(getDT()->caminoNodos.back()!=40)
+		{
+			getDT()->caminoNodos.push_back(getDT()->caminoNodos.back()+3);
+		}
+		else
+		{
+			getDT()->caminoNodos.push_back(58);
+		}
 	}
 	else
 	{
 		cout << "NO --> NODORECGRANJA" << endl;
+		if(getDT()->caminoNodos.back()!=40)
+		{
+			getDT()->caminoNodos.push_back(getDT()->caminoNodos.back()+4);
+		}
+		else
+		{
+			getDT()->caminoNodos.push_back(59);
+		}
 		getNo()->Decision();
 	}
 }
@@ -293,11 +328,13 @@ void NodoAldeanoEspadachin::Decision()
 	if(getDT()->getnumAldeanos()>=1)
 	{
 		cout << "SI --> NODORECESPADACHIN" << endl;
+		getDT()->caminoNodos.push_back(11);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NODORECALDEANO" << endl;
+		getDT()->caminoNodos.push_back(14);
 		getNo()->Decision();
 	}
 }
@@ -315,11 +352,13 @@ void NodoAldeanoLancero::Decision()
 	if(getDT()->getnumAldeanos()>=1)
 	{
 		cout << "SI --> NODORECLANCERO" << endl;
+		getDT()->caminoNodos.push_back(27);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NODORECALDEANO" << endl;
+		getDT()->caminoNodos.push_back(30);
 		getNo()->Decision();
 	}
 }
@@ -337,11 +376,13 @@ void NodoAldeanoArquero::Decision()
 	if(getDT()->getnumAldeanos()>=1)
 	{
 		cout << "SI --> NODORECARQUERO" << endl;
+		getDT()->caminoNodos.push_back(43);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NODORECALDEANO" << endl;
+		getDT()->caminoNodos.push_back(46);
 		getNo()->Decision();
 	}
 }
@@ -352,14 +393,14 @@ NodoRecAldeano::NodoRecAldeano(DecisionTree* dt):Node(dt)
 {
 		//yes es null CREAR ALDEANO 
 		//no es null
-		//no = new NodoRecGranja();
 }
 
 void NodoRecAldeano::Decision()
 {
 	if(getDT()->getRecursos() >= ALDEANO_COSTE)
 	{
-		cout << "SI --> HOJA, CREA ALDEANO" << endl; 
+		cout << "SI --> HOJA, CREA ALDEANO" << endl;
+		getDT()->caminoNodos.push_back(getDT()->caminoNodos.back()+1);
 		//CREAR ALDEANO
 		shared_ptr<AldeanoIA> aldeano = std::dynamic_pointer_cast<AldeanoIA>(gameEngine::addIAUnit(191,194,0));
 		aldeano->aplicarTextura(getDT()->driver);
@@ -369,6 +410,7 @@ void NodoRecAldeano::Decision()
 	else
 	{
 		cout << "NO --> HOJA, NADA" << endl;
+		getDT()->caminoNodos.push_back(getDT()->caminoNodos.back()+2);
 	}
 }
 
@@ -392,6 +434,7 @@ void NodoRecEspadachin::Decision()
 	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
 	{
 		cout << "SI --> HOJA, CREA ESPADACHIN" << endl;
+		getDT()->caminoNodos.push_back(12);
 		//CREAR ESPADACHIN
 		vector<shared_ptr<IDibujable>>* unidades = getDT()->IAunits;
 
@@ -407,12 +450,11 @@ void NodoRecEspadachin::Decision()
 				break;
 			}
 		}
-
-
 	}
 	else
 	{
 		cout << "NO --> HOJA, NADA" << endl;
+		getDT()->caminoNodos.push_back(13);
 	}
 }
 
@@ -434,6 +476,7 @@ void NodoRecCuartel::Decision()
 	if(getDT()->getRecursos() >= CUARTEL_COSTE)
 	{
 		cout << "SI --> HOJA, CREAR CUARTEL" << endl;
+		getDT()->caminoNodos.push_back(17);
 		
 		//Crear cuartel
 		gameEngine::addBuildings(190,187,2,false)->aplicarTextura(getDT()->driver);
@@ -442,6 +485,7 @@ void NodoRecCuartel::Decision()
 	else
 	{
 		cout << "NO --> NODOGRANJA" << endl;
+		getDT()->caminoNodos.push_back(19);
 		getNo()->Decision();
 	}
 }
@@ -459,6 +503,8 @@ void NodoRecGranja::Decision()
 	if(getDT()->getRecursos() >= GRANJA_COSTE)
 	{
 		cout << "SI --> HOJA, CREAR GRANJA" << endl;
+		getDT()->caminoNodos.push_back(getDT()->caminoNodos.back()+1);
+		
 		//CREAR GRANJA
 		gameEngine::addBuildings(190,180,1,false)->aplicarTextura(getDT()->driver);
 		gameEngine::recursos_ia -= GRANJA_COSTE;
@@ -466,6 +512,7 @@ void NodoRecGranja::Decision()
 	else
 	{
 		cout << "NO --> HOJA, NADA" << endl;
+		getDT()->caminoNodos.push_back(getDT()->caminoNodos.back()+2);
 	}
 }
 
@@ -483,11 +530,13 @@ void NodoArquerosMayorLanzas::Decision()
 	if(getDT()->getnumArquerosEnemigos() > getDT()->getnumLanceros())
 	{
 		cout << "SI --> NODOLANCERIA" << endl;
+		getDT()->caminoNodos.push_back(25);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NODOESPADACHINESMAYORARCOS" << endl;
+		getDT()->caminoNodos.push_back(40);
 		getNo()->Decision();
 	}
 }
@@ -505,11 +554,13 @@ void NodoLanceria::Decision()
 	if(getDT()->isLanceria())
 	{
 		cout << "SI --> NODOALDEANOLANCERO" << endl;
+		getDT()->caminoNodos.push_back(26);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NODORECLANCERIA" << endl;
+		getDT()->caminoNodos.push_back(33);
 		getNo()->Decision();
 	}
 }
@@ -532,6 +583,7 @@ void NodoRecLanceria::Decision()
 	if(getDT()->getRecursos() >= LANCERIA_COSTE)
 	{
 		cout << "SI --> HOJA, CREAR LANCERIA" << endl;
+		getDT()->caminoNodos.push_back(34);
 		//CREAR LANCERIA
 		gameEngine::addBuildings(184,193,4,false)->aplicarTextura(getDT()->driver);
 		gameEngine::recursos_ia -= LANCERIA_COSTE;
@@ -540,6 +592,7 @@ void NodoRecLanceria::Decision()
 	else
 	{
 		cout << "NO --> NODOGRANJA" << endl;
+		getDT()->caminoNodos.push_back(35);
 		getNo()->Decision();
 	}
 }
@@ -563,6 +616,7 @@ void NodoRecLancero::Decision()
 	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
 	{
 		cout << "SI --> HOJA, CREAR LANCERO" << endl;
+		getDT()->caminoNodos.push_back(28);
 		//CREAR LANCERO
 		vector<shared_ptr<IDibujable>>* unidades = getDT()->IAunits;
 
@@ -582,6 +636,7 @@ void NodoRecLancero::Decision()
 	else
 	{
 		cout << "NO --> HOJA, NADA" << endl;
+		getDT()->caminoNodos.push_back(29);
 	}
 }
 
@@ -597,18 +652,19 @@ NodoEspadachinesMayorArcos::NodoEspadachinesMayorArcos(DecisionTree* dt):Node(dt
 //¿Espadachines enemigos > Mis Arqueros?
 void NodoEspadachinesMayorArcos::Decision()
 {
-	cout << "numEspadachines del User" << getDT()->getnumEspadachinesEnemigos() << endl;
-	cout << "numArqueros de la IA" << getDT()->getnumArqueros() << endl;
 	if(getDT()->getnumEspadachinesEnemigos() > getDT()->getnumArqueros())
 	{
 		cout << "SI --> NODOARQUERIA" << endl;
+		getDT()->caminoNodos.push_back(41);
 		getYes()->Decision();
 	}
 	else
 	{
+		getDT()->caminoNodos.push_back(56);
 		if(gameEngine::state_war_ia != 1 && (getDT()->getnumSoldados() > getDT()->getnumSoldadosEnemigos()*1.5 || getDT()->getnumSoldados()>15))
 		{
 			cout << "NO --> NODOGRANJA, STATE=ATACAR" << endl;
+			getDT()->caminoNodos.push_back(57);
 			gameEngine::state_war_ia=1;
 			getNo()->Decision();
 		}
@@ -633,11 +689,13 @@ void NodoArqueria::Decision()
 	if(getDT()->isArqueria())
 	{
 		cout << "SI --> NODOALDEANOARQUERO" << endl;
+		getDT()->caminoNodos.push_back(42);
 		getYes()->Decision();
 	}
 	else
 	{
 		cout << "NO --> NODORECARQUERIA" << endl;
+		getDT()->caminoNodos.push_back(49);
 		getNo()->Decision();
 	}
 }
@@ -661,6 +719,7 @@ void NodoRecArqueria::Decision()
 	if(getDT()->getRecursos() >= ARQUERIA_COSTE)
 	{
 		cout << "SI --> HOJA, CREAR ARQUERIA" << endl;
+		getDT()->caminoNodos.push_back(50);
 		//CREAR ARQUERIA
 		gameEngine::addBuildings(178,193,3,false)->aplicarTextura(getDT()->driver);
 		gameEngine::recursos_ia -= ARQUERIA_COSTE;
@@ -668,6 +727,7 @@ void NodoRecArqueria::Decision()
 	else
 	{
 		cout << "NO --> NODOGRANJA" << endl;
+		getDT()->caminoNodos.push_back(51);
 		getNo()->Decision();
 	}
 }
@@ -691,6 +751,7 @@ void NodoRecArquero::Decision()
 	if(getDT()->getRecursos() >= CONVERTIR_COSTE)
 	{
 		cout << "SI --> HOJA, CREAR ARQUERO" << endl;
+		getDT()->caminoNodos.push_back(44);
 		//CREAR ARQUERO
 		vector<shared_ptr<IDibujable>>* unidades = getDT()->IAunits;
 
@@ -710,6 +771,7 @@ void NodoRecArquero::Decision()
 	else
 	{
 		cout << "NO --> HOJA, NADA" << endl;
+		getDT()->caminoNodos.push_back(45);
 	}
 }
 
