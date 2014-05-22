@@ -26,6 +26,7 @@ DecisionTree::DecisionTree(video::IVideoDriver* driver)
 
 void DecisionTree::doDecision(int vidaCC, int recursos, vector<shared_ptr<IDibujable>>* IAunits, vector<shared_ptr<IDibujable>>* Userunits, vector<shared_ptr<IDibujable>>* buildings)
 {
+	caminoNodos.clear();
 	this->IAunits = IAunits;
 	this->Userunits = Userunits;
 	this->buildings = buildings;
